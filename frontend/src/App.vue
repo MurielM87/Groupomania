@@ -1,6 +1,6 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <img alt="logo Groupomania" src="./assets/icon.png" id="logo">
+  <HelloWorld msg="Groupomania"/>
 </template>
 
 <script>
@@ -20,7 +20,11 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: red;
   margin-top: 60px;
+}
+
+#logo {
+  width: 200px;
 }
 </style>
