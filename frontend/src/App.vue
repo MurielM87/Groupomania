@@ -1,17 +1,23 @@
 <template>
-  <img alt="logo Groupomania" src="./assets/icon.png" id="logo">
-  <HelloWorld msg="Groupomania"/>
+  <div id="container">
+    <img alt="logo Groupomania" src="./assets/icon.png" id="logo" />
+    <HelloWorld msg="Groupomania" />
+    <div id="form">
+      <router-link to="/login">Connection</router-link>
+    </div>
+    <router-view />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HelloWorld from "./components/HelloWorld.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    HelloWorld,
+  },
+};
 </script>
 
 <style>
