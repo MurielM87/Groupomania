@@ -1,21 +1,23 @@
 <template>
-<div id="main">
+<div id="card_login">
   <h2>Connection</h2>
 
-    <form action='' id='log_in_form'>
-            <label htmlFor='email'>Email</label>
+    <form @submit.prevent="onSubmit" id='log_in_form'>
+            <label htmlFor='email' class="card_title">Email</label>
             <br />
             <input type='text'
                 name='email'
+                v-model='email'
                 id='email'    
                 required      
             />           
             <br />
-            <label htmlFor='password'>Mot de Passe</label>
+            <label htmlFor='password' class="card_title">Mot de Passe</label>
             <br />
             <input type='password'
                 name='password'
-                id='password'  
+                v-model='password'
+                id='password' 
                 required              
             />
             <br />
@@ -31,13 +33,16 @@ export default {
   props: {
     msg: String
   },
-  data: function() {
+  data: () => {
     return {
-      mode: 'login',
+      email:'',
+      password:''
     }
   },
-  methods : function() {
-
+  methods : {
+    submit () {
+      console.log('utilisateur connecté')
+    }
   }
 }
 </script>
@@ -50,7 +55,7 @@ h2 {
   padding-left: 15px;
 }
 
-#main {
+#card_login {
   width: 350px;
   height: 250px;
   text-align: center;
@@ -80,4 +85,11 @@ h2 {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 20px;
 }
+
+@media screen and (max-width: 992px) {
+    form {
+        width: 90%;
+    }
+}
 </style>
+

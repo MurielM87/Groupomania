@@ -1,10 +1,20 @@
-const {sequelize} = require ('sequelize');
+const { isModelListener } = require('@vue/shared');
+const {Sequelize, DataTypes} = require ('sequelize');
+const sequelize = new Sequelize('sqlite::memory:');
 
-const userModel = sequelize.Schema({
-    email: {type: String, required: true, unique: true},
-    password: {type: String, required: true}
-})
+module.exports = (sequelize, DataTypes) => 
+    sequelize.define('user', {
+        email: {type: DataTypes.STRING, required: true, unique: true},
+        password: {type: DataTypes.STRING, required: true}
+}, {
+    classMethods: {
+        associate: function(models) {
+            //associations can be defined here
+           //models.user.model.hasMany(models.message) //à changer de place
+        }
+    }
+});
 
-userModel.plugin(uniqueValidator);
 
-module.exports = sequelize.model('User', userModel);
+
+console.log(user === sequelize.userModel);

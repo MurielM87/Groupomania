@@ -2,11 +2,11 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
+const {sequelize} = require('sequelize');
 
 const dotenv = require('dotenv').config('../.env')
 
-const mysql = require('./DBconnection');
-
+const mysql = require('./config/DBconnection');
 const app = express();
 
 app.use(express.json());
