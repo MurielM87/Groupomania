@@ -5,7 +5,10 @@ const sequelize = new Sequelize('sqlite::memory:');
 module.exports = (sequelize, DataTypes) => 
     sequelize.define('user', {
         email: {type: DataTypes.STRING, required: true, unique: true},
-        password: {type: DataTypes.STRING, required: true}
+        password: {type: DataTypes.STRING, required: true},
+        lastName: {type: DataTypes.STRING, required: true},
+        firstName: {type: DataTypes.STRING, required: true},
+        pseudo: {type: DataTypes.STRING, required: true, unique: true}
 }, {
     classMethods: {
         associate: function(models) {

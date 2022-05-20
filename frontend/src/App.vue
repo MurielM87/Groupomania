@@ -3,21 +3,18 @@
     <img alt="logo Groupomania" src="./assets/icon.png" id="logo" />
     <HelloWorld msg="Groupomania" />
     <div id="form">
-      <router-link to="/login">Connection</router-link>
+      
+      <router-link to="/signup">Inscription</router-link>
+      <SignUp />
     </div>
     <router-view />
   </div>
 </template>
 
-<script>
+<script setup>
 import HelloWorld from "./components/HelloWorld.vue";
+import SignUp from "@/views/SignUp";
 
-export default {
-  name: "App",
-  components: {
-    HelloWorld,
-  },
-};
 </script>
 
 <style>

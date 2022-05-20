@@ -8,7 +8,7 @@ module.exports.signUpErrors = (err) => {
         errors.email = "Email incorrect";
 
     if (err.message.includes('password'))
-        errors.password = "Le mot de passe doit faire 6 caractères minimum";
+        errors.password = "Le mot de passe doit faire 8 caractères minimum";
 
     if (err.code === 11000 && Object.keys(err.keyValue)[0].includes('pseudo'));
         errors.pseudo = 'Ce pseudo est déjà pris';
