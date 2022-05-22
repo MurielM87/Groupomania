@@ -1,9 +1,9 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import SignUp from '@/views/SignUp.vue';
 const routes = [
-   
+    
     {
-        name: 'Signup',
+        name: 'SignUp',
         path: '/signup',
         component: SignUp,
     },    

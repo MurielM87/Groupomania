@@ -4,8 +4,7 @@
     <HelloWorld msg="Groupomania" />
     <div id="form">
       
-      <router-link to="/signup">Inscription</router-link>
-      <SignUp />
+      <router-link :to="{name : 'SignUp' }">Inscription</router-link>
     </div>
     <router-view />
   </div>
@@ -13,7 +12,7 @@
 
 <script setup>
 import HelloWorld from "./components/HelloWorld.vue";
-import SignUp from "@/views/SignUp";
+
 
 </script>
 
