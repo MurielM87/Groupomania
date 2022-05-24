@@ -64,17 +64,17 @@
 
 <script>
 import axios from "axios";
-const url = "http://localhost:3000/signup";
+const url = "http://localhost:3000/userSignUp/signup";
 
 export default {
   name: "SignUp",
   data() {
     return {
-      pseudo: "",
-      email: "",
-      firstname: "",
-      lastname: "",
-      password: "",
+      pseudo: "Test",
+      email: "stephnguets@yahoo.fr",
+      firstname: "Test",
+      lastname: "Test",
+      password: "Test"
     };
   },
   methods: {
