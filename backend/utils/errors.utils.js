@@ -19,7 +19,7 @@ module.exports.signUpErrors = (err) => {
     return errors;
 };
 
-module.exports.signInErrors = (err) => {
+module.exports.logInErrors = (err) => {
     let errors = {email: '', password: ''};
 
     if (err.message.includes('email')) 

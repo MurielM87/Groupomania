@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="handleSubmit" id="signup" class="card">
+  <form id="signup" class="card">
     <h2 class="card_title">Inscription</h2>
     <div class="form-row">
       <label for="pseudo">Votre pseudo</label>
@@ -58,18 +58,51 @@
       <div v-if="passwordError">{{ passwordError }}</div>
     </div>
     <div class="form-row">
-      <button @click="submitForm" type="submit" class="button">
-        Inscription
-      </button>
+      <button @click="signUp" type="submit" class="button">Inscription</button>
     </div>
   </form>
 </template>
 
 <script>
 import axios from "axios";
+const url = "http://localhost:3000/api/";
 
 export default {
-  name: "submitForm",
+  name: "SignUp",
+
+  setup() {
+    const SignUp = () => {
+      return {
+        pseudo: "",
+        email: "",
+        firstname: "",
+        lastname: "",
+        password: "",
+        passwordError: "",
+      };
+    };
+    console.log("signUp", SignUp);
+    return { SignUp },
+    //SignUp: axios.get(url + 'signup/'),
+          
+  SignUp(credentials) = {
+    if (
+  pseudo= this.pseudo,
+  email= this.email,
+  firstname= this.firstname,
+  lastname= this.lastname,
+  password= this.password
+) {
+  return axios
+      .post(url + "sign-up/", credentials)
+      .then((response) => response.data)
+}
+    
+  }
+  },
+  
+
+  /*
   data() {
     return {
       pseudo: "",
@@ -84,7 +117,7 @@ export default {
     this.submitForm();
   },
   methods: {
-    handleSubmit() {
+    signUp() {
       console.log('form submitted')
       //validate password
       this.passwordError = this.password.length > 5 ? '' : "Le mot de passe doit contenir au moins 6 caractères"
@@ -97,13 +130,22 @@ export default {
         console.log('password', this.password)
       }
     },
+
+    axios.get('localhost:3000')
+  .then(function (response) {
+    console.log(response.data)
+    console.log(response.status)
+    console.log(response.statusText)
+    console.log(response.headers)
+    console.log(response.config)
+  })
    
    
     async submitForm() {
       
       try {
         const response = await axios.get(
-          "http://localhost:3000/groupomania/signup"
+          "http://localhost:3000/signup"
         );
         this.pseudo = response.data.pseudo;
         this.email = response.data.email;
@@ -114,8 +156,8 @@ export default {
         console.log(err);
       }
     },
-  },
-}; 
+  },*/
+};
 </script>
 
 <style>
