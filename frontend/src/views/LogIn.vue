@@ -1,5 +1,5 @@
 <template>
-  <form id="login" class="card">
+  <form @submit.prevent="handleSubmit" id="login" class="card">
     <h2 class="card_title">Connexion</h2>
 
     <label for="email">Email</label>
@@ -22,18 +22,34 @@
       name="password"
     />
     <br />
-    <button @click="submitForm" type="submit" class="button">Connexion</button>
+    <button type="submit" class="button">Connexion</button>
   </form>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
-  setup() {
-    
+  name: 'LogIn',
+  data() {
+    return {
+      email: "",
+      password: "",
+    }
   },
+  methods: {
+    async handleSubmit() {
+      const submitData = await axios.post(url + 'login/',  {
+        email: this.email,
+        password: this.password
+      })
+      console.log(submitData);
+    }
+  }
 }
 </script>
 
 <style>
 
 </style>
+

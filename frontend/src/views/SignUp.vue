@@ -1,5 +1,5 @@
 <template>
-  <form id="signup" class="card">
+  <form @submit.prevent="handleSubmit" id="signup" class="card">
     <h2 class="card_title">Inscription</h2>
     <div class="form-row">
       <label for="pseudo">Votre pseudo</label>
@@ -55,54 +55,19 @@
         type="password"
         name="password"
       />
-      <div v-if="passwordError">{{ passwordError }}</div>
     </div>
     <div class="form-row">
-      <button @click="signUp" type="submit" class="button">Inscription</button>
+      <button type="submit" class="button">Inscription</button>
     </div>
   </form>
 </template>
 
 <script>
 import axios from "axios";
-const url = "http://localhost:3000/api/";
+const url = "http://localhost:3000/signup";
 
 export default {
   name: "SignUp",
-
-  setup() {
-    const SignUp = () => {
-      return {
-        pseudo: "",
-        email: "",
-        firstname: "",
-        lastname: "",
-        password: "",
-        passwordError: "",
-      };
-    };
-    console.log("signUp", SignUp);
-    return { SignUp },
-    //SignUp: axios.get(url + 'signup/'),
-          
-  SignUp(credentials) = {
-    if (
-  pseudo= this.pseudo,
-  email= this.email,
-  firstname= this.firstname,
-  lastname= this.lastname,
-  password= this.password
-) {
-  return axios
-      .post(url + "sign-up/", credentials)
-      .then((response) => response.data)
-}
-    
-  }
-  },
-  
-
-  /*
   data() {
     return {
       pseudo: "",
@@ -110,53 +75,21 @@ export default {
       firstname: "",
       lastname: "",
       password: "",
-      passwordError: "",
-    }; 
-  }, 
-  created: function () {
-    this.submitForm();
+    };
   },
   methods: {
-    signUp() {
-      console.log('form submitted')
-      //validate password
-      this.passwordError = this.password.length > 5 ? '' : "Le mot de passe doit contenir au moins 6 caractères"
-
-      if(!this.passwordError) {
-        console.log('pseudo', this.pseudo)
-        console.log('email', this.email)
-        console.log('firstname', this.firstname)
-        console.log('lastname', this.lastname)
-        console.log('password', this.password)
-      }
+    async handleSubmit() {
+      const submitData = await axios.post(url, {
+        pseudo: this.pseudo,
+        email: this.email,
+        firstname: this.firstname,
+        lastname: this.lastname,
+        password: this.password,
+      });
+      console.log(submitData);
+      this.$router.push("/login");
     },
-
-    axios.get('localhost:3000')
-  .then(function (response) {
-    console.log(response.data)
-    console.log(response.status)
-    console.log(response.statusText)
-    console.log(response.headers)
-    console.log(response.config)
-  })
-   
-   
-    async submitForm() {
-      
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/signup"
-        );
-        this.pseudo = response.data.pseudo;
-        this.email = response.data.email;
-        this.lastname = response.data.lastname;
-        this.firstname = response.data.firstname;
-        this.password = response.data.password;
-      } catch (err) {
-        console.log(err);
-      }
-    },
-  },*/
+  },
 };
 </script>
 
