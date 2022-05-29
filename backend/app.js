@@ -4,7 +4,7 @@ const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const {sequelize} = require('sequelize');
-
+const userRoutes = require("./routes/user.routes.js");
 const dotenv = require('dotenv').config('../.env')
 
 const mysql = require('./config/DBconnection');
@@ -26,5 +26,6 @@ app.use((req, res, next) => {
 
 app.use(cors()); //access to the API for everybody
 app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use("/userSignUp", userRoutes);
 
 module.exports = app;

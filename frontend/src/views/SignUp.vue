@@ -14,17 +14,6 @@
       <br />
     </div>
     <div class="form-row">
-      <label for="email">Email</label>
-      <br />
-      <input
-        v-model="email"
-        ref="email"
-        class="form-row_input"
-        type="text"
-        name="email"
-      />
-    </div>
-    <div class="form-row">
       <label for="firstname">Prénom</label>
       <br />
       <input
@@ -46,6 +35,17 @@
       />
     </div>
     <div class="form-row">
+      <label for="email">Email</label>
+      <br />
+      <input
+        v-model="email"
+        ref="email"
+        class="form-row_input"
+        type="text"
+        name="email"
+      />
+    </div>
+    <div class="form-row">
       <label for="password">Mot de passe</label>
       <br />
       <input
@@ -64,8 +64,7 @@
 
 <script>
 import axios from "axios";
-const url = "http://localhost:3000/signup";
-
+const url = "http://localhost:3000/userSignUp/signup";
 export default {
   name: "SignUp",
   data() {
@@ -74,7 +73,7 @@ export default {
       email: "",
       firstname: "",
       lastname: "",
-      password: "",
+      password: ""
     };
   },
   methods: {
