@@ -1,9 +1,8 @@
 <template>
-  <div id="container">
-    <img alt="logo Groupomania" src="./assets/icon.png" id="logo" />
-    <HelloWorld msg="Groupomania" />
+  <div id="container">    
+    <NavBar msg="Groupomania" />
     <div id="form">
-      
+      <router-link :to="{name: 'LogIn'}">Connexion</router-link>
       <router-link :to="{name : 'SignUp' }">Inscription</router-link>
     </div>
     <router-view />
@@ -11,7 +10,7 @@
 </template>
 
 <script setup>
-import HelloWorld from "./components/HelloWorld.vue";
+import NavBar from "./components/NavBar.vue";
 
 
 </script>

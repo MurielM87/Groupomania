@@ -21,10 +21,10 @@ exports.signup = (req, res, next) => {
             .then(hash => {
                 const user = new User({
                     pseudo: req.body.pseudo,
-                    email: req.body.email,
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
-                    password: hash
+                    password: hash,
+                    email: req.body.email,
                 });
                 //saving the user in the database
                 user.save()
