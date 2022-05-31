@@ -5,7 +5,7 @@ const {sequelize} = require('../config/DBconnection');
 const User = require('../models/user.model');
 
 const emailValidator = require('email-validator');
-const passwordValidator = require ('password-validator');
+//const passwordValidator = require ('password-validator');
 
 //SIGN UP
 exports.signup = (req, res, next) => {

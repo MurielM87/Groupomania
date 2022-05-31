@@ -9,7 +9,6 @@ const dotenv = require('dotenv').config('../.env')
 const userRoutes = require("./routes/user.routes.js");
 const DBconnection = require('./config/DBconnection');
 const app = express();
-
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -27,6 +26,7 @@ app.use((req, res, next) => {
 app.use(cors()); //access to the API for everybody
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use("/userSignUp", userRoutes);
+
 
 DBconnection.sync()
   .then((console.log("connected to the Database")))

@@ -1,7 +1,7 @@
-const Post = require('../models/post.model');
+const Post = require('../models/comment.model');
 const db = require('../config/DBconnection');
 
-//create a post
+//create a comment
 exports.createPost = (req, res, next) => {
     const postObject = JSON.parse(req.body.post);
     const post = new Post ({
@@ -10,13 +10,13 @@ exports.createPost = (req, res, next) => {
     });
     post.save()
         .then(() => {
-           res.status(201).json({message : "article créé"}) 
+           res.status(201).json({message : "commentaire ajouté"}) 
         }).catch((err) => {
             res.status(400).json({error})
         });
 };
 
-//delete a post
+//delete a comment
 
-//modify a post
+//modify a comment
 

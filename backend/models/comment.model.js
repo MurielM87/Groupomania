@@ -2,33 +2,35 @@ const { DataTypes } = require('sequelize');
 const sequelize = require("../config/DBconnection");
 
 const Post = sequelize.define('user', {
-    idpost: {
+    id: {
         type: DataTypes.INTEGER.UNSIGNED,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false
     },
     user_id: {
-
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        allowNull: false
     },
-    user_pseudo: {},
-    title: {
+    user_pseudo: {
         type: DataTypes.STRING,
-        allowNull: false,
-        trim: true,
-        maxlenght: 100
-    },
+        autoIncrement: true,
+        allowNull: false
+    },    
     content: {
         type: DataTypes.TEXT,
         allowNull: false,
         trim: true,
-        maxlenght: 1000
+        maxlenght: 500
     },
     imageUrl: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        trim: false
     },
     videoUrl: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        trimm: false
     },
     createdAt: {
         type: DataTypes.DATE,
