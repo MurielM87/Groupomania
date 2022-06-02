@@ -1,15 +1,14 @@
 <template>
-  <div class="navbar">
+  <div id="navbar">
     <img alt="logo Groupomania" src="../assets/icon.png" id="logo" />
     <h1>{{ msg }}</h1>
-    <li>
-      <ul><router-link :to="{ name: 'SignUp' }">Inscription</router-link></ul>
-      <ul><router-link :to="{ name: 'LogIn' }">Connexion</router-link></ul>
-    </li>
-    <li>
-      <ul>Profil</ul>
-      <ul>Déconnexion</ul>
-    </li>
+    <div id="barre">
+      <li>
+        <ul>Connexion</ul>
+        <ul>Inscription</ul>
+      </li>
+    </div>
+    
   </div>
 </template>
 
@@ -26,22 +25,32 @@ export default {
 #navbar {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+}
+
+h1 {
+  margin: auto;
 }
 
 #logo {
-    width: 30px;
+    width: 150px;
+    display: flex;
+    flex-direction: flex-start;
+    margin-left: 10px;
 }
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
+#barre {
+  width: 20%;
   display: flex;
   flex-direction: row;
-  text-align: center;
+  align-items: center;
+  justify-content: space-around;
   margin: 0 10px;
 }
+ul {
+  list-style-type: none;
+  padding: 20px;
+}
+
 a {
   color: #b97242;
 }

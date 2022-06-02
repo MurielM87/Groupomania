@@ -1,62 +1,49 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const {sequelize} = require('../config/DBconnection');
+const { sequelize } = require('../config/DBconnection');
 const User = require('../models/user.model');
 
 const emailValidator = require('email-validator');
 //const passwordValidator = require ('password-validator');
+/*
+//creation schema validation password
+const schema = new passwordValidator();
+schema
+    .is().min(8)
+    .is().max(16)
+    .has().uppercase()
+    .has().lowercase()
+    .has().digits()
+    .has().not().spaces()
+    .has().symbols()
+*/
 
 //SIGN UP
 exports.signup = (req, res, next) => {
     console.log(req.body)
 
-    if (!emailValidator.validate(req.body.email)) {
-        return res.status(400).json({ 'message': 'Adresse email non valide' });
-       
-    } else if (!schema.validate(req.body.password)) {
-        return res.status(400).json({ 'message': 'Mot de passe non valide - Utilisez des majuscules, minuscules, chiffres et symboles, aucun espace, minimum 8 caractères.' });
-    } else {
-        bcrypt.hash(req.body.password, 10)
-            .then(hash => {
-                const user = new User({
-                    pseudo: req.body.pseudo,
-                    firstName: req.body.firstName,
-                    lastName: req.body.lastName,
-                    password: hash,
-                    email: req.body.email,
-                });
-                //saving the user in the database
-                user.save()
-                    .then(() => res.status(201).json({ message: 'Utilisateur créé' }))
-                    .catch(error => res.status(400).json({ error }));
-            })
-            .catch(error => res.status(500).json({ error }))
-    } 
+    //create a new user
+    try {
+        let user = {
+            pseudo: req.body.pseudo,
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            email: req.body.email,
+            password: req.body.password,
+            createdAt: Date.now()
+        };
+        console.log('user', user);
+        return res.redirect("/");
+    } catch (e) {
+        console.log(e);
+    }
+
+
 
 };
 
 //LOG IN
 exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email })
-        .then(user => {
-            if (!user) {
-                return res.status(401).json({ error: 'utilisateur inconnu' });
-            }
-            bcrypt.compare(req.body.password, user.password)
-                .then(valid => {
-                    if (!valid) {
-                        return res.status(401).json({ error: 'mot de passe incorrect' });
-                    } res.status(200).json({
-                        userId: user._id,
-                        token: jwt.sign(
-                            { userId: user._id },
-                            process.env.TOKEN_SECRET,
-                            { expiresIn: '12h' }
-                        )
-                    });
-                })
-                .catch(error => res.status(500).json({ error }));
-        })
-        .catch(error => res.status(500).json({ error }));
+
 };

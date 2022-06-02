@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="handleSubmit" id="signup" class="card">
+  <form @submit.prevent="handleSubmit" method="post" id="signup" class="card">
     <h2 class="card_title">Inscription</h2>
     <div class="form-row">
       <label for="pseudo">Votre pseudo</label>
@@ -64,7 +64,7 @@
 
 <script>
 import axios from "axios";
-const url = "http://localhost:3000/User/signup";
+const url = "http://localhost:3000/user/signup";
 
 export default {
   name: "SignUp",
@@ -74,8 +74,7 @@ export default {
       email: "",
       firstname: "",
       lastname: "",
-      password: ""
-
+      password: "",
     };
   },
   methods: {

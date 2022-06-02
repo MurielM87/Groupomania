@@ -1,47 +1,49 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require("../config/DBconnection");
+module.exports = (sequelize, DataTypes) => {
 
-const Post = sequelize.define('user', {
-    id: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        autoIncrement: true,
-        primaryKey: true,
-        allowNull: false
-    },
-    user_id: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        autoIncrement: true,
-        allowNull: false
-    },
-    user_pseudo: {
-        type: DataTypes.STRING,
-        autoIncrement: true,
-        allowNull: false
-    },    
-    content: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        trim: true,
-        maxlenght: 500
-    },
-    imageUrl: {
-        type: DataTypes.STRING,
-        trim: false
-    },
-    videoUrl: {
-        type: DataTypes.STRING,
-        trimm: false
-    },
-    createdAt: {
-        type: DataTypes.DATE,
-        required: true,
-        allowNull: false
-    },
-    updatedAt: {
-        type: DataTypes.DATE,
-        required: true,
-        allowNull: false
-    }
-})
+    const Comment = sequelize.define('comment', {
+        id: {
+            type: DataTypes.INTEGER.UNSIGNED,
+            autoIncrement: true,
+            primaryKey: true,
+            allowNull: false
+        },
+        user_id: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        user_pseudo: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        content: {
+            type: DataTypes.TEXT,
+            allowNull: false,
+            trim: true,
+            maxlenght: 500
+        },
+        imageUrl: {
+            type: DataTypes.STRING,
+            trim: false
+        },
+        videoUrl: {
+            type: DataTypes.STRING,
+            trimm: false
+        },
+        createdAt: {
+            type: DataTypes.DATE,
+            required: true,
+            allowNull: false
+        },
+        updatedAt: {
+            type: DataTypes.DATE,
+            required: true,
+            allowNull: false
+        },
+        published: {
+            type: DataTypes.BOOLEAN
+        }
+    })
 
-module.exports = Post;
+    return Comment
+}
+

@@ -3,11 +3,11 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
-const {sequelize} = require('sequelize');
+const { sequelize } = require('sequelize');
 const dotenv = require('dotenv').config('../.env')
 
-const userRoutes = require("./routes/user.routes.js");
 const DBconnection = require('./config/DBconnection');
+const { application } = require('express');
 const app = express();
 app.use(express.json());
 
@@ -23,13 +23,20 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors()); //access to the API for everybody
-app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use("/userSignUp", userRoutes);
+
+//Routers
+const userRouter = require('./routes/user.route');
+const postRouter = require('./routes/post.route');
+const commentRouter = require('./routes/comment.route');
+
+app.use('/api/users', userRouter)
+app.use('/api/posts', postRouter)
+app.use('/api/comments', commentRouter)
 
 
-DBconnection.sync()
-  .then((console.log("connected to the Database")))
-  .catch(error => console.log('erreur'))
+app.use(cors()), //access to the API for everybody
+app.use('/images', express.static(path.join(__dirname, 'images'))),
 
-module.exports = app;
+
+
+module.exports = app

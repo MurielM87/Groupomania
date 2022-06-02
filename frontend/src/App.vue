@@ -1,5 +1,5 @@
 <template>
-  <div id="container">    
+  <div id="container">  
     <NavBar msg="Groupomania" />
     <div id="form">
       <router-link :to="{name: 'LogIn'}">Connexion</router-link>
@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-//import NavBar from "./components/NavBar.vue";
+import NavBar from "./components/NavBar.vue";
 
 
 </script>
@@ -25,7 +25,6 @@
   margin-top: 60px;
 }
 
-#logo {
-  width: 200px;
-}
+
+
 </style>

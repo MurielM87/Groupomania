@@ -28,7 +28,7 @@
 
 <script>
 import axios from 'axios';
-const url = "http://localhost:3000/User/signup";
+const url = "http://localhost:3000/User/login";
 
 export default {
   name: 'LogIn',

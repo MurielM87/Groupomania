@@ -1,18 +1,10 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require("../config/DBconnection");
-
-const User = sequelize.define('user', {
-    id: {
+module.exports = (sequelize, DataTypes) => {
+    const User = sequelize.define('user', {
+    user_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false
-    },
-    pseudo: {
-        type: DataTypes.STRING,
-        required: true,
-        allowNull: false,
-        unique: true,
     },
     email: {
         type: DataTypes.STRING,
@@ -30,6 +22,12 @@ const User = sequelize.define('user', {
         required: true,
         allowNull: false,
     },
+    pseudo: {
+        type: DataTypes.STRING,
+        required: true,
+        allowNull: false,
+        unique: true,
+    },
     password: {
         type: DataTypes.STRING,
         required: true,
@@ -43,10 +41,12 @@ const User = sequelize.define('user', {
     updatedAt: {
         type: DataTypes.DATE,
         required: true,
-        allowNull: false
+        allowNull: false,
+        defaultValue: DataTypes.NOW
     }
 })
 
-module.exports = User;
+return User
 
-console.log(User === sequelize.User);
+}
+
