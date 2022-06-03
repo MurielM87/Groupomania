@@ -15,7 +15,7 @@ import NavBar from "./components/NavBar.vue";
 
 </script>
 
-<style>
+<style lang="sass">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -24,7 +24,4 @@ import NavBar from "./components/NavBar.vue";
   color: red;
   margin-top: 60px;
 }
-
-
-
 </style>

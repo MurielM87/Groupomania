@@ -8,13 +8,13 @@ const Comment = db.comments
 
 //create a comment
 const createComment = async (req, res) => {
-    let info = {
+    let data = {
         title: req.body.title,
         content: req.body.content,
         published: req.body.published ? req.body.published : false
     }
 
-    const comment = await Comment.create(info)
+    const comment = await Comment.create(data)
     res.status(200).send(comment)
 }
 

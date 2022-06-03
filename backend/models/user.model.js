@@ -1,16 +1,18 @@
+'use strict';
+
 module.exports = (sequelize, DataTypes) => {
-    const User = sequelize.define('user', {
+    return sequelize.define('user', {
     user_id: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        autoIncrement: true,
+        type: DataTypes.UUID,
         primaryKey: true,
-        allowNull: false
     },
-    email: {
+    pseudo: {
         type: DataTypes.STRING,
+        isAlphanumeric: true,
         required: true,
-        allowNull: false,
+        allowNull: true,
         unique: true,
+        len: [3, 20]
     },
     firstname: {
         type: DataTypes.STRING,
@@ -22,11 +24,12 @@ module.exports = (sequelize, DataTypes) => {
         required: true,
         allowNull: false,
     },
-    pseudo: {
+    email: {
         type: DataTypes.STRING,
         required: true,
         allowNull: false,
         unique: true,
+        isEmail: true,
     },
     password: {
         type: DataTypes.STRING,
@@ -42,11 +45,25 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         required: true,
         allowNull: false,
-        defaultValue: DataTypes.NOW
+        defaultValue: DataTypes.DATETIME
+    },
+    deletedAt: {
+        type: DataTypes.DATE,
+        required: true,
+        allowNull: false,
+        defaultValue: DataTypes.DATETIME
+    },
+    isAdmin: {
+        //foreignKey in isAdmin table
+        type: DataTypes.INTEGER,
+        required: true,
+        allowNull: false
     }
-})
+},
+{
+    underscored: true,
+    paranoid: true,
+});
 
-return User
-
-}
+};
 

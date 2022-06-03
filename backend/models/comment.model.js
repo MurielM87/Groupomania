@@ -1,14 +1,17 @@
 module.exports = (sequelize, DataTypes) => {
 
-    const Comment = sequelize.define('comment', {
+    return sequelize.define('comment', {
         id: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            autoIncrement: true,
+            type: DataTypes.UUID,
             primaryKey: true,
             allowNull: false
         },
+        post_id: {
+            type: DataTypes.UUID,
+            allowNull: false
+        },
         user_id: {
-            type: DataTypes.STRING,
+            type: DataTypes.UUID,
             allowNull: false
         },
         user_pseudo: {
@@ -42,8 +45,10 @@ module.exports = (sequelize, DataTypes) => {
         published: {
             type: DataTypes.BOOLEAN
         }
-    })
-
-    return Comment
+    },
+    {
+        underscored: true,
+        paranoid: true,
+    });
 }
 

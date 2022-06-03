@@ -8,13 +8,13 @@ const Comment = db.comments
 
 //create a post
 const createPost = async (req, res) => {
-    let info = {
+    let data = {
         title: req.body.title,
         content: req.body.content,
         published: req.body.published ? req.body.published : false
     }
 
-    const post = await Post.create(info)
+    const post = await Post.create(data)
     res.status(200).send(post)
 }
 
@@ -53,11 +53,23 @@ const getPublishedPost = async (req, res) => {
     res.status(200).send(posts)
 }
 
+//connect one to many relations Post and Comment
+const getPostComment = async (req, res) => {
+    const data = await Post.findAll({
+        include: [{
+            model: Comment,
+            as: 'post'
+        }],
+        where: {id: post_id}
+    })
+}
+
 module.exports = {
     createPost,
     updatePost,
     deletePost,
     getOnePost,
     getAllPosts,
-    getPublishedPost
+    getPublishedPost,
+    getPostComment
 }

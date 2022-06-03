@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Post = sequelize.define('post', {
+   return sequelize.define('post', {
         idpost: {
             type: DataTypes.INTEGER.UNSIGNED,
             autoIncrement: true,
@@ -45,7 +45,10 @@ module.exports = (sequelize, DataTypes) => {
         published: {
             type: DataTypes.BOOLEAN
         }
-    })
+    },
+    {
+        underscored: true,
+        paranoid: true,
+    });
 
-    return Post
 }

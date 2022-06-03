@@ -44,5 +44,12 @@ server.on('listening', () => {
   console.log('Listening on ' + bind);
 });
 
-server.listen(port);
+//connected to the database
+const db = require('./models')
+db.sequelize.sync()
+  .then(() => {
+    server.listen(port);
+  })
+  .catch(e => console.log(e));
+
 

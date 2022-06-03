@@ -14,4 +14,7 @@ router.get('/allPost', postCtrl.getAllPosts)
 //published post
 router.get('/publishedPost', postCtrl.getPublishedPost)
 
+//get post comments
+router.get('/getPostComment', postCtrl.getPostComment)
+
 module.exports = router

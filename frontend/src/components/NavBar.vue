@@ -3,11 +3,18 @@
     <img alt="logo Groupomania" src="../assets/icon.png" id="logo" />
     <h1>{{ msg }}</h1>
     <div id="barre">
-      <li>
+      <li class="menu">
         <ul>Connexion</ul>
         <ul>Inscription</ul>
       </li>
+      <li class="menu">
+        <ul>Bonjour</ul>
+        <ul>Profil</ul>
+        <ul>Déconnexion</ul>
+      </li>
     </div>
+      
+
     
   </div>
 </template>
@@ -21,7 +28,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="sass">
 #navbar {
   display: flex;
   flex-direction: row;
@@ -38,7 +45,13 @@ h1 {
     flex-direction: flex-start;
     margin-left: 10px;
 }
+
 #barre {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu {
   width: 20%;
   display: flex;
   flex-direction: row;
