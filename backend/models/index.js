@@ -15,7 +15,6 @@ const sequelize = new Sequelize(
     DBconnection.PASSWORD, {
         host: DBconnection.HOST,
         dialect: DBconnection.dialect,
-        operatorsAliases: false,
 
         pool: {
             max: DBconnection.pool.max,
@@ -72,50 +71,28 @@ db.sequelize.sync({ force: false })
     
 
 //all associations
-//authorisations
-db.authorisation.hasMany(db.users);
-//users
+//authorisations inside users
+db.authorisation.hasMany(db.users, {
+  foreignKey: 'isAdmin',
+  as: 'user'
+});
 db.users.belongsTo(db.authorisation)
 
-
-module.exports = db
-
-/*
-
+//posts inside users
 db.users.hasMany(db.posts, {
   foreignKey: 'user_id',
   as: 'post'
 });
-
 db.posts.belongsTo(db.users, {
   foreignKey: 'user_id',
   as: 'user'
-})*/
+})
 
-/*
-
-db.User.hasMany(db.Post, {
-  onDelete: "CASCADE",
+//delete user and posts
+db.users.hasMany(db.posts, {
+  onDelete: 'CASCADE',
 });
-db.Post.belongsTo(db.User);
+db.posts.belongsTo(db.users);
 
-
-db.Post.hasMany(db.Like, {
-  onDelete: 'cascade',
-  foreignKey: { name: 'PostId', allowNull: false },
-  hooks: true });
-
-db.Like.belongsTo(db.User, {
-  onDelete: "CASCADE",
-  foreignKey: { name: "UserId", allowNull: false },
-  hooks: true,
-});
-
-db.Like.belongsTo(db.Post, {
-  onDelete: "CASCADE",
-  foreignKey: { name: "PostId", allowNull: false },
-  hooks: true,
-});
 
 module.exports = db;
-*/

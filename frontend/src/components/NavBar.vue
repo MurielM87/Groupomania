@@ -28,7 +28,7 @@ export default {
 };
 </script>
 
-<style lang="sass">
+<style>
 #navbar {
   display: flex;
   flex-direction: row;

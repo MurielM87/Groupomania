@@ -28,7 +28,7 @@
 
 <script>
 import axios from 'axios';
-const url = "http://localhost:3000/api/users/login";
+const url = "http://localhost:3000/users/login";
 
 export default {
   name: 'LogIn',
@@ -50,7 +50,7 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style>
 
 </style>
 

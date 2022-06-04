@@ -64,7 +64,7 @@
 
 <script>
 import axios from "axios";
-const url = "http://localhost:3000/api/users/signup";
+const url = "http://localhost:3000/users/signup";
 
 export default {
   name: "SignUp",
@@ -93,7 +93,7 @@ export default {
 };
 </script>
 
-<style lang="sass">
+<style>
 
   form {
   color: black;
