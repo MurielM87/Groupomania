@@ -1,0 +1,22 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-size: $font-size4;
+  font-family: "Rubik", sans-serif;
+  line-height: 12px;
+  color: #000000;
+}
+
+.container {
+  width: 100%;
+  margin: auto;
+  background-color: $background2;
+  @media screen and (min-width: map-get($breakpoints, desktop)) {
+    width: 1394px;
+    background-color: $background1;
+  }
+}

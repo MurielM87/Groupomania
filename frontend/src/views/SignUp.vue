@@ -64,7 +64,7 @@
 
 <script>
 import axios from "axios";
-const url = "http://localhost:3000/users/signup";
+const url = "http://localhost:3000/";
 
 export default {
   name: "SignUp",
@@ -79,27 +79,26 @@ export default {
   },
   methods: {
     async handleSubmit() {
-      const submitData = await axios.post(url, {
+      const response = await axios.post(url + "signup", {
         pseudo: this.pseudo,
         email: this.email,
         firstname: this.firstname,
         lastname: this.lastname,
         password: this.password,
       });
-      console.log(submitData);
+      console.log(response);
+
       this.$router.push("/login");
     },
   },
 };
 </script>
 
-<style>
-
-  form {
+<style lang="scss">
+form {
   color: black;
   background-color: white;
   width: 400px;
   margin: auto;
 }
-
 </style>

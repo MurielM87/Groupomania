@@ -62,7 +62,6 @@ sequelize.authenticate()
 db.users = require('./user.model.js')(sequelize, DataTypes)
 db.posts = require('./post.model.js')(sequelize, DataTypes)
 db.comments = require('./comment.model.js')(sequelize, DataTypes)
-db.authenticate = require('./authorisation.js')(sequelize, DataTypes)
 
 db.sequelize.sync({ force: false })
     .then(() => {
@@ -71,13 +70,6 @@ db.sequelize.sync({ force: false })
     
 
 //all associations
-//authorisations inside users
-db.authorisation.hasMany(db.users, {
-  foreignKey: 'isAdmin',
-  as: 'user'
-});
-db.users.belongsTo(db.authorisation)
-
 //posts inside users
 db.users.hasMany(db.posts, {
   foreignKey: 'user_id',

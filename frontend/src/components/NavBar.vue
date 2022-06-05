@@ -1,49 +1,63 @@
 <template>
   <div id="navbar">
-    <img alt="logo Groupomania" src="../assets/icon.png" id="logo" />
-    <h1>{{ msg }}</h1>
+    <img alt="logo Groupomania" src="../assets/icon.png" class="logo" />
+    
+    <h1>Groupomania</h1>
+
     <div id="barre">
-      <li class="menu">
-        <ul>Connexion</ul>
-        <ul>Inscription</ul>
-      </li>
-      <li class="menu">
-        <ul>Bonjour</ul>
-        <ul>Profil</ul>
-        <ul>Déconnexion</ul>
+      <div v-if="user">
+        <router-link :to="{ name: 'MainPage' }">Page d'accueil</router-link>
+        <p>Bonjour {{ user.pseudo }}</p>
+        <li class="menu">
+          <ul>
+            <router-link :to="{ name: 'ProfilUser' }">Profil</router-link>
+          </ul>
+          <ul :@click="handleclick">
+            <router-link :to="{ name: 'LogOut' }">Déconnexion</router-link>
+          </ul>
+        </li>
+      </div>
+      <li class="menu" v-if="!user">
+        <ul>
+          <router-link :to="{ name: 'LogIn' }">Connexion</router-link>
+        </ul>
+        <ul>
+          <router-link :to="{ name: 'SignUp' }">Inscription</router-link>
+        </ul>
       </li>
     </div>
-      
-
-    
   </div>
 </template>
 
 <script>
 export default {
   name: "NavBar",
-  props: {
-    msg: String,
+  props: ["user"],
+  methods: {
+    handleClick() {
+      localStorage.removeItem("token");
+      this.$router.push("/logout");
+    },
   },
 };
 </script>
 
-<style>
+<style lang="scss">
 #navbar {
+  width: 80%;
+  height: 100px;
+  margin: auto;
+  color: black;
+  background-color: white;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-h1 {
-  margin: auto;
-}
-
-#logo {
-    width: 150px;
-    display: flex;
-    flex-direction: flex-start;
-    margin-left: 10px;
+.logo {
+  display: flex;
+  flex-direction: flex-start;
+  margin-left: 100px;
 }
 
 #barre {
@@ -65,6 +79,6 @@ ul {
 }
 
 a {
-  color: #b97242;
+  color: red;
 }
 </style>

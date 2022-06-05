@@ -1,15 +1,19 @@
 <template>
 <div>
-    <h2>Vous êtes déconnecté !</h2>
-    <p>cliquez pour vous <router-link :to="{name: 'LogIn'}">reconnecter</router-link></p>
+    <p>Vous êtes déconnecté !</p>
+    <p><router-link :to="{name: 'LogIn'}">cliquez pour vous reconnectez-vous</router-link></p>
 </div>
     
 </template>
 
 <script>
 
+export default {
+  name: "LogOut",
+  
+};
 </script>
 
-<style>
+<style lang="scss">
 
 </style>

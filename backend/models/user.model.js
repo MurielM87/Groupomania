@@ -54,10 +54,9 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.DATETIME
     },
     isAdmin: {
-        //foreignKey in isAdmin table
-        type: DataTypes.INTEGER,
-        required: true,
-        allowNull: false
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
     }
 },
 {

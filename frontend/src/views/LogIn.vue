@@ -1,5 +1,6 @@
 <template>
   <form @submit.prevent="handleSubmit" id="login" class="card">
+    
     <h2 class="card_title">Connexion</h2>
 
     <label for="email">Email</label>
@@ -28,7 +29,7 @@
 
 <script>
 import axios from 'axios';
-const url = "http://localhost:3000/users/login";
+const url = "http://localhost:3000/";
 
 export default {
   name: 'LogIn',
@@ -40,17 +41,21 @@ export default {
   },
   methods: {
     async handleSubmit() {
-      const submitData = await axios.post(url + 'login/',  {
+      const response = await axios.post(url + 'login',  {
         email: this.email,
         password: this.password
-      })
-      console.log(submitData);
+      });
+      console.log(response);
+
+      localStorage.setItem('token', response.data.token);
+
+      this.$router.push("/home");
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 
 </style>
 
