@@ -28,10 +28,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             trim: false
         },
-        videoUrl: {
-            type: DataTypes.STRING,
-            trimm: false
-        },
         createdAt: {
             type: DataTypes.DATE,
             required: true,

@@ -29,9 +29,6 @@ module.exports = (sequelize, DataTypes) => {
         imageUrl: {
             type: DataTypes.STRING
         },
-        videoUrl: {
-            type: DataTypes.STRING
-        },
         createdAt: {
             type: DataTypes.DATE,
             required: true,
