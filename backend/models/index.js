@@ -5,6 +5,7 @@ const {Sequelize, DataTypes} = require('sequelize');
 const path = require('path');
 const basename = path.basename(__filename);
 const fs = require("fs");
+const { setUncaughtExceptionCaptureCallback } = require('process');
 const db = {} 
 
 //console.log(DBconnection);
@@ -62,6 +63,7 @@ sequelize.authenticate()
 db.users = require('./user.model.js')(sequelize, DataTypes)
 db.posts = require('./post.model.js')(sequelize, DataTypes)
 db.comments = require('./comment.model.js')(sequelize, DataTypes)
+db.likes = require('./like.model.js')(sequelize, DataTypes)
 
 db.sequelize.sync({ force: false })
     .then(() => {
