@@ -16,8 +16,7 @@
                 <input type="text" placeholder="{{ user.lastname }}"/>
             </div>
             <div>
-                <label>Département</label>
-                <input/>
+                <div>Articles publiés</div>
             </div>
             
         </form>
@@ -31,6 +30,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style>
 
 </style>

@@ -1,7 +1,7 @@
 <template>
 <div>
-    <p>Vous êtes déconnecté !</p>
-    <p><router-link :to="{name: 'LogIn'}">cliquez pour vous reconnectez-vous</router-link></p>
+    <p>Déconnection !</p>
+    <p><router-link :to="{name: 'LogIn'}">cliquez pour vous reconnectez</router-link></p>
 </div>
     
 </template>
@@ -14,6 +14,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style>
 
 </style>

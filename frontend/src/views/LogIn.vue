@@ -28,8 +28,8 @@
 </template>
 
 <script>
-import axios from 'axios';
-const url = "http://localhost:3000/";
+
+//const url = "http://localhost:3000/";
 
 export default {
   name: 'LogIn',
@@ -40,22 +40,22 @@ export default {
     }
   },
   methods: {
-    async handleSubmit() {
-      const response = await axios.post(url + 'login',  {
-        email: this.email,
-        password: this.password
-      });
-      console.log(response);
+//    async handleSubmit() {
+//      const response = await axios.post(url + 'login',  {
+//        email: this.email,
+//        password: this.password
+//      });
+//      console.log(response);
+//
+//      localStorage.setItem('token', response.data.token);
 
-      localStorage.setItem('token', response.data.token);
-
-      this.$router.push("/home");
-    }
+ //     this.$router.push("/home");
+  //  }
   }
 }
 </script>
 
-<style lang="scss">
+<style>
 
 </style>
 

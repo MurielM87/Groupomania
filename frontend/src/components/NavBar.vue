@@ -12,7 +12,7 @@
           <ul>
             <router-link :to="{ name: 'ProfilUser' }">Profil</router-link>
           </ul>
-          <ul :@click="handleclick">
+          <ul>
             <router-link :to="{ name: 'LogOut' }">Déconnexion</router-link>
           </ul>
         </li>
@@ -42,7 +42,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style>
 #navbar {
   width: 80%;
   height: 100px;

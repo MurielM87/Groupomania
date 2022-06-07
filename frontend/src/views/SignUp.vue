@@ -57,13 +57,13 @@
       />
     </div>
     <div class="form-row">
-      <button type="submit" class="button">Inscription</button>
+      <input type="submit" class="button" value="Inscription" />
     </div>
   </form>
 </template>
 
 <script>
-import axios from "axios";
+//import axios from "axios";
 const url = "http://localhost:3000/";
 
 export default {
@@ -78,23 +78,33 @@ export default {
     };
   },
   methods: {
-    async handleSubmit() {
-      const response = await axios.post(url + "signup", {
-        pseudo: this.pseudo,
-        email: this.email,
-        firstname: this.firstname,
-        lastname: this.lastname,
-        password: this.password,
-      });
-      console.log(response);
-
-      this.$router.push("/login");
+    handleSubmit() {
+      console.log("handleSubmit");
+      console.log(url);
+      fetch("http://localhost:3000/users/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          pseudo: this.pseudo,
+          email: this.email,
+          firstname: this.firstname,
+          lastname: this.lastname,
+          password: this.password,
+        }),
+      })
+      .then(function(res){
+        console.log(res.json())
+      }) 
+      .catch(err => err.status(404).json({message : "erreur dans la création"}));
+      console.log(fetch)
     },
   },
 };
 </script>
 
-<style lang="scss">
+<style>
 form {
   color: black;
   background-color: white;
