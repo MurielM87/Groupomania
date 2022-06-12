@@ -1,33 +1,34 @@
+'user strict'
+
 module.exports = (sequelize, DataTypes) => {
-   return sequelize.define('post', {
-        idpost: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            autoIncrement: true,
+
+    return sequelize.define('comment', {
+        id: {
+            type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false
         },
+        post_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
         user_id: {
-            type: DataTypes.STRING,
-            allowNull: false,
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
         user_pseudo: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        title: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            trim: true,
-            maxlenght: 100
-        },
         content: {
             type: DataTypes.TEXT,
             allowNull: false,
             trim: true,
-            maxlenght: 1000
+            maxlenght: 500
         },
         imageUrl: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            trim: false
         },
         createdAt: {
             type: DataTypes.DATE,
@@ -47,5 +48,4 @@ module.exports = (sequelize, DataTypes) => {
         underscored: true,
         paranoid: true,
     });
-
 }

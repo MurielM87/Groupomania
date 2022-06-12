@@ -1,17 +1,19 @@
+'use strict'
+
 module.exports = (sequelize, DataTypes) => {
 
     return sequelize.define('like', {
         id: {
-            type: DataTypes.UUID,
+            type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false
         },
         post_id: {
-            type: DataTypes.UUID,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         user_id: {
-            type: DataTypes.UUID,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         user_pseudo: {
@@ -27,4 +29,3 @@ module.exports = (sequelize, DataTypes) => {
         paranoid: true,
     });
 }
-

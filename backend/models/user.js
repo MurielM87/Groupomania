@@ -3,7 +3,7 @@
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('user', {
     user_id: {
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         primaryKey: true,
     },
     pseudo: {
@@ -68,4 +68,3 @@ module.exports = (sequelize, DataTypes) => {
 });
 
 };
-
