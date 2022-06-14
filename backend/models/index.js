@@ -7,7 +7,6 @@ const basename = path.basename(__filename);
 const fs = require("fs");
 const db = {} 
 
-//console.log(DBconnection);
 
 const sequelize = new Sequelize(
     DBconnection.DB, 
@@ -24,6 +23,17 @@ const sequelize = new Sequelize(
         }
     }
 )
+db.Sequelize = Sequelize
+db.sequelize = sequelize
+
+sequelize.authenticate()
+    .then(() => {
+        console.log('Connection has been established successfully')
+    })
+    .catch(err => {
+        console.log('Unable to connect to the databasse' + err)
+    });
+
 
     fs.readdirSync(__dirname)
     .filter((file) => {
@@ -45,19 +55,9 @@ const sequelize = new Sequelize(
     }
   });
 
-db.Sequelize = Sequelize
-db.sequelize = sequelize
-
-sequelize.authenticate()
-    .then(() => {
-        console.log('Connection has been established successfully')
-    })
-    .catch(err => {
-        console.log('Unable to connect to the databasse' + err)
-    });
 
 
-db.users = require('./user.js')(sequelize, DataTypes)
+db.Users = require('./user.js')(sequelize, DataTypes)
 db.posts = require('./post.js')(sequelize, DataTypes)
 db.comments = require('./comment.js')(sequelize, DataTypes)
 db.likes = require('./like.js')(sequelize, DataTypes)
@@ -67,23 +67,50 @@ db.sequelize.sync({ force: false })
         console.log('re-sync done')
     })
     
-
-//all associations
-//posts inside users
-db.users.hasMany(db.posts, {
-  foreignKey: 'user_id',
-  as: 'post'
-});
-db.posts.belongsTo(db.users, {
-  foreignKey: 'user_id',
-  as: 'user'
+/*
+//all associations - foreignKey
+//Users
+db.Users.hasMany(db.posts, {
+  foreignKey: "id",
+  //foreignKey: "pseudo",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE"
 })
+db.posts.belongsTo(db.Users)
 
-//delete user and posts
-db.users.hasMany(db.posts, {
-  onDelete: 'CASCADE',
-});
-db.posts.belongsTo(db.users);
+db.Users.hasMany(db.comments, {
+  foreignKey: "id",
+  foreignKey: "pseudo",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE"
+})
+db.comments.belongsTo(db.Users)
+
+db.Users.hasMany(db.likes, {
+  foreignKey: "id",
+  foreignKey: "pseudo",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE"
+})
+db.likes.belongsTo(db.Users)
+
+//Posts
+db.posts.hasMany(db.comments, {
+  foreignKey: "id"
+})
+db.comments.belongsTo(db.posts)
+
+db.posts.hasMany(db.likes, {
+  foreignKey: "id"
+})
+db.likes.belongsTo(db.posts)
+
+//Comments
+db.comments.hasMany(db.likes, {
+  foreignKey: "id"
+})
+db.likes.belongsTo(db.comments)
+*/
 
 
 module.exports = db;

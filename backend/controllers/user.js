@@ -4,33 +4,35 @@ const { User } = require("../models");
 
 //SIGNUP
 exports.signup = (req, res, next) => {
-    
+    console.log('signup')
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {
-      const user = new User({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        password: hash,
-        bio: req.body.bio,
-        img_profile: avatarDefault,
-      });
-
+      console.log(req)
+    
       if (!/^[\w\d.+-]+@[\w.-]+\.[a-z]{2,}$/.test(req.body.email)) {
         return res.status(400).json({ error: "Email invalide" });
       }
 
-      user
-        .save()
+      User.create({
+        pseudo: req.body.pseudo,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email,
+        password: hash,
+      })
         .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
         .catch((error) => res.status(400).json({ error }));
     })
-    .catch((error) => res.status(500).json({ error }));
+    .catch((error) => {
+      console.log('err', error)
+      return res.status(500).json({ error })
+    });
+    
+    
 };
 
 //LOGIN
-
 exports.login = (req, res, next) => {
 
   if (!/^[\w\d.+-]+@[\w.-]+\.[a-z]{2,}$/.test(req.body.email)) {

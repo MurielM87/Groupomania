@@ -25,7 +25,7 @@
       <br />
       <input
         v-model="firstname"
-        v-on:input="checkUsername"
+        v-on:input="checkfirstname"
         ref="firstname"
         class="form-row_input"
         type="text"
@@ -35,12 +35,13 @@
         required
       />
       <br />
-      <p class="error__message">{{ usernameErrorMessage }}</p>
+      <p class="error__message">{{ firstnameErrorMessage }}</p>
       <br />
       <label for="lastname">Nom</label>
       <br />
       <input
         v-model="lastname"
+        v-on:input="checklastname"
         ref="lastname"
         class="form-row_input"
         type="text"
@@ -50,7 +51,7 @@
         required
       />
       <br />
-      <p class="error__message">{{ usernameErrorMessage }}</p>
+      <p class="error__message">{{ lastnameErrorMessage }}</p>
     </div>
     <div class="form-row">
       <label for="email">Email</label>
@@ -90,13 +91,12 @@
     </div>
     <div class="form-row">
       <input
-        v-on:click.prevent="signingUp"
+        v-on:click.prevent="signUp"
         type="submit"
         class="button"
         value="Inscription"
       />
     </div>
-    <p>{{ apiResponseMessage }}</p>
   </form>
 </template>
 
@@ -111,15 +111,15 @@ export default {
       lastname: "",
       password: "",
       pseudoErrorMessage: "",
-      usernameErrorMessage: "",
+      firstnameErrorMessage: "",
+      lastnameErrorMessage: "",
       emailErrorMessage: "",
       passwordErrorMessage: "",
-      passwordConfirmErrorMessage: "",
       passwordFieldType: "password",
     };
   },
   methods: {
-    checkPseudo: function(){
+    checkPseudo(){
       const pseudoRegex = /^([a-zA-Z0-9-_]{2,36})$/gi;
       if(this.pseudo.match(pseudoRegex)) {
         this.pseudoErrorMessage = "";
@@ -127,15 +127,23 @@ export default {
         this.pseudoErrorMessage = "Choississez un autre pseudo"
       }
     },
-    checkUsername: function () {
+    checkfirstname() {
       const usernameRegex = /^[a-zéèôöîïûùü' -]{2,50}$/gi;
-      if (this.username.match(usernameRegex)) {
-        this.usernameErrorMessage = "";
+      if (this.firstname.match(usernameRegex)) {
+        this.firstnameErrorMessage = "";
       } else {
-        this.usernameErrorMessage = `Vous ne pouvez utiliser que des lettres, espaces, - et ' "`;
+        this.firstnameErrorMessage = `Vous ne pouvez utiliser que des lettres, espaces, - et ' "`;
       }
     },
-    checkEmail: function () {
+    checklastname() {
+      const usernameRegex = /^[a-zéèôöîïûùü' -]{2,50}$/gi;
+      if (this.lastname.match(usernameRegex)) {
+        this.lastnameErrorMessage = "";
+      } else {
+        this.lastnameErrorMessage = `Vous ne pouvez utiliser que des lettres, espaces, - et ' "`;
+      }
+    },
+    checkEmail() {
       const mailRegex = /^[a-z0-9-._]+[@]{1}[a-z0-9.-_]+[.]{1}[a-z]{2,10}$/gi;
       if (this.email.match(mailRegex)) {
         this.emailErrorMessage = "";
@@ -143,9 +151,9 @@ export default {
         this.emailErrorMessage = "Format incorrect";
       }
     },
-    checkPassword: function () {
+    checkPassword() {
       const passwordRegex =
-        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&?!*-]).{8}$/;
+        /^(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
       if (this.password.match(passwordRegex)) {
         this.passwordErrorMessage = "";
       } else {
@@ -153,30 +161,35 @@ export default {
           "Utilisez au moins 8 caractères, une minuscule, une majuscule, un chiffre et un caractère spécial";
       }
     },
-    signUp: function () {
+    signUp() {
       if (
         this.pseudo === "" || this.firstname === "" || this.lastname === "" || this.email === "" || this.password === ""
       ) {
-        this.apiResponseMessage = "Veuillez renseigner tous les champs !";
         this.pseudoErrorMessage = "Obligatoire";
-        this.usernameErrorMessage = "Obligatoire";
+        this.firstnameErrorMessage = "Obligatoire";
+        this.lastnameErrorMessage = "Obligatoire"
         this.emailErrorMessage = "Obligatoire";
         this.passwordErrorMessage = "Obligatoire"
       } else {
-        fetch
-          .post("http://localhost:3000/api/user/signup", {
+        fetch("http://localhost:3000/api/user/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             pseudo: this.pseudo,
             firstname: this.firstname,
             lastname: this.lastname,
             email: this.email,
             password: this.password
           })
+        })
           .then((response) => {
             this.$router.push("/login");
             console.log(response)
           })
           .catch((error) => {
-            this.apiResponseMessage = error.response.data.message;
+            console.log("error", error);
           });
       }
     },

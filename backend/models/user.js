@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('user', {
-    user_id: {
+    return sequelize.define('User', {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
     },
@@ -42,28 +42,30 @@ module.exports = (sequelize, DataTypes) => {
     createdAt: {
         type: DataTypes.DATE,
         required: true,
-        allowNull: false
+        allowNull: false,
+        defaultValue: DataTypes.DATETIME,
     },
     updatedAt: {
         type: DataTypes.DATE,
         required: true,
         allowNull: false,
-        defaultValue: DataTypes.DATETIME
+        defaultValue: DataTypes.DATETIME,
     },
     deletedAt: {
         type: DataTypes.DATE,
         required: true,
-        allowNull: false,
-        defaultValue: DataTypes.DATETIME
+        allowNull: true,
+        //defaultValue: DataTypes.DATETIME
     },
     isAdmin: {
         type: DataTypes.BOOLEAN,
+        required: true,
         allowNull: false,
-        defaultValue: false
+        defaultValue: false,
     }
 },
 {
-    underscored: true,
+    
     paranoid: true,
 });
 

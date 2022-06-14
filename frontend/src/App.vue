@@ -1,10 +1,7 @@
 <template>
   <div id="container">  
     <NavBar />
-    <div id="form">
-      <router-link :to="{name: 'LogIn'}">Connexion</router-link>
-      <router-link :to="{name : 'SignUp' }">Inscription</router-link>
-    </div>
+   
     <router-view :user='user' />
    
   </div>

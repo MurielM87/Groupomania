@@ -71,10 +71,7 @@ exports.modifyPost = (req, res) => {
       });
     }
 
-    //    console.log("you can modify");
-
     // Modification du post (if sans image else avec image)
-
     if (!req.file) {
       Post.update(
         { ...req.body, id: req.params.id },
@@ -96,7 +93,7 @@ exports.modifyPost = (req, res) => {
       if (post.file === null) {
         const postObject = {
           ...req.body,
-          file: `${req.protocol}://${req.get("host")}/images/feeds/${
+          file: `${req.protocol}://${req.get("host")}/images/${
             req.file.filename
           }`,
         };
@@ -108,14 +105,14 @@ exports.modifyPost = (req, res) => {
           .then(() => res.status(200).json({ message: "Post modifié" }))
           .catch((error) => res.status(400).json({ error }));
       } else if (post.file !== null) {
-        const filename = post.file.split("/images/feeds/")[1];
-        fs.unlink(`images/feeds/${filename}`, () => {
+        const filename = post.file.split("/images/")[1];
+        fs.unlink(`images/${filename}`, () => {
           console.log("Image supprimée");
         });
 
         const postObject = {
           ...req.body,
-          file: `${req.protocol}://${req.get("host")}/images/feeds/${req.file}`,
+          file: `${req.protocol}://${req.get("host")}/images/${req.file}`,
         };
 
         Post.update(
@@ -151,8 +148,8 @@ exports.deletePost = (req, res) => {
 
     // Suppression de l'image dans le système de fichiers et de son lien en BDD
 
-    const filename = post.file.split("/images/feeds/")[1];
-    fs.unlink(`images/feeds/${filename}`, () => {
+    const filename = post.file.split("/images/")[1];
+    fs.unlink(`images/${filename}`, () => {
       Post.destroy({
         where: {
           id: req.params.id,

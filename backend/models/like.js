@@ -1,5 +1,9 @@
 'use strict'
 
+const Users = require('./user')
+const Posts = require('./post')
+const Comments = require('./comment')
+
 module.exports = (sequelize, DataTypes) => {
 
     return sequelize.define('like', {
@@ -8,17 +12,45 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             allowNull: false
         },
-        post_id: {
+        postId: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: true,
+        //    references: {
+        //        model: Posts,
+        //        key: 'id',
+        //        onDelete : 'CASCADE',
+        //        onUpdate : 'CASCADE'
+        //     }  
         },
-        user_id: {
+        commentId: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: true,
+        //    references: {
+        //        model: Comments,
+        //        key: 'id',
+        //        onDelete : 'CASCADE',
+        //        onUpdate : 'CASCADE'
+        //     }  
         },
-        user_pseudo: {
+        userId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        //    references: {
+        //        model: Users,
+        //        key: 'id',
+        //        onDelete : 'CASCADE',
+        //        onUpdate : 'CASCADE'
+        //     }  
+        },
+        userPseudo: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+        //    references: {
+        //        model: Users,
+        //        key: 'pseudo',
+        //        onDelete : 'CASCADE',
+        //        onUpdate : 'CASCADE'
+        //     }  
         },
         published: {
             type: DataTypes.BOOLEAN
@@ -28,4 +60,5 @@ module.exports = (sequelize, DataTypes) => {
         underscored: true,
         paranoid: true,
     });
+
 }

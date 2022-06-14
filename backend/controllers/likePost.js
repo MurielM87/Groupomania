@@ -1,7 +1,7 @@
 const { Like } = require('../models/index.js');
 const { User } = require('../models/index.js');
 
-/* logique pour liker un post */
+
 exports.likePost = (req, res) => {
     try {
         console.log(req.body);
@@ -38,7 +38,7 @@ exports.unlikePost = (req, res) => {
     }
 };
 
-/* logique pour récupérer les likes d'un post */
+//get all likes for a post
 exports.getAllLikesPost = (req, res) => {
     try {
         Like.findAll({

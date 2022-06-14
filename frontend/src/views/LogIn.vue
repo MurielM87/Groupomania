@@ -1,7 +1,7 @@
 <template>
   <form id="login" class="card">
     <h2 class="card_title">Connexion</h2>
-    <router-link :to="{ name: 'SignIn' }">Inscription</router-link>
+    <router-link :to="{ name: 'SignUp' }"><h2>Inscription</h2></router-link>
 
     <label for="email">Email</label>
     <br />
@@ -22,7 +22,7 @@
     <br />
     <input
       v-model="password"
-      v-bind:type="passwordFieldType"
+      v-on:bind= "password"
       ref="password"
       class="form-row_input"
       name="password"
@@ -31,9 +31,8 @@
     <br />
     <p class="error__message">{{ passwordErrorMessage }}</p>
     <br />
-    <input type="submit" class="button" v-on:click.prevent="logingIn"
+    <input type="submit" class="button" v-on:click.prevent="logIn"
       value="Connexion" />
-    <p>{{ apiResponseMessage }}</p>
   </form>
 </template>
 
@@ -47,8 +46,6 @@ export default {
       password: "",
       emailErrorMessage: "",
       passwordErrorMessage: "",
-      apiResponseMessage: "",
-      passwordFieldType: "password",
     };
   },
   methods: {
@@ -61,24 +58,24 @@ export default {
     },
     logIn: function () {
       if (this.email === "" || this.password === "") {
-        this.apiResponseMessage =
-          "Veuillez vous identifier";
         this.emailErrorMessage = "Obligatoire";
         this.passwordErrorMessage = "Obligatoire";
       } else {
-        fetch
-          .post("http://localhost:3000/api/user/login", {
-            email: this.email,
-            password: this.password,
+        fetch("http://localhost:3000/api/user/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          }, body: JSON.stringify({
+              email: this.email,
+              password: this.password
           })
+        })    
           .then((response) => {
-            this.$store.commit("SET_USER_ROLE", response.data.role);
-            this.$store.commit("SET_USER_ID", response.data.userId);
-            this.$store.commit("SET_USER_TOKEN", response.data.token);
-            this.$router.push("/fil");
+            this.$router.push("/publications");
+            console.log(response)
           })
           .catch((error) => {
-            this.apiResponseMessage = error.response.data.message;
+            console.log(error)
           });
       }
     },

@@ -1,4 +1,6 @@
 'user strict'
+const Users = require('./user')
+const Posts = require('./post')
 
 module.exports = (sequelize, DataTypes) => {
 
@@ -8,17 +10,35 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             allowNull: false
         },
-        post_id: {
+        postId: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+        //    references: {
+        //        model: Posts,
+        //        key: 'id',
+        //        onDelete : 'CASCADE',
+        //        onUpdate : 'CASCADE'
+        //    }  
         },
-        user_id: {
+        userId: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+        //    references: {
+        //        model: Users,
+        //        key: 'id',
+        //        onDelete : 'CASCADE',
+        //        onUpdate : 'CASCADE'
+        //    }              
         },
-        user_pseudo: {
+        userPseudo: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+        //    references: {
+        //        model: Users,
+        //        key: 'pseudo',
+        //        onDelete : 'CASCADE',
+        //        onUpdate : 'CASCADE'
+        //     }  
         },
         content: {
             type: DataTypes.TEXT,
