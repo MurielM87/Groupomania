@@ -34,7 +34,7 @@ exports.signup = (req, res, next) => {
 
 //LOGIN
 exports.login = (req, res, next) => {
-
+  console.log('login')
   if (!/^[\w\d.+-]+@[\w.-]+\.[a-z]{2,}$/.test(req.body.email)) {
     return res.status(400).json({ EvalError: "Email invalide" });
   }

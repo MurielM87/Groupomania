@@ -36,6 +36,7 @@
     "nodemon": "^2.0.16",
     "password-validator": "^5.2.1",
     "sequelize": "^6.19.0",
+    "sequelize-cli": "^6.4.1",
     "sqlite": "^4.1.1",
     "sqlite3": "^5.0.8",
     "validator": "^13.7.0",

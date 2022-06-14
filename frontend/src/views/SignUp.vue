@@ -1,7 +1,9 @@
 <template>
   <form method="post" id="signup" class="card">
-    <router-link :to="{ name: 'LogIn' }"><h2>Connexion</h2></router-link>
-    <h2 class="card_title">Inscription</h2>
+    <div class="title_card">
+      <router-link :to="{ name: 'LogIn' }"><h2>Connexion</h2></router-link>
+      <h2 class="card_title">Inscription</h2>
+    </div>    
     <div class="form-row">
       <label for="pseudo">Votre pseudo</label>
       <br />
