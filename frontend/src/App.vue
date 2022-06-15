@@ -28,6 +28,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: red;
-  margin-top: 60px;
+  
 }
 </style>

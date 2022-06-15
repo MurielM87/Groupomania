@@ -1,12 +1,17 @@
 <template>
   <div id="navbar">
     <img alt="logo Groupomania" src="../assets/icon.png" class="logo" />
-    
+    <div v-if="user">
+      <router-link :to="{ name: 'Mainpage'}"><img alt="logo Groupomania" src="../assets/icon.png" class="logo" /></router-link>
+    </div>
+
     <h1>Groupomania</h1>
+    <div v-if="user">
+      <router-link :to="{ name: 'Mainpage'}"><h1>Groupomania</h1></router-link>
+    </div>
 
     <div id="barre">
       <div v-if="user">
-        <router-link :to="{ name: 'MainPage' }">Page d'accueil</router-link>
         <p>Bonjour {{ user.pseudo }}</p>
         <li class="menu">
           <ul>
@@ -27,6 +32,7 @@
       </li>
     </div>
   </div>
+  <div class="barre_color"></div>
 </template>
 
 <script>
@@ -44,11 +50,11 @@ export default {
 
 <style>
 #navbar {
-  width: 80%;
+  width: 100%;
   height: 100px;
   margin: auto;
   color: black;
-  background-color: white;
+  
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -79,6 +85,16 @@ ul {
 }
 
 a {
+  color: black;
+}
+
+a:hover {
   color: red;
+}
+
+.barre_color {
+  width: 100%;
+  border-bottom: 2px #FD2D01 solid;
+  margin-bottom: 20px;
 }
 </style>

@@ -1,4 +1,7 @@
 'use strict';
+
+const user = require("../models/user");
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('comments', {
@@ -10,10 +13,12 @@ module.exports = {
       },
       postId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        isAlphanumeric: true,
+        unique: true
       },
-      userId: {
-        allowNull: false,
+      UserId: {
+        allowNull: true,
         type: Sequelize.INTEGER
       },
       userPseudo: {

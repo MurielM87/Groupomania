@@ -52,13 +52,6 @@ export default {
     };
   },
   methods: {
-    showPassword: function () {
-      if (this.passwordFieldType === "password") {
-        this.passwordFieldType = "text";
-      } else if (this.passwordFieldType === "text") {
-        this.passwordFieldType = "password";
-      }
-    },
     logIn: function () {
       if (this.email === "" || this.password === "") {
         this.emailErrorMessage = "Obligatoire";
@@ -74,7 +67,7 @@ export default {
           })
         })    
           .then((response) => {
-            this.$router.push("/publications");
+            this.$router.push("/home");
             console.log(response)
           })
           .catch((error) => {

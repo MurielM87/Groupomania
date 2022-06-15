@@ -1,6 +1,4 @@
-const { Like } = require('../models/index.js');
-const { User } = require('../models/index.js');
-
+const { Like, User } = require('../models/index.js');
 
 exports.likePost = (req, res) => {
     try {

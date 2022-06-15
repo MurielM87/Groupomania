@@ -8,16 +8,16 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      UserId: {
+        allowNull: true,
+        type: Sequelize.INTEGER
+      },
       postId: {
         allowNull: true,
         type: Sequelize.INTEGER
       },
       commentId: {
         allowNull: true,
-        type: Sequelize.INTEGER
-      },
-      userId: {
-        allowNull: false,
         type: Sequelize.INTEGER
       },
       userPseudo: {

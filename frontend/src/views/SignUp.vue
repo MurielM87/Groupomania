@@ -79,10 +79,10 @@
       <input
         v-model="password"
         v-on:input="checkPassword"
-        v-bind:type="passwordFieldType"
         ref="password"
         class="form-row_input"
         name="password"
+        type="password"
         contenteditable
         spellcheck="false"
         required
@@ -116,8 +116,7 @@ export default {
       firstnameErrorMessage: "",
       lastnameErrorMessage: "",
       emailErrorMessage: "",
-      passwordErrorMessage: "",
-      passwordFieldType: "password",
+      passwordErrorMessage: ""
     };
   },
   methods: {
@@ -202,8 +201,28 @@ export default {
 <style>
 form {
   color: black;
-  background-color: white;
+  background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+              linear-gradient(127deg, rgba(225, 255, 0, 0.8), rgba(0,255,0,0) 70.71%),
+              linear-gradient(336deg, rgba(255, 170, 0, 0.8), rgba(0,0,255,0) 70.71%);
   width: 400px;
   margin: auto;
+  padding: 20px;
 }
+
+.title_card {
+  width: 300px;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+h2 {
+  color: black;
+}
+
+label {
+  font-size : 20px;
+}
+
 </style>
