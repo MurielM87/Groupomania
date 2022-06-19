@@ -80,5 +80,8 @@ export default {
 </script>
 
 <style>
+.card {
+  margin-bottom: 30px;
+}
 </style>
 

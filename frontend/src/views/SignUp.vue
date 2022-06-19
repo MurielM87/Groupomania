@@ -198,7 +198,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 form {
   color: black;
   background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
@@ -207,6 +207,12 @@ form {
   width: 400px;
   margin: auto;
   padding: 20px;
+  @media (min-width: 768px) and (max-width: 992px) {
+    width: 60%;
+  }
+  @media screen and (max-width:768px) {
+    width: 80%;
+  }
 }
 
 .title_card {
@@ -222,7 +228,8 @@ h2 {
 }
 
 label {
-  font-size : 20px;
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 
 </style>
