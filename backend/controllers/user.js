@@ -1,8 +1,9 @@
-const bcrypt = require("bcrypt") 
-const MyDatabase = require("../models") 
-const token = require("../middlewares/token") 
-const fs = require("fs") 
-require("dotenv").config() 
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+const MyDatabase = require("../models")
+const token = require("../middlewares/token")
+const fs = require("fs")
+require("dotenv").config()
 
 //SignUp
 exports.signup = async (req, res) => {
@@ -35,26 +36,30 @@ exports.signup = async (req, res) => {
   }
 }
 
+
 //LogIn
 exports.login = async (req, res) => {
   try {
     const user = await MyDatabase.User.findOne({
       where: { email: req.body.email },
     })
-    if (user === null) {
+    if (!user) {
       return res.status(403).send({ error: "utilisateur inconnu" })
-    } else {
-      const hash = await bcrypt.compare(req.body.password, user.password) //
-      if (!hash) {
-        return res.status(401).send({ error: "Mot de passe incorrect !" })
-      } else {
-        const tokenObject = token.issueJWT(user)
-        res.status(200).send({
-          user: user,
-          token: tokenObject.token          
-        })
-      }
     }
+    bcrypt.compare(req.body.password, user.password)
+      .then(valid => {
+        if (!valid) {
+          return res.status(401).json({ error: 'mot de passe incorrect' });
+        } res.status(200).json({
+          userId: user._id,
+          token: jwt.sign(
+            { userId: user._id },
+            process.env.TOKEN_SECRET,
+            { expiresIn: '12h' }
+          )
+        });
+      })
+
   } catch (error) {
     return res.status(500).send({ error: "Erreur serveur" })
   }
@@ -82,9 +87,8 @@ exports.updateUser = async (req, res) => {
     let user = await MyDatabase.User.findOne({ where: { id: id } })
     if (userId === user.id) {
       if (req.file && user.avatar) {
-        newavatar = `${req.protocol}://${req.get("host")}/upload/${
-          req.file.filename
-        }`
+        newavatar = `${req.protocol}://${req.get("host")}/upload/${req.file.filename
+          }`
         const filename = user.avatar.split("/upload")[1]
         fs.unlink(`upload/${filename}`, (err) => {
           if (err) console.log(err)
@@ -93,9 +97,8 @@ exports.updateUser = async (req, res) => {
           }
         })
       } else if (req.file) {
-        newavatar = `${req.protocol}://${req.get("host")}/upload/${
-          req.file.filename
-        }`
+        newavatar = `${req.protocol}://${req.get("host")}/upload/${req.file.filename
+          }`
       }
       if (newavatar) {
         user.avatar = newavatar
