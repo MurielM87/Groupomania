@@ -1,49 +1,49 @@
-'use strict';
-
-const user = require("../models/user");
+"use strict"
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('comments', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable("Comments", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
-      postId: {
+      message: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+      },
+      username: {
+        type: Sequelize.STRING(20),
+        allowNull: false,
+      },
+      PostId: {
         allowNull: false,
         type: Sequelize.INTEGER,
-        isAlphanumeric: true,
-        unique: true
+        references: {
+          model: "Post",
+          key: "id",
+        },
       },
       UserId: {
-        allowNull: true,
-        type: Sequelize.INTEGER
-      },
-      userPseudo: {
         allowNull: false,
-        type: Sequelize.STRING
-      },
-      content: {
-        allowNull: false,
-        type: Sequelize.TEXT
-      },
-      imgUrl: {
-        allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        references: {
+          model: "User",
+          key: "id",
+        },
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
-    });
+        type: Sequelize.DATE,
+      },
+    })
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('comments');
-  }
-};
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable("Comments")
+  },
+}

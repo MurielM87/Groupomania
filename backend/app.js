@@ -1,51 +1,41 @@
-const express = require('express');
-const path = require('path');
-const cors = require('cors');
-const { sequelize } = require('./models/index');
+const express = require("express")
+const morgan = require("morgan")
+const cors = require("cors")
+const path = require("path")
+const helmet = require("helmet")
+require("dotenv").config()
 
 
-const app = express();
-app.use(express.json());
+const app = express()
+app.use(express.json())
+app.use(morgan("tiny"))
+app.use(express.urlencoded({ extended: true }))
 
+app.use(cors())
+app.use(helmet())
 
-app.get('/', function (req, res) {
-    res.send('hello world')
+//routes
+const userRouter = require("./routes/userRoutes")
+const postRouter = require("./routes/postRoutes")
+
+//database
+const { sequelize } = require("./models/index")
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("Connexion to database is a success !")
   })
-app.get('/api', function (req, res) {
-    res.send('coucou')
+  .catch((error) => console.log(`Failed to access database : ${error}`))
+
+sequelize
+  .sync()
+  .then(() => {
+    console.log("connection successfully !")
   })
+  .catch((error) => console.log(`connection unsuccessfully  : ${error}`))
 
-
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    next();
-  });
-  
-//Routers
-const userRouter = require('./routes/userRoutes');
-const postRouter = require('./routes/postRoutes');
-
-app.use('./upload', express.static(path.join(__dirname, './upload')));
-app.use('/api', userRouter)
-app.use('/api', postRouter)
-
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.set('views', path.join(__dirname, 'views'));
-
-app.use(cors()), 
-app.use('/images', express.static(path.join(__dirname, 'images'))),
-
-dbTest = async function () {
-  try {
-    await sequelize.authenticate();
-    console.log('Connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
-};
-dbTest();
+app.use("/upload", express.static(path.join(__dirname, "upload")))
+app.use("/api/user", userRouter)
+app.use("/api/post", postRouter)
 
 module.exports = app

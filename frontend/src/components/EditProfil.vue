@@ -42,16 +42,6 @@
         required
       />
     </div>
-    <div>
-      <label>Email</label>
-      <br />
-      <input
-        type="email"
-        v-model="email"
-        placeholder="{{ user.email }}"
-        required
-      />
-    </div>
     <button v-on:click.prevent="editProfil" id="btn_save" class="btn">
       <i class="fas fa-save"><span class="text_desktop">Enregistrer les modifications</span></i>
     </button>
@@ -70,8 +60,7 @@ export default {
     return {
       pseudo: this.pseudo,
       firstname: this.firstname,
-      lastname: this.lastname,
-      email: this.email,
+      lastname: this.lastname
     };
   },
   //  beforeCreate() {
@@ -86,8 +75,7 @@ export default {
       if (
         this.pseudo === "" ||
         this.firstname === "" ||
-        this.lastname === "" ||
-        this.email === ""
+        this.lastname === ""
       ) {
         console.log("error");
       } else {
@@ -99,8 +87,7 @@ export default {
           body: JSON.stringify({
             pseudo: this.pseudo,
             firstname: this.firstname,
-            lastname: this.lastname,
-            email: this.email,
+            lastname: this.lastname
           }),
         })
           .then((response) => {

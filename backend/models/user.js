@@ -1,30 +1,29 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict"
+const { Model } = require("sequelize")
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate({ post, comment, like }) {
-      // define association here
-      this.hasMany(post, { onDelete: "cascade", onUpdate: "cascade" })
-      this.hasMany(comment, { onDelete: "cascade", onUpdate: "cascade" })
-      this.hasMany(like, { onDelete: "cascade", onUpdate: "cascade" })
+    static associate(models) {
+      // define association
+      models.User.hasMany(models.Post)
+      models.User.hasMany(models.Comment)
+      models.User.hasMany(models.Like)
     }
   }
-  User.init({
-    pseudo: DataTypes.STRING,
-    firstname: DataTypes.STRING,
-    lastname: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'User',
-  });
-  return User;
-};
+  User.init(
+    {
+      pseudo: { type: DataTypes.STRING(50), allowNull: false },
+      firstname: { type: DataTypes.STRING(50), allowNull: false },
+      lastname: { type: DataTypes.STRING(50), allowNull: false },
+      email: { type: DataTypes.STRING(150), allowNull: false, unique: true },
+      password: { type: DataTypes.STRING(150), allowNull: false },
+  //    isAdmin: { type: DataTypes.BOOLEAN, allowNull: false, default: false },
+    },
+    {
+      sequelize,
+      modelName: "User",
+    },
+    {}
+  )
+  return User
+}

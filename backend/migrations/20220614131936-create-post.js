@@ -1,32 +1,33 @@
 'use strict';
+
+const { DataTypes } = require("sequelize/types");
+
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('posts', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('Posts', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      UserId: {
-        allowNull: true,
-        type: Sequelize.INTEGER
-      },
-      userPseudo: {
+      userId: {
         allowNull: false,
-        type: Sequelize.STRING,        
-        isAlphanumeric: true,
-        unique: true
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id'
+        },     
       },
       title: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      content: {
+      post: {
         allowNull: false,
         type: Sequelize.TEXT
       },
-      imgUrl: {
+      imageUrl: {
         allowNull: true,
         type: Sequelize.STRING
       },
@@ -40,7 +41,7 @@ module.exports = {
       }
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('posts');
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('Posts');
   }
 };

@@ -43,10 +43,10 @@ export default {
   margin: auto;
 }
 #logo_background {
-  width: 1000px;
+  width: 600px;
   position: absolute;
   left: 23%;
-  top: -140px;
+  top: -100px;
   z-index: -1;
   @media (min-width: 768px) and (max-width: 992px) {
     width: 400px;

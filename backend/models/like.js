@@ -1,25 +1,30 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict"
+const { Model } = require("sequelize")
+
 module.exports = (sequelize, DataTypes) => {
-  class like extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+  class Like extends Model {
     static associate(models) {
-      // define association here
+      // define association
+      models.Like.belongsTo(models.User, {
+        foreignKey: {
+          allowNull: false,
+        },
+        onDelete: "CASCADE",
+      }),
+        models.Like.belongsTo(models.Post, {
+          foreignKey: {
+            allowNull: false,
+          },
+          onDelete: "CASCADE",
+        })
     }
   }
-  like.init({
-    postId: DataTypes.INTEGER,
-    commentId: DataTypes.INTEGER,
-    userPseudo: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'like',
-  });
-  return like;
-};
+  Like.init(
+    {},
+    {
+      sequelize,
+      modelName: "Like",
+    }
+  )
+  return Like
+}
