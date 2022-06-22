@@ -6,7 +6,7 @@ const Sequelize = require("sequelize")
 const basename = path.basename(__filename)
 const env = process.env.NODE_ENV || "development"
 const config = require(__dirname + "/../config/config.json")[env]
-const MyDatabase = {}
+const Database = {}
 
 let sequelize
 if (config.use_env_variable) {
@@ -31,16 +31,16 @@ fs.readdirSync(__dirname)
       sequelize,
       Sequelize.DataTypes
     )
-    MyDatabase[model.name] = model
+    Database[model.name] = model
   })
 
-Object.keys(MyDatabase).forEach((modelName) => {
-  if (MyDatabase[modelName].associate) {
-    MyDatabase[modelName].associate(MyDatabase)
+Object.keys(Database).forEach((modelName) => {
+  if (Database[modelName].associate) {
+    Database[modelName].associate(Database)
   }
 })
 
-MyDatabase.sequelize = sequelize
-MyDatabase.Sequelize = Sequelize
+Database.sequelize = sequelize
+Database.Sequelize = Sequelize
 
-module.exports = MyDatabase
+module.exports = Database

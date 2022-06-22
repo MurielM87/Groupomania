@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const MyDatabase = require("../models")
+const database = require("../models")
 const token = require("../middlewares/token")
 const fs = require("fs")
 require("dotenv").config()
@@ -9,7 +9,7 @@ require("dotenv").config()
 exports.signup = async (req, res) => {
   console.log('signup')
   try {
-    const user = await MyDatabase.User.findOne({
+    const user = await database.User.findOne({
       where: { email: req.body.email },
     })
     if (user !== null) {
@@ -18,7 +18,7 @@ exports.signup = async (req, res) => {
       }
     } else {
       const hash = await bcrypt.hash(req.body.password, 10)
-      const newUser = await MyDatabase.User.create({
+      const newUser = await database.User.create({
         pseudo: req.body.pseudo,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
@@ -40,7 +40,7 @@ exports.signup = async (req, res) => {
 //LogIn
 exports.login = async (req, res) => {
   try {
-    const user = await MyDatabase.User.findOne({
+    const user = await database.User.findOne({
       where: { email: req.body.email },
     })
     if (!user) {
@@ -69,7 +69,7 @@ exports.login = async (req, res) => {
 exports.getOneUser = async (req, res) => {
   try {
     // try to find this user by his ID
-    const user = await MyDatabase.User.findOne({
+    const user = await database.User.findOne({
       where: { id: req.params.id },
     })
     res.status(200).send(user)
@@ -83,13 +83,13 @@ exports.updateUser = async (req, res) => {
   const id = req.params.id
   try {
     const userId = token.getUserId(req)
-    let newavatar
-    let user = await MyDatabase.User.findOne({ where: { id: id } })
+    let newImage
+    let user = await database.User.findOne({ where: { id: id } })
     if (userId === user.id) {
-      if (req.file && user.avatar) {
-        newavatar = `${req.protocol}://${req.get("host")}/upload/${req.file.filename
+      if (req.file && user.imageUrl) {
+        newImage = `${req.protocol}://${req.get("host")}/upload/${req.file.filename
           }`
-        const filename = user.avatar.split("/upload")[1]
+        const filename = user.imageUrl.split("/upload")[1]
         fs.unlink(`upload/${filename}`, (err) => {
           if (err) console.log(err)
           else {
@@ -97,25 +97,30 @@ exports.updateUser = async (req, res) => {
           }
         })
       } else if (req.file) {
-        newavatar = `${req.protocol}://${req.get("host")}/upload/${req.file.filename
+        newImage = `${req.protocol}://${req.get("host")}/upload/${req.file.filename
           }`
       }
-      if (newavatar) {
-        user.avatar = newavatar
+      if (newImage) {
+        user.imageUrl = newImage
       }
-
-      if (req.body.username) {
-        user.username = req.body.username
+      if (req.body.pseudo) {
+        user.pseudo= req.body.pseudo
       }
-      const newUser = await user.save({ fields: ["username", "avatar"] }) //
+      if (req.body.firstname) {
+        user.firstname= req.body.firstname
+      }
+      if (req.body.lastname) {
+        user.lastname= req.body.lastname
+      }
+      const newUser = await user.save({ fields: ["pseudo", "firstname", "lastname", "imageUrl"] }) //
       res.status(200).json({
         user: newUser,
-        messageRetour: "Votre profil a bien été modifié",
+        message: "Votre profil a bien été modifié",
       })
     } else {
       res
         .status(401)
-        .json({ messageRetour: "Vous n'avez pas les droits requis" })
+        .json({ message: "Vous n'êtes pas autorisé" })
     }
   } catch (error) {
     return res.status(500).send({ error: "Erreur serveur" })
@@ -126,16 +131,16 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     const id = req.params.id
-    const user = await MyDatabase.User.findOne({ where: { id: id } })
-    if (user.avatar !== null) {
-      const filename = user.avatar.split("/upload")[1]
+    const user = await database.User.findOne({ where: { id: id } })
+    if (user !== null) {
+      const filename = user.imageUrl.split("/upload")[1]
       fs.unlink(`upload/${filename}`, () => {
-        MyDatabase.User.destroy({ where: { id: id } })
-        res.status(200).json({ messageRetour: "utilisateur supprimé" })
+        database.User.destroy({ where: { id: id } })
+        res.status(200).json({ message: "utilisateur supprimé" })
       })
     } else {
-      MyDatabase.User.destroy({ where: { id: id } })
-      res.status(200).json({ messageRetour: "utilisateur supprimé" })
+      database.User.destroy({ where: { id: id } })
+      res.status(200).json({ message: "utilisateur supprimé" })
     }
   } catch (error) {
     return res.status(500).send({ error: "Erreur serveur" })

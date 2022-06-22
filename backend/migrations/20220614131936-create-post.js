@@ -1,10 +1,8 @@
 'use strict';
 
-const { DataTypes } = require("sequelize/types");
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Posts', {
+    await queryInterface.createTable('Post', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -15,7 +13,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Users',
+          model: 'User',
           key: 'id'
         },     
       },
@@ -23,7 +21,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      post: {
+      content: {
         allowNull: false,
         type: Sequelize.TEXT
       },
@@ -42,6 +40,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Posts');
+    await queryInterface.dropTable('Post');
   }
 };

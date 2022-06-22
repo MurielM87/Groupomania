@@ -1,6 +1,6 @@
 const http = require("http")
 const app = require("./app")
-const MyDatabase = require("./models")
+const Database = require("./models")
 
 // set the PORT value to a string or number
 const normalizePort = (val) => {
@@ -42,7 +42,7 @@ const errorHandler = (error) => {
 const server = http.createServer(app)
 
 // sync to the database to add function is the user an admin
-MyDatabase.sequelize.sync().then(function () {
+Database.sequelize.sync().then(function () {
   server.on("error", errorHandler)
   server.on("listening", () => {
     const address = server.address()
@@ -50,6 +50,5 @@ MyDatabase.sequelize.sync().then(function () {
       typeof address === "string" ? "pipe " + address : "port " + port
     console.log("Listening on " + bind)
   })
-  server.listen(port)
-  require("./config/admin.config")
+  server.listen(port)  
 })

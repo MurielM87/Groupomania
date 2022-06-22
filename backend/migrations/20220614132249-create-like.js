@@ -2,14 +2,14 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Likes", {
+    await queryInterface.createTable("Like", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      PostId: {
+      postId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
@@ -17,13 +17,21 @@ module.exports = {
           key: "id",
         },
       },
-      UserId: {
+      userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: "User",
           key: "id",
         },
+      },
+      userPseudo:{
+        allowNull: false,
+        type: Sequelize.STRING,
+        references: {
+          model: "User",
+          key: "pseudo"
+        }
       },
       createdAt: {
         allowNull: false,
@@ -36,6 +44,6 @@ module.exports = {
     })
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Likes")
+    await queryInterface.dropTable("Like")
   },
 }

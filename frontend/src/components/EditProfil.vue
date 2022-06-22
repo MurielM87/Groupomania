@@ -63,12 +63,12 @@ export default {
       lastname: this.lastname
     };
   },
-  //  beforeCreate() {
-  //    const token = localStorage.getItem('token')
-  //    if(token == null) {
-  //        this.$router.push('/login')
-  //    }
-  //  },
+    beforeCreate() {
+      const token = localStorage.getItem('token')
+      if(token == null) {
+          this.$router.push('/login')
+      }
+    },
   methods: {
     editProfil() {
       console.log("editProfil");

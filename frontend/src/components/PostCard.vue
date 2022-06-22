@@ -40,12 +40,12 @@ export default {
   components: {
     CommentPost
   },
-  //  beforeCreate() {
-//    const token = localStorage.getItem('token')
-//    if(token == null) {
-//        this.$router.push('/login')
-//    }
-//  },
+    beforeCreate() {
+    const token = localStorage.getItem('token')
+    if(token == null) {
+        this.$router.push('/login')
+    }
+  },
   method: {
     publishCard(){
       console.log("publishCard")

@@ -67,6 +67,11 @@ export default {
           })
         })    
           .then((response) => {
+            this.data = response.data
+            this.$store.dispatch("setToken", response.data.token)
+            this.$store.dispatch("setUser", response.data.user)
+            this.$store.dispatch("getUserById", response.data.user.id)
+
             this.$router.push("/home");
             console.log(response)
           })

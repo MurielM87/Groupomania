@@ -7,13 +7,13 @@ module.exports = (sequelize, DataTypes) => {
       // define association
       models.Comment.belongsTo(models.User, {
         foreignKey: {
-          allowNull: false,
+        allowNull: false,
         },
         onDelete: "CASCADE",
       }),
         models.Comment.belongsTo(models.Post, {
           foreignKey: {
-            allowNull: false,
+          allowNull: false,
           },
           onDelete: "CASCADE",
         })
@@ -21,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Comment.init(
     {
-      message: { type: DataTypes.TEXT, allowNull: false },
-      username: { type: DataTypes.STRING, allowNull: false },
+      content: { type: DataTypes.TEXT, allowNull: false },
+      userPseudo: { type: DataTypes.STRING, allowNull: false },
     },
     {
       sequelize,

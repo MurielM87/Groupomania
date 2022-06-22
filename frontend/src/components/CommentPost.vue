@@ -28,12 +28,12 @@
 <script>
 export default {
   name: "CommentPost",
-  //  beforeCreate() {
-  //    const token = localStorage.getItem('token')
-  //    if(token == null) {
-  //        this.$router.push('/login')
-  //    }
-  //  },
+    beforeCreate() {
+      const token = localStorage.getItem('token')
+      if(token == null) {
+          this.$router.push('/login')
+      }
+    },
   method: {
     publishComment(){
       console.log("publishComment")

@@ -186,6 +186,10 @@ export default {
           })
         })
           .then((response) => {
+            this.data = response.data
+            this.$store.dispatch("setUser", response.data.user)
+            this.$store.dispatch("getUserById", response.data.user.id)
+            
             this.$router.push("/login");
             console.log(response)
           })

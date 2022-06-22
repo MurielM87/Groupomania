@@ -30,12 +30,12 @@ export default {
     components: { 
       PostCard 
     },
-    //  beforeCreate() {
-//    const token = localStorage.getItem('token')
-//    if(token == null) {
-//        this.$router.push('/login')
-//    }
-//  },
+  beforeCreate() {
+    const token = localStorage.getItem('token')
+    if(token == null) {
+        this.$router.push('/login')
+    }
+  },
   mounted(){
     fetch('http://localhost:3000/api/user', {
       method: "POST",

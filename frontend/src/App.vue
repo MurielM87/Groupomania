@@ -45,7 +45,7 @@ export default {
 #logo_background {
   width: 600px;
   position: absolute;
-  left: 23%;
+  left: 33%;
   top: -100px;
   z-index: -1;
   @media (min-width: 768px) and (max-width: 992px) {

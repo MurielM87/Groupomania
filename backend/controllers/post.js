@@ -1,6 +1,6 @@
-const token = require("../middlewares/token") 
-const MyDatabase = require("../models") 
-const fs = require("fs") 
+const token = require("../middlewares/token")
+const database = require("../models")
+const fs = require("fs")
 
 //create a post
 exports.createPost = async (req, res) => {
@@ -8,36 +8,34 @@ exports.createPost = async (req, res) => {
   let imageUrl
   try {
     // try to find this user by his Id
-    const user = await MyDatabase.User.findOne({
-      attributes: ["username", "id", "avatar"],
+    const user = await database.User.findOne({
+      attributes: ["pseudo", "id"],
       where: { id: userId },
     })
-    // if ok get the file in the request
+    
     if (user !== null) {
       if (req.file) {
-        imageUrl = `${req.protocol}://${req.get("host")}/upload/${
-          req.file.filename
-        }`
+        imageUrl = `${req.protocol}://${req.get("host")}/upload/${req.file.filename
+          }`
       } else {
         imageUrl = null
       }
       // create this post in database
-      const post = await MyDatabase.Post.create({
+      const post = await database.Post.create({
         include: [
           {
-            model: MyDatabase.User,
-            attributes: ["username", "avatar", "id"],
+            model: database.User,
+            attributes: ["pseudo", "id"],
           },
         ],
-        message: req.body.message,
-        link: req.body.link,
+        content: req.body.content,
         imageUrl: imageUrl,
         UserId: user.id,
       })
 
       res
         .status(201)
-        .json({ post: post, messageRetour: "Votre post est ajouté" })
+        .json({ post: post, message: "Votre post est ajouté" })
     } else {
       res.status(400).send({ error: "Erreur " })
     }
@@ -50,31 +48,30 @@ exports.createPost = async (req, res) => {
 exports.getOnePost = async (req, res) => {
   try {
     // try to find this user by his Id
-    const post = await MyDatabase.Post.findOne({
+    const post = await database.Post.findOne({
       where: { id: req.params.id },
       include: [
         {
-          model: MyDatabase.User,
-          attributes: ["username", "avatar", "id"],
+          model: database.User,
+          attributes: ["username", "id"],
         },
         {
-          model: MyDatabase.Like,
-          attributes: ["PostId", "UserId"],
+          model: database.Like,
+          attributes: ["postId", "userId"],
         },
         {
-          model: MyDatabase.Comment,
+          model: database.Comment,
           order: [["createdAt", "DESC"]],
-          attributes: ["message", "username", "UserId"],
+          attributes: ["content", "pseudo", "UserId"],
           include: [
             {
-              model: MyDatabase.User,
-              attributes: ["avatar", "username"],
+              model: database.User,
+              attributes: ["pseudo"],
             },
           ],
         },
       ],
     })
-    // Added every data needed for front
     res.status(200).json(post)
   } catch (error) {
     return res.status(500).send({ error: "Erreur serveur" })
@@ -85,53 +82,50 @@ exports.getOnePost = async (req, res) => {
 exports.getAllPosts = async (req, res) => {
   try {
     // get all posts from database
-    const posts = await MyDatabase.Post.findAll({
+    const posts = await database.Post.findAll({
       attributes: ["id", "post", "imageUrl", "createdAt"],
       order: [["createdAt", "DESC"]],
       include: [
         {
-          model: MyDatabase.User,
+          model: database.User,
           attributes: ["pseudo", "id", "imageUrl", "isAdmin"],
         },
         {
-          model: MyDatabase.Like,
-          attributes: ["UserId"],
+          model: database.Like,
+          attributes: ["userId"],
         },
         {
-          model: MyDatabase.Comment,
-          attributes: ["post", "pseudo", "UserId", "id"],
+          model: database.Comment,
+          attributes: ["post", "pseudo", "userId", "id"],
           order: [["createdAt", "DESC"]],
           include: [
             {
-              model: MyDatabase.User,
+              model: database.User,
               attributes: ["imageUrl", "pseudo", "isAdmin"],
             },
           ],
         },
       ],
-    }) // Added every data needed for front + order we want
+    })
     res.status(200).send(posts)
   } catch (error) {
-    return res.status(500).send({
-      error: "erreur server ",
-    })
+    return res.status(500).send({ error: "erreur server " })
   }
 }
 
 //update a post
 exports.updatePost = async (req, res) => {
   try {
-    // try to find this post by his Id
+    //find the post by Id
     let newImageUrl
     const userId = token.getUserId(req)
-    let post = await MyDatabase.Post.findOne({ where: { id: req.params.id } })
-    // Make sure this user is the owner
+    let post = await database.Post.findOne({ where: { id: req.params.id } })
+
     if (userId === post.UserId) {
       // if a file is in the request
       if (req.file) {
-        newImageUrl = `${req.protocol}://${req.get("host")}/upload/${
-          req.file.filename
-        }`
+        newImageUrl = `${req.protocol}://${req.get("host")}/upload/${req.file.filename
+          }`
         // if an image was already in database
         if (post.imageUrl) {
           const filename = post.imageUrl.split("/upload")[1]
@@ -146,15 +140,15 @@ exports.updatePost = async (req, res) => {
       } // if a new message is in the request
       if (req.body.post) {
         post.post = req.body.post
-      } 
+      }
       post.imageUrl = newImageUrl
       //save in database
       const newPost = await post.save({
         fields: ["post", "imageUrl"],
       })
-      res.status(200).json({ newPost: newPost, messageRetour: "post modifié" })
+      res.status(200).json({ newPost: newPost, message: "post modifié" })
     } else {
-      res.status(400).json({ message: "Vous n'avez pas les droits requis" })
+      res.status(400).json({ message: "Vous n'êtes pas autorisé" })
     }
   } catch (error) {
     return res.status(500).send({ error: "Erreur serveur" })
@@ -165,23 +159,23 @@ exports.updatePost = async (req, res) => {
 exports.deletePost = async (req, res) => {
   try {
     const userId = token.getUserId(req)
-    const checkIfAdmin = await MyDatabase.User.findOne({
+    const checkIfAdmin = await database.User.findOne({
       where: { id: userId },
     })
-    const post = await MyDatabase.Post.findOne({ where: { id: req.params.id } })
-    if (userId === post.UserId || checkIfAdmin.isAdmin === true) {
+    const post = await database.Post.findOne({ where: { id: req.params.id } })
+    if (userId === post.userId || checkIfAdmin.isAdmin === true) {
       if (post.imageUrl) {
         const filename = post.imageUrl.split("/upload")[1]
         fs.unlink(`upload/${filename}`, () => {
-          MyDatabase.Post.destroy({ where: { id: post.id } })
+          database.Post.destroy({ where: { id: post.id } })
           res.status(200).json({ message: "Post supprimé" })
         })
       } else {
-        MyDatabase.Post.destroy({ where: { id: post.id } }, { truncate: true })
+        database.Post.destroy({ where: { id: post.id } }, { truncate: true })
         res.status(200).json({ message: "Post supprimé" })
       }
     } else {
-      res.status(401).json({ message: "Vous n'avez pas les droits requis" })
+      res.status(401).json({ message: "Vous n'êtes pas autorisé" })
     }
   } catch (error) {
     return res.status(500).send({ error: "Erreur serveur" })
@@ -189,26 +183,25 @@ exports.deletePost = async (req, res) => {
 }
 
 //like a post
-
 exports.likePost = async (req, res, next) => {
   try {
     const userId = token.getUserId(req)
     const postId = req.params.id
-    const user = await MyDatabase.Like.findOne({
-      where: { UserId: userId, PostId: postId },
+    const user = await database.Like.findOne({
+      where: { userId: userId, postId: postId },
     })
     if (user) {
-      await MyDatabase.Like.destroy(
-        { where: { UserId: userId, PostId: postId } },
+      await database.Like.destroy(
+        { where: { userId: userId, postId: postId } },
         { truncate: true, restartIdentity: true }
       )
-      res.status(200).send({ messageRetour: "vou n'aimez plus ce post" })
+      res.status(200).send({ message: "vous n'aimez plus ce post" })
     } else {
-      await MyDatabase.Like.create({
-        UserId: userId,
-        PostId: postId,
+      await database.Like.create({
+        userId: userId,
+        postId: postId,
       })
-      res.status(201).json({ messageRetour: "vous aimez ce post" })
+      res.status(201).json({ message: "vous aimez ce post" })
     }
   } catch (error) {
     return res.status(500).send({ error: "Erreur serveur" })
@@ -220,7 +213,7 @@ exports.addComment = async (req, res) => {
   try {
     const comment = req.body.commentPost
     const pseudo = req.body.commentPseudo
-    const newComment = await MyDatabase.Comment.create({
+    const newComment = await database.Comment.create({
       post: comment,
       pseudo: pseudo,
       UserId: token.getUserId(req),
@@ -236,23 +229,22 @@ exports.addComment = async (req, res) => {
 }
 
 //delete a comment
-
 exports.deleteComment = async (req, res) => {
   try {
     const userId = token.getUserId(req)
-    const checkAdmin = await MyDatabase.User.findOne({ where: { id: userId } })
-    const comment = await MyDatabase.Comment.findOne({
+    const checkAdmin = await database.User.findOne({ where: { id: userId } })
+    const comment = await database.Comment.findOne({
       where: { id: req.params.id },
     })
 
-    if (userId === comment.UserId || checkAdmin.isAdmin === true) {
-      MyDatabase.Comment.destroy(
+    if (userId === comment.userId || checkAdmin.isAdmin === true) {
+      database.Comment.destroy(
         { where: { id: req.params.id } },
         { truncate: true }
       )
       res.status(200).json({ message: "commentaire supprimé" })
     } else {
-      res.status(401).json({ message: "Vous n'avez pas les droits requis" })
+      res.status(401).json({ message: "Vous n'êtes pas autorisé" })
     }
   } catch (error) {
     return res.status(501).send({ error: "Erreur serveur" })

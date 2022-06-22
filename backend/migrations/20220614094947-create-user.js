@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Users", {
+    await queryInterface.createTable("User", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -28,11 +28,11 @@ module.exports = {
         allowNull: true,
         type: Sequelize.STRING
       },
-  //    isAdmin: {
-  //      type: Sequelize.BOOLEAN,
-  //      allowNull: false,
-  //      default: false,
-  //    },
+      isAdmin: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        default: false,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -44,6 +44,6 @@ module.exports = {
     })
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Users")
+    await queryInterface.dropTable("User")
   },
 }
