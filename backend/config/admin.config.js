@@ -1,13 +1,13 @@
-/*const Database = require("../models")
+const Database = require("../models")
 const bcrypt = require("bcrypt")
 
 //ADMIN
 //pseudo = Admin
 //email = admin@groupomania.com
-//password = Administrateur1
+//password = Adminis1!
 
 function createAdmin(req, res) {
-  // check if an admin account already exist
+  // check if an admin account already exists
   Database.User.findOne({
     where: { email: "admin@groupomania.com" } || { username: "admin" },
   })
@@ -44,4 +44,4 @@ function createAdmin(req, res) {
       console.log({ error })
     })
 }
-module.exports = createAdmin()*/
+module.exports = createAdmin()

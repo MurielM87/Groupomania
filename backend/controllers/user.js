@@ -32,7 +32,7 @@ exports.signup = async (req, res) => {
       })
     }
   } catch (error) {
-    res.status(400).json({ message: "Cet email est déjà utilisé !" })
+    res.status(400).json({ message: "Cet email est déjà utilisé", error })
   }
 }
 
