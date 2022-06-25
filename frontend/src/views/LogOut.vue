@@ -1,4 +1,4 @@
-<template>
+<template v-if="!token">
 <div id="logout_card">
     <h2>A bientôt !</h2>
     <p><router-link :to="{name: 'LogIn'}">cliquez ici pour vous reconnecter</router-link></p>

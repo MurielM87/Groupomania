@@ -1,55 +1,70 @@
 <template>
   <div id="navbar">
     <img alt="logo Groupomania" src="../assets/icon.png" class="logo" />
-    <div v-if="user">
+    <div v-if="token">
       <router-link :to="{ name: 'Mainpage' }"
         ><img alt="logo Groupomania" src="../assets/icon.png" class="logo"
       /></router-link>
     </div>
 
     <h1>Groupomania</h1>
-    <div v-if="user">
+    <div v-if="token">
       <router-link :to="{ name: 'Mainpage' }"><h1>Groupomania</h1></router-link>
     </div>
-    
+
     <div id="barre">
-      <li v-if="user" class="menu">
+      <li v-if="token" class="menu">
         <ul>
           <router-link :to="{ name: 'ProfilUser' }"
-            ><i class="fas fa-portrait"></i><span class="text_desktop">Profil</span></router-link
+            ><i class="fas fa-portrait"></i
+            ><span class="text_desktop">Profil</span></router-link
           >
         </ul>
         <ul>
-          <router-link :to="{ name: 'LogOut' }"
-            ><i class="fas fa-sign-out-alt"></i><span class="text_desktop">Déconnexion</span></router-link
+          <router-link :to="{ name: 'LogOut' }" @click.prevent="disconnect"
+            ><i class="fas fa-sign-out-alt"></i
+            ><span class="text_desktop">Déconnexion</span></router-link
           >
         </ul>
       </li>
-      <li v-if="!user" class="menu">
+      <li v-if="!token" class="menu">
         <ul>
           <router-link :to="{ name: 'LogIn' }"
-            ><i class="fas fa-sign-in-alt"></i><span class="text_desktop">Connexion</span></router-link
+            ><i class="fas fa-sign-in-alt"></i
+            ><span class="text_desktop">Connexion</span></router-link
           >
         </ul>
         <ul>
           <router-link :to="{ name: 'SignUp' }"
-            ><i class="fas fa-user-plus"></i><span class="text_desktop">Inscription</span></router-link
+            ><i class="fas fa-user-plus"></i
+            ><span class="text_desktop">Inscription</span></router-link
           >
         </ul>
       </li>
-      
     </div>
   </div>
   <div class="barre_color"></div>
 </template>
 
 <script>
+
 export default {
   name: "NavBar",
-  props: ["user"],
+  data() {
+    return {
+      isLoggedIn: false
+    }
+  },
+  created() {
+    const token = localStorage.getItem('token')
+    if (token !== null) {
+      this.isLoggedIn = true
+    }
+  },
   methods: {
-    handleClick() {
+    disconnect() {
       localStorage.removeItem("token");
+      //localStorage.removeItem("user");
       this.$router.push("/logout");
     },
   },
@@ -105,7 +120,7 @@ h1 {
 ul {
   list-style-type: none;
   padding: 20px;
-  @media (min-width: 768px) and (max-width: 992px){
+  @media (min-width: 768px) and (max-width: 992px) {
     padding: 10px;
     margin-right: 10px;
   }

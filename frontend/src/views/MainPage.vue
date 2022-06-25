@@ -4,14 +4,16 @@
   <PostForm />
 
   <div id="separate_barre"></div>
-  <li id="post_card" v-for="post in posts" :key="post">
-    <PostCard />
+  <li id="post_card" v-for="post in posts" :key="post.id">    
+        <PostCard />      
   </li>
 </template>
 
 <script>
 import PostCard from "../components/PostCard.vue";
 import PostForm from "../components/PostForm.vue";
+//import {ref} from "vue";
+const token = localStorage.getItem("token");
 
 export default {
   name: "MainPage",
@@ -19,26 +21,46 @@ export default {
     PostCard,
     PostForm,
   },
-  beforeCreate() {
-    const token = localStorage.getItem('token')
-    if(token == null) {
-        this.$router.push('/login')
+  /*async setup() {
+    const error = ref(null);
+    const posts = ref(null);
+
+    try {
+       const postsResponse = await fetch('http://localhost:3000/post')
+    posts.value = await postsResponse.json()
+    }catch(e){
+      error.value = e
+    }   
+
+    return {posts, error}
+  }*/
+
+
+
+  beforeCreate() {    
+    if (token == null) {
+      this.$router.push("/login");
     }
   },
-  mounted(){
-    fetch('http://localhost:3000/api/posts')
-        .then((res) => res.json())
-        .then((res) => {
-            this.posts = res
-            console.log('this.posts', this.posts)
-        })
-        .catch((err) => console.log('err:', err))
-  },
-  data(){
+  data() {
     return {
-        posts: []
-    }
-  }
+      post: [],
+    };
+  },
+  created() {
+    fetch("http://localhost:3000/api/post", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        this.post = res.data;
+      })
+      .catch((err) => console.log("err:", err));
+  },
 };
 </script>
 
@@ -46,7 +68,7 @@ export default {
 #post_card {
   display: flex;
   flex-direction: column;
-  justify-content: center;  
+  justify-content: center;
 }
 #separate_barre {
   width: 60%;

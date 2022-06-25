@@ -18,6 +18,24 @@ export default {
     NavBar,
     FooterPage,
   },
+  data() {
+    return {
+      user: null,
+    };
+  },
+  created() {
+    fetch("http://localhost:3000/api/user/", {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer" + localStorage.getItem("token"),
+      },
+    })
+      .then((res) => {
+        this.user = res.data;
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  },
 };
 </script>
 
@@ -59,6 +77,5 @@ export default {
     top: 15px;
     left: 125px;
   }
-
 }
 </style>

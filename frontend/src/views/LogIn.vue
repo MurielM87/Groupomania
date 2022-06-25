@@ -4,7 +4,7 @@
       <h2 class="card_title">Connexion</h2>
       <router-link :to="{ name: 'SignUp' }"><h2>Inscription</h2></router-link>
     </div>
-    
+
     <label for="email">Email</label>
     <br />
     <input
@@ -24,7 +24,7 @@
     <br />
     <input
       v-model="password"
-      v-on:bind= "password"
+      v-on:bind="password"
       ref="password"
       class="form-row_input"
       type="password"
@@ -34,8 +34,12 @@
     <br />
     <p class="error_message">{{ passwordErrorMessage }}</p>
     <br />
-    <input type="submit" class="button" v-on:click.prevent="logIn"
-      value="Connexion" />
+    <input
+      type="submit"
+      class="button"
+      @click.prevent="logIn"
+      value="Connexion"
+    />
   </form>
 </template>
 
@@ -51,27 +55,40 @@ export default {
       passwordErrorMessage: "",
     };
   },
+
   methods: {
-    logIn: function () {
+    logIn: function () {      
       if (this.email === "" || this.password === "") {
-        this.emailErrorMessage = "Obligatoire";
-        this.passwordErrorMessage = "Obligatoire";
+        this.emailErrorMessage = "Adresse email invalide";
+        this.passwordErrorMessage = "Mot de passe invalide";
       } else {
         fetch("http://localhost:3000/api/user/login", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
-          }, body: JSON.stringify({
-              email: this.email,
-              password: this.password
-          })
-        })    
-          .then((response) => {
+            "Content-Type": "application/json",            
+            Authorization:'Bearer' + localStorage.getItem("token")
+          },
+          body: JSON.stringify({
+            email: this.email,
+            password: this.password,
+          }),
+        })
+          .then((res) => res.json)
+          .then((res) => {
+            const token = res.token
+            localStorage.setItem("token", token);
+
+            let tokenInCache
+            while (tokenInCache == null) {
+              tokenInCache = localStorage.getItem('token')
+            }
+            
             this.$router.push("/home");
-            console.log(response)
+            //window.location.href='/home';
+            console.log(res);
           })
           .catch((error) => {
-            console.log(error)
+            console.log(error);
           });
       }
     },

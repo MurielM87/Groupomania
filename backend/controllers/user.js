@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const database = require("../models")
-const token = require("../middlewares/token")
+const token = require("../middlewares/auth")
 const fs = require("fs")
 require("dotenv").config()
 
@@ -65,19 +65,6 @@ exports.login = async (req, res) => {
   }
 }
 
-//Get One User
-exports.getOneUser = async (req, res) => {
-  try {
-    // try to find this user by his ID
-    const user = await database.User.findOne({
-      where: { id: req.params.id },
-    })
-    res.status(200).send(user)
-  } catch (error) {
-    return res.status(500).send({ error: "Erreur serveur" })
-  }
-}
-
 //Update User
 exports.updateUser = async (req, res) => {
   const id = req.params.id
@@ -104,13 +91,13 @@ exports.updateUser = async (req, res) => {
         user.imageUrl = newImage
       }
       if (req.body.pseudo) {
-        user.pseudo= req.body.pseudo
+        user.pseudo = req.body.pseudo
       }
       if (req.body.firstname) {
-        user.firstname= req.body.firstname
+        user.firstname = req.body.firstname
       }
       if (req.body.lastname) {
-        user.lastname= req.body.lastname
+        user.lastname = req.body.lastname
       }
       const newUser = await user.save({ fields: ["pseudo", "firstname", "lastname", "imageUrl"] }) //
       res.status(200).json({
@@ -142,6 +129,19 @@ exports.deleteUser = async (req, res) => {
       database.User.destroy({ where: { id: id } })
       res.status(200).json({ message: "utilisateur supprimé" })
     }
+  } catch (error) {
+    return res.status(500).send({ error: "Erreur serveur" })
+  }
+}
+
+//Get One User
+exports.getOneUser = async (req, res) => {
+  try {
+    // try to find a user by Id
+    const user = await database.User.findOne({
+      where: { id: req.params.id },
+    })
+    res.status(200).send(user)
   } catch (error) {
     return res.status(500).send({ error: "Erreur serveur" })
   }

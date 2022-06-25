@@ -1,57 +1,56 @@
 <template>
   <div id="card">
     <div id="post_author">
-        <img src="../assets/avatar_default.png" alt="">
-        <div>auteur du post</div> 
+      <img src="../assets/avatar_default.png" alt="" />
+      <div>auteur du post</div>
     </div>
     <h3>titre du post</h3>
     <div>
       <p>contenu du post</p>
-    </div> 
-    <p>publié le </p> 
+    </div>
+    <p>publié le</p>
     <div id="like_post">
-        <i class="far fa-thumbs-up"></i>
-        <i class="far fa-thumbs-down"></i>
-      </div>
+      <i class="far fa-thumbs-up"></i>
+      <i class="far fa-thumbs-down"></i>
+    </div>
     <div v-for="comment in comments" :key="comment">
-      <CommentPost /> 
+      <CommentPost />
     </div>
     <div id="comment_card">
       <div id="comment_author">
         <img src="../assets/avatar_default.png" alt="" />
         <h4>nom de l'auteur du commentaire</h4>
-      </div>      
-      <textarea 
-        type="text"  
-        placeholder="commentaire"
-        required>
-      </textarea>
-      <button v-on:click.prevent="publishCard" id="btn_save" class="btn"><i class="fas fa-save"></i><span class="text_desktop">Publier</span></button>
-      <button v-on:click.prevent="deleteCard" id="bnt_delete" class="btn"><i class="fas fa-trash-alt"></i><span class="text_desktop">Supprimer</span></button>
-
-    </div>   
+      </div>
+      <textarea type="text" placeholder="commentaire" required> </textarea>
+      <button v-on:click.prevent="publishCard" id="btn_save" class="btn">
+        <i class="fas fa-save"></i><span class="text_desktop">Publier</span>
+      </button>
+      <button v-on:click.prevent="deleteCard" id="bnt_delete" class="btn">
+        <i class="fas fa-trash-alt"></i
+        ><span class="text_desktop">Supprimer</span>
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
-import CommentPost from "./CommentPost.vue"
+import CommentPost from "./CommentPost.vue";
 export default {
   name: "PostCard",
   components: {
-    CommentPost
+    CommentPost,
   },
-    beforeCreate() {
-    const token = localStorage.getItem('token')
-    if(token == null) {
-        this.$router.push('/login')
+  beforeCreate() {
+    const token = localStorage.getItem("token");
+    if (token == null) {
+      this.$router.push("/login");
     }
   },
   method: {
-    publishCard(){
-      console.log("publishCard")
-      
-    }
-  }
+    publishCard() {
+      console.log("publishCard");
+    },
+  },
 };
 </script>
 
@@ -60,7 +59,7 @@ export default {
   background-color: white;
   width: 25rem;
   border-radius: 20px;
-  border: 1px solid #FD2F01;
+  border: 1px solid #fd2f01;
   padding: 20px;
   margin: auto;
   margin-bottom: 20px;
@@ -73,16 +72,16 @@ export default {
   text-align: right;
   padding: 10px;
 }
-.fa-thumbs-up{
+.fa-thumbs-up {
   color: black;
-  &:focus{
+  &:focus {
     color: green;
   }
 }
-.fa-thumbs-down{
+.fa-thumbs-down {
   color: black;
   padding-left: 15px;
-  &:focus{
+  &:focus {
     color: red;
   }
 }

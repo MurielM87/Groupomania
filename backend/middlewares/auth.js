@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
 
+
 module.exports = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1]
@@ -8,11 +9,11 @@ module.exports = (req, res, next) => {
     const userId = decodedToken.userId;
     req.auth= { userId }
     if (req.body.userId && req.body.userId !== userId) {
-      ;("identifiant invalide")
+      throw 'User ID non valable';
     } else {
       next()
     }
   } catch (error) {
-    res.status(401).json({error: "requête invalide" })
+    res.status(401).json({error: error | 'rêquete non authentifiée'});
   }
 }

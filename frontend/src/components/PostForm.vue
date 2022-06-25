@@ -26,7 +26,7 @@
       <div id="label_file_input">
         <label for="file-input" id="btn_file_input" class="btn"
           ><i class="far fa-folder-open" id="btn_file"></i
-          ><span class="text_desktop">parcourir</span></label
+          ><span class="text_desktop">Ajouter une image</span></label
         >
         <input type="file" id="file-input" />
         <v-file-input
@@ -42,12 +42,18 @@
         </v-file-input>
       </div>
 
-      <button v-on:click.prevent="publishPost" :disabled="!isValid" id="btn_save" class="btn">
-        <i class="fas fa-save"></i><span class="text_desktop">Publier</span>
+      <button
+        @click.prevent="publishPost"
+        :disabled="isValid"
+        id="btn_save"
+        class="btn"
+      ><i class="fas fa-save"></i><span class="text_desktop">Publier</span>
       </button>
-      <button v-on:click.prevent="deletePost" id="btn_delete" class="btn">
-        <i class="fas fa-trash-alt"></i
-        ><span class="text_desktop">Supprimer</span>
+      <button 
+        @click.prevent="deletePost" 
+        id="btn_delete" 
+        class="btn"
+        ><i class="fas fa-trash-alt"></i><span class="text_desktop">Supprimer</span>
       </button>
     </div>
   </div>
@@ -68,7 +74,7 @@ export default {
       if (this.title === "" || this.content === "") {
         console.log("error");
       } else {
-        fetch("http://localhost:3000/api/post", {
+        fetch("http://localhost:3000/api/post/add", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

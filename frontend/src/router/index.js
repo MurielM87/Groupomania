@@ -46,7 +46,7 @@ const router = createRouter({
 
 router.beforeEach((to) => {
     if (isLoginRequired(to)) {
-      return router.push("/login")
+        return router.push("/login")
     }
 })
 

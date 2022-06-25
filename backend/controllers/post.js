@@ -1,4 +1,4 @@
-const token = require("../middlewares/token")
+const token = require("../middlewares/auth")
 const database = require("../models")
 const fs = require("fs")
 
@@ -7,7 +7,7 @@ exports.createPost = async (req, res) => {
   const userId = token.getUserId(req)
   let imageUrl
   try {
-    // try to find this user by his Id
+    // try to find the user by Id
     const user = await database.User.findOne({
       attributes: ["pseudo", "id"],
       where: { id: userId },
@@ -20,7 +20,7 @@ exports.createPost = async (req, res) => {
       } else {
         imageUrl = null
       }
-      // create this post in database
+      // create a post in database
       const post = await database.Post.create({
         include: [
           {
@@ -37,7 +37,7 @@ exports.createPost = async (req, res) => {
         .status(201)
         .json({ post: post, message: "Votre post est ajouté" })
     } else {
-      res.status(400).send({ error: "Erreur " })
+      res.status(400).send({ error: "Erreur" })
     }
   } catch (error) {
     return res.status(500).send({ error: "Erreur serveur" })
@@ -47,13 +47,13 @@ exports.createPost = async (req, res) => {
 //get a post
 exports.getOnePost = async (req, res) => {
   try {
-    // try to find this user by his Id
+    // try to find the user by Id
     const post = await database.Post.findOne({
       where: { id: req.params.id },
       include: [
         {
           model: database.User,
-          attributes: ["username", "id"],
+          attributes: ["pseudo", "id"],
         },
         {
           model: database.Like,

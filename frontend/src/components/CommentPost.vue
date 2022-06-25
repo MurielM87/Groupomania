@@ -20,7 +20,8 @@
       <i class="fas fa-save"></i><span class="text_desktop">Publier</span>
     </button>
     <button v-on:click.prevent="deleteComment" id="btn_delete" class="btn">
-      <i class="fas fa-trash-alt"></i><span class="text_desktop">Supprimer</span>
+      <i class="fas fa-trash-alt"></i
+      ><span class="text_desktop">Supprimer</span>
     </button>
   </div>
 </template>
@@ -28,18 +29,18 @@
 <script>
 export default {
   name: "CommentPost",
-    beforeCreate() {
-      const token = localStorage.getItem('token')
-      if(token == null) {
-          this.$router.push('/login')
-      }
-    },
+  beforeCreate() {
+    const token = localStorage.getItem("token");
+    if (token == null) {
+      this.$router.push("/login");
+    }
+  },
   method: {
-    publishComment(){
-      console.log("publishComment")
-      if(this.name === '' || this.content === '') {
-        console.log('error')
-      }else{
+    publishComment() {
+      console.log("publishComment");
+      if (this.name === "" || this.content === "") {
+        console.log("error");
+      } else {
         fetch("http://localhost:3000/api/post/:id", {
           method: "POST",
           headers: {
@@ -47,19 +48,19 @@ export default {
           },
           body: JSON.stringify({
             name: this.name,
-            content: this.content
-          })
+            content: this.content,
+          }),
         })
           .then((response) => {
             this.$router.push("/home");
-            console.log(response)
+            console.log(response);
           })
           .catch((error) => {
             console.log("error", error);
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
