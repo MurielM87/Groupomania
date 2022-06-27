@@ -1,19 +1,19 @@
 <template>
   <div id="navbar">
     <img alt="logo Groupomania" src="../assets/icon.png" class="logo" />
-    <div v-if="token">
+    <div v-if="user">
       <router-link :to="{ name: 'Mainpage' }"
         ><img alt="logo Groupomania" src="../assets/icon.png" class="logo"
       /></router-link>
     </div>
 
     <h1>Groupomania</h1>
-    <div v-if="token">
+    <div v-if="user">
       <router-link :to="{ name: 'Mainpage' }"><h1>Groupomania</h1></router-link>
     </div>
 
     <div id="barre">
-      <li v-if="token" class="menu">
+      <li v-if="user" class="menu">
         <ul>
           <router-link :to="{ name: 'ProfilUser' }"
             ><i class="fas fa-portrait"></i
@@ -27,7 +27,7 @@
           >
         </ul>
       </li>
-      <li v-if="!token" class="menu">
+      <li v-if="!user" class="menu">
         <ul>
           <router-link :to="{ name: 'LogIn' }"
             ><i class="fas fa-sign-in-alt"></i

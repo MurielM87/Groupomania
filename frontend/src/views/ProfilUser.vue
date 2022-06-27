@@ -7,7 +7,7 @@
         alt="avatar par defaut"
         id="photo_profil"
       />
-      <router-link to="/edit-profil" v-if="token"><i class="fas fa-pencil-alt"></i></router-link>
+      <router-link to="/edit-profil" v-if="user"><i class="fas fa-pencil-alt"></i></router-link>
     </div>
     <div id="name_card">
       <div>Pseudo : user.pseudo</div>
@@ -36,6 +36,7 @@ export default {
       this.$router.push("/login");
     }
   },
+  
   data() {
     return {
       user: [],

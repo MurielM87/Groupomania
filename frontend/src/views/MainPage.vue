@@ -4,6 +4,7 @@
   <PostForm />
 
   <div id="separate_barre"></div>
+  
   <li id="post_card" v-for="post in posts" :key="post.id">    
         <PostCard />      
   </li>

@@ -77,14 +77,13 @@ export default {
           .then((res) => {
             const token = res.token
             localStorage.setItem("token", token);
-
-            let tokenInCache
-            while (tokenInCache == null) {
-              tokenInCache = localStorage.getItem('token')
-            }
+console.log("token", token)
+        //    let tokenInCache
+        //    while (tokenInCache == null) {
+        //      tokenInCache = localStorage.getItem('token')
+        //    }
             
-            this.$router.push("/home");
-            //window.location.href='/home';
+            this.$router.push("/");
             console.log(res);
           })
           .catch((error) => {
