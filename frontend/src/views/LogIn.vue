@@ -73,18 +73,15 @@ export default {
             password: this.password,
           }),
         })
-          .then((res) => res.json)
-          .then((res) => {
-            const token = res.token
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data)
+            const token = data.token
             localStorage.setItem("token", token);
 console.log("token", token)
-        //    let tokenInCache
-        //    while (tokenInCache == null) {
-        //      tokenInCache = localStorage.getItem('token')
-        //    }
-            
+                    
             this.$router.push("/");
-            console.log(res);
+        
           })
           .catch((error) => {
             console.log(error);

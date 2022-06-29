@@ -24,7 +24,7 @@
       <i class="far fa-thumbs-down"></i>
     </div>
     <div v-for="comment in comments" :key="comment">
-      <CommentPost />
+      <CommentPost @add="addComment" />
     </div>
     <div id="comment_card">
       <div id="comment_author">
@@ -34,15 +34,16 @@
       <textarea type="text" placeholder="commentaire" required> </textarea>
       <button
         type="submit"
-        @click.prevent="publishCard"
+        @click.prevent="addComment"
         id="btn_save"
         class="btn"
       >
         <i class="fas fa-save"></i><span class="text_desktop">Publier</span>
       </button>
+
       <button
         type="submit"
-        @click.prevent="deleteCard"
+        @click.prevent="deleteComment"
         id="bnt_delete"
         class="btn"
       >
@@ -59,15 +60,23 @@ import { ref } from "vue";
 
 export default {
   name: "PostCard",
+ // components: {
+ //   CommentPost,
+ // },
   emits: ["deletePost", "editPost"],
   props: {
     publishPost: {
       type: Array,
       required: true,
     },
+  //  addComment: {
+  //    type: Array,
+  //    required: true
+  //  }
   },
   setup(props, { emit }) {
     let postToEdit = ref(null);
+  //  let comment = ref(null);
 
     let deletePost = function (post) {
       emit("deletePost", post);
@@ -82,11 +91,20 @@ export default {
       postToEdit.value = null;
     };
 
+  //  const addComment = function(comment) {
+  //    console.log("comment", comment.value)
+  //    console.log("addComment", addComment.value)
+  //  };
+
+  //  emit("addComment", comment.value)
+
     return {
       deletePost,
       editPost,
       postToEdit,
       save,
+    //  addComment,
+    //  comment,
     };
   },
 

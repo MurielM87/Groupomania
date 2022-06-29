@@ -7,6 +7,7 @@
       </div>
       <textarea
         name="comment"
+        v-model="comment"
         id="comment_area"
         rows="5"
         cols="33"
@@ -37,8 +38,26 @@
 </template>
 
 <script>
+import {ref} from 'vue';
+
 export default {
+
   name: "CommentPost",
+  setup(props, ctx) {
+    let comment = ref("")
+
+    const addComment = function() {
+      console.log("addComment");
+      console.log("addComment", comment.value)
+    }
+
+    ctx.emit("add", comment.value)
+
+    return {
+      addComment,
+      comment,
+    }
+  }
 
   /*
   beforeCreate() {

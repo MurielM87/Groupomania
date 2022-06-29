@@ -81,6 +81,18 @@ export default {
       console.log("title", title.value);
       console.log("content", content.value);
 
+      fetch('http://localhost:3000/api/post/add', {
+        method: "POST",
+          headers: {
+            "Content-Type": "application/json",            
+            Authorization:'Bearer ' + localStorage.getItem("token")
+          },
+          body: JSON.stringify({
+            title: title.value,
+            content: content.value,
+          }),
+      })
+
       ctx.emit("add", title.value);
       ctx.emit("add", content.value);
 

@@ -4,7 +4,9 @@ const fs = require("fs")
 
 //create a post
 exports.createPost = async (req, res) => {
-  const userId = token.getUserId(req)
+  const userId = req.auth.userId
+  
+  console.log('auth', req.auth.userId)
   let imageUrl
   try {
     // try to find the user by Id
@@ -30,7 +32,7 @@ exports.createPost = async (req, res) => {
         ],
         content: req.body.content,
         imageUrl: imageUrl,
-        UserId: user.id,
+        id: userId,
       })
 
       res
@@ -40,7 +42,8 @@ exports.createPost = async (req, res) => {
       res.status(400).send({ error: "Erreur" })
     }
   } catch (error) {
-    return res.status(500).send({ error: "Erreur serveur" })
+    console.log(error)
+    return res.status(500).send({ error })
   }
 }
 

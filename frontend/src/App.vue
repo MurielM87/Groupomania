@@ -25,7 +25,7 @@ export default {
         fetch("http://localhost:3000/api/user/", {
           method: "GET",
           headers: {
-            Authorization: "Bearer"+localStorage.getItem("token"),
+            Authorization: "Bearer" + localStorage.getItem("token"),
           },
         })
           .then((res) => {
