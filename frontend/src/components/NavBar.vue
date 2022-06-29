@@ -1,19 +1,19 @@
 <template>
   <div id="navbar">
-    <img alt="logo Groupomania" src="../assets/icon.png" class="logo" />
-    <div v-if="user">
-      <router-link :to="{ name: 'Mainpage' }"
+    <div v-if="isLoggedIn">
+      <router-link :to="{ name: 'MainPage' }"
         ><img alt="logo Groupomania" src="../assets/icon.png" class="logo"
       /></router-link>
     </div>
-
-    <h1>Groupomania</h1>
-    <div v-if="user">
-      <router-link :to="{ name: 'Mainpage' }"><h1>Groupomania</h1></router-link>
+    <div v-else><img alt="logo Groupomania" src="../assets/icon.png" class="logo" /></div>
+    
+    <div v-if="isLoggedIn">
+      <router-link :to="{ name: 'MainPage' }"><h1>Groupomania</h1></router-link>
     </div>
+    <h1 v-else>Groupomania</h1>
 
     <div id="barre">
-      <li v-if="user" class="menu">
+      <li v-if="isLoggedIn" class="menu">
         <ul>
           <router-link :to="{ name: 'ProfilUser' }"
             ><i class="fas fa-portrait"></i
@@ -27,7 +27,7 @@
           >
         </ul>
       </li>
-      <li v-if="!user" class="menu">
+      <li v-if="!isLoggedIn" class="menu">
         <ul>
           <router-link :to="{ name: 'LogIn' }"
             ><i class="fas fa-sign-in-alt"></i
@@ -63,8 +63,7 @@ export default {
   },
   methods: {
     disconnect() {
-      localStorage.removeItem("token");
-      //localStorage.removeItem("user");
+      localStorage.removeItem("user");
       this.$router.push("/logout");
     },
   },
@@ -85,9 +84,11 @@ export default {
 h1 {
   display: flex;
   align-items: center;
+  margin-top : 25px;
 }
 
 .logo {
+  width: 100px;
   display: flex;
   flex-direction: flex-start;
   margin-left: 180px;

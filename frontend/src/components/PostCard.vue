@@ -1,14 +1,24 @@
 <template>
   <div id="card">
-    <div id="post_author">
-      <img src="../assets/avatar_default.png" alt="" />
-      <div>auteur du post</div>
-    </div>
-    <h3>titre du post</h3>
-    <div>
-      <p>contenu du post</p>
-    </div>
-    <p>publié le</p>
+    <li v-for="post in publishPost" :key="post.id">
+      <button @click="deletePost(post)">Supprimer<i class="fas fa-trash-alt"
+        ></i></button>
+      <button @click="editPost(post)">Modifier<i class="fas fa-pencil-alt"></i></button>
+      <span v-if="postToEdit !== null && postToEdit.id === post.id">
+        <input
+          type="text"
+          v-model="postToEdit.post"
+          @keypress.enter="save"
+        /><button @click="save"><i class="fas fa-save"
+        ></i>sauvegarder</button>
+      </span>
+      <span v-else>
+        {{ post.post }}
+      </span>
+    </li>
+
+    <div id="separate_barre"></div>
+
     <div id="like_post">
       <i class="far fa-thumbs-up"></i>
       <i class="far fa-thumbs-down"></i>
@@ -18,14 +28,24 @@
     </div>
     <div id="comment_card">
       <div id="comment_author">
-        <img src="../assets/avatar_default.png" alt="" />
+        <img src="@/assets/avatar_default.png" alt="" />
         <h4>nom de l'auteur du commentaire</h4>
       </div>
       <textarea type="text" placeholder="commentaire" required> </textarea>
-      <button v-on:click.prevent="publishCard" id="btn_save" class="btn">
+      <button
+        type="submit"
+        @click.prevent="publishCard"
+        id="btn_save"
+        class="btn"
+      >
         <i class="fas fa-save"></i><span class="text_desktop">Publier</span>
       </button>
-      <button v-on:click.prevent="deleteCard" id="bnt_delete" class="btn">
+      <button
+        type="submit"
+        @click.prevent="deleteCard"
+        id="bnt_delete"
+        class="btn"
+      >
         <i class="fas fa-trash-alt"></i
         ><span class="text_desktop">Supprimer</span>
       </button>
@@ -34,9 +54,43 @@
 </template>
 
 <script>
-import CommentPost from "./CommentPost.vue";
+import { ref } from "vue";
+//import CommentPost from "./CommentPost.vue";
+
 export default {
   name: "PostCard",
+  emits: ["deletePost", "editPost"],
+  props: {
+    publishPost: {
+      type: Array,
+      required: true,
+    },
+  },
+  setup(props, { emit }) {
+    let postToEdit = ref(null);
+
+    let deletePost = function (post) {
+      emit("deletePost", post);
+    };
+
+    let editPost = function (post) {
+      postToEdit.value = post;
+    };
+
+    let save = function () {
+      emit("editPost", postToEdit.value);
+      postToEdit.value = null;
+    };
+
+    return {
+      deletePost,
+      editPost,
+      postToEdit,
+      save,
+    };
+  },
+
+  /*
   components: {
     CommentPost,
   },
@@ -50,7 +104,7 @@ export default {
     publishCard() {
       console.log("publishCard");
     },
-  },
+  },*/
 };
 </script>
 
@@ -68,9 +122,15 @@ export default {
     width: 80%;
   }
 }
+#comment_author {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
 #like_post {
   text-align: right;
   padding: 10px;
+  margin-right: 25px;
 }
 .fa-thumbs-up {
   color: black;
@@ -85,4 +145,9 @@ export default {
     color: red;
   }
 }
+#comment_author img {
+  width: 40px;
+  padding: 10px;
+}
+
 </style>

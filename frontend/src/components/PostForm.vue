@@ -1,8 +1,8 @@
 <template>
   <div id="card">
     <div id="post_author">
-      <img src="../assets/avatar_default.png" alt="" />
-      <div>auteur du post</div>
+      <img src="@/assets/avatar_default.png" alt="" />
+      <h3>auteur du post</h3>
     </div>
     <div id="post_form" contenteditable="true">
       <input
@@ -30,7 +30,7 @@
         >
         <input type="file" id="file-input" />
         <v-file-input
-          @change="uploadImage"
+          @change="uploadImage($event)" 
           v-model="file"
           accept="image/png, image/jpeg, image/jpg, image/bmp, image/gif, image/webp"
           label="Ajouter une image"
@@ -41,15 +41,15 @@
         >
         </v-file-input>
       </div>
-
       <button
-        @click.prevent="publishPost"
-        :disabled="isValid"
+        type="submit"
+        @click.prevent="addPost"
         id="btn_save"
         class="btn"
       ><i class="fas fa-save"></i><span class="text_desktop">Publier</span>
       </button>
       <button 
+        type="submit"
         @click.prevent="deletePost" 
         id="btn_delete" 
         class="btn"
@@ -60,14 +60,45 @@
 </template>
 
 <script>
+import {ref} from 'vue';
+
 export default {
-  name: "PostCard",
+  name: "PostForm",
   beforeCreate() {
     const token = localStorage.getItem("token");
     if (token == null) {
       this.$router.push("/login");
     }
   },
+  
+  setup(props, ctx){
+    let postCard = ref[""]
+    let title = ref("");
+    let content = ref("");
+
+    const addPost = function () {
+      console.log("addPost");
+      console.log("title", title.value);
+      console.log("content", content.value);
+
+      ctx.emit("add", title.value);
+      ctx.emit("add", content.value);
+
+      title.value="";
+      content.value="";      
+    };
+
+    return {
+      postCard,
+      title,
+      content,
+      addPost,
+    }
+  }
+
+  /*
+  
+  
   method: {
     publishPost() {
       console.log("publishPost");
@@ -113,7 +144,35 @@ export default {
           console.log("error", error);
         });
     },
-  },
+    uploadImage(e){
+      this.form.icon = e.target.files[0];
+
+      let formData = new FormData();
+      formData.append('method', this.form.method);
+      formData.append('icon', this.form.icon);
+
+      fetch('http://localhost:3000/api/post', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer' + this.token,
+          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data'
+        }, 
+        body: formData 
+      })
+        .then(function(res) {
+          if(res.status !== 201) {
+            this.fetchError = res.status 
+          }else{
+            res.json().then(function(data) {
+              this.fetchResponse = data;
+            }.bind(this));
+          }
+        }.bind(this))
+        .catch( error => {console.log(error)})
+      
+    },
+  },*/
 };
 </script>
 

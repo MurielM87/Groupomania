@@ -16,10 +16,20 @@
       </textarea>
       <div>publié le</div>
     </div>
-    <button v-on:click.prevent="publishComment" id="btn_save" class="btn">
+    <button
+      type="submit"
+      @click.prevent="addComment"
+      id="btn_save"
+      class="btn"
+    >
       <i class="fas fa-save"></i><span class="text_desktop">Publier</span>
     </button>
-    <button v-on:click.prevent="deleteComment" id="btn_delete" class="btn">
+    <button
+      type="submit"
+      @click.prevent="deleteComment"
+      id="btn_delete"
+      class="btn"
+    >
       <i class="fas fa-trash-alt"></i
       ><span class="text_desktop">Supprimer</span>
     </button>
@@ -29,6 +39,8 @@
 <script>
 export default {
   name: "CommentPost",
+
+  /*
   beforeCreate() {
     const token = localStorage.getItem("token");
     if (token == null) {
@@ -36,8 +48,8 @@ export default {
     }
   },
   method: {
-    publishComment() {
-      console.log("publishComment");
+    addComment() {
+      console.log("addComment");
       if (this.name === "" || this.content === "") {
         console.log("error");
       } else {
@@ -60,7 +72,7 @@ export default {
           });
       }
     },
-  },
+  },*/
 };
 </script>
 

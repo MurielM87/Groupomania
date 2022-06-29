@@ -25,6 +25,8 @@
 
 <script>
 import PostCard from "@/components/PostCard.vue";
+import {ref} from "vue";
+
 export default {
   name: "ProfilUser",
   components: {
@@ -36,7 +38,15 @@ export default {
       this.$router.push("/login");
     }
   },
-  
+  setup(){
+    let user = ref[""];
+
+    return {
+      user,
+    }
+  }
+
+  /*
   data() {
     return {
       user: [],
@@ -61,7 +71,7 @@ export default {
         console.log("this.user", this.user);
       })
       .catch((err) => console.log("err:", err));
-  },
+  },*/
 };
 </script>
 
