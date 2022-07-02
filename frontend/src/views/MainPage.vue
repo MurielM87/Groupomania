@@ -1,11 +1,11 @@
 <template>
   <h2>PUBLICATIONS</h2>
 
-  <PostForm @add="addPost"/>
+  <PostForm @add="addPost" @addComment="addComment"/>
 
   <div id="separate_barre"></div>
   <br />
-  <PostCard :publishPost="publishPost" @deletePost="deletePost" @editPost="editPost"/>  
+  <PostCard :publishPost="publishPost" @deletePost="deletePost" @editPost="editPost" :publishComment="publishComment" @deleteComment="deleteComment" @editComment="editComment"/>  
   
 </template>
 
@@ -13,7 +13,7 @@
 import PostCard from "@/components/PostCard.vue";
 import PostForm from "@/components/PostForm.vue";
 import {ref} from "vue";
-//const token = localStorage.getItem("token");
+
 
 export default {
   name: "MainPage",

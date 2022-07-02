@@ -30,7 +30,7 @@
         >
         <input type="file" id="file-input" />
         <v-file-input
-          @change="uploadImage($event)" 
+          @change="uploadImage($event)"
           v-model="file"
           accept="image/png, image/jpeg, image/jpg, image/bmp, image/gif, image/webp"
           label="Ajouter une image"
@@ -41,26 +41,15 @@
         >
         </v-file-input>
       </div>
-      <button
-        type="submit"
-        @click.prevent="addPost"
-        id="btn_save"
-        class="btn"
-      ><i class="fas fa-save"></i><span class="text_desktop">Publier</span>
-      </button>
-      <button 
-        type="submit"
-        @click.prevent="deletePost" 
-        id="btn_delete" 
-        class="btn"
-        ><i class="fas fa-trash-alt"></i><span class="text_desktop">Supprimer</span>
+      <button type="submit" @click.prevent="addPost" id="btn_save" class="btn">
+        <i class="fas fa-save"></i><span class="text_desktop">Publier</span>
       </button>
     </div>
   </div>
 </template>
 
 <script>
-import {ref} from 'vue';
+import { ref } from "vue";
 
 export default {
   name: "PostForm",
@@ -70,9 +59,9 @@ export default {
       this.$router.push("/login");
     }
   },
-  
-  setup(props, ctx){
-    let postCard = ref[""]
+
+  setup(props, ctx) {
+    let postCard = ref[""];
     let title = ref("");
     let content = ref("");
 
@@ -81,23 +70,27 @@ export default {
       console.log("title", title.value);
       console.log("content", content.value);
 
-      fetch('http://localhost:3000/api/post/add', {
-        method: "POST",
+      if (title.value === null || content.value === null) {
+        console.log("erreur");
+      } else {
+        fetch("http://localhost:3000/api/post/add", {
+          method: "POST",
           headers: {
-            "Content-Type": "application/json",            
-            Authorization:'Bearer ' + localStorage.getItem("token")
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
           },
           body: JSON.stringify({
             title: title.value,
             content: content.value,
           }),
-      })
+        });
+      }
 
       ctx.emit("add", title.value);
       ctx.emit("add", content.value);
 
-      title.value="";
-      content.value="";      
+      title.value = "";
+      content.value = "";
     };
 
     return {
@@ -105,8 +98,8 @@ export default {
       title,
       content,
       addPost,
-    }
-  }
+    };
+  },
 
   /*
   
@@ -248,14 +241,15 @@ export default {
   margin: 10px;
   padding: 5px;
   border-radius: 5px;
+  &:focus {
+    background-color: #fd2d01;
+  }
 }
 .fa-save,
 .fa-trash-alt,
-.fa-folder-open {
+.fa-folder-open,
+.fa-pen {
   font-size: 20px;
   margin: 2px;
-  &:focus {
-    color: #fd2d01;
-  }
 }
 </style>
