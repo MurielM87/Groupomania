@@ -1,78 +1,182 @@
 <template>
-  <form id="profil_form">
+  <div id="profil_form">
     <h2>Profil</h2>
-    <div id="photo_icone">
-      <img
-        src="../assets/avatar_default.png"
-        alt="avatar par defaut"
-        id="photo_profil"
-      />
-      <router-link to="/edit-profil" v-if="user"><i class="fas fa-pencil-alt"></i></router-link>
+
+    <form class="modify-img" @submit.prevent="updateUserImage($event)">
+      <label for="profil_img">
+        <i
+          class="fas fa-user-circle"
+          id="profil_avatar_icon"
+          v-if="!user.image"
+        ></i>
+        <img
+          v-else
+          id="profil_avatar_img"
+          alt="Avatar"
+          title="modifier mon avatar"
+          :src="`http://localhost:3000/${user.image}`"
+        />
+      </label>
+      <input type="file" name="avatar" id="profil_image" accept="image/*" />
+      <button
+        type="submit"
+        class="profil_avatar_btn"
+        title="enregistrer la nouvelle image"
+      >
+        Valider
+      </button>
+    </form>
+
+    <div id="separate_barre"></div>
+
+    <div class="profil_informations">
+      <form class="form-profil" @submit.prevent="updateProfil(user.id)">
+        <div class="form_group">
+          <label for="pseudo">Pseudo</label>
+          <input
+            type="text"
+            v-model.lazy="user.pseudo"
+            name="pseudo"
+            id="pseudo"
+            class="form_input"
+            required
+          />
+          <div class="form-err"></div>
+        </div>
+        <div class="form_group">
+          <label for="firstname">Prénom</label>
+          <input
+            type="text"
+            v-model.lazy="user.firstName"
+            name="firstname"
+            id="firstname"
+            class="form_input"
+            required
+          />
+          <div class="form-err"></div>
+        </div>
+        <div class="form_group">
+          <label for="lastname">Nom</label>
+          <input
+            type="text"
+            v-model.lazy="user.lastName"
+            name="lastname"
+            id="lastname"
+            class="form_input"
+            required
+          />
+          <div class="form-err"></div>
+        </div>
+        <div class="form_group">
+          <label for="email">Email</label>
+          <input
+            type="text"
+            v-model.lazy="user.email"
+            name="email"
+            id="email"
+            class="form_input"
+            required
+          />
+          <div class="form-err"></div>
+        </div>
+        <button class="form_btn" title="enregistrer les modifications">
+          enregistrer les modifications
+        </button>
+
+        <div id="separation_barre"></div>
+
+        <button
+          class="delete_btn"
+          @click="deleteUser(user.id)"
+          title="supprimer le compte"
+        >
+          supprimer le compte
+        </button>
+      </form>
     </div>
-    <div id="name_card">
-      <div>Pseudo : user.pseudo</div>
-      <div>Prénom : user.firstname</div>
-      <div>Nom : user.lastname</div>
-      <div>Email : user.email</div>
-    </div>
-    <div id="separation_barre"></div>
-    <h3>Messages publiés</h3>
-    <div id="posts_card" v-for="post in posts" :key="post">
-      <PostCard />
-    </div>
-  </form>
+  </div>
 </template>
 
 <script>
-import PostCard from "@/components/PostCard.vue";
-import {ref} from "vue";
 
 export default {
   name: "ProfilUser",
-  components: {
-    PostCard,
-  },
-  beforeCreate() {
-    const token = localStorage.getItem("token");
-    if (token == null) {
-      this.$router.push("/login");
-    }
-  },
-  setup(){
-    let user = ref[""];
-    
-
-    return {
-      user,
-    }
-  }
-
-  /*
   data() {
     return {
-      user: [],
+      user: {
+        pseudo: "",
+        firstname: "",
+        lastname: "",
+        email: "",
+        image: "",
+      },
     };
   },
-  mounted() {
-    fetch("http://localhost:3000/api/user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        pseudo: this.pseudo,
-        firstname: this.firstname,
-        lastname: this.lastname,
-        email: this.email,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        this.posts = res;
-        console.log("this.user", this.user);
+  created() {
+    this.token = localStorage.getItem("token");
+    this.getUserProfil;
+  },
+  methods: {
+    //get all the informations about the user
+    getUserProfil() {
+      const userId = localStorage.id;
+      fetch("http://localhost:3000/api/users/${userId}", {
+        method: "GET",
+        data: userId,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token}`,
+        },
       })
-      .catch((err) => console.log("err:", err));
-  },*/
+        .then((res) => {
+          this.user = res.data;
+        })
+        .catch(() => {
+          this.$router.push({ name: "Login" });
+        });
+    },
+
+    //modify userProfil
+    updateProfil(id) {
+      fetch("http://localhost:3000/api/users/${id}", {
+        method: "PUT",
+        data: this.user,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token}`,
+        },
+      }).then(() => {
+        alert("profil modifié");
+        console.log(id);
+      });
+    },
+
+    //delete user
+    deleteUser(id) {
+      if (
+        window.confirm(
+          "vous allez supprimer votre compte. Êtes-vous certain de votre choix?"
+        )
+      )
+        fetch("http://localhost:3000/api/users/${id}", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.token}`,
+          },
+        })
+          .then((res) => {
+            if (res) {
+              console.log(id);
+              localStorage.removeItem("token");
+              this.$router.push({ name: "SignUp" });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    },
+  },
 };
 </script>
 

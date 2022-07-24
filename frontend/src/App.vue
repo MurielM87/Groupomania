@@ -2,7 +2,7 @@
   <div class="container">
     <NavBar />
     <img src="./assets/icon.svg" alt="logo" id="logo_background" />
-    <router-view :user="isLoggedIn" />
+    <router-view />
 
     <FooterPage />
   </div>
@@ -12,37 +12,13 @@
 import NavBar from "./components/NavBar.vue";
 import FooterPage from "./components/FooterPage.vue";
 
-
 export default {
   name: "App",
   components: {
     NavBar,
     FooterPage,
-  },
-  setup(){
-     class isLoggedIn {
-      constructor(user) {
-        fetch("http://localhost:3000/api/user/", {
-          method: "GET",
-          headers: {
-            Authorization: "Bearer" + localStorage.getItem("token"),
-          },
-        })
-          .then((res) => {
-            this.user=res.user;
-            console.log(res.user);
-          })
-          .catch((err) => console.log(err));
+  },  
 
-        console.log(user);
-      }
-    }
-
-    return {
-      isLoggedIn,
-    
-    }
-  },
 };
 </script>
 

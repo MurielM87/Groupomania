@@ -44,7 +44,6 @@
 </template>
 
 <script>
-
 export default {
   name: "LogIn",
   data() {
@@ -57,16 +56,16 @@ export default {
   },
 
   methods: {
-    logIn: function () {      
+    logIn: function () {
       if (this.email === "" || this.password === "") {
         this.emailErrorMessage = "Adresse email invalide";
         this.passwordErrorMessage = "Mot de passe invalide";
       } else {
-        fetch("http://localhost:3000/api/user/login", {
+        fetch("http://localhost:3000/api/users/login", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",            
-            Authorization:'Bearer' + localStorage.getItem("token")
+            "Content-Type": "application/json",
+            Authorization: "Bearer" + localStorage.getItem("token"),
           },
           body: JSON.stringify({
             email: this.email,
@@ -75,13 +74,13 @@ export default {
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log(data)
-            const token = data.token
+            console.log(data);
+            const token = data.token;
             localStorage.setItem("token", token);
-console.log("token", token)
-                    
+            console.log("token", token);
+           
+
             this.$router.push("/");
-        
           })
           .catch((error) => {
             console.log(error);

@@ -1,162 +1,214 @@
 <template>
-  <div id="card">
-    <li v-for="post in publishPost" :key="post.id">
-      <button @click="deletePost(post)">
-        Supprimer<i class="fas fa-trash-alt"></i>
-      </button>
-      <button @click="editPost(post)">
-        Modifier<i class="fas fa-pen"></i>
-      </button>
-      <span v-if="postToEdit !== null && postToEdit.id === post.id">
-        <input
-          type="text"
-          v-model="postToEdit.post"
-          @keypress.enter="save"
-        /><button @click="save"><i class="fas fa-save"></i>sauvegarder</button>
-      </span>
-      <span v-else>
-        {{ post.post }}
-      </span>
-
-      <div id="separate_barre"></div>
-
-      <div id="like_post">
-        <i class="far fa-thumbs-up"></i>
-        <i class="far fa-thumbs-down"></i>
+  <article id="card">
+    <div class="post_author">
+      <a href="/profil">
+        <img
+          v-if="post.image"
+          :src="`http://localhost:3000/${post.image}`"
+          width="50"
+          title="Avatar de l'auteur"
+          class="post-header-pic-round"
+        />
+        <i v-else id="post-pic-default" class="fas fa-user-circle"></i>
+      </a>
+      <div class="author_name">
+        <p>{{ user.pseudo }}</p>
       </div>
+      <div class="post_date">
+        <p>{{ datePost(post.date_ajout) }}</p>
+      </div>
+    </div>
 
-      <div id="comment_card">
-        <div id="comment_author">
-          <img src="@/assets/avatar_default.png" alt="" />
-          <h4>nom de l'auteur du commentaire</h4>
-        </div>
-        <textarea
-          type="text"
-          v-model="publishComment"
-          placeholder="commentaires"
-          rows="5"
-          cols="33"
-          required
-        >
-        </textarea>
+    <div class="post_btn" v-if="post.editable">
+      <button
+        @click="menuActive = !menuActive"
+        v-click-outside="clickOutside"
+        class="btn_menu"
+        title="options"
+      >
+        <i class="fas fa-ellipsis-v"></i>
+      </button>
+      <div v-if="menuActive" id="post_modify">
         <button
-          type="submit"
-          @click.prevent="addComment"
-          id="btn_save"
-          class="btn"
+          id="post_modify"
+          title="modifier le message"
+          @click="updatePost(post.id)"
         >
-          <i class="fas fa-save"></i><span class="text_desktop">Publier</span>
+          <i class="far fa-edit"></i>
+          <span class="btn_modify">Modifier</span>
+        </button>
+        <button
+          id="post_delete"
+          title="supprimer le message"
+          @click="deletePost(post.id)"
+        >
+          <i class="far fa-trash-alt"></i>
+          <span>Supprimer</span>
         </button>
       </div>
+    </div>
 
-      <div v-for="comment in comments" :key="comment">
-        <li>
-          <button @click="deletePost(comment)">
-            Supprimer<i class="fas fa-trash-alt"></i>
-          </button>
-          <button @click="editComment(comment)">
-            Modifier<i class="fas fa-pen"></i>
-          </button>
-          <span
-            v-if="commentToEdit !== null && commentToEdit.id === comment.id"
-          >
-            <input
-              type="text"
-              v-model="commentToEdit.comment"
-              @keypress.enter="saveComment"
-            /><button @click="saveComment">
-              <i class="fas fa-save"></i>sauvegarder
-            </button>
-          </span>
-          <span v-else>
-            {{ comment.comment }}
-          </span>
-        </li>
+    <div class="post_content">
+      <div class="post_description">
+        <p>{{ post.title }}</p>
+        <p>{{ post.content }}</p>
       </div>
-    </li>
-  </div>
+      <div class="post_img">
+        <img
+          :src="`http://localhost:3000${post.media}`"
+          title="Image du post"
+          class="wall-img"
+          v-if="post.media"
+        />
+      </div>
+      <div class="post_like">
+        <i class="far fa-thumbs-up" id="icon-like"></i>
+        <p>{{ post.likes }}</p>
+      </div>
+    </div>
+
+    <div id="separate_barre"></div>
+
+    <div class="post_action">
+      <div class="post_action_like" @click="addLike(post.id)" title="j'aime">
+        <i class="far fa-thumbs-up" id="icon-like"></i>
+        <span>J'aime</span>
+      </div>
+      <div
+        class="post_action_comment"
+        @click="showComment(post.id)"
+        title="commentaire"
+      >
+        <i class="far fa-comment-alt" id="icon-comment"></i>
+        <span>Commentaires</span>
+      </div>
+    </div>
+
+    <div id="separate_barre"></div>
+
+    <div class="comment" v-if="releveComment">
+      <div
+        class="comment_author"
+        v-for="commentaire in commentaires"
+        :key="commentaire.id"
+      >
+        <img
+          v-if="commentaire.image"
+          :src="`http://localhost:3000/${commentaire.image}`"
+          width="40"
+          class="comment-pic-round"
+        />
+        <i v-else id="comment-pic-default" class="fas fa-user-circle"></i>
+        <div class="comment_user">
+          <span class="comment_user-name"
+            >{{ commentaire.nom }} {{ commentaire.prenom }}</span
+          >
+          <p class="comment-text">{{ commentaire.message }}</p>
+        </div>
+        <div class="edit_comment" v-if="commentaire.editable">
+          <button
+            :data-id="commentaire.id"
+            @click="
+              menuActiveComments = {
+                ...menuActiveComments,
+                [commentaire.id]: !menuActiveComments[commentaire.id],
+              }
+            "
+            v-click-outside="clickOutsideComment"
+            class="dropdown-btn-comments"
+            title="Option"
+          >
+            <i class="fas fa-ellipsis-v"></i>
+          </button>
+          <div
+            v-if="menuActiveComments[commentaire.id]"
+            id="myDropdownComments"
+            class="dropdown-content-comments"
+          >
+            <button
+              id="comment-delete"
+              title="Supprimer le commentaire"
+              @click="deleteComment(post.id, commentaire.id)"
+            >
+              <i class="far fa-trash-alt"></i>
+              <span class="dropdown-options-comments">Supprimer</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ecriture du commentaire -->
+      <form class="comment-input" @submit.prevent="submitComment">
+        <input
+          type="text"
+          class="com-input"
+          v-model="commentData.message"
+          placeholder="Écrivez un commentaire ici..."
+          required
+        />
+      </form>
+
+    </div>
+  </article>
 </template>
 
 <script>
-import { ref } from "vue";
 
 export default {
   name: "PostCard",
-
-  beforeCreate() {
-    const token = localStorage.getItem("token");
-    if (token == null) {
-      this.$router.push("/login");
+  props: {
+    post: Object,
+    deletePost: Function,
+    addLike: Function,
+    addComment: Function,
+    loadComment: Function,
+    commentaires: Array,
+    deleteComment: Function
+  },
+  data(){
+    return {
+      menuActive: false,
+      menuActiveComments: {},
+      scTimer: 0,
+      scY: 0,
+      commentData : {
+        message:''
+      },
+      releveComment: false
     }
   },
-
-  emits: ["deletePost", "editPost", "deleteComment", "editComment"],
-  props: {
-    publishPost: {
-      type: Array,
-      required: true,
+  methods: {
+    // Fonction fermant automatiquement la partie option de post dès lors que l'utilisateur click au delà des boutons modifier et supprimer 
+    clickOutside(){
+      this.menuActive = false 
     },
-    comments: {
-      type: Array,
-      required: true,
+    // Fonction fermant automatiquement la partie option  de commentaire dès lors que l'utilisateur click au délà du bouton supprimer 
+    clickOutsideComment(event, el) {
+      const id = el.dataset['id'];
+      this.menuActiveComments = {... this.menuActiveComments, [id]: false};
     },
-  },
-  setup(props, { emit }) {
-    let postToEdit = ref(null);
-
-    let deletePost = function (post) {
-      emit("deletePost", post);
-    };
-
-    let editPost = function (post) {
-      postToEdit.value = post;
-    };
-
-    let save = function () {
-      emit("editPost", postToEdit.value);
-      postToEdit.value = null;
-    };
-
-    let commentCard = ref[""];
-    let publishComment = ref("");
-
-    const addComment = function () {
-      console.log("addComment");
-      console.log("PostCard, addComment", publishComment.value);
-
-      emit("addComment", publishComment.value);
-      publishComment.value = "";
-    };
-
-    let commentToEdit = ref(null);
-    let deleteComment = function (comment) {
-      emit("deleteComment", comment);
-    };
-    let editComment = function (comment) {
-      commentToEdit.value = comment;
-    };
-    let saveComment = function () {
-      emit("editComment", commentToEdit.value);
-      commentToEdit.value = null;
-    };
-
-    return {
-      deletePost,
-      editPost,
-      postToEdit,
-      save,
-
-      commentCard,
-      addComment,
-      publishComment,
-
-      deleteComment,
-      editComment,
-      commentToEdit,
-      saveComment,
-    };
-  },
-};
+      // Mise en forme de la date d'ajout du post sur un standard français 
+    datePost(date){
+      const event = new Date(date);
+      const options = {year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric"};
+      return event.toLocaleDateString("fr-Fr", options);
+    },
+    // Redirection vers la page dédiée à la modification de post 
+    updatePost() {
+      this.$router.push({name: "ModifyPost", params:{id:this.post.id} });
+    },
+    // Bouton permettant d'afficher la partie commentaires
+    showComment(postId) {
+      this.releveComment = true;
+      this.loadComments(postId)
+    },
+    //function d'ajout de commentaire
+    submitComment() {
+      this.addComment(this.post.id, this.commentData.message);
+      this.commentData.message="";
+    }
+  }
+}
 </script>
 
 <style lang="scss">

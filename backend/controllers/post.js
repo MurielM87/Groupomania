@@ -4,16 +4,16 @@ const fs = require("fs")
 
 //create a post
 exports.createPost = async (req, res) => {
-  const userId = req.auth.userId
-  
+  const userId = req.auth.userId  
   console.log('auth', req.auth.userId)
   let imageUrl
   try {
-    // try to find the user by Id
+    //find the user by Id
     const user = await database.User.findOne({
       attributes: ["pseudo", "id"],
       where: { id: userId },
     })
+    console.log("userDatabase 16", user)
     
     if (user !== null) {
       if (req.file) {
@@ -31,15 +31,16 @@ exports.createPost = async (req, res) => {
           },
         ],
         content: req.body.content,
-        imageUrl: imageUrl,
+        imageUrl: req.body.imageUrl,
         id: userId,
       })
+      console.log("postDatabase 37", post)
 
       res
         .status(201)
-        .json({ post: post, message: "Votre post est ajouté" })
+        .json({ post: post, message: "Votre message est publié" })
     } else {
-      res.status(400).send({ error: "Erreur" })
+      res.status(400).send({ error: "Erreur, votre message n'a pas pu être publié" })
     }
   } catch (error) {
     console.log(error)
@@ -47,10 +48,80 @@ exports.createPost = async (req, res) => {
   }
 }
 
+//update a post
+exports.updatePost = async (req, res) => {
+  try {
+    //find the post by Id
+    let newImageUrl
+    const userId = token.getUserId(req)
+    let post = await database.Post.findOne({ where: { id: req.params.id } })
+
+    if (userId === post.UserId) {
+      // if a file is in the request
+      if (req.file) {
+        newImageUrl = `${req.protocol}://${req.get("host")}/upload/${req.file.filename
+          }`
+        // if an image was already in database
+        if (post.imageUrl) {
+          const filename = post.imageUrl.split("/upload")[1]
+          // delete it from the "upload" file
+          fs.unlink(`upload/${filename}`, (err) => {
+            if (err) console.log(err)
+            else {
+              console.log(`Deleted file: upload/${filename}`)
+            }
+          })
+        }
+      } // if a new message is in the request
+      if (req.body.post) {
+        post.post = req.body.post
+      }
+      post.imageUrl = newImageUrl
+      //save in database
+      const newPost = await post.save({
+        fields: ["post", "imageUrl"],
+      })
+      res.status(200).json({ newPost: newPost, message: "message modifié" })
+    } else {
+      res.status(400).json({ message: "Vous n'avez pas l'autorisation" })
+    }
+  } catch (error) {
+    return res.status(500).send({ error: "Erreur serveur" })
+  }
+}
+
+//delete a post
+exports.deletePost = async (req, res) => {
+  try {
+    const userId = token.getUserId(req)
+    const checkIfAdmin = await database.User.findOne({
+      where: { id: userId },
+    })
+    const post = await database.Post.findOne({ where: { id: req.params.id } })
+    if (userId === post.userId || checkIfAdmin.isAdmin === true) {
+      if (post.imageUrl) {
+        const filename = post.imageUrl.split("/upload")[1]
+        fs.unlink(`upload/${filename}`, () => {
+          database.Post.destroy({ where: { id: post.id } })
+          res.status(200).json({ message: "Post supprimé" })
+        })
+      } else {
+        database.Post.destroy({ where: { id: post.id } }, { truncate: true })
+        res.status(200).json({ message: "Post supprimé" })
+      }
+    } else {
+      res.status(401).json({ message: "Vous n'avez pas l'autorisation" })
+    }
+  } catch (error) {
+    return res.status(500).send({ error: "Erreur serveur" })
+  }
+}
+
+
 //get a post
 exports.getOnePost = async (req, res) => {
   try {
-    // try to find the user by Id
+    //find the user by Id
     const post = await database.Post.findOne({
       where: { id: req.params.id },
       include: [
@@ -116,74 +187,6 @@ exports.getAllPosts = async (req, res) => {
   }
 }
 
-//update a post
-exports.updatePost = async (req, res) => {
-  try {
-    //find the post by Id
-    let newImageUrl
-    const userId = token.getUserId(req)
-    let post = await database.Post.findOne({ where: { id: req.params.id } })
-
-    if (userId === post.UserId) {
-      // if a file is in the request
-      if (req.file) {
-        newImageUrl = `${req.protocol}://${req.get("host")}/upload/${req.file.filename
-          }`
-        // if an image was already in database
-        if (post.imageUrl) {
-          const filename = post.imageUrl.split("/upload")[1]
-          // delete it from the "upload" file
-          fs.unlink(`upload/${filename}`, (err) => {
-            if (err) console.log(err)
-            else {
-              console.log(`Deleted file: upload/${filename}`)
-            }
-          })
-        }
-      } // if a new message is in the request
-      if (req.body.post) {
-        post.post = req.body.post
-      }
-      post.imageUrl = newImageUrl
-      //save in database
-      const newPost = await post.save({
-        fields: ["post", "imageUrl"],
-      })
-      res.status(200).json({ newPost: newPost, message: "post modifié" })
-    } else {
-      res.status(400).json({ message: "Vous n'êtes pas autorisé" })
-    }
-  } catch (error) {
-    return res.status(500).send({ error: "Erreur serveur" })
-  }
-}
-
-//delete a post
-exports.deletePost = async (req, res) => {
-  try {
-    const userId = token.getUserId(req)
-    const checkIfAdmin = await database.User.findOne({
-      where: { id: userId },
-    })
-    const post = await database.Post.findOne({ where: { id: req.params.id } })
-    if (userId === post.userId || checkIfAdmin.isAdmin === true) {
-      if (post.imageUrl) {
-        const filename = post.imageUrl.split("/upload")[1]
-        fs.unlink(`upload/${filename}`, () => {
-          database.Post.destroy({ where: { id: post.id } })
-          res.status(200).json({ message: "Post supprimé" })
-        })
-      } else {
-        database.Post.destroy({ where: { id: post.id } }, { truncate: true })
-        res.status(200).json({ message: "Post supprimé" })
-      }
-    } else {
-      res.status(401).json({ message: "Vous n'êtes pas autorisé" })
-    }
-  } catch (error) {
-    return res.status(500).send({ error: "Erreur serveur" })
-  }
-}
 
 //like a post
 exports.likePost = async (req, res, next) => {
@@ -251,5 +254,40 @@ exports.deleteComment = async (req, res) => {
     }
   } catch (error) {
     return res.status(501).send({ error: "Erreur serveur" })
+  }
+}
+
+//get all comments from a post
+exports.getAllComments = async (req, res) => {
+  try {
+    // get all comments from database
+    const comments = await database.Comment.findAll({
+      attributes: ["id", "post", "imageUrl", "createdAt"],
+      order: [["createdAt", "DESC"]],
+      include: [
+        {
+          model: database.User,
+          attributes: ["pseudo", "id", "imageUrl", "isAdmin"],
+        },
+        {
+          model: database.Like,
+          attributes: ["userId"],
+        },
+        {
+          model: database.Comment,
+          attributes: ["post", "pseudo", "userId", "id"],
+          order: [["createdAt", "DESC"]],
+          include: [
+            {
+              model: database.User,
+              attributes: ["imageUrl", "pseudo", "isAdmin"],
+            },
+          ],
+        },
+      ],
+    })
+    res.status(200).send(posts)
+  } catch (error) {
+    return res.status(500).send({ error: "erreur server " })
   }
 }

@@ -1,184 +1,73 @@
 <template>
-  <div id="card">
-    <div id="post_author">
-      <img src="@/assets/avatar_default.png" alt="" />
-      <h3>auteur du post</h3>
-    </div>
-    <div id="post_form" contenteditable="true">
-      <input
-        type="text"
-        v-model="title"
-        placeholder="titre"
-        class="post_title"
-        required
-      />
-      <textarea
-        type="text"
-        v-model="content"
-        placeholder="message"
-        rows="5"
-        cols="33"
-        required
-      >
-      </textarea>
-    </div>
-    <div>
-      <div id="label_file_input">
-        <label for="file-input" id="btn_file_input" class="btn"
-          ><i class="far fa-folder-open" id="btn_file"></i
-          ><span class="text_desktop">Ajouter une image</span></label
-        >
-        <input type="file" id="file-input" />
-        <v-file-input
-          @change="uploadImage($event)"
-          v-model="file"
-          accept="image/png, image/jpeg, image/jpg, image/bmp, image/gif, image/webp"
-          label="Ajouter une image"
-          hide-details
-          prepend-icon="far fa-folder-open"
-          outlined
-          dense
-        >
-        </v-file-input>
+  <section id="new_post">
+    <form class="post_card" @submit.prevent="addPost(event)">
+      <h2>Nouveau message</h2>
+      <div class="post_form">
+        <input
+          type="text"
+          v-model="title"
+          class="post_title"
+          placeholder="titre du message"
+          required
+        />
+        <textarea
+          type="text"
+          v-model="content"
+          placeholder="message"
+          rows="10"
+          cols="30"
+          required
+        ></textarea>
+        <div class="post_img">
+          <label for="addContent"
+            ><i class="far fa-file-image" title="ajouter un fichier"></i
+          ></label>
+          <input type="file" id="addContent" name="image" accept="image/*" />
+        </div>
+        <button class="post-btn" title="valider la publication">Publier</button>
       </div>
-      <button type="submit" @click.prevent="addPost" id="btn_save" class="btn">
-        <i class="fas fa-save"></i><span class="text_desktop">Publier</span>
-      </button>
-    </div>
-  </div>
+    </form>
+  </section>
 </template>
 
+    
 <script>
-import { ref } from "vue";
-
 export default {
   name: "PostForm",
-  beforeCreate() {
-    const token = localStorage.getItem("token");
-    if (token == null) {
-      this.$router.push("/login");
+  props: {
+    createPost: Function
+  },
+  data() {
+    return {
+      postForm: {
+        title: "",
+        content: "",
+        image: ""
+      }
     }
   },
+  methods: {
+    addPost(event) {
+      const title = this.postForm.title;
+      const content = this.postForm.content;
+      const image = event.target.image.files[0];
 
-  setup(props, ctx) {
-    let postCard = ref[""];
-    let title = ref("");
-    let content = ref("");
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append ('content', content);
+      formData.append ('image', image);
+      alert("Message ajouté")
+      this.createPost(FormData);
 
-    const addPost = function () {
-      console.log("addPost");
-      console.log("title", title.value);
-      console.log("content", content.value);
-
-      if (title.value === null || content.value === null) {
-        console.log("erreur");
-      } else {
-        fetch("http://localhost:3000/api/post/add", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-          body: JSON.stringify({
-            title: title.value,
-            content: content.value,
-          }),
-        });
+      this.postForm = {
+        title: '',
+        content: '',
+        image: ''
       }
-
-      ctx.emit("add", title.value);
-      ctx.emit("add", content.value);
-
-      title.value = "";
-      content.value = "";
-    };
-
-    return {
-      postCard,
-      title,
-      content,
-      addPost,
-    };
-  },
-
-  /*
-  
-  
-  method: {
-    publishPost() {
-      console.log("publishPost");
-      if (this.title === "" || this.content === "") {
-        console.log("error");
-      } else {
-        fetch("http://localhost:3000/api/post/add", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title: this.title,
-            content: this.content,
-          }),
-        })
-          .then((response) => {
-            this.$router.push("/home");
-            console.log(response);
-          })
-          .catch((error) => {
-            console.log("error", error);
-          });
-      }
-    },
-    deletePost() {
-      console.log("deletePost");
-      fetch("http://localhost:3000/api/post/:id", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: this.title,
-          content: this.content,
-        }),
-      })
-        .then((response) => {
-          this.$router.push("/home");
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
-    },
-    uploadImage(e){
-      this.form.icon = e.target.files[0];
-
-      let formData = new FormData();
-      formData.append('method', this.form.method);
-      formData.append('icon', this.form.icon);
-
-      fetch('http://localhost:3000/api/post', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer' + this.token,
-          'Accept': 'application/json',
-          'Content-Type': 'multipart/form-data'
-        }, 
-        body: formData 
-      })
-        .then(function(res) {
-          if(res.status !== 201) {
-            this.fetchError = res.status 
-          }else{
-            res.json().then(function(data) {
-              this.fetchResponse = data;
-            }.bind(this));
-          }
-        }.bind(this))
-        .catch( error => {console.log(error)})
-      
-    },
-  },*/
-};
+      event.target.image.value=''
+    }
+  }
+}
 </script>
 
 <style lang="scss">
@@ -187,7 +76,7 @@ export default {
   flex-direction: column;
   width: 45rem;
   border-radius: 20px;
-  border: 1px solid peru;
+  border: 1px solid #fd2d01;
   padding: 20px;
   margin: auto;
   margin-top: 20px;

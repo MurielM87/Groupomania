@@ -66,7 +66,7 @@ exports.login = async (req, res) => {
   }
 }
 
-//Update User
+//update User
 exports.updateUser = async (req, res) => {
   const id = req.params.id
   try {
@@ -115,7 +115,7 @@ exports.updateUser = async (req, res) => {
   }
 }
 
-//Delete User
+//delete User
 exports.deleteUser = async (req, res) => {
   try {
     const id = req.params.id

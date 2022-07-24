@@ -5,8 +5,10 @@
         ><img alt="logo Groupomania" src="../assets/icon.png" class="logo"
       /></router-link>
     </div>
-    <div v-else><img alt="logo Groupomania" src="../assets/icon.png" class="logo" /></div>
-    
+    <div v-else>
+      <img alt="logo Groupomania" src="../assets/icon.png" class="logo" />
+    </div>
+
     <div v-if="isLoggedIn">
       <router-link :to="{ name: 'MainPage' }"><h1>Groupomania</h1></router-link>
     </div>
@@ -47,10 +49,9 @@
 </template>
 
 <script>
-
 export default {
   name: "NavBar",
-  data() {
+    data() {
     return {
       isLoggedIn: false
     }
@@ -64,10 +65,10 @@ export default {
   methods: {
     disconnect() {
       localStorage.removeItem("user");
-      this.$router.push("/logout");
+      this.$router.push({name : "LogOut"});
     },
   },
-};
+}
 </script>
 
 <style lang="scss">
@@ -84,7 +85,7 @@ export default {
 h1 {
   display: flex;
   align-items: center;
-  margin-top : 25px;
+  margin-top: 25px;
 }
 
 .logo {

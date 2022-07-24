@@ -35,7 +35,7 @@ sequelize
   .catch((error) => console.log(`connection unsuccessfully  : ${error}`))
 
 app.use("/upload", express.static(path.join(__dirname, "upload")))
-app.use("/api/user", userRouter)
-app.use("/api/post", postRouter)
+app.use("/api/users", userRouter)
+app.use("/api/posts", postRouter)
 
 module.exports = app
