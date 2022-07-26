@@ -48,16 +48,18 @@ exports.login = async (req, res) => {
     }
     bcrypt.compare(req.body.password, user.password)
       .then(valid => {
-        console.log("user", user.id)
+        console.log("user", user.id);
+        const token = jwt.sign(
+          { userId: user.id },
+          process.env.TOKEN,
+          { expiresIn: '12h' }
+        )
+      
         if (!valid) {
           return res.status(401).json({ error: 'mot de passe incorrect' });
-        } res.status(200).json({
-          userId: user.id,
-          token: jwt.sign(
-            { userId: user.id },
-            process.env.TOKEN,
-            { expiresIn: '12h' }
-          )
+        } res.status(200).cookie("token", token).json({
+          userId: user.id, token
+         
         });
       })
 

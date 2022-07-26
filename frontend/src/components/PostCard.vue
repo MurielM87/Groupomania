@@ -4,7 +4,7 @@
       <a href="/profil">
         <img
           v-if="post.image"
-          :src="`http://localhost:3000/${post.image}`"
+          :src="`http://localhost:3000/api/posts/${post.imageUrl}`"
           width="50"
           title="Avatar de l'auteur"
           class="post-header-pic-round"
@@ -55,10 +55,10 @@
       </div>
       <div class="post_img">
         <img
-          :src="`http://localhost:3000${post.media}`"
+          :src="`http://localhost:3000/api/posts/${post.imageUrl}`"
           title="Image du post"
           class="wall-img"
-          v-if="post.media"
+          v-if="post.image"
         />
       </div>
       <div class="post_like">
@@ -77,7 +77,7 @@
       <div
         class="post_action_comment"
         @click="showComment(post.id)"
-        title="commentaire"
+        title="comment"
       >
         <i class="far fa-comment-alt" id="icon-comment"></i>
         <span>Commentaires</span>
@@ -89,29 +89,29 @@
     <div class="comment" v-if="releveComment">
       <div
         class="comment_author"
-        v-for="commentaire in commentaires"
-        :key="commentaire.id"
+        v-for="comment in comments"
+        :key="comment.id"
       >
         <img
-          v-if="commentaire.image"
-          :src="`http://localhost:3000/${commentaire.image}`"
+          v-if="comment.image"
+          :src="`http://localhost:3000/api/posts/:id/comment/${comment.image}`"
           width="40"
           class="comment-pic-round"
         />
         <i v-else id="comment-pic-default" class="fas fa-user-circle"></i>
         <div class="comment_user">
-          <span class="comment_user-name"
-            >{{ commentaire.nom }} {{ commentaire.prenom }}</span
+          <span class="comment_user_pseudo"
+            >{{ user.pseudo }}</span
           >
-          <p class="comment-text">{{ commentaire.message }}</p>
+          <p class="comment-text">{{ comment.content }}</p>
         </div>
-        <div class="edit_comment" v-if="commentaire.editable">
+        <div class="edit_comment" v-if="comment.editable">
           <button
-            :data-id="commentaire.id"
+            :data-id="comment.id"
             @click="
               menuActiveComments = {
                 ...menuActiveComments,
-                [commentaire.id]: !menuActiveComments[commentaire.id],
+                [comment.id]: !menuActiveComments[comment.id],
               }
             "
             v-click-outside="clickOutsideComment"
@@ -121,14 +121,14 @@
             <i class="fas fa-ellipsis-v"></i>
           </button>
           <div
-            v-if="menuActiveComments[commentaire.id]"
+            v-if="menuActiveComments[comment.id]"
             id="myDropdownComments"
             class="dropdown-content-comments"
           >
             <button
               id="comment-delete"
               title="Supprimer le commentaire"
-              @click="deleteComment(post.id, commentaire.id)"
+              @click="deleteComment(post.id, comment.id)"
             >
               <i class="far fa-trash-alt"></i>
               <span class="dropdown-options-comments">Supprimer</span>
@@ -142,7 +142,7 @@
         <input
           type="text"
           class="com-input"
-          v-model="commentData.message"
+          v-model="commentData.content"
           placeholder="Écrivez un commentaire ici..."
           required
         />
@@ -162,7 +162,7 @@ export default {
     addLike: Function,
     addComment: Function,
     loadComment: Function,
-    commentaires: Array,
+    comment: Array,
     deleteComment: Function
   },
   data(){
@@ -172,7 +172,7 @@ export default {
       scTimer: 0,
       scY: 0,
       commentData : {
-        message:''
+        content:''
       },
       releveComment: false
     }
@@ -182,7 +182,7 @@ export default {
     clickOutside(){
       this.menuActive = false 
     },
-    // Fonction fermant automatiquement la partie option  de commentaire dès lors que l'utilisateur click au délà du bouton supprimer 
+    // Fonction fermant automatiquement la partie option du commentaire avec le click du bouton supprimer 
     clickOutsideComment(event, el) {
       const id = el.dataset['id'];
       this.menuActiveComments = {... this.menuActiveComments, [id]: false};
@@ -204,14 +204,14 @@ export default {
     },
     //function d'ajout de commentaire
     submitComment() {
-      this.addComment(this.post.id, this.commentData.message);
-      this.commentData.message="";
+      this.addComment(this.post.id, this.commentData.content);
+      this.commentData.content="";
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss"> 
 #card {
   background-color: white;
   width: 25rem;

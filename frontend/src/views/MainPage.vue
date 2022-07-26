@@ -1,6 +1,6 @@
 <template>
   <section class="posts">
-    <h1>Posts</h1>
+    <h1>Nouvelles publications</h1>
     <PostForm :createPost="createPost" />
 
     <div id="separate_barre"></div>
@@ -70,15 +70,22 @@ export default {
 
     //create a new post
     createPost(formData) {
-      fetch(`http://localhost:3000/api/posts/add`, {
+      console.log("createPost", formData)
+      fetch("http://localhost:3000/api/posts/add", {
         method: "POST",
         data: formData,
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${this.token}`,
         },
+         body: JSON.stringify({
+            title: this.title,
+            content: this.content,
+          }),
       }).then((res) => {
+        console.log("createPost | formData", formData);
         const post = res.data;
+        console.log("createPost | res.data", res.data)
         post["likes"] = 0;
         this.posts = [post].concat(this.posts);
       });
@@ -86,7 +93,8 @@ export default {
 
     //delete a post
     deletePost(postId) {
-      fetch(`http://localhost:3000/api/posts/:id`, {
+      console.log("deletePost", postId)
+      fetch(`http://localhost:3000/api/posts/${postId}`, {
         method: "DELETE",
         data: { postId },
         headers: {
@@ -102,6 +110,7 @@ export default {
 
     //add a comment
     addComment(postId, content) {
+      console.log("addContent||postId, content", postId, content)
       fetch(`http://localhost:3000/api/posts/:id/comment`, {
         method: "POST",
         data: { postId, content },
@@ -125,14 +134,17 @@ export default {
           ...this.comments,
           [postId]: res.data,
         };
+        console.log("loadComments||res.data", res.data)
       });
     },
 
     //delete a comment from a post
-    deleteComment(postId, CommentId) {
+    deleteComment(postId, commentId) {
+      console.log("deleteComment||postId", postId);
+      console.log("deleteComment||commentId", commentId)
       fetch(`http://localhost:3000/api/posts/comment/:id`, {
         method: "DELETE",
-        data: {postId, CommentId},
+        data: {postId, commentId},
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.token}`
@@ -143,6 +155,7 @@ export default {
 
     //add a like
     addLike(postId) {
+      console.log("addLike||postId", postId)
       fetch(`http://localhost:3000/api/posts/:id/like`, {
         method: "POST",
         data: { postId },
@@ -156,6 +169,7 @@ export default {
             if (res.status == 204) {
               this.posts[post].likes -= 1;
             }
+            console.log("addLike||posts", post)
             if (res.status == 201) {
               this.posts[post].likes += 1;
             }
