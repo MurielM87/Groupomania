@@ -4,16 +4,16 @@
       <a href="/profil">
         <img
           v-if="post.image"
-          :src="`http://localhost:3000/api/posts/${post.imageUrl}`"
+          :src="`http://localhost:3000/api/users/${user.imageUrl}`"
           width="50"
           title="Avatar de l'auteur"
           class="post-header-pic-round"
         />
         <i v-else id="post-pic-default" class="fas fa-user-circle"></i>
+        <div class="author_name">
+          <p>{{ user.pseudo }}</p>
+        </div>
       </a>
-      <div class="author_name">
-        <p>{{ user.pseudo }}</p>
-      </div>
       <div class="post_date">
         <p>{{ datePost(post.date_ajout) }}</p>
       </div>
@@ -87,22 +87,16 @@
     <div id="separate_barre"></div>
 
     <div class="comment" v-if="releveComment">
-      <div
-        class="comment_author"
-        v-for="comment in comments"
-        :key="comment.id"
-      >
+      <div class="comment_author" v-for="comment in comments" :key="comment.id">
         <img
           v-if="comment.image"
-          :src="`http://localhost:3000/api/posts/:id/comment/${comment.image}`"
+          :src="`http://localhost:3000/api/posts/:id/comment/${comment.imageUrl}`"
           width="40"
           class="comment-pic-round"
         />
         <i v-else id="comment-pic-default" class="fas fa-user-circle"></i>
         <div class="comment_user">
-          <span class="comment_user_pseudo"
-            >{{ user.pseudo }}</span
-          >
+          <span class="comment_user_pseudo">{{ user.pseudo }}</span>
           <p class="comment-text">{{ comment.content }}</p>
         </div>
         <div class="edit_comment" v-if="comment.editable">
@@ -147,13 +141,11 @@
           required
         />
       </form>
-
     </div>
   </article>
 </template>
 
 <script>
-
 export default {
   name: "PostCard",
   props: {
@@ -163,55 +155,61 @@ export default {
     addComment: Function,
     loadComment: Function,
     comment: Array,
-    deleteComment: Function
+    deleteComment: Function,
   },
-  data(){
+  data() {
     return {
       menuActive: false,
       menuActiveComments: {},
       scTimer: 0,
       scY: 0,
-      commentData : {
-        content:''
+      commentData: {
+        content: "",
       },
-      releveComment: false
-    }
+      releveComment: false,
+    };
   },
   methods: {
-    // Fonction fermant automatiquement la partie option de post dès lors que l'utilisateur click au delà des boutons modifier et supprimer 
-    clickOutside(){
-      this.menuActive = false 
+    // Fonction fermant automatiquement la partie option de post dès lors que l'utilisateur click au delà des boutons modifier et supprimer
+    clickOutside() {
+      this.menuActive = false;
     },
-    // Fonction fermant automatiquement la partie option du commentaire avec le click du bouton supprimer 
+    // Fonction fermant automatiquement la partie option du commentaire avec le click du bouton supprimer
     clickOutsideComment(event, el) {
-      const id = el.dataset['id'];
-      this.menuActiveComments = {... this.menuActiveComments, [id]: false};
+      const id = el.dataset["id"];
+      this.menuActiveComments = { ...this.menuActiveComments, [id]: false };
     },
-      // Mise en forme de la date d'ajout du post sur un standard français 
-    datePost(date){
+    // Mise en forme de la date d'ajout du post sur un standard français
+    datePost(date) {
       const event = new Date(date);
-      const options = {year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric"};
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      };
       return event.toLocaleDateString("fr-Fr", options);
     },
-    // Redirection vers la page dédiée à la modification de post 
+    // Redirection vers la page dédiée à la modification de post
     updatePost() {
-      this.$router.push({name: "ModifyPost", params:{id:this.post.id} });
+      this.$router.push({ name: "ModifyPost", params: { id: this.post.id } });
     },
     // Bouton permettant d'afficher la partie commentaires
     showComment(postId) {
       this.releveComment = true;
-      this.loadComments(postId)
+      this.loadComments(postId);
     },
     //function d'ajout de commentaire
     submitComment() {
       this.addComment(this.post.id, this.commentData.content);
-      this.commentData.content="";
-    }
-  }
-}
+      this.commentData.content = "";
+    },
+  },
+};
 </script>
 
-<style lang="scss"> 
+<style lang="scss">
 #card {
   background-color: white;
   width: 25rem;

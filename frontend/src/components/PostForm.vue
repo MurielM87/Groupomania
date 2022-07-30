@@ -1,6 +1,6 @@
 <template>
   <section id="new_post">
-    <form class="post_card" @submit.prevent="addPost(event)">
+    <form class="post_card" @submit.prevent="addPost($event)">
       <h2>Nouveau message</h2>
       <div class="post_form">
         <input
@@ -22,7 +22,8 @@
           <label for="addContent"
             ><i class="far fa-file-image" title="ajouter un fichier"></i
           ></label>
-          <input type="file" id="addContent" name="image" accept="image/*" />
+          <input 
+            type="file" id="addContent" name="imageUrl" accept="image/*" />
         </div>
         <button class="post-btn" title="valider la publication">Publier</button>
       </div>
@@ -42,7 +43,7 @@ export default {
       postForm: {
         title: "",
         content: "",
-        image: ""
+        imageUrl: ""
       }
     }
   },
@@ -56,7 +57,6 @@ export default {
       formData.append('title', title);
       formData.append ('content', content);
       formData.append ('image', image);
-      alert("Message ajouté")
       this.createPost(FormData);
 
       this.postForm = {

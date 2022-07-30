@@ -26,7 +26,7 @@ module.exports = {
       },
       imageUrl: {
         allowNull: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING(300),
       },
       isAdmin: {
         type: Sequelize.BOOLEAN,

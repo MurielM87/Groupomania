@@ -13,7 +13,7 @@
       :addLike="addLike"
       :addComment="addComment"
       :loadComments="loadComments"
-      :commentaires="comments[post.id]"
+      :comments="comments[post.id]"
       :deleteComment="deleteComment"
     />
 
@@ -40,9 +40,12 @@ export default {
       comments: {},
     };
   },
-  created() {
+  getItem() {
     this.token = localStorage.getItem("token");
-    fetch("http://localhost:3000/api/posts/", {
+    this.userId = localStorage.getItem("userId");
+
+    fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.token}`,
@@ -71,7 +74,7 @@ export default {
     //create a new post
     createPost(formData) {
       console.log("createPost", formData)
-      fetch("http://localhost:3000/api/posts/add", {
+      fetch(`http://localhost:3000/api/posts/add`, {
         method: "POST",
         data: formData,
         headers: {
@@ -94,7 +97,7 @@ export default {
     //delete a post
     deletePost(postId) {
       console.log("deletePost", postId)
-      fetch(`http://localhost:3000/api/posts/${postId}`, {
+      fetch(`http://localhost:3000/api/posts/${this.postId}`, {
         method: "DELETE",
         data: { postId },
         headers: {
@@ -123,7 +126,7 @@ export default {
 
     //get all comments from a post
     loadComments(postId) {
-      fetch(`http://localhost:3000/api/posts/comments/${postId}`, {
+      fetch(`http://localhost:3000/api/posts/comments/${this.postId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

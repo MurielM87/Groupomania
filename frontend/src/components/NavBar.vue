@@ -57,14 +57,14 @@ export default {
     }
   },
   created() {
-    const token = localStorage.getItem('token')
-    if (token !== null) {
+    const userId = localStorage.getItem('userId')
+    if (userId !== null) {
       this.isLoggedIn = true
     }
   },
   methods: {
     disconnect() {
-      localStorage.removeItem("user");
+      localStorage.removeItem('userId', 'token');
       this.$router.push({name : "LogOut"});
     },
   },

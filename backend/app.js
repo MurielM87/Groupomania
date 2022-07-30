@@ -4,10 +4,12 @@ const cors = require("cors")
 const path = require("path")
 const helmet = require("helmet")
 require("dotenv").config()
+const cookieParser = require('cookie-parser');
 
 
 const app = express()
 app.use(express.json())
+app.use(cookieParser());
 app.use(morgan("tiny"))
 app.use(express.urlencoded({ extended: true }))
 

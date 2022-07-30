@@ -1,104 +1,39 @@
 <template>
-  <div id="profil_form">
-    <h2>Profil</h2>
-
-    <form class="modify-img" @submit.prevent="updateUserImage($event)">
-      <label for="profil_img">
-        <i
-          class="fas fa-user-circle"
-          id="profil_avatar_icon"
-          v-if="!user.image"
-        ></i>
-        <img
+  <form id="profil_form">
+    <h2>Profil de {{ user.pseudo }}</h2>    
+    
+    <div id="photo_icone">
+      <img
+        src="../assets/avatar_default.png"
+        alt="avatar par defaut"
+        id="photo_profil"
+         v-if="!user.imageUrl"
+      />
+      <img
           v-else
           id="profil_avatar_img"
           alt="Avatar"
           title="modifier mon avatar"
-          :src="`http://localhost:3000/${user.image}`"
+          :src="`http://localhost:3000/users/profil/${user.imageUrl}`"
         />
-      </label>
-      <input type="file" name="avatar" id="profil_image" accept="image/*" />
-      <button
-        type="submit"
-        class="profil_avatar_btn"
-        title="enregistrer la nouvelle image"
-      >
-        Valider
-      </button>
-    </form>
-
-    <div id="separate_barre"></div>
-
-    <div class="profil_informations">
-      <form class="form-profil" @submit.prevent="updateProfil(user.id)">
-        <div class="form_group">
-          <label for="pseudo">Pseudo</label>
-          <input
-            type="text"
-            v-model.lazy="user.pseudo"
-            name="pseudo"
-            id="pseudo"
-            class="form_input"
-            required
-          />
-          <div class="form-err"></div>
-        </div>
-        <div class="form_group">
-          <label for="firstname">Prénom</label>
-          <input
-            type="text"
-            v-model.lazy="user.firstName"
-            name="firstname"
-            id="firstname"
-            class="form_input"
-            required
-          />
-          <div class="form-err"></div>
-        </div>
-        <div class="form_group">
-          <label for="lastname">Nom</label>
-          <input
-            type="text"
-            v-model.lazy="user.lastName"
-            name="lastname"
-            id="lastname"
-            class="form_input"
-            required
-          />
-          <div class="form-err"></div>
-        </div>
-        <div class="form_group">
-          <label for="email">Email</label>
-          <input
-            type="text"
-            v-model.lazy="user.email"
-            name="email"
-            id="email"
-            class="form_input"
-            required
-          />
-          <div class="form-err"></div>
-        </div>
-        <button class="form_btn" title="enregistrer les modifications">
-          enregistrer les modifications
-        </button>
-
-        <div id="separation_barre"></div>
-
-        <button
-          class="delete_btn"
-          @click="deleteUser(user.id)"
-          title="supprimer le compte"
-        >
-          supprimer le compte
-        </button>
-      </form>
+      <router-link to="/edit-profil" v-if="user"><i class="fas fa-pencil-alt"></i></router-link>
     </div>
-  </div>
+      
+    <div id="name_card">
+      <div>Pseudo : {{user.pseudo}}</div>
+      <div>Prénom : {{user.firstname}}</div>
+      <div>Nom : {{user.lastname}}</div>
+      <div>Email : {{user.email}}</div>
+    </div>
+    <div id="separation_barre"></div>
+    <h3>Messages publiés</h3>
+    <div id="posts_card" v-for="post in posts" :key="post">
+      <PostCard />
+    </div>
+  </form>
 </template>
 
 <script>
-
 export default {
   name: "ProfilUser",
   data() {
@@ -108,7 +43,7 @@ export default {
         firstname: "",
         lastname: "",
         email: "",
-        image: "",
+        imageUrl: "",
       },
     };
   },
@@ -119,62 +54,22 @@ export default {
   methods: {
     //get all the informations about the user
     getUserProfil() {
-      const userId = localStorage.id;
-      fetch("http://localhost:3000/api/users/${userId}", {
+      const userId = localStorage.getItem("userId");
+      fetch(`http://localhost:3000/api/users/profil/${userId}`, {
         method: "GET",
-        data: userId,
+
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.token}`,
         },
       })
         .then((res) => {
+          console.log("res", res);
           this.user = res.data;
         })
         .catch(() => {
           this.$router.push({ name: "Login" });
         });
-    },
-
-    //modify userProfil
-    updateProfil(id) {
-      fetch("http://localhost:3000/api/users/${id}", {
-        method: "PUT",
-        data: this.user,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
-        },
-      }).then(() => {
-        alert("profil modifié");
-        console.log(id);
-      });
-    },
-
-    //delete user
-    deleteUser(id) {
-      if (
-        window.confirm(
-          "vous allez supprimer votre compte. Êtes-vous certain de votre choix?"
-        )
-      )
-        fetch("http://localhost:3000/api/users/${id}", {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.token}`,
-          },
-        })
-          .then((res) => {
-            if (res) {
-              console.log(id);
-              localStorage.removeItem("token");
-              this.$router.push({ name: "SignUp" });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
     },
   },
 };
@@ -188,13 +83,13 @@ export default {
   border-radius: 30px;
   margin-bottom: 20px;
 }
-#photo_icone {
+#profil_avatar_icon {
   width: 300px;
   margin: auto;
   position: relative;
   text-align: center;
 }
-#photo_profil {
+#profil_avatar_icon {
   position: relative;
   width: 300px;
   object-fit: contain;

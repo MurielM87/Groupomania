@@ -61,7 +61,7 @@ export default {
         this.emailErrorMessage = "Adresse email invalide";
         this.passwordErrorMessage = "Mot de passe invalide";
       } else {
-        fetch("http://localhost:3000/api/users/login", {
+        fetch(`http://localhost:3000/api/users/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -75,10 +75,10 @@ export default {
           .then((res) => res.json())
           .then((data) => {
             console.log(data);
-            const token = data.token;
-            localStorage.setItem("token", token);
-            console.log("token", token);
-           
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("userId", data.userId)
+            console.log("token", data.token);
+            console.log("userId", data.userId)
 
             this.$router.push("/");
           })

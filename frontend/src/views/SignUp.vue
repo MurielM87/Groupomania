@@ -172,7 +172,7 @@ export default {
         this.emailErrorMessage = "Obligatoire";
         this.passwordErrorMessage = "Obligatoire"
       } else {
-        fetch("http://localhost:3000/api/users/signup", {
+        fetch(`http://localhost:3000/api/users/signup`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

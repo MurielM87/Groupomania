@@ -3,6 +3,7 @@ import SignUp from '@/views/SignUp.vue';
 import LogIn from '@/views/LogIn.vue';
 import MainPage from '@/views/MainPage';
 import ProfilUser from '@/views/ProfilUser';
+import EditProfil from '@/components/EditProfil';
 import LogOut from '@/views/LogOut';
 
 const routes = [
@@ -25,6 +26,11 @@ const routes = [
         name: 'ProfilUser',
         path: '/profil',
         component: ProfilUser,
+    },
+    {
+        name: 'EditProfil',
+        path: '/edit-profil',
+        component: EditProfil,
     },
     {
         name: 'LogOut',
