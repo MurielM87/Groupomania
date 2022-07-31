@@ -2,34 +2,37 @@
   <form id="profil_form">
     <h2>Modifier votre profil</h2>
 
-    <form class="modify-img" @submit.prevent="updateUserImage($event)">
+    <div class="img" enctype="multipart/form-data">
       <div id="photo_icone">
         <img
           src="../assets/avatar_default.png"
           alt="avatar par defaut"
-          id="photo_profil"
+          class="profil_image"
           v-if="!user.imageUrl"
         />
         <img
           v-else
-          id="profil_avatar_img"
+          class="profil_image"
           alt="Avatar"
           title="modifier mon avatar"
           :src="`http://localhost:3000/users/profil/${user.imageUrl}`"
         />
       </div>
-      <input type="file" name="avatar" id="profil_image" accept="image/*" />
-    </form>
+      <input @change="onFileSelected" type="file" name="avatar" id="profil_image" accept="image/*" ref="fileInput"/>
+      <button @click="onUpload">Télécharger</button>
+    </div>
+    
 
     <div id="separate_barre"></div>
 
     <div class="profil_informations">
       <form class="form-profil" @submit.prevent="updateProfil(user.id)">
         <div class="form_group">
-          <label for="pseudo">Pseudo</label>
+          <label for="pseudo">Pseudo : </label>
           <input
             type="text"
             v-model.lazy="user.pseudo"
+            placeholder="{{user.pseudo}}"
             name="pseudo"
             id="pseudo"
             class="form_input"
@@ -38,10 +41,11 @@
           <div class="form-err"></div>
         </div>
         <div class="form_group">
-          <label for="firstname">Prénom</label>
+          <label for="firstname">Prénom : </label>
           <input
             type="text"
-            v-model.lazy="user.firstName"
+            v-model.lazy="user.firstname"
+            placeholder={{user.firstname}}
             name="firstname"
             id="firstname"
             class="form_input"
@@ -50,10 +54,11 @@
           <div class="form-err"></div>
         </div>
         <div class="form_group">
-          <label for="lastname">Nom</label>
+          <label for="lastname">Nom : </label>
           <input
             type="text"
-            v-model.lazy="user.lastName"
+            v-model.lazy="user.lastname"
+            placeholder="{{user.lastname}}"
             name="lastname"
             id="lastname"
             class="form_input"
@@ -62,10 +67,11 @@
           <div class="form-err"></div>
         </div>
         <div class="form_group">
-          <label for="email">Email</label>
+          <label for="email">Email : </label>
           <input
             type="text"
             v-model.lazy="user.email"
+            placeholder="{{user.email}}"
             name="email"
             id="email"
             class="form_input"
@@ -73,17 +79,15 @@
           />
           <div class="form-err"></div>
         </div>
-        <button class="form_btn" title="enregistrer les modifications">
+        <button @click="updateProfil(userId)" class="form_btn" title="enregistrer les modifications"><i class="fas fa-save"></i>
           enregistrer les modifications
         </button>
 
-        <div id="separation_barre"></div>
-
         <button
           class="delete_btn"
-          @click="deleteUser(user.id)"
+          @click="deleteUser(userId)"
           title="supprimer le compte"
-        >
+        ><i class="fas fa-trash-alt"></i>
           supprimer le compte
         </button>
       </form>
@@ -103,6 +107,7 @@ export default {
         email: "",
         imageUrl: "",
       },
+      selectedFile: null,
     };
   },
   created() {
@@ -115,11 +120,13 @@ export default {
       const userId = localStorage.getItem("userId");
       fetch(`http://localhost:3000/api/users/profil/${userId}`, {
         method: "GET",
-
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.token}`,
         },
+         body: JSON.stringify({
+            user: this.user,
+          }),
       })
         .then((res) => {
           console.log("res", res);
@@ -139,10 +146,40 @@ export default {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.token}`,
         },
+        body: JSON.stringify({
+            user: this.user,
+            selectedFile: this.selectedFile,
+          }),
       }).then(() => {
         alert("profil modifié");
-        console.log("userId", userId);
-      });
+        console.log("userId", userId); 
+
+        this.$router.push({ name: "ProfilUser"})
+      })
+      .catch(err => {console.log("err", err)});
+    },
+
+    //upload profil image
+    onFileSelected(event) {
+      console.log(event)
+      this.selectedFile = event.target.files[0]
+    },
+    onUpload(){
+      const fd = new FormData();
+      fd.append('image', this.selectedFile, this.selectedFile.name)
+      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, fd, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token}`
+        },
+        body: JSON.stringify ({
+          selectedFile: this.selectedFile,
+        })
+      })
+      .then(res => {
+        console.log(res)
+      })
     },
 
     //delete user
@@ -152,12 +189,15 @@ export default {
           "vous allez supprimer votre compte. Êtes-vous certain de votre choix?"
         )
       )
-        fetch(`http://localhost:3000/api/users/profil/${userId}`, {
+        fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${this.token}`,
           },
+          body: JSON.stringify({
+            user: this.user
+          }),
         })
           .then((res) => {
             if (res) {
@@ -175,65 +215,7 @@ export default {
 </script>
 
 <style lang="scss">
-#profil_form {
-  width: 50%;
-  color: black;
-  border: 1px solid #fd2d01;
-  border-radius: 30px;
-  margin-bottom: 20px;
-  @media (min-width: 768px) and (max-width: 992px) {
-    width: 70%;
-  }
-  @media screen and (max-width: 768px) {
-    width: 90%;
-  }
-}
-#photo_icone {
-  width: 300px;
-  margin: auto;
-  position: relative;
-  text-align: center;
-}
-#photo_profil {
-  position: relative;
-  width: 300px;
-  object-fit: contain;
-  border-radius: 50%;
-  margin-top: 10px;
-  @media (min-width: 768px) and (max-width: 992px) {
-    width: 250px;
-  }
-  @media screen and (max-width: 768px) {
-    width: 200px;
-  }
-}
-#file-input {
-  display: none;
-}
-.fa-pencil-alt {
-  background: #f5f5f5;
-  color: black;
-  border-radius: 50%;
-  padding: 10px;
-  position: absolute;
-  right: 10%;
-  bottom: 10%;
-  &:hover {
-    color: red;
-  }
-  @media screen and (max-width: 768px) {
-    right: 18%;
-  }
-}
-.fa-pencil-alt:hover {
-  background: #ffd7d7;
-}
-#name_card {
-  font-size: 22px;
-  line-height: 35px;
-  margin-bottom: 20px;
-  text-align: left;
-}
+
 #separation_barre {
   border: 1px solid #455166;
   width: 30%;

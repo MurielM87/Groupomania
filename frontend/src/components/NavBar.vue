@@ -1,6 +1,6 @@
 <template>
   <div id="navbar">
-    <div v-if="isLoggedIn">
+    <div v-if="this.isLoggedIn">
       <router-link :to="{ name: 'MainPage' }"
         ><img alt="logo Groupomania" src="../assets/icon.png" class="logo"
       /></router-link>
@@ -9,37 +9,33 @@
       <img alt="logo Groupomania" src="../assets/icon.png" class="logo" />
     </div>
 
-    <div v-if="isLoggedIn">
+    <div v-if="this.isLoggedIn">
       <router-link :to="{ name: 'MainPage' }"><h1>Groupomania</h1></router-link>
     </div>
     <h1 v-else>Groupomania</h1>
 
     <div id="barre">
-      <li v-if="isLoggedIn" class="menu">
+      <li v-if="this.isLoggedIn" class="menu">
         <ul>
           <router-link :to="{ name: 'ProfilUser' }"
-            ><i class="fas fa-portrait"></i
-            ><span class="text_desktop">Profil</span></router-link
+            ><span class="text_desktop"><i class="fas fa-portrait">Profil</i></span></router-link
           >
         </ul>
         <ul>
-          <router-link :to="{ name: 'LogOut' }" @click.prevent="disconnect"
-            ><i class="fas fa-sign-out-alt"></i
-            ><span class="text_desktop">Déconnexion</span></router-link
+          <router-link :to="{ name: 'LogOut' }" @click="this.logOut"
+            ><span class="text_desktop"><i class="fas fa-sign-out-alt">Déconnexion</i></span></router-link
           >
         </ul>
       </li>
-      <li v-if="!isLoggedIn" class="menu">
+      <li v-else class="menu">
         <ul>
           <router-link :to="{ name: 'LogIn' }"
-            ><i class="fas fa-sign-in-alt"></i
-            ><span class="text_desktop">Connexion</span></router-link
+            ><i class="fas fa-sign-in-alt"><span class="text_desktop">Connexion</span></i></router-link
           >
         </ul>
         <ul>
           <router-link :to="{ name: 'SignUp' }"
-            ><i class="fas fa-user-plus"></i
-            ><span class="text_desktop">Inscription</span></router-link
+            ><span class="text_desktop"><i class="fas fa-user-plus">Inscription</i></span></router-link
           >
         </ul>
       </li>
@@ -57,14 +53,15 @@ export default {
     }
   },
   created() {
-    const userId = localStorage.getItem('userId')
-    if (userId !== null) {
+    const token = localStorage.getItem('token')
+    if (token != null) {
       this.isLoggedIn = true
     }
   },
   methods: {
-    disconnect() {
-      localStorage.removeItem('userId', 'token');
+    logOut() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
       this.$router.push({name : "LogOut"});
     },
   },

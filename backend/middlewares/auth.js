@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
+const cookies = require("cookie-parser");
 
 
 module.exports = (req, res, next) => {

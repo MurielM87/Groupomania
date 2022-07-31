@@ -137,7 +137,7 @@ exports.deleteUser = async (req, res) => {
   }
 }
 
-//Get One User
+//get One User
 exports.getOneUser = async (req, res) => {
   try {
     // try to find a user by Id
@@ -145,6 +145,20 @@ exports.getOneUser = async (req, res) => {
       where: { id: req.params.id },
     })
     res.status(200).send(user)
+  } catch (error) {
+    return res.status(500).send({ error: "Erreur serveur" })
+  }
+}
+
+//get All Users
+exports.getAllUsers = async (req, res) => {
+  try {
+    // get all users from database
+    const users = await database.User.findAll({
+      attributes: ["id", "pseudo", "firstname", "lastname", "email", "imageUrl"],
+      order: [["createdAt", "DESC"]],
+    })
+    res.status(200).send(users)
   } catch (error) {
     return res.status(500).send({ error: "Erreur serveur" })
   }

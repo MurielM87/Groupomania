@@ -34,6 +34,12 @@ export default {
     PostForm,
     PostCard,
   },
+  created(){
+    const token = localStorage.getItem("token");
+    if (token == null) {
+      this.$router.push({name: 'LogIn'})
+    }
+  },
   data() {
     return {
       posts: [],
@@ -114,7 +120,7 @@ export default {
     //add a comment
     addComment(postId, content) {
       console.log("addContent||postId, content", postId, content)
-      fetch(`http://localhost:3000/api/posts/:id/comment`, {
+      fetch(`http://localhost:3000/api/posts/${this.postId}/comment`, {
         method: "POST",
         data: { postId, content },
         headers: {
@@ -145,7 +151,7 @@ export default {
     deleteComment(postId, commentId) {
       console.log("deleteComment||postId", postId);
       console.log("deleteComment||commentId", commentId)
-      fetch(`http://localhost:3000/api/posts/comment/:id`, {
+      fetch(`http://localhost:3000/api/posts/comment/${this.commentId}`, {
         method: "DELETE",
         data: {postId, commentId},
         headers: {
@@ -159,7 +165,7 @@ export default {
     //add a like
     addLike(postId) {
       console.log("addLike||postId", postId)
-      fetch(`http://localhost:3000/api/posts/:id/like`, {
+      fetch(`http://localhost:3000/api/posts/${this.postId}/like`, {
         method: "POST",
         data: { postId },
         headers: {

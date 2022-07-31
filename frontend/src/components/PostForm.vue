@@ -19,13 +19,12 @@
           required
         ></textarea>
         <div class="post_img">
-          <label for="addContent"
-            ><i class="far fa-file-image" title="ajouter un fichier"></i
-          ></label>
-          <input 
-            type="file" id="addContent" name="imageUrl" accept="image/*" />
+          <label for="addContent"></label>
+          <input type="file" id="addContent" name="imageUrl" accept="image/*" />
         </div>
-        <button class="post-btn" title="valider la publication">Publier</button>
+        <button class="post-btn" title="valider la publication">
+          <i class="far fa-edit"></i>Publier
+        </button>
       </div>
     </form>
   </section>
@@ -36,38 +35,60 @@
 export default {
   name: "PostForm",
   props: {
-    createPost: Function
+    createPost: Function,
   },
   data() {
     return {
       postForm: {
         title: "",
         content: "",
-        imageUrl: ""
-      }
-    }
+        imageUrl: "",
+      },
+    };
   },
   methods: {
-    addPost(event) {
+    addPost(e) {
       const title = this.postForm.title;
       const content = this.postForm.content;
-      const image = event.target.image.files[0];
+      const image = e.target.image.files[0];
 
       const formData = new FormData();
-      formData.append('title', title);
-      formData.append ('content', content);
-      formData.append ('image', image);
+      formData.append("title", title);
+      formData.append("content", content);
+      formData.append("image", image);
       this.createPost(FormData);
 
       this.postForm = {
-        title: '',
-        content: '',
-        image: ''
-      }
-      event.target.image.value=''
-    }
-  }
-}
+        title: "",
+        content: "",
+        image: "",
+      };
+      e.target.image.value = "";
+
+      fetch(`http://localhost:3000/api/posts/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+          Authorization: `Bearer ${this.token}`,
+        },
+        body: formData,
+      }).then(
+        function (response) {
+          if (response.status != 201) {
+            this.fetchError = response.status;
+          } else {
+            response.json().then(
+              function (data) {
+                this.fetchResponse = data;
+              }.bind(this)
+            );
+          }
+        }.bind(this)
+      );
+    },
+  },
+};
 </script>
 
 <style lang="scss">
