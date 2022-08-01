@@ -1,9 +1,10 @@
 <template>
   <section class="posts">
-    <h1>Nouvelles publications</h1>
+   
     <PostForm :createPost="createPost" />
 
     <div id="separate_barre"></div>
+     <h2>Nouvelles publications</h2>
 
     <PostCard
       v-for="post in posts"
@@ -50,7 +51,7 @@ export default {
     this.token = localStorage.getItem("token");
     this.userId = localStorage.getItem("userId");
 
-    fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+    fetch(`http://localhost:3000/api/posts/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -191,4 +192,8 @@ export default {
 </script>
 
 <style lang="scss">
+.toTop {
+  display: flex;
+  margin-left: 30px;
+}
 </style>

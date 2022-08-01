@@ -5,7 +5,7 @@ const cookies = require("cookie-parser");
 
 module.exports = (req, res, next) => {
   try {
-    const token = req.headers.cookies.split("=")[1]
+    const token = req.headers.cookies.split(`=`)[1]
     if(token) {
       const decodedToken = jwt.verify(token, process.env.TOKEN)
       req.user = decodedToken

@@ -4,7 +4,7 @@
       <a href="/profil">
         <img
           v-if="post.image"
-          :src="`http://localhost:3000/api/users/${user.imageUrl}`"
+          :src="`http://localhost:3000/api/users/${this.imageUrl}`"
           width="50"
           title="Avatar de l'auteur"
           class="post-header-pic-round"
@@ -15,7 +15,7 @@
         </div>
       </a>
       <div class="post_date">
-        <p>{{ datePost(post.date_ajout) }}</p>
+        <p>{{ datePost(post.updateAt) }}</p>
       </div>
     </div>
 
@@ -32,7 +32,7 @@
         <button
           id="post_modify"
           title="modifier le message"
-          @click="updatePost(post.id)"
+          @click="updatePost(postId)"
         >
           <i class="far fa-edit"></i>
           <span class="btn_modify">Modifier</span>
@@ -40,7 +40,7 @@
         <button
           id="post_delete"
           title="supprimer le message"
-          @click="deletePost(post.id)"
+          @click="deletePost(postId)"
         >
           <i class="far fa-trash-alt"></i>
           <span>Supprimer</span>
@@ -52,31 +52,33 @@
       <div class="post_description">
         <p>{{ post.title }}</p>
         <p>{{ post.content }}</p>
+        <p>{{ post.imageUrl }}</p>
       </div>
       <div class="post_img">
         <img
           :src="`http://localhost:3000/api/posts/${post.imageUrl}`"
           title="Image du post"
-          class="wall-img"
+          class="img_post_add"
           v-if="post.image"
         />
-      </div>
-      <div class="post_like">
-        <i class="far fa-thumbs-up" id="icon-like"></i>
-        <p>{{ post.likes }}</p>
       </div>
     </div>
 
     <div id="separate_barre"></div>
 
+    <div class="post_like">
+      <i class="far fa-thumbs-up" id="icon-like"></i>
+      <p>{{ post.likes }}</p>
+    </div>
+
     <div class="post_action">
-      <div class="post_action_like" @click="addLike(post.id)" title="j'aime">
+      <div class="post_action_like" @click="addLike(postId)" title="j'aime">
         <i class="far fa-thumbs-up" id="icon-like"></i>
         <span>J'aime</span>
       </div>
       <div
         class="post_action_comment"
-        @click="showComment(post.id)"
+        @click="showComment(postId)"
         title="comment"
       >
         <i class="far fa-comment-alt" id="icon-comment"></i>
@@ -101,11 +103,11 @@
         </div>
         <div class="edit_comment" v-if="comment.editable">
           <button
-            :data-id="comment.id"
+            :data-id="commentId"
             @click="
               menuActiveComments = {
                 ...menuActiveComments,
-                [comment.id]: !menuActiveComments[comment.id],
+                [commentId]: !menuActiveComments[commentId],
               }
             "
             v-click-outside="clickOutsideComment"
@@ -115,14 +117,14 @@
             <i class="fas fa-ellipsis-v"></i>
           </button>
           <div
-            v-if="menuActiveComments[comment.id]"
+            v-if="menuActiveComments[commentId]"
             id="myDropdownComments"
             class="dropdown-content-comments"
           >
             <button
               id="comment-delete"
               title="Supprimer le commentaire"
-              @click="deleteComment(post.id, comment.id)"
+              @click="deleteComment(postId, commentId)"
             >
               <i class="far fa-trash-alt"></i>
               <span class="dropdown-options-comments">Supprimer</span>
@@ -193,7 +195,7 @@ export default {
     },
     // Redirection vers la page dédiée à la modification de post
     updatePost() {
-      this.$router.push({ name: "ModifyPost", params: { id: this.post.id } });
+      this.$router.push({ name: "ModifyPost", params: { id: this.postId } });
     },
     // Bouton permettant d'afficher la partie commentaires
     showComment(postId) {
@@ -202,7 +204,7 @@ export default {
     },
     //function d'ajout de commentaire
     submitComment() {
-      this.addComment(this.post.id, this.commentData.content);
+      this.addComment(this.postId, this.commentData.content);
       this.commentData.content = "";
     },
   },

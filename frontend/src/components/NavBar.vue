@@ -54,7 +54,7 @@ export default {
   },
   created() {
     const token = localStorage.getItem('token')
-    if (token != null) {
+    if (token !== null) {
       this.isLoggedIn = true
     }
   },

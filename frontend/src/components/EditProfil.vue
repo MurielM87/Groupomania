@@ -5,7 +5,7 @@
     <div class="img" enctype="multipart/form-data">
       <div id="photo_icone">
         <img
-          src="../assets/avatar_default.png"
+          src="../assets/avatar.png"
           alt="avatar par defaut"
           class="profil_image"
           v-if="!user.imageUrl"
@@ -13,7 +13,7 @@
         <img
           v-else
           class="profil_image"
-          alt="Avatar"
+          alt="avatar"
           title="modifier mon avatar"
           :src="`http://localhost:3000/users/profil/${user.imageUrl}`"
         />
@@ -117,8 +117,8 @@ export default {
   methods: {
     //get all the informations about the user
     getUserProfil() {
-      const userId = localStorage.getItem("userId");
-      fetch(`http://localhost:3000/api/users/profil/${userId}`, {
+      const userId = localStorage.getItem("userId", userId);
+      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -139,7 +139,7 @@ export default {
 
     //modify userProfil
     updateProfil(userId) {
-      fetch(`http://localhost:3000/api/users/profil/${userId}`, {
+      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
         method: "PUT",
         data: this.user,
         headers: {
@@ -153,8 +153,9 @@ export default {
       }).then(() => {
         alert("profil modifié");
         console.log("userId", userId); 
+        console.log("this.userId", this.userId);
 
-        this.$router.push({ name: "ProfilUser"})
+        //this.$router.push({ name: "ProfilUser"})
       })
       .catch(err => {console.log("err", err)});
     },
@@ -167,15 +168,14 @@ export default {
     onUpload(){
       const fd = new FormData();
       fd.append('image', this.selectedFile, this.selectedFile.name)
-      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, fd, {
-        method: "PUT",
+      fetch(`http://localhost:3000/api/profil/images/${this.userId}`, fd, {
+        method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
+          "Accept": "application/json",
           Authorization: `Bearer ${this.token}`
         },
-        body: JSON.stringify ({
-          selectedFile: this.selectedFile,
-        })
+        body: FormData,
       })
       .then(res => {
         console.log(res)
@@ -215,11 +215,11 @@ export default {
 </script>
 
 <style lang="scss">
-
-#separation_barre {
+#separate_barre {
   border: 1px solid #455166;
   width: 30%;
   margin: auto;
   margin-bottom: 20px;
+  margin-top: 20px;
 }
 </style>

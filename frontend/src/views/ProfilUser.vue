@@ -4,7 +4,7 @@
 
     <div id="photo_icone">
       <img
-        src="../assets/avatar_default.png"
+        src="../assets/avatar.png"
         alt="avatar par defaut"
         class="profil_image"
         v-if="!user.imageUrl"
@@ -12,7 +12,7 @@
       <img
         v-else
         class="profil_image"
-        alt="Avatar"
+        alt="avatar"
         title="modifier mon avatar"
         :src="`http://localhost:3000/users/profil/${user.imageUrl}`"
       />
@@ -61,8 +61,8 @@ export default {
   methods: {
     //get all the informations about the user
     getUserProfil() {
-      const userId = localStorage.getItem("userId");
-      fetch(`http://localhost:3000/api/users/profil/${userId}`, {
+      const userId = localStorage.getItem("userId", userId);
+      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
         method: "GET",
 
         headers: {
@@ -83,7 +83,7 @@ export default {
     },
 
     getAllPosts() {
-      fetch(`http://localhost:3000/api/posts`, {
+      fetch(`http://localhost:3000/api/posts/${this.userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

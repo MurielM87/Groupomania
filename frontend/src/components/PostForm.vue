@@ -20,11 +20,10 @@
         ></textarea>
         <div class="post_img">
           <label for="addContent"></label>
-          <input type="file" id="addContent" name="imageUrl" accept="image/*" />
+          <input @change="newImage" type="file" id="addContent" name="imageUrl" accept="image/*" /><button @click="onUpload">Télécharger</button>
         </div>
         <button class="post-btn" title="valider la publication">
-          <i class="far fa-edit"></i>Publier
-        </button>
+          <i class="far fa-edit"></i>Publier</button>
       </div>
     </form>
   </section>
@@ -47,6 +46,29 @@ export default {
     };
   },
   methods: {
+
+    //upload profil image
+    newImage(event) {
+      console.log(event)
+      this.imageUrl = event.target.files[0]
+    },
+    onUpload(postId){
+      const fd = new FormData();
+      fd.append('image', this.imageUrl, this.imageUrl.name)
+      fetch(`http://localhost:3000/api/posts/${postId}`, fd, {
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Accept": "application/json",
+          Authorization: `Bearer ${this.token}`
+        },
+        body: FormData,
+      })
+      .then(res => {
+        console.log(res)
+      })
+    },
+
     addPost(e) {
       const title = this.postForm.title;
       const content = this.postForm.content;
