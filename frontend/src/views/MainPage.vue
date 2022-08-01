@@ -37,7 +37,8 @@ export default {
   },
   created(){
     const token = localStorage.getItem("token");
-    if (token == null) {
+    const userId = localStorage.getItem("userId");
+    if (token == null && userId == null) {
       this.$router.push({name: 'LogIn'})
     }
   },
