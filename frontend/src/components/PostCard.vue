@@ -1,7 +1,7 @@
 <template>
   <article id="card">
     <div class="post_author">
-      <a href="/profil">
+      <router-link :to="{ name: 'ProfilUser' }">
         <img
           v-if="post.image"
           :src="`http://localhost:3000/api/users/${this.imageUrl}`"
@@ -13,7 +13,23 @@
         <div class="author_name">
           <p>{{ user.pseudo }}</p>
         </div>
-      </a>
+      </router-link>
+    </div>
+
+    <div class="post_content">
+      <div class="post_description">
+        <p>{{ post.title }}</p>
+        <p>{{ post.content }}</p>
+        <p>{{ post.imageUrl }}</p>
+      </div>
+      <div class="post_img">
+        <img
+          :src="`http://localhost:3000/api/posts/${post.imageUrl}`"
+          title="Image du post"
+          class="img_post_add"
+          v-if="post.image"
+        />
+      </div>
       <div class="post_date">
         <p>{{ datePost(post.updateAt) }}</p>
       </div>
@@ -48,22 +64,6 @@
       </div>
     </div>
 
-    <div class="post_content">
-      <div class="post_description">
-        <p>{{ post.title }}</p>
-        <p>{{ post.content }}</p>
-        <p>{{ post.imageUrl }}</p>
-      </div>
-      <div class="post_img">
-        <img
-          :src="`http://localhost:3000/api/posts/${post.imageUrl}`"
-          title="Image du post"
-          class="img_post_add"
-          v-if="post.image"
-        />
-      </div>
-    </div>
-
     <div id="separate_barre"></div>
 
     <div class="post_like">
@@ -95,13 +95,27 @@
           :src="`http://localhost:3000/api/posts/:id/comment/${comment.imageUrl}`"
           width="40"
           class="comment-pic-round"
-        />
-        <i v-else id="comment-pic-default" class="fas fa-user-circle"></i>
+        /><i v-else id="comment-pic-default" class="fas fa-user-circle"></i>
         <div class="comment_user">
-          <span class="comment_user_pseudo">{{ user.pseudo }}</span>
+          <router-link :to="{ name: 'ProfilUser' }"
+            ><span class="comment_user_pseudo">{{
+              user.pseudo
+            }}</span></router-link
+          >
           <p class="comment-text">{{ comment.content }}</p>
         </div>
+
         <div class="edit_comment" v-if="comment.editable">
+          <!-- ecriture du commentaire -->
+          <form class="comment-input" @submit.prevent="submitComment">
+            <input
+              type="text"
+              class="com-input"
+              v-model="comment.content"
+              placeholder="Écrivez un commentaire ici..."
+              required
+            />
+          </form>
           <button
             :data-id="commentId"
             @click="
@@ -132,17 +146,6 @@
           </div>
         </div>
       </div>
-
-      <!-- ecriture du commentaire -->
-      <form class="comment-input" @submit.prevent="submitComment">
-        <input
-          type="text"
-          class="com-input"
-          v-model="commentData.content"
-          placeholder="Écrivez un commentaire ici..."
-          required
-        />
-      </form>
     </div>
   </article>
 </template>
