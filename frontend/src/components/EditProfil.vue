@@ -122,7 +122,7 @@ export default {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
+          "Authorization": `Bearer ${this.token}`,
         },
          body: JSON.stringify({
             user: this.user,
@@ -144,7 +144,7 @@ export default {
         data: this.user,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
+          "Authorization": `Bearer ${this.token}`,
         },
         body: JSON.stringify({
             user: this.user,
@@ -173,7 +173,7 @@ export default {
         headers: {
           "Content-Type": "multipart/form-data",
           "Accept": "application/json",
-          Authorization: `Bearer ${this.token}`
+          "Authorization": `Bearer ${this.token}`
         },
         body: FormData,
       })
@@ -193,7 +193,7 @@ export default {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${this.token}`,
+            "Authorization": `Bearer ${this.token}`,
           },
           body: JSON.stringify({
             user: this.user

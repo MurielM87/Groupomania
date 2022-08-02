@@ -13,7 +13,7 @@
         v-else
         class="profil_image"
         alt="avatar"
-        title="modifier mon avatar"
+        title="mon avatar"
         :src="`http://localhost:3000/users/profil/${user.imageUrl}`"
       />
       <router-link to="/edit-profil" v-if="user"
@@ -68,7 +68,7 @@ export default {
 
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
+          "Authorization": `Bearer ${this.token}`,
         },
         body: JSON.stringify({
           user: this.user,
@@ -88,7 +88,7 @@ export default {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
+          "Authorization": `Bearer ${this.token}`,
         },
         body: JSON.stringify({
           userId: this.userId,

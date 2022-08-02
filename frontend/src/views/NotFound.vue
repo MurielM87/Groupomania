@@ -24,7 +24,7 @@ export default {
 }
 
 :root {
-    --size: 50px;
+    --size: 60px;
 }
 
 body {

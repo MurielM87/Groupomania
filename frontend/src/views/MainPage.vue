@@ -56,7 +56,7 @@ export default {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${this.token}`,
+        "Authorization": `Bearer ${this.token}`,
       },
     })
       .then((res) => {
@@ -87,7 +87,7 @@ export default {
         data: formData,
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${this.token}`,
+          "Authorization": `Bearer ${this.token}`,
         },
          body: JSON.stringify({
             title: this.title,
@@ -110,7 +110,7 @@ export default {
         data: { postId },
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
+          "Authorization": `Bearer ${this.token}`,
         },
       }).then(() => {
         this.posts = this.posts.filter((post) => {
@@ -127,7 +127,7 @@ export default {
         data: { postId, content },
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
+          "Authorization": `Bearer ${this.token}`,
         },
       }).then(() => this.loadcomments(postId));
     },
@@ -138,7 +138,7 @@ export default {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
+          "Authorization": `Bearer ${this.token}`,
         },
       }).then((res) => {
         this.comments = {
@@ -158,7 +158,7 @@ export default {
         data: {postId, commentId},
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`
+          "Authorization": `Bearer ${this.token}`
         }
       })
       .then(() => this.loadComments(postId))
@@ -172,7 +172,7 @@ export default {
         data: { postId },
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
+          "Authorization": `Bearer ${this.token}`,
         },
       }).then((res) => {
         for (let post in this.posts) {

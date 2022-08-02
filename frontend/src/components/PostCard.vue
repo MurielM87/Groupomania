@@ -5,7 +5,6 @@
         <img
           v-if="post.image"
           :src="`http://localhost:3000/api/users/${this.imageUrl}`"
-          width="50"
           title="Avatar de l'auteur"
           class="post-header-pic-round"
         />

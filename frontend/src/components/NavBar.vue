@@ -57,6 +57,8 @@ export default {
     const userId = localStorage.getItem('userId')
     if (token !== null && userId!== null) {
       this.isLoggedIn = true
+    } else {
+      this.$router.push({name: "LogIn"})
     }
   },
   methods: {

@@ -60,7 +60,7 @@ export default {
         headers: {
           "Content-Type": "multipart/form-data",
           "Accept": "application/json",
-          Authorization: `Bearer ${this.token}`
+          "Authorization": `Bearer ${this.token}`
         },
         body: FormData,
       })
@@ -91,8 +91,8 @@ export default {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
-          Accept: "application/json",
-          Authorization: `Bearer ${this.token}`,
+          "Accept": "application/json",
+          "Authorization": `Bearer ${this.token}`,
         },
         body: formData,
       }).then(
