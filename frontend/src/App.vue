@@ -18,7 +18,6 @@ export default {
     NavBar,
     FooterPage,
   },  
-
 };
 </script>
 
@@ -46,7 +45,7 @@ export default {
 #logo_background {
   width: 600px;
   position: absolute;
-  left: 33%;
+  left: 31%;
   top: -100px;
   z-index: -1;
   @media (min-width: 768px) and (max-width: 992px) {

@@ -1,5 +1,5 @@
 <template>
-  <div id="navbar">
+  <header>
     <div v-if="this.isLoggedIn">
       <router-link :to="{ name: 'MainPage' }"
         ><img alt="logo Groupomania" src="../assets/icon.png" class="logo"
@@ -40,7 +40,7 @@
         </ul>
       </li>
     </div>
-  </div>
+  </header>
   <div class="barre_color"></div>
 </template>
 
@@ -72,7 +72,7 @@ export default {
 </script>
 
 <style lang="scss">
-#navbar {
+header {
   width: 100%;
   height: 100px;
   margin: auto;

@@ -18,7 +18,7 @@
           :src="`http://localhost:3000/users/profil/${user.imageUrl}`"
         />
       </div>
-      <input @change="onFileSelected" type="file" name="avatar" id="profil_image" accept="image/*" ref="fileInput"/>
+      <input @change="onFileSelected" type="file" name="avatar" id="profil_image" accept=".jpeg, .jpg, .png, .webp, .gif" ref="fileInput"/>
       <button @click="onUpload">Télécharger</button>
     </div>
     
@@ -66,19 +66,6 @@
           />
           <div class="form-err"></div>
         </div>
-        <div class="form_group">
-          <label for="email">Email : </label>
-          <input
-            type="text"
-            v-model.lazy="user.email"
-            placeholder="{{user.email}}"
-            name="email"
-            id="email"
-            class="form_input"
-            required
-          />
-          <div class="form-err"></div>
-        </div>
         <button @click="updateProfil(userId)" class="form_btn" title="enregistrer les modifications"><i class="fas fa-save"></i>
           enregistrer les modifications
         </button>
@@ -104,7 +91,6 @@ export default {
         pseudo: "",
         firstname: "",
         lastname: "",
-        email: "",
         imageUrl: "",
       },
       selectedFile: null,

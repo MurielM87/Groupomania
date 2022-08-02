@@ -20,7 +20,7 @@
         ></textarea>
         <div class="post_img">
           <label for="addContent"></label>
-          <input @change="newImage" type="file" id="addContent" name="imageUrl" accept="image/*" /><button @click="onUpload">Télécharger</button>
+          <input @change="newImage" type="file" id="addContent" name="imageUrl" accept=".jpeg, .jpg, .png, .webp, .gif" /><button @click="onUpload">Télécharger</button>
         </div>
         <button class="post-btn" title="valider la publication">
           <i class="far fa-edit"></i>Publier</button>
@@ -28,9 +28,10 @@
     </form>
   </section>
 </template>
-
     
 <script>
+import { ref } from "vue";
+
 export default {
   name: "PostForm",
   props: {
@@ -39,9 +40,9 @@ export default {
   data() {
     return {
       postForm: {
-        title: "",
-        content: "",
-        imageUrl: "",
+        title: ref(""),
+        content: ref(""),
+        imageUrl: ref(""),
       },
     };
   },

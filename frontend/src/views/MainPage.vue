@@ -8,7 +8,7 @@
 
     <PostCard
       v-for="post in posts"
-      :key="post.id"
+      :key="post.postId"
       :post="post"
       :deletePost="deletePost"
       :addLike="addLike"
