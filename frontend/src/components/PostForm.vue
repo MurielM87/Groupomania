@@ -1,34 +1,43 @@
 <template>
   <!--to write a new message -->
-  <section id="new_post">
-    <form class="post_card" @submit.prevent="addPost()">
-      <h2>Nouveau message</h2>
-      <div class="post_form">
+  <section id="card">
+    <h2>Nouveau message</h2>
+    <div class="post_form">
+      <input
+        type="text"
+        v-model="title"
+        class="post_title"
+        placeholder="titre du message"
+        required
+      />
+      <textarea
+        type="text"
+        v-model="content"
+        placeholder="message"
+        rows="10"
+        cols="30"
+        required
+      ></textarea>
+      <!--add an image -->
+      <div class="post_img">
+        <label for="addContent"></label>
         <input
-          type="text"
-          v-model="title"
-          class="post_title"
-          placeholder="titre du message"
-          required
+          @change="addPost($event)"
+          type="file"
+          id="addContent"
+          name="imageUrl"
+          accept=".jpeg, .jpg, .png, .webp, .gif"
         />
-        <textarea
-          type="text"
-          v-model="content"
-          placeholder="message"
-          rows="10"
-          cols="30"
-          required
-        ></textarea>
-        <!--add an image -->
-        <div class="post_img">
-          <label for="addContent"></label>
-          <input @change="newImage" type="file" id="addContent" name="imageUrl" accept=".jpeg, .jpg, .png, .webp, .gif" /><button @click="onUpload">Télécharger</button>
-        </div>
-        
-        <button class="post-btn" title="valider la publication">
-          <i class="far fa-edit"></i>Publier</button>
       </div>
-    </form>
+
+      <button
+        @click="addPost()"
+        class="post-btn"
+        title="valider la publication"
+      >
+        <i class="far fa-edit"></i>Publier
+      </button>
+    </div>
   </section>
 </template>
     
@@ -50,62 +59,41 @@ export default {
     };
   },
   methods: {
-
-    //upload profil image
-    newImage(event) {
-      console.log(event)
-      this.imageUrl = event.target.files[0]
-    },
-    onUpload(postId){
-      const fd = new FormData();
-      fd.append('image', this.imageUrl, this.imageUrl.name)
-      fetch(`http://localhost:3000/api/posts/${postId}`, fd, {
-        method: "POST",
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "Accept": "application/json",
-          "Authorization": `Bearer ${this.token}`
-        },
-        body: FormData,
-      })
-      .then(res => {
-        console.log(res)
-      })
-    },
-
-    addPost() {
-      const title = this.postForm.title;
-      const content = this.postForm.content;
-      const image = this.postForm.imageUrl;
-
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("content", content);
-      formData.append("image", image);
-      this.createPost(FormData);
-
+    addPost(event) {
       this.postForm = {
-        title: "",
-        content: "",
-        image: "",
+        title: this.title,
+        content: this.content,
+        image: this.imageUrl,
       };
-      
+      console.log("title", this.title);
+      console.log("content", this.content);
+      console.log("image", this.imageUrl);
+
+      //upload image
+      console.log("event", event);
+      this.imageUrl = event.target.files[0];
+
+      const fd = new FormData();
+      console.log("newFormData", FormData);
+      fd.append("image", this.imageUrl, this.imageUrl.name);
+
       fetch(`http://localhost:3000/api/posts/add`, {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
-          "Accept": "application/json",
-          "Authorization": `Bearer ${this.token}`,
+          Accept: "application/json",
+          Authorization: `Bearer ${this.token}`,
         },
-        body: formData,
       }).then(
-        function (response) {
-          if (response.status != 201) {
-            this.fetchError = response.status;
+        function (res) {
+          if (res.status != 201) {
+            this.fetchError = res.status;
+            console.log("res", res);
           } else {
-            response.json().then(
+            res.json().then(
               function (data) {
                 this.fetchResponse = data;
+                console.log("data", data);
               }.bind(this)
             );
           }
@@ -136,41 +124,12 @@ export default {
   }
 }
 
-#post_author {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-#post_author img {
-  width: 40px;
-  padding: 10px;
+#label_file_input {
+  text-align: right;
 }
 
 .post_title {
   width: 100%;
-}
-
-#card h3,
-#card p {
-  margin: 0;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  text-align: left;
-}
-
-#post_form {
-  display: flex;
-  flex-direction: column;
-}
-
-#post_form img {
-  width: 100%;
-  object-fit: cover;
-}
-#label_file_input {
-  text-align: right;
 }
 .btn {
   margin: 10px;
@@ -181,6 +140,7 @@ export default {
   }
 }
 .fa-save,
+.fa-edit,
 .fa-trash-alt,
 .fa-folder-open,
 .fa-pen {

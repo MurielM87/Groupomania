@@ -18,24 +18,24 @@
       <li v-if="this.isLoggedIn" class="menu">
         <ul>
           <router-link :to="{ name: 'ProfilUser' }"
-            ><span class="text_desktop"><i class="fas fa-portrait">Profil</i></span></router-link
+            ><i class="fas fa-portrait"><span class="text_desktop"> Mon profil</span></i></router-link
           >
         </ul>
         <ul>
           <router-link :to="{ name: 'LogIn' }" @click="this.logOut"
-            ><span class="text_desktop"><i class="fas fa-sign-out-alt">Déconnexion</i></span></router-link
+            ><i class="fas fa-sign-out-alt"><span class="text_desktop"> Déconnexion</span></i></router-link
           >
         </ul>
       </li>
       <li v-else class="menu">
         <ul>
           <router-link :to="{ name: 'LogIn' }"
-            ><i class="fas fa-sign-in-alt"><span class="text_desktop">Connexion</span></i></router-link
+            ><i class="fas fa-sign-in-alt"><span class="text_desktop"> Connexion</span></i></router-link
           >
         </ul>
         <ul>
           <router-link :to="{ name: 'SignUp' }"
-            ><span class="text_desktop"><i class="fas fa-user-plus">Inscription</i></span></router-link
+            ><i class="fas fa-user-plus"><span class="text_desktop"> Inscription</span></i></router-link
           >
         </ul>
       </li>
@@ -86,6 +86,7 @@ h1 {
   display: flex;
   align-items: center;
   margin-top: 25px;
+  margin-left: 150px;
 }
 
 .logo {
@@ -104,18 +105,18 @@ h1 {
 }
 
 .menu {
-  width: 20%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  margin: 0 10px;
+  margin: 10px;
+  padding-right: 150px;
   @media (min-width: 768px) and (max-width: 992px) {
-    width: 100%;
+    padding-right: 0px;
     flex-direction: column;
   }
   @media screen and (max-width: 768px) {
-    width: 100%;
+    padding-right: 0px;
     align-content: center;
   }
 }
@@ -146,7 +147,10 @@ ul {
     color: red;
   }
   @media (min-width: 768px) and (max-width: 992px) {
-    display: none;
+    font-size: 15px
+  }
+  @media screen and (max-width: 768px) {
+    font-size: 30px;
   }
 }
 .barre_color {

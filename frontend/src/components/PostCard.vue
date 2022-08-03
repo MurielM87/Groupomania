@@ -1,35 +1,37 @@
 <template>
   <article id="card">
     <!--informations from the author of the post-->
-    <div class="post_author">
-      <router-link :to="{ name: 'ProfilUser' }">
-        <img
-          v-if="post.image"
-          :src="`http://localhost:3000/api/users/${this.imageUrl}`"
-          title="Avatar de l'auteur"
-          class="author_avatar"
-        />
-        <img
-          v-else
-          src="../assets/avatar.png"
-          title="Avatar de l'auteur"
-          class="author_avatar"
-        />
-        <div class="author_name">
-          <p>{{ user.pseudo }}</p>
+    <router-link :to="{ name: 'ProfilUser' }">
+      <div id="post_author">
+        <div id="author_img">
+          <img
+            v-if="post.image"
+            :src="`http://localhost:3000/api/users/${this.imageUrl}`"
+            title="Avatar de l'auteur"
+            class="author_avatar"
+          />
+          <img
+            v-else
+            src="../assets/avatar.png"
+            title="Avatar de l'auteur"
+            class="author_avatar"
+          />
         </div>
-      </router-link>
-    </div>
+        <div class="author_name">
+          <h4>Pseudo : {{ user.pseudo }}</h4>
+        </div>
+      </div>
+    </router-link>
     <!--content from the writing post -->
     <div class="post_content">
       <div class="post_description">
-        <p>{{ post.title }}</p>
-        <p>{{ post.content }}</p>
-        <p v-if="post.image">{{ post.imageUrl }}</p>
+        <h3>titre : {{ post.title }}</h3>
+        <p>contenu : {{ post.content }}</p>
+        <p v-if="post.image">image : {{ post.imageUrl }}</p>
       </div>
       <!--add the datetime -->
       <div class="post_date">
-        <p>publié le {{ datePost(post.createdAt) }}</p>
+        <p>publié le {{ datePost(post.createdAt) }} -</p>
         <p>modifié le {{ datePost(post.updatedAt) }}</p>
       </div>
     </div>
@@ -58,101 +60,80 @@
 
     <!-- add like to the post-->
     <div @click="addLike(postId)" class="post_like">
-      <i class="far fa-thumbs-up" id="icon-like"></i>
-      <p>{{ post.likes }}</p>
+      <i class="far fa-thumbs-up"></i>
+      <i class="far fa-thumbs-down"></i>
+      <p>post.likes : {{ post.likes }}</p>
     </div>
 
     <!--add a comment to the post -->
-    <div
-      class="post_action_comment"
-      @click="showComment(postId)"
-      title="comment"
-    >
-      <h3>Commentaires</h3>
-    </div>
+    <div class="post_comments">
+      <h3><i class="far fa-comment-alt"></i> Commentaires</h3>
 
-    <!--get previous comments -->
-    <div class="comment" v-if="releveComment">
-      <div class="comment_author" v-for="comment in comments" :key="comment.id">
-        <img
-          v-if="comment.image"
-          :src="`http://localhost:3000/api/posts/:id/comment/${comment.imageUrl}`"
-          class="comment-pic-round"
-        />
-        <img v-else src="../assets/avatar.png" alt="avatar de l'auteur" />
-        <div class="comment_user">
-          <router-link :to="{ name: 'ProfilUser' }"
-            ><span class="comment_user_pseudo">
+      <!--write a comment -->
+      <CommentCard />
+
+      <!--get all comments -->
+      <div class="comments_card" v-for="comment in comments" :key="comment.id">
+        <router-link :to="{ name: 'ProfilUser' }">
+          <div class="comment_author">
+            <img
+              v-if="comment.image"
+              :src="`http://localhost:3000/api/users/${userId.imageUrl}`"
+            />
+            <img v-else src="../assets/avatar.png" alt="avatar de l'auteur" />
+            <span class="comment_author_pseudo">
               {{ user.pseudo }}
             </span>
-          </router-link>
-          <p class="comment-text">{{ comment.content }}</p>
+          </div>
+        </router-link>
+
+        <div class="comment_content">
+          <p class="comment_text">
+            {{ comment.content }}
+          </p>
+          <!--add the datetime -->
+          <div class="post_date">
+            <p>publié le {{ dateComment(comment.createdAt) }}</p>
+          </div>
         </div>
 
-        <div class="edit_comment">
-          <!--write a comment -->
-          <form class="comment-input" @submit.prevent="submitComment">
-            <textarea
-              type="text"
-              class="com-input"
-              v-model="comment.content"
-              placeholder="commentaire"
-              rows="10"
-              cols="30"
-              required
-            ></textarea>
-            <button>
-              <span>Publier</span><i class="far fa-comment-alt"></i>
-            </button>
-          </form>
-            <button
-              id="comment-delete"
-              title="Supprimer le commentaire"
-              @click="deleteComment(postId, commentId)"
-            >
-              <span>Supprimer</span><i class="far fa-trash-alt"></i>
-            </button>
-        </div>
+        <button
+          id="comment-delete"
+          title="Supprimer le commentaire"
+          @click="deleteComment(postId, commentId)"
+        >
+          <span>Supprimer</span><i class="far fa-trash-alt"></i>
+        </button>
       </div>
     </div>
   </article>
 </template>
 
 <script>
+import CommentCard from "./CommentCard.vue";
+
 export default {
   name: "PostCard",
-  props: {
-    post: Object,
-    deletePost: Function,
-    addLike: Function,
-    addComment: Function,
-    loadComment: Function,
-    comment: Array,
-    deleteComment: Function,
+  component: {
+    CommentCard,
   },
   data() {
     return {
-      menuActive: false,
-      menuActiveComments: {},
-      scTimer: 0,
-      scY: 0,
-      commentData: {
+      user: {
+        pseudo: "",
+        imageUrl: "",
+      },
+      post: {
+        title: "",
         content: "",
       },
-      releveComment: false,
+      comment: {
+        content: "",
+      },
     };
   },
   methods: {
-    // Fonction fermant automatiquement la partie option de post dès lors que l'utilisateur click au delà des boutons modifier et supprimer
-    clickOutside() {
-      this.menuActive = false;
-    },
-    // Fonction fermant automatiquement la partie option du commentaire avec le click du bouton supprimer
-    clickOutsideComment(event, el) {
-      const id = el.dataset["id"];
-      this.menuActiveComments = { ...this.menuActiveComments, [id]: false };
-    },
-    // Mise en forme de la date d'ajout du post sur un standard français
+    //date of the post
     datePost(date) {
       const event = new Date(date);
       const options = {
@@ -164,38 +145,92 @@ export default {
       };
       return event.toLocaleDateString("fr-Fr", options);
     },
-    // Redirection vers la page dédiée à la modification de post
-    //  updatePost() {
-    //    this.$router.push({ name: "ModifyPost", params: { id: this.postId } });
-    //  },
-    // Bouton permettant d'afficher la partie commentaires
-    showComment(postId) {
-      this.releveComment = true;
-      this.loadComments(postId);
+    publishPost() {},
+    
+    updatePost(postId) {    
+      console.log("post ${postId} updated", postId);
     },
-    //function d'ajout de commentaire
-    submitComment() {
-      this.addComment(this.postId, this.commentData.content);
-      this.commentData.content = "";
+    deletePost(postId) {
+      console.log("deletePost", postId);
+      fetch(`http://localhost:3000/api/posts/${this.postId}`, {
+        method: "DELETE",
+        data: { postId },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.token}`,
+        },
+      }).then(() => {
+        this.posts = this.posts.filter((post) => {
+          console.log("deletePost || postId", postId)
+          return post.id != postId;
+        });
+      });
+      console.log("post ${postId} deleted", postId);
     },
+
+    addLike(postId) {
+      console.log("addLike || postId", postId);
+    },
+    deleteComment(postId, commentId) {
+      console.log("deleteComment, postId", postId);
+      console.log("deleteComment, commentId", commentId);
+    },
+
+    //date of the comment
+    dateComment(date) {
+      const event = new Date(date);
+      const options = {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      };
+      return event.toLocaleDateString("fr-Fr", options);
+    },
+
+    getAllComments() {},
   },
+  components: { CommentCard },
 };
 </script>
 
 <style lang="scss">
-#card {
-  background-color: white;
-  width: 25rem;
-  border-radius: 20px;
-  border: 1px solid #fd2f01;
-  padding: 20px;
-  margin: auto;
+#post_author {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  border: 1px solid black;
+  border-radius: 10px;
   margin-bottom: 20px;
-  margin-top: 20px;
-  @media screen and (max-width: 768px) {
-    width: 80%;
-  }
 }
+
+.author_avatar {
+  width: 50px;
+  padding: 10px;
+}
+h4 {
+  margin: 20px;
+}
+
+#card h3,
+#card p {
+  margin: 0;
+  padding-bottom: 10px;
+  padding-left: 10px;
+}
+
+#card p {
+  text-align: justify;
+}
+
+.post_date {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 20px;
+}
+
 #comment_author {
   display: flex;
   flex-direction: row;

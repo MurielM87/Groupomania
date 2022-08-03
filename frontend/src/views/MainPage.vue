@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import PostForm from "@/components/PostForm.vue";
 import PostCard from "@/components/PostCard.vue";
 
@@ -34,7 +35,7 @@ export default {
     PostForm,
     PostCard,
   },
-  beforecreated() {
+  beforeCreate() {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
     if (token == null && userId == null) {
@@ -43,16 +44,26 @@ export default {
   },
   data() {
     return {
-      user: [],
-      posts: [],
-      comments: [],
+      user: [{
+        pseudo: ref(""),
+        imageUrl: ref(""),
+      }],
+      post: [{
+        title: ref(""),
+        content: ref(""),
+        imageUrl: ref(""),
+      }],
+      comment: [{
+        content: ref("")
+      }],
     };
   },
   getItem() {
     this.token = localStorage.getItem("token");
     this.userId = localStorage.getItem("userId");
 
-    fetch(`http://localhost:3000/api/posts/`, {
+    //get the user
+    fetch(`http://localhost:3000/api/users/${this.userId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -92,6 +103,7 @@ export default {
         body: JSON.stringify({
           title: this.title,
           content: this.content,
+          image: this.imageUrl,
         }),
       }).then((res) => {
         console.log("createPost | formData", formData);
@@ -114,6 +126,7 @@ export default {
         },
       }).then(() => {
         this.posts = this.posts.filter((post) => {
+          console.log("deletePost || postId", postId)
           return post.id != postId;
         });
       });
