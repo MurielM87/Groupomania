@@ -1,10 +1,9 @@
 <template>
   <section class="posts">
-   
     <PostForm :createPost="createPost" />
 
     <div id="separate_barre"></div>
-     <h2>Nouvelles publications</h2>
+    <h2>Nouvelles publications</h2>
 
     <PostCard
       v-for="post in posts"
@@ -14,7 +13,7 @@
       :addLike="addLike"
       :addComment="addComment"
       :loadComments="loadComments"
-      :comments="comments[post.id]"
+      :comments="comments[post.postId]"
       :deleteComment="deleteComment"
     />
 
@@ -35,17 +34,18 @@ export default {
     PostForm,
     PostCard,
   },
-  created(){
+  beforecreated() {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
     if (token == null && userId == null) {
-      this.$router.push({name: 'LogIn'})
+      this.$router.push({ name: "LogIn" });
     }
   },
   data() {
     return {
+      user: [],
       posts: [],
-      comments: {},
+      comments: [],
     };
   },
   getItem() {
@@ -81,7 +81,7 @@ export default {
 
     //create a new post
     createPost(formData) {
-      console.log("createPost", formData)
+      console.log("createPost", formData);
       fetch(`http://localhost:3000/api/posts/add`, {
         method: "POST",
         data: formData,
@@ -89,13 +89,13 @@ export default {
           "Content-Type": "multipart/form-data",
           "Authorization": `Bearer ${this.token}`,
         },
-         body: JSON.stringify({
-            title: this.title,
-            content: this.content,
-          }),
+        body: JSON.stringify({
+          title: this.title,
+          content: this.content,
+        }),
       }).then((res) => {
         console.log("createPost | formData", formData);
-        const post = res.data;
+        const post = res.FormData;
         console.log("createPost | res.data", res.data)
         post["likes"] = 0;
         this.posts = [post].concat(this.posts);
@@ -104,7 +104,7 @@ export default {
 
     //delete a post
     deletePost(postId) {
-      console.log("deletePost", postId)
+      console.log("deletePost", postId);
       fetch(`http://localhost:3000/api/posts/${this.postId}`, {
         method: "DELETE",
         data: { postId },
@@ -121,7 +121,7 @@ export default {
 
     //add a comment
     addComment(postId, content) {
-      console.log("addContent||postId, content", postId, content)
+      console.log("addContent||postId, content", postId, content);
       fetch(`http://localhost:3000/api/posts/${this.postId}/comment`, {
         method: "POST",
         data: { postId, content },
@@ -145,28 +145,27 @@ export default {
           ...this.comments,
           [postId]: res.data,
         };
-        console.log("loadComments||res.data", res.data)
+        console.log("loadComments||res.data", res.data);
       });
     },
 
     //delete a comment from a post
     deleteComment(postId, commentId) {
       console.log("deleteComment||postId", postId);
-      console.log("deleteComment||commentId", commentId)
+      console.log("deleteComment||commentId", commentId);
       fetch(`http://localhost:3000/api/posts/comment/${this.commentId}`, {
         method: "DELETE",
-        data: {postId, commentId},
+        data: { postId, commentId },
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.token}`
-        }
-      })
-      .then(() => this.loadComments(postId))
+          "Authorization": `Bearer ${this.token}`,
+        },
+      }).then(() => this.loadComments(postId));
     },
 
     //add a like
     addLike(postId) {
-      console.log("addLike||postId", postId)
+      console.log("addLike||postId", postId);
       fetch(`http://localhost:3000/api/posts/${this.postId}/like`, {
         method: "POST",
         data: { postId },
@@ -180,7 +179,7 @@ export default {
             if (res.status == 204) {
               this.posts[post].likes -= 1;
             }
-            console.log("addLike||posts", post)
+            console.log("addLike||posts", post);
             if (res.status == 201) {
               this.posts[post].likes += 1;
             }

@@ -4,7 +4,6 @@ import LogIn from '@/views/LogIn.vue';
 import MainPage from '@/views/MainPage';
 import ProfilUser from '@/views/ProfilUser';
 import EditProfil from '@/components/EditProfil';
-import LogOut from '@/views/LogOut';
 import NotFound from '@/views/NotFound';
 
 const routes = [
@@ -32,11 +31,6 @@ const routes = [
         name: 'EditProfil',
         path: '/edit-profil',
         component: EditProfil,
-    },
-    {
-        name: 'LogOut',
-        path: '/logout',
-        component: LogOut,
     },
     {
         name: 'NotFound',

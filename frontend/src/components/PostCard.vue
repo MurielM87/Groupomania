@@ -1,148 +1,117 @@
 <template>
   <article id="card">
+    <!--informations from the author of the post-->
     <div class="post_author">
       <router-link :to="{ name: 'ProfilUser' }">
         <img
           v-if="post.image"
           :src="`http://localhost:3000/api/users/${this.imageUrl}`"
           title="Avatar de l'auteur"
-          class="post-header-pic-round"
+          class="author_avatar"
         />
-        <i v-else id="post-pic-default" class="fas fa-user-circle"></i>
+        <img
+          v-else
+          src="../assets/avatar.png"
+          title="Avatar de l'auteur"
+          class="author_avatar"
+        />
         <div class="author_name">
           <p>{{ user.pseudo }}</p>
         </div>
       </router-link>
     </div>
-
+    <!--content from the writing post -->
     <div class="post_content">
       <div class="post_description">
         <p>{{ post.title }}</p>
         <p>{{ post.content }}</p>
-        <p>{{ post.imageUrl }}</p>
+        <p v-if="post.image">{{ post.imageUrl }}</p>
       </div>
-      <div class="post_img">
-        <img
-          :src="`http://localhost:3000/api/posts/${post.imageUrl}`"
-          title="Image du post"
-          class="img_post_add"
-          v-if="post.image"
-        />
-      </div>
+      <!--add the datetime -->
       <div class="post_date">
-        <p>{{ datePost(post.updateAt) }}</p>
+        <p>publié le {{ datePost(post.createdAt) }}</p>
+        <p>modifié le {{ datePost(post.updatedAt) }}</p>
       </div>
     </div>
 
-    <div class="post_btn" v-if="post.editable">
+    <!--add the buttons 'modify' and 'delete' to the published post-->
+    <div class="post_btn">
       <button
-        @click="menuActive = !menuActive"
-        v-click-outside="clickOutside"
-        class="btn_menu"
-        title="options"
+        id="post_modify"
+        title="modifier le message"
+        @click="updatePost(postId)"
       >
-        <i class="fas fa-ellipsis-v"></i>
+        <i class="far fa-edit"></i>
+        <span class="btn_modify">Modifier</span>
       </button>
-      <div v-if="menuActive" id="post_modify">
-        <button
-          id="post_modify"
-          title="modifier le message"
-          @click="updatePost(postId)"
-        >
-          <i class="far fa-edit"></i>
-          <span class="btn_modify">Modifier</span>
-        </button>
-        <button
-          id="post_delete"
-          title="supprimer le message"
-          @click="deletePost(postId)"
-        >
-          <i class="far fa-trash-alt"></i>
-          <span>Supprimer</span>
-        </button>
-      </div>
+      <button
+        id="post_delete"
+        title="supprimer le message"
+        @click="deletePost(postId)"
+      >
+        <i class="far fa-trash-alt"></i>
+        <span>Supprimer</span>
+      </button>
     </div>
 
     <div id="separate_barre"></div>
 
-    <div class="post_like">
+    <!-- add like to the post-->
+    <div @click="addLike(postId)" class="post_like">
       <i class="far fa-thumbs-up" id="icon-like"></i>
       <p>{{ post.likes }}</p>
     </div>
 
-    <div class="post_action">
-      <div class="post_action_like" @click="addLike(postId)" title="j'aime">
-        <i class="far fa-thumbs-up" id="icon-like"></i>
-        <span>J'aime</span>
-      </div>
-      <div
-        class="post_action_comment"
-        @click="showComment(postId)"
-        title="comment"
-      >
-        <i class="far fa-comment-alt" id="icon-comment"></i>
-        <span>Commentaires</span>
-      </div>
+    <!--add a comment to the post -->
+    <div
+      class="post_action_comment"
+      @click="showComment(postId)"
+      title="comment"
+    >
+      <h3>Commentaires</h3>
     </div>
 
-    <div id="separate_barre"></div>
-
+    <!--get previous comments -->
     <div class="comment" v-if="releveComment">
       <div class="comment_author" v-for="comment in comments" :key="comment.id">
         <img
           v-if="comment.image"
           :src="`http://localhost:3000/api/posts/:id/comment/${comment.imageUrl}`"
-          width="40"
           class="comment-pic-round"
-        /><i v-else id="comment-pic-default" class="fas fa-user-circle"></i>
+        />
+        <img v-else src="../assets/avatar.png" alt="avatar de l'auteur" />
         <div class="comment_user">
           <router-link :to="{ name: 'ProfilUser' }"
-            ><span class="comment_user_pseudo">{{
-              user.pseudo
-            }}</span></router-link
-          >
+            ><span class="comment_user_pseudo">
+              {{ user.pseudo }}
+            </span>
+          </router-link>
           <p class="comment-text">{{ comment.content }}</p>
         </div>
 
-        <div class="edit_comment" v-if="comment.editable">
-          <!-- ecriture du commentaire -->
+        <div class="edit_comment">
+          <!--write a comment -->
           <form class="comment-input" @submit.prevent="submitComment">
-            <input
+            <textarea
               type="text"
               class="com-input"
               v-model="comment.content"
-              placeholder="Écrivez un commentaire ici..."
+              placeholder="commentaire"
+              rows="10"
+              cols="30"
               required
-            />
+            ></textarea>
+            <button>
+              <span>Publier</span><i class="far fa-comment-alt"></i>
+            </button>
           </form>
-          <button
-            :data-id="commentId"
-            @click="
-              menuActiveComments = {
-                ...menuActiveComments,
-                [commentId]: !menuActiveComments[commentId],
-              }
-            "
-            v-click-outside="clickOutsideComment"
-            class="dropdown-btn-comments"
-            title="Option"
-          >
-            <i class="fas fa-ellipsis-v"></i>
-          </button>
-          <div
-            v-if="menuActiveComments[commentId]"
-            id="myDropdownComments"
-            class="dropdown-content-comments"
-          >
             <button
               id="comment-delete"
               title="Supprimer le commentaire"
               @click="deleteComment(postId, commentId)"
             >
-              <i class="far fa-trash-alt"></i>
-              <span class="dropdown-options-comments">Supprimer</span>
+              <span>Supprimer</span><i class="far fa-trash-alt"></i>
             </button>
-          </div>
         </div>
       </div>
     </div>
@@ -187,18 +156,18 @@ export default {
     datePost(date) {
       const event = new Date(date);
       const options = {
-        year: "numeric",
-        month: "long",
         day: "numeric",
+        month: "long",
+        year: "numeric",
         hour: "numeric",
         minute: "numeric",
       };
       return event.toLocaleDateString("fr-Fr", options);
     },
     // Redirection vers la page dédiée à la modification de post
-    updatePost() {
-      this.$router.push({ name: "ModifyPost", params: { id: this.postId } });
-    },
+    //  updatePost() {
+    //    this.$router.push({ name: "ModifyPost", params: { id: this.postId } });
+    //  },
     // Bouton permettant d'afficher la partie commentaires
     showComment(postId) {
       this.releveComment = true;

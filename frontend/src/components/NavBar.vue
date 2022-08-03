@@ -22,7 +22,7 @@
           >
         </ul>
         <ul>
-          <router-link :to="{ name: 'LogOut' }" @click="this.logOut"
+          <router-link :to="{ name: 'LogIn' }" @click="this.logOut"
             ><span class="text_desktop"><i class="fas fa-sign-out-alt">Déconnexion</i></span></router-link
           >
         </ul>
@@ -65,7 +65,7 @@ export default {
     logOut() {
       localStorage.removeItem('token');
       localStorage.removeItem('userId');
-      this.$router.push({name : "LogOut"});
+      this.$router.push({name : "LogIn"});
     },
   },
 }

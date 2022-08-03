@@ -1,6 +1,7 @@
 <template>
+  <!--to write a new message -->
   <section id="new_post">
-    <form class="post_card" @submit.prevent="addPost($event)">
+    <form class="post_card" @submit.prevent="addPost()">
       <h2>Nouveau message</h2>
       <div class="post_form">
         <input
@@ -18,10 +19,12 @@
           cols="30"
           required
         ></textarea>
+        <!--add an image -->
         <div class="post_img">
           <label for="addContent"></label>
           <input @change="newImage" type="file" id="addContent" name="imageUrl" accept=".jpeg, .jpg, .png, .webp, .gif" /><button @click="onUpload">Télécharger</button>
         </div>
+        
         <button class="post-btn" title="valider la publication">
           <i class="far fa-edit"></i>Publier</button>
       </div>
@@ -70,10 +73,10 @@ export default {
       })
     },
 
-    addPost(e) {
+    addPost() {
       const title = this.postForm.title;
       const content = this.postForm.content;
-      const image = e.target.image.files[0];
+      const image = this.postForm.imageUrl;
 
       const formData = new FormData();
       formData.append("title", title);
@@ -86,8 +89,7 @@ export default {
         content: "",
         image: "",
       };
-      e.target.image.value = "";
-
+      
       fetch(`http://localhost:3000/api/posts/add`, {
         method: "POST",
         headers: {

@@ -1,7 +1,8 @@
 <template>
   <form id="profil_form">
     <h2>Profil de {{ user.pseudo }}</h2>
-
+    
+    <!--user profile image -->
     <div id="photo_icone">
       <img
         src="../assets/avatar.png"
@@ -16,16 +17,19 @@
         title="mon avatar"
         :src="`http://localhost:3000/users/profil/${user.imageUrl}`"
       />
-      <router-link to="/edit-profil" v-if="user"
+      <router-link to="/edit-profil" v-if="userId"
         ><i class="fas fa-pencil-alt"></i
       ></router-link>
     </div>
 
+    <!--user information -->
     <div id="name_card">
       <div>Prénom : {{ user.firstname }} Nom : {{ user.lastname }}</div>
       <div>Email : {{ user.email }}</div>
     </div>
+
     <div id="separation_barre"></div>
+    
     <h3>Messages publiés</h3>
     <div id="posts_card" v-for="post in posts" :key="post">
       <PostCard />
@@ -52,11 +56,11 @@ export default {
       },
     };
   },
-  created(){
+  beforecreated() {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
     if (token == null && userId == null) {
-      this.$router.push({name: 'LogIn'})
+      this.$router.push({ name: "LogIn" });
     }
   },
   methods: {
@@ -93,9 +97,9 @@ export default {
         body: JSON.stringify({
           userId: this.userId,
           posts: this.posts,
-        })        
+        }),
       })
-      .then((res) => {
+        .then((res) => {
           console.log("res", res);
           this.posts = res.data;
         })
