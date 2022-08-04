@@ -1,11 +1,10 @@
 const token = require("../middlewares/auth")
 const database = require("../models")
 const jwt = require("jsonwebtoken")
-const fs = require("fs")
 
 //add a comment
 exports.createComment = async (req, res) => {
-    const token = req.headers.authorization.split(" ")[1];
+    const token = req.headers.cookies.split(" ")[1];
     const decodedToken = jwt.verify(token, "Jtsr843aIc78adGa_korT2aN_171a00");
     const userId = decodedToken.userId;
     if (req.body.content === "") {

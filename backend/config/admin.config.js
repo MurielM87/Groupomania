@@ -17,7 +17,7 @@ function createAdmin(req, res) {
         bcrypt
           .hash("Administrateur1", 10)
           .then((hash) => {
-            const admin = MyDatabase.User.create({
+            const admin = Database.User.create({
               username: "admin",
               email: "admin@groupomania.com",
               password: hash,
