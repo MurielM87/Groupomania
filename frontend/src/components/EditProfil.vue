@@ -26,7 +26,7 @@
     <div id="separate_barre"></div>
 
     <div class="profil_informations">
-      <form class="form-profil" @submit.prevent="updateProfil(user.id)">
+      <div class="form-profil">
         <div class="form_group">
           <label for="pseudo">Pseudo : </label>
           <input
@@ -77,7 +77,7 @@
         ><i class="fas fa-trash-alt"></i>
           supprimer le compte
         </button>
-      </form>
+      </div>
     </div>
   </form>
 </template>
@@ -154,7 +154,7 @@ export default {
     onUpload(){
       const fd = new FormData();
       fd.append('image', this.selectedFile, this.selectedFile.name)
-      fetch(`http://localhost:3000/api/profil/images/${this.userId}`, fd, {
+      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, fd, {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
@@ -189,6 +189,7 @@ export default {
             if (res) {
               console.log("userId", userId);
               localStorage.removeItem("token");
+              localStorage.removeItem("userId");
               this.$router.push({ name: "SignUp" });
             }
           })

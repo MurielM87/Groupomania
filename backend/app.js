@@ -36,7 +36,7 @@ sequelize
   })
   .catch((error) => console.log(`connection unsuccessfully  : ${error}`))
 
-app.use("/api/upload", express.static(path.join(__dirname, "upload")))
+//app.use("/api/upload", express.static(path.join(__dirname, "upload")))
 app.use("/api/users", userRouter)
 app.use("/api/posts", postRouter)
 

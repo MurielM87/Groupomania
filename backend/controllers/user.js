@@ -7,7 +7,6 @@ require("dotenv").config()
 
 //SignUp
 exports.signup = async (req, res) => {
-  console.log('signup')
   try {
     const user = await database.User.findOne({
       where: { email: req.body.email },

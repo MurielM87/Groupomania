@@ -187,6 +187,37 @@ exports.getAllPosts = async (req, res) => {
   }
 }
 
+//get all posts of one user
+exports.getAllPostsOfOneUser = (req, res, next) => {
+	database.Post.findAll({ 
+    where: { userId: req.params.id },
+    attributes: ["id", "post", "imageUrl", "createdAt"],
+      order: [["createdAt", "DESC"]],
+      include: [
+        {
+          model: database.User,
+          attributes: ["pseudo", "id", "imageUrl", "isAdmin"],
+        },
+        {
+          model: database.Like,
+          attributes: ["userId"],
+        },
+        {
+          model: database.Comment,
+          attributes: ["post", "pseudo", "userId", "id"],
+          order: [["createdAt", "DESC"]],
+          include: [
+            {
+              model: database.User,
+              attributes: ["imageUrl", "pseudo", "isAdmin"],
+            },
+          ],
+        },
+      ],
+  })
+		.then((posts) => res.status(200).json(posts))
+		.catch((error) => res.status(400).json({ error }));
+};
 
 //like a post
 exports.likePost = async (req, res, next) => {
@@ -211,83 +242,5 @@ exports.likePost = async (req, res, next) => {
     }
   } catch (error) {
     return res.status(500).send({ error: "Erreur serveur" })
-  }
-}
-
-//add a comment
-exports.addComment = async (req, res) => {
-  try {
-    const comment = req.body.commentPost
-    const pseudo = req.body.commentPseudo
-    const newComment = await database.Comment.create({
-      post: comment,
-      pseudo: pseudo,
-      UserId: token.getUserId(req),
-      PostId: req.params.id,
-    })
-
-    res
-      .status(201)
-      .json({ newComment, message: "commentaire publié" })
-  } catch (error) {
-    return res.status(500).send({ error: "Erreur serveur" })
-  }
-}
-
-//delete a comment
-exports.deleteComment = async (req, res) => {
-  try {
-    const userId = token.getUserId(req)
-    const checkAdmin = await database.User.findOne({ where: { id: userId } })
-    const comment = await database.Comment.findOne({
-      where: { id: req.params.id },
-    })
-
-    if (userId === comment.userId || checkAdmin.isAdmin === true) {
-      database.Comment.destroy(
-        { where: { id: req.params.id } },
-        { truncate: true }
-      )
-      res.status(200).json({ message: "commentaire supprimé" })
-    } else {
-      res.status(401).json({ message: "Vous n'êtes pas autorisé" })
-    }
-  } catch (error) {
-    return res.status(501).send({ error: "Erreur serveur" })
-  }
-}
-
-//get all comments from a post
-exports.getAllComments = async (req, res) => {
-  try {
-    // get all comments from database
-    const comments = await database.Comment.findAll({
-      attributes: ["id", "post", "imageUrl", "createdAt"],
-      order: [["createdAt", "DESC"]],
-      include: [
-        {
-          model: database.User,
-          attributes: ["pseudo", "id", "imageUrl", "isAdmin"],
-        },
-        {
-          model: database.Like,
-          attributes: ["userId"],
-        },
-        {
-          model: database.Comment,
-          attributes: ["post", "pseudo", "userId", "id"],
-          order: [["createdAt", "DESC"]],
-          include: [
-            {
-              model: database.User,
-              attributes: ["imageUrl", "pseudo", "isAdmin"],
-            },
-          ],
-        },
-      ],
-    })
-    res.status(200).send(posts)
-  } catch (error) {
-    return res.status(500).send({ error: "erreur server " })
   }
 }

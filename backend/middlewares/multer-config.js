@@ -8,9 +8,10 @@ const MIME_TYPES = {
   "image/gif": "gif",
 }
 
-const storage = multer.diskStorage({
+//upload images for the user
+const userStorage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, "upload")
+    callback(null, "images/users")
   },
  
   filename: (req, file, callback) => {
@@ -20,4 +21,18 @@ const storage = multer.diskStorage({
   },
 })
 
-module.exports = multer({ storage: storage }).single("image")
+//upload images in the post
+const postStorage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    callback(null, "images/posts")
+  },
+ 
+  filename: (req, file, callback) => {
+    const name = file.originalname.replace(/\.[^/.]+$/, "")
+    const extension = MIME_TYPES[file.mimetype]
+    callback(null, name + Date.now() + "." + extension)
+  },
+})
+
+module.exports = multer({ storage: userStorage }).single("image");
+module.exports = multer({ storage: postStorage }).single("image");
