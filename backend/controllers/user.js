@@ -73,20 +73,20 @@ exports.updateUser = async (req, res) => {
   try {
     const userId = token.getUserId(req)
     let newImage
-    let user = await database.User.findOne({ where: { id: id } })
+    let user = await database.User.findByPk({ where: { id: id } })
     if (userId === user.id) {
       if (req.file && user.imageUrl) {
-        newImage = `${req.protocol}://${req.get("host")}/upload/${req.file.filename
+        newImage = `${req.protocol}://${req.get("host")}/images/${req.file.filename
           }`
-        const filename = user.imageUrl.split("/upload")[1]
-        fs.unlink(`upload/${filename}`, (err) => {
+        const filename = user.imageUrl.split("/images")[1]
+        fs.unlink(`images/${filename}`, (err) => {
           if (err) console.log(err)
           else {
-            console.log(`Deleted file: upload/${filename}`)
+            console.log(`Deleted file: images/${filename}`)
           }
         })
       } else if (req.file) {
-        newImage = `${req.protocol}://${req.get("host")}/upload/${req.file.filename
+        newImage = `${req.protocol}://${req.get("host")}/images/${req.file.filename
           }`
       }
       if (newImage) {
@@ -122,8 +122,8 @@ exports.deleteUser = async (req, res) => {
     const id = req.params.id
     const user = await database.User.findOne({ where: { id: id } })
     if (user !== null) {
-      const filename = user.imageUrl.split("/upload")[1]
-      fs.unlink(`upload/${filename}`, () => {
+      const filename = user.imageUrl.split("/images")[1]
+      fs.unlink(`images/${filename}`, () => {
         database.User.destroy({ where: { id: id } })
         res.status(200).json({ message: "utilisateur supprimé" })
       })

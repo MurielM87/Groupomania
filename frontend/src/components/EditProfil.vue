@@ -140,7 +140,8 @@ export default {
         alert("profil modifié");
         console.log("userId", userId); 
         console.log("this.userId", this.userId);
-
+        let user = JSON.parse(localStorage.getItem('user'));
+        console.log("edit-profil||user", user)
         //this.$router.push({ name: "ProfilUser"})
       })
       .catch(err => {console.log("err", err)});
