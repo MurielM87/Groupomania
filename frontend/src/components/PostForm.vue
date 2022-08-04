@@ -22,7 +22,7 @@
       <div class="post_img">
         <label for="addContent"></label>
         <input
-          @change="addPost($event)"
+          @change="uploadImg($event)"
           type="file"
           id="addContent"
           name="imageUrl"
@@ -59,23 +59,33 @@ export default {
     };
   },
   methods: {
-    addPost(event) {
+    
+    //upload image
+      uploadImg(event) {
+        const image = event.target.files[0]
+        console.log("image-target", image)
+        },
+
+
+    addPost() {
       this.postForm = {
         title: this.title,
         content: this.content,
-        image: this.imageUrl,
+        image: this.image,
       };
       console.log("title", this.title);
       console.log("content", this.content);
       console.log("image", this.imageUrl);
 
-      //upload image
-      console.log("event", event);
-      this.imageUrl = event.target.files[0];
+      
+    //  console.log("event", event);
+    //  this.imageUrl = event.target.files[0];
 
       const fd = new FormData();
-      console.log("newFormData", FormData);
-      fd.append("image", this.imageUrl, this.imageUrl.name);
+      console.log("newFormData", fd);
+      fd.append("image", this.imageUrl);
+      fd.append("title", this.title);
+      fd.append("content", this.content);
 
       fetch(`http://localhost:3000/api/posts/add`, {
         method: "POST",
@@ -84,6 +94,7 @@ export default {
           Accept: "application/json",
           Authorization: `Bearer ${this.token}`,
         },
+        body: fd,
       }).then(
         function (res) {
           if (res.status != 201) {

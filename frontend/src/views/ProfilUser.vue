@@ -59,6 +59,7 @@ export default {
   beforeCreate() {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
+    console.log("profil||user", userId);
     if (token == null && userId == null) {
       this.$router.push({ name: "LogIn" });
     }
@@ -66,7 +67,8 @@ export default {
   methods: {
     //get all the informations about the user
     getUserProfil() {
-      const userId = localStorage.getItem("userId", userId);
+      console.log(this.userId)
+      //const userId = localStorage.getItem("userId", userId);
       fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
         method: "GET",
 
@@ -74,9 +76,6 @@ export default {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${this.token}`,
         },
-        body: JSON.stringify({
-          user: this.user,
-        }),
       })
         .then((res) => {
           console.log("res", res);
@@ -94,10 +93,6 @@ export default {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${this.token}`,
         },
-        body: JSON.stringify({
-          userId: this.userId,
-          posts: this.posts,
-        }),
       })
         .then((res) => {
           console.log("res", res);
