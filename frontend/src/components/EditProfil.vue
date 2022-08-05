@@ -110,9 +110,6 @@ export default {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${this.token}`,
         },
-         body: JSON.stringify({
-            user: this.user,
-          }),
       })
         .then((res) => {
           console.log("res", res);
@@ -124,6 +121,7 @@ export default {
     },
 
     //modify userProfil
+   computed:{
     updateProfil(userId) {
       fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
         method: "PUT",
@@ -169,6 +167,7 @@ export default {
       })
     },
 
+   }, 
     //delete user
     deleteUser(userId) {
       if (

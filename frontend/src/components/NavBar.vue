@@ -47,7 +47,7 @@
 <script>
 export default {
   name: "NavBar",
-    data() {
+  data() {
     return {
       isLoggedIn: false
     }
@@ -55,7 +55,7 @@ export default {
   created() {
     const token = localStorage.getItem('token')
     const userId = localStorage.getItem('userId')
-    if (token !== null && userId!== null) {
+    if (token !== null && userId !== null) {
       this.isLoggedIn = true
     } else {
       this.$router.push({name: "LogIn"})
@@ -87,6 +87,9 @@ h1 {
   align-items: center;
   margin-top: 25px;
   margin-left: 150px;
+  @media screen and (max-width: 992px) {
+    margin-left: 0px;
+  }
 }
 
 .logo {

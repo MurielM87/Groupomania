@@ -31,78 +31,85 @@
     <div id="separation_barre"></div>
     
     <h3>Messages publiés</h3>
-    <div id="posts_card" v-for="post in posts" :key="post">
-      <PostCard />
+    <div id="card" v-for="post in posts" :key="post">
+      <div>titre: {{post.title}}</div>
+      <div>contenu: {{post.content}}</div>
+      <div>image: {{post.imageUrl}}</div>
+      <div>publié le {{post.createdAt}}</div><div>modifié le {{post.updatedAt}}</div>
     </div>
   </form>
 </template>
 
 <script>
-import PostCard from "@/components/PostCard";
-
 export default {
-  name: "ProfilUser",
-  components: {
-    PostCard,
-  },
-  data() {
-    return {
-      user: {
-        pseudo: "",
-        firstname: "",
-        lastname: "",
-        email: "",
-        imageUrl: "",
-      },
-    };
-  },
-  beforeCreate() {
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-    console.log("profil||user", userId);
-    if (token == null && userId == null) {
-      this.$router.push({ name: "LogIn" });
-    }
-  },
-  methods: {
-    //get all the informations about the user
-    getUserProfil() {
-      console.log(this.userId)
-      //const userId = localStorage.getItem("userId", userId);
-      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-        method: "GET",
-
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.token}`,
-        },
-      })
-        .then((res) => {
-          console.log("res", res);
-          this.user = res.data;
-        })
-        .catch(() => {
-          this.$router.push({ name: "Login" });
-        });
+    name: "ProfilUser",
+    props: ["isLoggedIn"],
+    data() {
+        return {
+            user: {
+                pseudo: "",
+                firstname: "",
+                lastname: "",
+                email: "",
+                imageUrl: "",
+            },
+            posts: [""],
+        };
     },
-
-    getAllPosts() {
-      fetch(`http://localhost:3000/api/posts/${this.userId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.token}`,
-        },
-      })
-        .then((res) => {
-          console.log("res", res);
-          this.posts = res.data;
-        })
-        .catch(() => {
-          this.$router.push({ name: "Login" });
-        });
+    beforeCreate() {
+        const token = localStorage.getItem("token");
+        const userId = localStorage.getItem("userId");
+        console.log("profil||beforeCreate||userId", userId);
+        if (token == null && userId == null) {
+            this.$router.push({ name: "LogIn" });
+        }
     },
-  },
+    created() {
+        const userId = localStorage.getItem("userId");
+        console.log("profil||created||userId", userId);
+    },
+    methods: {
+        //get all the informations about the user
+        async getUserProfil(userId) {
+            console.log("getUserProfil||this.userId", this.userId);
+            console.log("getUserProfil||userId", userId);
+            //const userId = localStorage.getItem("userId", userId);
+            await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+                method: "GET",
+                withCredentials: true,
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${this.token}`,
+                },
+            })
+                .then((res) => {
+                console.log("res", res);
+                this.user = res.data;
+            })
+                .catch(() => {
+                this.$router.push({ name: "Login" });
+            });
+        },
+
+        //get all posts from a user
+        getAllPosts() {
+            fetch(`http://localhost:3000/api/posts/${this.userId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${this.token}`,
+                },
+            })
+                .then((res) => {
+                console.log("res", res);
+                this.posts = res.data;
+            })
+                .catch(() => {
+                this.$router.push({ name: "Login" });
+            });
+        },
+    },
 };
 </script>
 
@@ -146,12 +153,12 @@ export default {
   padding: 10px;
   position: absolute;
   right: 30%;
-  bottom: 40%;
+  top: 22%;
   &:hover {
     color: red;
   }
   @media screen and (max-width: 768px) {
-    bottom: 44%;
+    top: 19%;
   }
 }
 .fa-pencil-alt:hover {
