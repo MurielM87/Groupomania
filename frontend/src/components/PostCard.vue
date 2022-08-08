@@ -70,7 +70,7 @@
       <h3><i class="far fa-comment-alt"></i> Commentaires</h3>
 
       <!--write a comment -->
-      <CommentCard />
+      <CommentForm />
 
       <!--get all comments -->
       <div class="comments_card" v-for="comment in comments" :key="comment.id">
@@ -110,12 +110,13 @@
 </template>
 
 <script>
-import CommentCard from "./CommentCard.vue";
+import CommentForm from "./CommentForm.vue";
 
 export default {
   name: "PostCard",
+  props:["title", "content", "imageUrl"],
   component: {
-    CommentCard,
+    CommentForm,
   },
   data() {
     return {
@@ -146,17 +147,32 @@ export default {
       return event.toLocaleDateString("fr-Fr", options);
     },
     publishPost() {
-      const post = fetch(`http://localhost:3000/api/posts/`, {
+      fetch(`http://localhost:3000/api/posts/`, {
         methods: "GET",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${this.token}`,
         }
       })
-      console.log("post ${postId} published", post)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
+      console.log("post ${postId} published")
     },
     
     updatePost(postId) {    
+      fetch(`http://localhost:3000/api/posts/${this.postId}`, {
+        method: "PUT",
+        data: { postId },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.token}`,
+        },
+      }).then(() => {
+        this.posts = this.posts.filter((post) => {
+          console.log("updatePost || postId", postId)
+          return post.id != postId;
+        });
+      });
       console.log("post ${postId} updated", postId);
     },
     deletePost(postId) {
@@ -200,7 +216,6 @@ export default {
 
     getAllComments() {},
   },
-  components: { CommentCard },
 };
 </script>
 
