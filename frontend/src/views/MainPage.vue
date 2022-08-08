@@ -31,6 +31,7 @@ import PostCard from "@/components/PostCard.vue";
 
 export default {
   name: "MainPage",
+  props:["title", "content", "imageUrl"],
   components: {
     PostForm,
     PostCard,
@@ -44,6 +45,8 @@ export default {
   },
   data() {
     return {
+      token : localStorage.getItem("token"),
+      userId : localStorage.getItem("userId"),
       user: [{
         pseudo: ref(""),
         imageUrl: ref(""),
@@ -91,11 +94,11 @@ export default {
     },
 
     //create a new post
-    createPost(formData) {
-      console.log("createPost", formData);
+    createPost(fd) {
+      console.log("createPost", fd);
       fetch(`http://localhost:3000/api/posts/add`, {
         method: "POST",
-        data: formData,
+        data: fd,
         headers: {
           "Content-Type": "multipart/form-data",
           "Authorization": `Bearer ${this.token}`,
@@ -106,8 +109,8 @@ export default {
           image: this.imageUrl,
         }),
       }).then((res) => {
-        console.log("createPost | formData", formData);
-        const post = res.FormData;
+        console.log("createPost | formData", fd);
+        const post = res.Fd;
         console.log("createPost | res.data", res.data)
         post["likes"] = 0;
         this.posts = [post].concat(this.posts);
@@ -129,6 +132,7 @@ export default {
           console.log("deletePost || postId", postId)
           return post.id != postId;
         });
+        //  this.$router.push({ name: "MainPage" });
       });
     },
 

@@ -24,7 +24,7 @@ const routes = [
     },
     {
         name: 'ProfilUser',
-        path: '/profil',
+        path: '/profil/:id',
         component: ProfilUser,
     },
     {
@@ -44,6 +44,7 @@ const router = createRouter({
     routes,
 });
 
+/*
 router.beforeEach((to) => {
     if (isLoginRequired(to)) {
         return router.push("/login")
@@ -64,6 +65,6 @@ function isPrivatePage(to) {
 function isTokenInCache() {
     return localStorage.getItem("token") != null
 }
-
+*/
 
 export default router;

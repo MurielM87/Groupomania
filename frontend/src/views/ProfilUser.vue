@@ -1,11 +1,11 @@
 <template>
-  <form id="profil_form">
+  <form id="profil_form" v-bind="isLoggedIn">
     <h2>Profil de {{ user.pseudo }}</h2>
-    
+
     <!--user profile image -->
     <div id="photo_icone">
       <img
-        src="../assets/avatar.png"
+        :src="require('../assets/avatar.png')"
         alt="avatar par defaut"
         class="profil_image"
         v-if="!user.imageUrl"
@@ -29,87 +29,103 @@
     </div>
 
     <div id="separation_barre"></div>
-    
+
     <h3>Messages publiés</h3>
     <div id="card" v-for="post in posts" :key="post">
-      <div>titre: {{post.title}}</div>
-      <div>contenu: {{post.content}}</div>
-      <div>image: {{post.imageUrl}}</div>
-      <div>publié le {{post.createdAt}}</div><div>modifié le {{post.updatedAt}}</div>
+      <div>titre: {{ post.title }}</div>
+      <div>contenu: {{ post.content }}</div>
+      <div>image: {{ post.imageUrl }}</div>
+      <div>publié le {{ post.createdAt }}</div>
+      <div>modifié le {{ post.updatedAt }}</div>
     </div>
   </form>
 </template>
 
 <script>
 export default {
-    name: "ProfilUser",
-    props: ["isLoggedIn"],
-    data() {
-        return {
-            user: {
-                pseudo: "",
-                firstname: "",
-                lastname: "",
-                email: "",
-                imageUrl: "",
-            },
-            posts: [""],
-        };
-    },
-    beforeCreate() {
-        const token = localStorage.getItem("token");
-        const userId = localStorage.getItem("userId");
-        console.log("profil||beforeCreate||userId", userId);
-        if (token == null && userId == null) {
-            this.$router.push({ name: "LogIn" });
-        }
-    },
-    created() {
-        const userId = localStorage.getItem("userId");
-        console.log("profil||created||userId", userId);
-    },
-    methods: {
-        //get all the informations about the user
-        async getUserProfil(userId) {
-            console.log("getUserProfil||this.userId", this.userId);
-            console.log("getUserProfil||userId", userId);
-            //const userId = localStorage.getItem("userId", userId);
-            await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-                method: "GET",
-                withCredentials: true,
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${this.token}`,
-                },
-            })
-                .then((res) => {
-                console.log("res", res);
-                this.user = res.data;
-            })
-                .catch(() => {
-                this.$router.push({ name: "Login" });
-            });
+  name: "ProfilUser",
+  props: ["isLoggedIn"],
+  data() {
+    return {
+      userId: localStorage.getItem("userId"),
+      token: localStorage.getItem("token"),
+      user: {
+        pseudo: "",
+        firstname: "",
+        lastname: "",
+        email: "",
+        imageUrl: "",
+      },
+      posts: [""],
+    };
+  },
+//  beforeCreate() {
+//    const token = localStorage.getItem("token");
+//    const userId = localStorage.getItem("userId");
+//    console.log("profil||beforeCreate||userId", userId);
+//    if (token == null && userId == null) {
+//      this.$router.push({ name: "LogIn" });
+//    }
+//  },
+/*  mounted(userId) {
+    fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+      methods: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        userId = data;
+        console.log("profil||mounted||data", data);
+        console.log("profil||mounted||userId", userId);
+      })
+      .catch((err) => console.log(err));
+  },*/
+  methods: {
+    //get all the informations about the user
+    async getUserProfil(userId) {
+      console.log("getUserProfil||this.userId", this.userId);
+      console.log("getUserProfil||userId", userId);
+      //const userId = localStorage.getItem("userId", userId);
+      await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+        method: "GET",
+        withCredentials: true,
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token}`,
         },
+      })
+        .then((res) => {
+          console.log("res", res);
+          this.user = res.data;
+          console.log("res.data", res.data)
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+    },
 
-        //get all posts from a user
-        getAllPosts() {
-            fetch(`http://localhost:3000/api/posts/${this.userId}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${this.token}`,
-                },
-            })
-                .then((res) => {
-                console.log("res", res);
-                this.posts = res.data;
-            })
-                .catch(() => {
-                this.$router.push({ name: "Login" });
-            });
+    //get all posts from a user
+    getAllPosts() {
+      fetch(`http://localhost:3000/api/posts/${this.userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token}`,
         },
+      })
+        .then((res) => {
+          console.log("res", res);
+          this.posts = res.data;
+        })
+        .catch(() => {
+          this.$router.push({ name: "Login" });
+        });
     },
+  },
 };
 </script>
 
@@ -153,7 +169,7 @@ export default {
   padding: 10px;
   position: absolute;
   right: 30%;
-  top: 22%;
+  top: 40%;
   &:hover {
     color: red;
   }

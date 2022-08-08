@@ -1,7 +1,7 @@
 <template>
   <article id="card">
     <!--informations from the author of the post-->
-    <router-link :to="{ name: 'ProfilUser' }">
+    <router-link to="/profil/${this.userId}">
       <div id="post_author">
         <div id="author_img">
           <img
@@ -23,7 +23,7 @@
       </div>
     </router-link>
     <!--content from the writing post -->
-    <div class="post_content">
+    <div class="post_content" v-for="post in posts" :key="post.id">
       <div class="post_description">
         <h3>titre : {{ post.title }}</h3>
         <p>contenu : {{ post.content }}</p>
@@ -74,7 +74,7 @@
 
       <!--get all comments -->
       <div class="comments_card" v-for="comment in comments" :key="comment.id">
-        <router-link :to="{ name: 'ProfilUser' }">
+        <router-link to="/profil/{this.userId}">
           <div class="comment_author">
             <img
               v-if="comment.image"
@@ -145,7 +145,16 @@ export default {
       };
       return event.toLocaleDateString("fr-Fr", options);
     },
-    publishPost() {},
+    publishPost() {
+      const post = fetch(`http://localhost:3000/api/posts/`, {
+        methods: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.token}`,
+        }
+      })
+      console.log("post ${postId} published", post)
+    },
     
     updatePost(postId) {    
       console.log("post ${postId} updated", postId);

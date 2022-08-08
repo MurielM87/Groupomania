@@ -5,21 +5,25 @@
     <div class="img" enctype="multipart/form-data">
       <div id="photo_icone">
         <img
-          src="../assets/avatar.png"
+          default-src="../assets/avatar.png"
           alt="avatar par defaut"
           class="profil_image"
           v-if="!user.imageUrl"
         />
-        <img
-          v-else
-          class="profil_image"
-          alt="avatar"
-          title="modifier mon avatar"
-          :src="`http://localhost:3000/users/profil/${user.imageUrl}`"
-        />
       </div>
-      <input @change="onFileSelected" type="file" name="avatar" id="profil_image" accept=".jpeg, .jpg, .png, .webp, .gif" ref="fileInput"/>
-      <button @click="onUpload">Télécharger</button>
+      <input @change="onFileSelected" type="file" name="avatar" id="profil_image" accept=".jpeg, .jpg, .png, .webp, .gif" ref="fileInput" />
+   <!--   <button @click="onUpload()">Télécharger</button> -->
+    <button
+        type="button"
+        @click="browse()"
+        class="rounded-full hover:bg-white hover:bg-opacity-25 p-2 focus:outline-none text-white transition duration-200"
+      ></button>
+      <button
+        type="button"
+        v-if="value"
+        @click="remove()"
+        class="rounded-full hover:bg-white hover:bg-opacity-25 p-2 focus:outline-none text-white transition duration-200"
+      ></button>
     </div>
     
 
@@ -120,6 +124,39 @@ export default {
         });
     },
 
+    //upload profil image
+  browse() {
+      this.$refs.file.click();
+    },
+    remove() {
+      this.$emit("input", null);
+    },
+    onFileSelected(e) {
+      this.$emit("input", e.target.files[0]);
+    },
+  //  onFileSelected(e) {
+  //    console.log(e)
+  //    //this.selectedFile = event.target.files[0]
+  //    this.$emit("input", e.target.files[0]);
+  //  },
+  //  onUpload(){
+  //    const fd = new FormData();
+  //    this.$refs.file.click();
+  //    //fd.append('image', this.selectedFile, this.selectedFile.name)
+  //    fetch(`http://localhost:3000/api/users/profil/${this.userId}`, fd, {
+  //      method: "POST",
+  //      headers: {
+  //        "Content-Type": "multipart/form-data",
+  //        "Accept": "application/json",
+  //        "Authorization": `Bearer ${this.token}`
+  //      },
+  //      body: FormData,
+  //    })
+  //    .then(res => {
+  //      console.log(res)
+  //    })
+  //  },
+
     //modify userProfil
    computed:{
     updateProfil(userId) {
@@ -143,28 +180,6 @@ export default {
         //this.$router.push({ name: "ProfilUser"})
       })
       .catch(err => {console.log("err", err)});
-    },
-
-    //upload profil image
-    onFileSelected(event) {
-      console.log(event)
-      this.selectedFile = event.target.files[0]
-    },
-    onUpload(){
-      const fd = new FormData();
-      fd.append('image', this.selectedFile, this.selectedFile.name)
-      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, fd, {
-        method: "POST",
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "Accept": "application/json",
-          "Authorization": `Bearer ${this.token}`
-        },
-        body: FormData,
-      })
-      .then(res => {
-        console.log(res)
-      })
     },
 
    }, 

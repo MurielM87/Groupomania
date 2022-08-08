@@ -24,6 +24,7 @@
         <input
           @change="uploadImg($event)"
           type="file"
+          ref="file"
           id="addContent"
           name="imageUrl"
           accept=".jpeg, .jpg, .png, .webp, .gif"
@@ -38,6 +39,15 @@
         <i class="far fa-edit"></i>Publier
       </button>
     </div>
+    <div id="preview" class="newPost__preview">
+      <img
+        v-if="image"
+        :src="imageUrl"
+        id="preview"
+        class="newPost__preview__image"
+        alt="Prévisualisation de l'image ajoutée au message"
+      />
+    </div>
   </section>
 </template>
     
@@ -51,6 +61,8 @@ export default {
   },
   data() {
     return {
+      userId: localStorage.getItem("userId"),
+      token: localStorage.getItem("token"),
       postForm: {
         title: ref(""),
         content: ref(""),
@@ -58,34 +70,30 @@ export default {
       },
     };
   },
-  methods: {
-    
-    //upload image
-      uploadImg(event) {
-        const image = event.target.files[0]
-        console.log("image-target", image)
-        },
 
+
+  methods: {
+    //upload image
+    uploadImg(event) {
+      this.imageUrl = event.target.files[0];
+      console.log("image-target", this.imageUrl);
+    },
 
     addPost() {
       this.postForm = {
         title: this.title,
         content: this.content,
-        image: this.image,
+        image: this.imageUrl,
       };
       console.log("title", this.title);
       console.log("content", this.content);
-      console.log("image", this.imageUrl);
-
-      
-    //  console.log("event", event);
-    //  this.imageUrl = event.target.files[0];
+      console.log("imageUrl", this.imageUrl);
 
       const fd = new FormData();
       console.log("newFormData", fd);
-      fd.append("image", this.imageUrl);
       fd.append("title", this.title);
       fd.append("content", this.content);
+      fd.append("image", this.imageUrl);
 
       fetch(`http://localhost:3000/api/posts/add`, {
         method: "POST",
