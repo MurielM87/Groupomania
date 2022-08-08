@@ -114,7 +114,10 @@ import CommentForm from "./CommentForm.vue";
 
 export default {
   name: "PostCard",
-  props:["title", "content", "imageUrl"],
+  props:{note: {
+    type: Object,
+    required: true,
+  }},
   component: {
     CommentForm,
   },

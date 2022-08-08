@@ -31,7 +31,6 @@ import PostCard from "@/components/PostCard.vue";
 
 export default {
   name: "MainPage",
-  props:["title", "content", "imageUrl"],
   components: {
     PostForm,
     PostCard,

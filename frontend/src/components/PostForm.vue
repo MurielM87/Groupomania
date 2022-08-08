@@ -20,33 +20,27 @@
       ></textarea>
       <!--add an image -->
       <div class="post_img">
+        <!--preview image -->
+        <div class="preview_img" :style="{'background-image': `url(${previewImage})`}" @click="selectImage"></div>
         <label for="addContent"></label>
         <input
-          @change="uploadImg($event)"
+          @input="uploadImg($event)"
           type="file"
-          ref="file"
+          ref="fileInput"
           id="addContent"
           name="imageUrl"
           accept=".jpeg, .jpg, .png, .webp, .gif"
         />
       </div>
 
+      <!-- button to publish -->
       <button
-        @click="addPost()"
+        @click.prevent="addPost()"
         class="post-btn"
         title="valider la publication"
       >
         <i class="far fa-edit"></i>Publier
       </button>
-    </div>
-    <div id="preview" class="newPost__preview">
-      <img
-        v-if="image"
-        :src="imageUrl"
-        id="preview"
-        class="newPost__preview__image"
-        alt="Prévisualisation de l'image ajoutée au message"
-      />
     </div>
   </section>
 </template>
@@ -68,11 +62,15 @@ export default {
         content: ref(""),
         imageUrl: ref(""),
       },
+      previewImage: null,
     };
   },
 
 
   methods: {
+    selectImage() {
+      this.$ref.fileInput.click()
+    },
     //upload image
     uploadImg(event) {
       this.imageUrl = event.target.files[0];
@@ -165,5 +163,10 @@ export default {
 .fa-pen {
   font-size: 20px;
   margin: 2px;
+}
+
+.preview_img{
+  width: 40px;
+  height: 40px;
 }
 </style>

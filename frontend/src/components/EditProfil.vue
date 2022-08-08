@@ -5,25 +5,12 @@
     <div class="img" enctype="multipart/form-data">
       <div id="photo_icone">
         <img
-          default-src="../assets/avatar.png"
-          alt="avatar par defaut"
+          :src="image"
+          alt="Avatar"
           class="profil_image"
-          v-if="!user.imageUrl"
         />
-      </div>
       <input @change="onFileSelected" type="file" name="avatar" id="profil_image" accept=".jpeg, .jpg, .png, .webp, .gif" ref="fileInput" />
-   <!--   <button @click="onUpload()">Télécharger</button> -->
-    <button
-        type="button"
-        @click="browse()"
-        class="rounded-full hover:bg-white hover:bg-opacity-25 p-2 focus:outline-none text-white transition duration-200"
-      ></button>
-      <button
-        type="button"
-        v-if="value"
-        @click="remove()"
-        class="rounded-full hover:bg-white hover:bg-opacity-25 p-2 focus:outline-none text-white transition duration-200"
-      ></button>
+      </div>
     </div>
     
 
@@ -97,7 +84,7 @@ export default {
         lastname: "",
         imageUrl: "",
       },
-      selectedFile: null,
+      image: '../assets/avatar.png',
     };
   },
   created() {
@@ -123,17 +110,17 @@ export default {
           this.$router.push({ name: "Login" });
         });
     },
+      //upload profil image
+      onFileSelected(e) {
+        const file = e.target.files[0]
+        //preview image
+        this.image = URL.createObjectURL(file)
+      },
 
-    //upload profil image
-  browse() {
-      this.$refs.file.click();
-    },
-    remove() {
-      this.$emit("input", null);
-    },
-    onFileSelected(e) {
-      this.$emit("input", e.target.files[0]);
-    },
+
+//    onFileSelected(e) {
+//      this.$emit("input", e.target.files[0]);
+//    },
   //  onFileSelected(e) {
   //    console.log(e)
   //    //this.selectedFile = event.target.files[0]
@@ -217,6 +204,11 @@ export default {
 </script>
 
 <style lang="scss">
+#photo_icone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 #separate_barre {
   border: 1px solid #455166;
   width: 30%;
