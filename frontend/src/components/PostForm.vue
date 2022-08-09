@@ -39,6 +39,8 @@
       >
         <i class="far fa-edit"></i>Publier
       </button>
+      <button @click="cancelPost" class="form_btn">
+          <i class="far fa-times-circle"></i>Annuler</button>
     </div>
   </section>
 </template>
@@ -86,10 +88,10 @@ export default {
       console.log("imageUrl", this.imageUrl);
 
       const fd = new FormData();
+      console.log("newFormData", fd);
       fd.append("title", this.title);
       fd.append("content", this.content);
       fd.append("image", this.imageUrl);
-      console.log("newFormData", fd);
 
       fetch(`http://localhost:3000/api/posts/add`, {
         method: "POST",
@@ -115,6 +117,11 @@ export default {
         }.bind(this)
       );
     },
+
+    //cancel Post
+    cancelPost(){
+      this.$router.push({ name: "MainPage"})
+    }
   },
 };
 </script>
