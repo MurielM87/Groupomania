@@ -74,17 +74,19 @@
 </template>
 
 <script>
+import { ref } from "vue"
+
 export default {
   name: "ProfilUser",
   data() {
     return {
-      user: {
+      user: ref({
         pseudo: "",
         firstname: "",
         lastname: "",
         imageUrl: "",
-      },
-      image: '../assets/avatar.png',
+      }),
+      image: this.imageUrl,
     };
   },
   created() {
