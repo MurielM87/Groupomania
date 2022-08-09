@@ -20,8 +20,6 @@
       ></textarea>
       <!--add an image -->
       <div class="post_img">
-        <!--preview image -->
-        <div class="preview_img" :style="{'background-image': `url(${previewImage})`}" @click="selectImage"></div>
         <label for="addContent"></label>
         <input
           @input="uploadImg($event)"
@@ -88,10 +86,10 @@ export default {
       console.log("imageUrl", this.imageUrl);
 
       const fd = new FormData();
-      console.log("newFormData", fd);
       fd.append("title", this.title);
       fd.append("content", this.content);
       fd.append("image", this.imageUrl);
+      console.log("newFormData", fd);
 
       fetch(`http://localhost:3000/api/posts/add`, {
         method: "POST",
@@ -160,7 +158,8 @@ export default {
 .fa-edit,
 .fa-trash-alt,
 .fa-folder-open,
-.fa-pen {
+.fa-pen,
+.fa-times-circle {
   font-size: 20px;
   margin: 2px;
 }

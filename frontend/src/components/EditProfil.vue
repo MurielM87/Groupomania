@@ -4,15 +4,17 @@
 
     <div class="img" enctype="multipart/form-data">
       <div id="photo_icone">
-        <img
-          :src="image"
-          alt="Avatar"
-          class="profil_image"
+        <img :src="image" alt="Avatar" class="profil_image" />
+        <input
+          @change="onFileSelected"
+          type="file"
+          name="avatar"
+          id="profil_image"
+          accept=".jpeg, .jpg, .png, .webp, .gif"
+          ref="fileInput"
         />
-      <input @change="onFileSelected" type="file" name="avatar" id="profil_image" accept=".jpeg, .jpg, .png, .webp, .gif" ref="fileInput" />
       </div>
     </div>
-    
 
     <div id="separate_barre"></div>
 
@@ -36,7 +38,7 @@
           <input
             type="text"
             v-model.lazy="user.firstname"
-            placeholder={{user.firstname}}
+            placeholder="{{user.firstname}}"
             name="firstname"
             id="firstname"
             class="form_input"
@@ -57,15 +59,24 @@
           />
           <div class="form-err"></div>
         </div>
-        <button @click="updateProfil(userId)" class="form_btn" title="enregistrer les modifications"><i class="fas fa-save"></i>
-          enregistrer les modifications
+        <button
+          @click="updateProfil(userId)"
+          class="form_btn"
+          title="enregistrer les modifications"
+        >
+          <i class="fas fa-save"></i>
+          Enregistrer les modifications
         </button>
+        <button @click="cancelProfil" class="form_btn">
+          <i class="far fa-times-circle"></i>Annuler les modifications</button
+        ><br />
 
         <button
           class="delete_btn"
           @click="deleteUser(userId)"
           title="supprimer le compte"
-        ><i class="fas fa-trash-alt"></i>
+        >
+          <i class="fas fa-trash-alt"></i>
           supprimer le compte
         </button>
       </div>
@@ -74,7 +85,7 @@
 </template>
 
 <script>
-import { ref } from "vue"
+import { ref } from "vue";
 
 export default {
   name: "ProfilUser",
@@ -101,7 +112,7 @@ export default {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.token}`,
         },
       })
         .then((res) => {
@@ -112,66 +123,68 @@ export default {
           this.$router.push({ name: "Login" });
         });
     },
-      //upload profil image
-      onFileSelected(e) {
-        const file = e.target.files[0]
-        //preview image
-        this.image = URL.createObjectURL(file)
-      },
+    //upload profil image
+    onFileSelected(e) {
+      const file = e.target.files[0];
+      //preview image
+      this.image = URL.createObjectURL(file);
+    },
 
-
-//    onFileSelected(e) {
-//      this.$emit("input", e.target.files[0]);
-//    },
-  //  onFileSelected(e) {
-  //    console.log(e)
-  //    //this.selectedFile = event.target.files[0]
-  //    this.$emit("input", e.target.files[0]);
-  //  },
-  //  onUpload(){
-  //    const fd = new FormData();
-  //    this.$refs.file.click();
-  //    //fd.append('image', this.selectedFile, this.selectedFile.name)
-  //    fetch(`http://localhost:3000/api/users/profil/${this.userId}`, fd, {
-  //      method: "POST",
-  //      headers: {
-  //        "Content-Type": "multipart/form-data",
-  //        "Accept": "application/json",
-  //        "Authorization": `Bearer ${this.token}`
-  //      },
-  //      body: FormData,
-  //    })
-  //    .then(res => {
-  //      console.log(res)
-  //    })
-  //  },
+    //    onFileSelected(e) {
+    //      this.$emit("input", e.target.files[0]);
+    //    },
+    //  onFileSelected(e) {
+    //    console.log(e)
+    //    //this.selectedFile = event.target.files[0]
+    //    this.$emit("input", e.target.files[0]);
+    //  },
+    //  onUpload(){
+    //    const fd = new FormData();
+    //    this.$refs.file.click();
+    //    //fd.append('image', this.selectedFile, this.selectedFile.name)
+    //    fetch(`http://localhost:3000/api/users/profil/${this.userId}`, fd, {
+    //      method: "POST",
+    //      headers: {
+    //        "Content-Type": "multipart/form-data",
+    //        "Accept": "application/json",
+    //        "Authorization": `Bearer ${this.token}`
+    //      },
+    //      body: FormData,
+    //    })
+    //    .then(res => {
+    //      console.log(res)
+    //    })
+    //  },
 
     //modify userProfil
-   computed:{
-    updateProfil(userId) {
-      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-        method: "PUT",
-        data: this.user,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.token}`,
-        },
-        body: JSON.stringify({
+    computed: {
+      updateProfil(userId) {
+        fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+          method: "PUT",
+          data: this.user,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.token}`,
+          },
+          body: JSON.stringify({
             user: this.user,
             selectedFile: this.selectedFile,
           }),
-      }).then(() => {
-        alert("profil modifié");
-        console.log("userId", userId); 
-        console.log("this.userId", this.userId);
-        let user = JSON.parse(localStorage.getItem('user'));
-        console.log("edit-profil||user", user)
-        //this.$router.push({ name: "ProfilUser"})
-      })
-      .catch(err => {console.log("err", err)});
+        })
+          .then(() => {
+            alert("profil modifié");
+            console.log("userId", userId);
+            console.log("this.userId", this.userId);
+            let user = JSON.parse(localStorage.getItem("user"));
+            console.log("edit-profil||user", user);
+            //this.$router.push({ name: "ProfilUser"})
+          })
+          .catch((err) => {
+            console.log("err", err);
+          });
+      },
     },
 
-   }, 
     //delete user
     deleteUser(userId) {
       if (
@@ -183,10 +196,10 @@ export default {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${this.token}`,
+            Authorization: `Bearer ${this.token}`,
           },
           body: JSON.stringify({
-            user: this.user
+            user: this.user,
           }),
         })
           .then((res) => {
@@ -201,6 +214,11 @@ export default {
             console.log(err);
           });
     },
+
+    //cancel the modifications
+    cancelProfil(){
+      this.$router.push("/profil/${this.userId}")    
+    }
   },
 };
 </script>
