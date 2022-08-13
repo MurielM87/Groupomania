@@ -28,6 +28,7 @@
       class="post_content"
       v-for="post in posts"
       :key="post.postId"
+      :post="post"
     >
       <div class="post_description">
         <h3>titre : {{ post.title }}</h3>
@@ -77,14 +78,19 @@
 
       <!--write a comment -->
       <CommentForm 
-        :id="postId" 
-        :post="post" 
-        :token="token" 
+        :id="commentId" 
+        :postId="post.postId"         
+        :userId="userId"
+        :post="post"
         @createComment="createComment" 
       />
 
       <!--get all comments -->
-      <div class="comments_card" v-for="comment in comments" :key="comment.id" :token="token" >
+      <div class="comments_card" 
+        v-for="comment in comments" 
+        :key="comment.id" 
+        :comment="comment"
+      >
         <router-link to="/profil/{this.userId}" :token="token">
           <div class="comment_author">
             <img
@@ -134,11 +140,7 @@ export default {
   component: {
     CommentForm,
   },
-  props: [
-    "token", "userId",
-    "user.pseudo", "user.imageUrl", 
-    "post.title", "post.content", "post.imageUrl"
-  ],
+  props: ["token", "userId"],
   data() {
     return {
       post: ref([]),
@@ -159,7 +161,7 @@ export default {
       .then((res) => {
         console.log(res)
         this.posts = res.data
-        //this.comments = res.data
+        this.comments = res.data
         })
       .catch((err) => {
         console.log(err)

@@ -52,11 +52,11 @@ export default {
   emits:["createPost"],
   data() {
     return {
-      userId: localStorage.getItem("userId"),
+      //userId: localStorage.getItem("userId"),
       postForm: ref([]),
     };
   },
-  props: ["token"],
+  props: ["token", "userId"],
   methods: {
     selectImage() {
       this.$ref.fileInput.click()
@@ -87,7 +87,7 @@ export default {
       .then((res) => {
         this.title = '';
         this.content = '';
-        //this.$emit("createPost", postForm);
+        this.$emit("createPost", postForm);
         this.post.push(this.postForm);
         console.log("res", res)
       })
@@ -107,12 +107,13 @@ export default {
                 "Authorization": `Bearer ${this.token}`,
         },body: FormData,
         })
-        .then((res) => {
-          console.log("res", res);
-          this.title = '';
-          this.content = '';
-          this.file = '';
-          this.$emit("createPost", postForm)
+        .then((data) => {
+          console.log("data", data);
+          this.postForm = data;
+        //  this.title = '';
+        //  this.content = '';
+        //  this.file = '';
+        //  this.$emit("createPost", postForm)
         })
         .catch((err) => console.log("err", err))
          }

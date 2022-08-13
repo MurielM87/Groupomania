@@ -3,11 +3,10 @@
     <h2>Bonjour {{ user.pseudo }}</h2>
     <PostForm
       @createPost="addPost"
-      :pseudo="user.pseudo"
-      :imageUrl="user.imageUrl"
+      :user="user"
       :token="token"
-      :title="post.title"
-      :content="post.content"
+      :userId="userId"
+      :post="post"
     />
 
     <div id="separate_barre"></div>
@@ -37,10 +36,10 @@ export default {
     PostForm,
     PostCard,
   },
-  //props: ["userId", "user.pseudo", "user.imageUrl", "post.title", "post.content", "post.imageUrl"],
   data() {
     return {
       token: localStorage.getItem("token"),
+      userId: localStorage.getItem("userId"),
       user: ref([]),
       post: ref([]),
       comment: ref([])

@@ -47,9 +47,10 @@
 <script>
 export default {
   name: "NavBar",
-  props: ["token"],
   data() {
     return {
+      token: localStorage.getItem('token'),
+      userId: localStorage.getItem('userId'),
       isLoggedIn: false
     }
   },

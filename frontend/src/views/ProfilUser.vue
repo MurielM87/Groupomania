@@ -1,5 +1,5 @@
 <template>
-  <form id="profil_form">
+  <form id="profil_form" >
     <h2>Profil de {{ user.pseudo }}</h2>
 
     <!--user profile image -->
@@ -44,10 +44,10 @@
 <script>
 export default {
   name: "ProfilUser",
-  props: ["userId"],
   data() {
     return {
       token: localStorage.getItem("token"),
+      userId: localStorage.getItem("userId"),
       user: {
         pseudo: "",
         firstname: "",
