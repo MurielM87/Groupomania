@@ -1,5 +1,6 @@
 <template>
   <article id="card">
+    
     <!--informations from the author of the post-->
     <router-link to="/profil/${this.userId}">
       <div id="post_author">
@@ -26,13 +27,12 @@
     <div
       class="post_content"
       v-for="post in posts"
-      :key="post.id"
-      :deletePost="deletePost"
+      :key="post.postId"
     >
       <div class="post_description">
         <h3>titre : {{ post.title }}</h3>
         <p>contenu : {{ post.content }}</p>
-        <p v-if="post.image">image : {{ post.imageUrl }}</p>
+        <p v-if="post.imageUrl">image : {{ post.imageUrl }}</p>
       </div>
       <!--add the datetime -->
       <div class="post_date">
@@ -40,13 +40,14 @@
         <p>modifié le {{ datePost(post.updatedAt) }}</p>
       </div>
     </div>
+    <br />
 
     <!--add the buttons 'modify' and 'delete' to the published post-->
-    <div class="post_btn" v-if="post.userId">
+    <div class="post_btn" v-if="post.userId" :token="token">
       <button
         id="post_modify"
         title="modifier le message"
-        @click="updatePost(postId)"
+        @click="updatePost"
       >
         <i class="far fa-edit"></i>
         <span class="btn_modify">Modifier</span>
@@ -54,7 +55,7 @@
       <button
         id="post_delete"
         title="supprimer le message"
-        @click="deletePost(postId)"
+        @click="deletePost"
       >
         <i class="far fa-trash-alt"></i>
         <span>Supprimer</span>
@@ -64,7 +65,7 @@
     <div id="separate_barre"></div>
 
     <!-- add like to the post-->
-    <div @click="addLike(postId)" class="post_like">
+    <div @click="addLike" class="post_like" :token="token">
       <i class="far fa-thumbs-up"></i>
       <i class="far fa-thumbs-down"></i>
       <p>post.likes : {{ post.likes }}</p>
@@ -75,14 +76,19 @@
       <h3><i class="far fa-comment-alt"></i> Commentaires</h3>
 
       <!--write a comment -->
-      <CommentForm />
+      <CommentForm 
+        :id="postId" 
+        :post="post" 
+        :token="token" 
+        @createComment="createComment" 
+      />
 
       <!--get all comments -->
-      <div class="comments_card" v-for="comment in comments" :key="comment.id">
-        <router-link to="/profil/{this.userId}">
+      <div class="comments_card" v-for="comment in comments" :key="comment.id" :token="token" >
+        <router-link to="/profil/{this.userId}" :token="token">
           <div class="comment_author">
             <img
-              v-if="comment.image"
+              v-if="user.imageUrl"
               :src="`http://localhost:3000/api/users/${userId.imageUrl}`"
             />
             <img v-else src="../assets/avatar.png" alt="avatar de l'auteur" />
@@ -96,53 +102,70 @@
           <p class="comment_text">
             {{ comment.content }}
           </p>
+          <br />
           <!--add the datetime -->
           <div class="post_date">
             <p>publié le {{ dateComment(comment.createdAt) }}</p>
           </div>
         </div>
+        <br />
 
-        <button
-          id="comment-delete"
-          title="Supprimer le commentaire"
-          @click="deleteComment(postId, commentId)"
-        >
-          <span>Supprimer</span><i class="far fa-trash-alt"></i>
-        </button>
+        <div v-if="comment.userId" :token="token">
+          <button
+            id="comment-delete"
+            title="Supprimer le commentaire"
+            @click="deleteComment(postId, commentId)"
+          >
+            <span>Supprimer</span><i class="far fa-trash-alt"></i>
+          </button>
+        </div>
+        
       </div>
     </div>
   </article>
 </template>
 
 <script>
+import { ref } from "vue";
 import CommentForm from "./CommentForm.vue";
 
 export default {
   name: "PostCard",
-  props: {
-    note: {
-      type: Object,
-      required: true,
-    },
-  },
   component: {
     CommentForm,
   },
+  props: [
+    "token", "userId",
+    "user.pseudo", "user.imageUrl", 
+    "post.title", "post.content", "post.imageUrl"
+  ],
   data() {
     return {
-      user: {
-        pseudo: "",
-        imageUrl: "",
-      },
-      post: {
-        title: "",
-        content: "",
-      },
-      comment: {
-        content: "",
-      },
+      post: ref([]),
+      comment: ref([]),
     };
   },
+  
+
+  //get all the posts
+    async created(){
+      await fetch(`http://localhost:3000/api/posts/`, {
+        methods: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.token}`,
+        }
+      })
+      .then((res) => {
+        console.log(res)
+        this.posts = res.data
+        //this.comments = res.data
+        })
+      .catch((err) => {
+        console.log(err)
+      })
+    },
+
   methods: {
     //date of the post
     datePost(date) {
@@ -156,150 +179,7 @@ export default {
       };
       return event.toLocaleDateString("fr-Fr", options);
     },
-
-    /*  publishPost() {
-      fetch(`http://localhost:3000/api/posts/`, {
-        methods: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.token}`,
-        }
-      })
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err))
-      console.log("post ${postId} published")
-    },*/
-
-    //create a new post
-    createPost(fd) {
-      console.log("createPost", fd);
-      fetch(`http://localhost:3000/api/posts/add`, {
-        method: "POST",
-        data: fd,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${this.token}`,
-        },
-        body: JSON.stringify({
-          title: this.title,
-          content: this.content,
-          image: this.imageUrl,
-        }),
-      }).then((res) => {
-        console.log("createPost | formData", fd);
-        const post = res.Fd;
-        console.log("createPost | res.data", res.data);
-        post["likes"] = 0;
-        this.posts = [post].concat(this.posts);
-      });
-    },
-
-    //modify a post
-    updatePost(postId) {
-      fetch(`http://localhost:3000/api/posts/${this.postId}`, {
-        method: "PUT",
-        data: { postId },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
-        },
-      }).then(() => {
-        this.posts = this.posts.filter((post) => {
-          console.log("updatePost || postId", postId);
-          return post.id != postId;
-        });
-      });
-      console.log("post ${postId} updated", postId);
-    },
-
-    //delete a post
-    deletePost(postId) {
-      console.log("deletePost", postId);
-      fetch(`http://localhost:3000/api/posts/${this.postId}`, {
-        method: "DELETE",
-        data: { postId },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
-        },
-      }).then(() => {
-        this.posts = this.posts.filter((post) => {
-          console.log("deletePost || postId", postId);
-          return post.id != postId;
-        });
-        //  this.$router.push({ name: "MainPage" });
-      });
-    },
-
-    //add a like
-    addLike(postId) {
-      console.log("addLike||postId", postId);
-      fetch(`http://localhost:3000/api/posts/${this.postId}/like`, {
-        method: "POST",
-        data: { postId },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
-        },
-      }).then((res) => {
-        for (let post in this.posts) {
-          if (this.posts[post].id == postId) {
-            if (res.status == 204) {
-              this.posts[post].likes -= 1;
-            }
-            console.log("addLike||posts", post);
-            if (res.status == 201) {
-              this.posts[post].likes += 1;
-            }
-          }
-        }
-      });
-    },
-
-    //add a comment
-    addComment(postId, content) {
-      console.log("addContent||postId, content", postId, content);
-      fetch(`http://localhost:3000/api/posts/${this.postId}/comment`, {
-        method: "POST",
-        data: { postId, content },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
-        },
-      }).then(() => this.loadcomments(postId));
-    },
-
-    //get all comments from a post
-    loadComments(postId) {
-      fetch(`http://localhost:3000/api/posts/comments/${this.postId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
-        },
-      }).then((res) => {
-        this.comments = {
-          ...this.comments,
-          [postId]: res.data,
-        };
-        console.log("loadComments||res.data", res.data);
-      });
-    },
-
-    //delete a comment from a post
-    deleteComment(postId, commentId) {
-      console.log("deleteComment||postId", postId);
-      console.log("deleteComment||commentId", commentId);
-      fetch(`http://localhost:3000/api/posts/comment/${this.commentId}`, {
-        method: "DELETE",
-        data: { postId, commentId },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
-        },
-      }).then(() => this.loadComments(postId));
-    },
-
+    
     //date of the comment
     dateComment(date) {
       const event = new Date(date);
@@ -312,6 +192,129 @@ export default {
       };
       return event.toLocaleDateString("fr-Fr", options);
     },
+
+    
+    //modify a post
+    updatePost(postId) {
+      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem("token");
+      
+      if(userId == userId && token == token) {
+        fetch(`http://localhost:3000/api/posts/${this.postId}`, {
+          method: "PUT",
+          data: { postId },
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${this.token}`,
+          },
+          body: {
+            title: this.title,
+            content: this.content,
+            imageUrl: this.imageUrl,
+          }
+      }).then(() => {
+          this.posts = this.posts.filter((post) => {
+            console.log("updatePost || postId", postId);
+            return post.id != postId;
+          });
+        });
+        console.log("post ${postId} updated", postId);
+        console.log("PostCard||updatePost", postId);
+      }
+    },      
+        
+
+    //delete a post
+    deletePost(postId) {
+      const userId = localStorage.getItem("userId");
+      const token = localStorage.getItem("token"); 
+      console.log("PostCard||deletePost", postId);     
+      if(userId == userId && token == token) {
+        fetch(`http://localhost:3000/api/posts/${this.postId}`, {
+          method: "DELETE",
+          data: { postId },
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${this.token}`,
+          },
+        }).then(() => {
+          this.posts = this.posts.splice((post) => {
+            console.log("deletePost || postId", postId);
+            return post.id != postId;
+          });
+        });
+      }
+    },
+
+    //add a like
+    addLike(postId) {
+      console.log("PostCard||addLike||postId", postId);
+      //  fetch(`http://localhost:3000/api/posts/${this.postId}/like`, {
+      //    method: "POST",
+      //    data: { postId },
+      //    headers: {
+      //      "Content-Type": "application/json",
+      //      "Authorization": `Bearer ${this.token}`,
+      //    },
+      //  }).then((res) => {
+      //    for (let post in this.posts) {
+      //      if (this.posts[post].id == postId) {
+      //        if (res.status == 204) {
+      //          this.posts[post].likes -= 1;
+      //        }
+      //        console.log("addLike||posts", post);
+      //        if (res.status == 201) {
+      //          this.posts[post].likes += 1;
+      //        }
+      //      }
+      //    }
+      //  });
+    },
+
+    //add a comment
+    addComment(postId, content) {
+      console.log("PostCard||addContent||postId, content", postId, content);
+      //  fetch(`http://localhost:3000/api/posts/${this.postId}/comment`, {
+      //    method: "POST",
+      //    data: { postId, content },
+      //    headers: {
+      //      "Content-Type": "application/json",
+      //      "Authorization": `Bearer ${this.token}`,
+      //    },
+      //  }).then(() => this.loadcomments(postId));
+    },
+
+    //get all comments from a post
+    loadComments(/*postId*/) {
+      //  fetch(`http://localhost:3000/api/posts/comments/${this.postId}`, {
+      //    method: "GET",
+      //    headers: {
+      //      "Content-Type": "application/json",
+      //      "Authorization": `Bearer ${this.token}`,
+      //    },
+      //  }).then((res) => {
+      //    this.comments = {
+      //      ...this.comments,
+      //      [postId]: res.data,
+      //    };
+      //    console.log("loadComments||res.data", res.data);
+      //  });
+    },
+
+    //delete a comment from a post
+    deleteComment(postId, commentId) {
+      console.log("PostCard||deleteComment||postId", postId);
+      console.log("PostCard||deleteComment||commentId", commentId);
+      //  fetch(`http://localhost:3000/api/posts/comment/${this.commentId}`, {
+      //    method: "DELETE",
+      //    data: { postId, commentId },
+      //    headers: {
+      //      "Content-Type": "application/json",
+      //      "Authorization": `Bearer ${this.token}`,
+      //    },
+      //  }).then(() => this.loadComments(postId));
+    },
+
   },
 };
 </script>
@@ -352,11 +355,6 @@ h4 {
   padding: 20px;
 }
 
-#comment_author {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-}
 #like_post {
   text-align: right;
   padding: 10px;
@@ -382,6 +380,11 @@ h4 {
   border-radius: 10px;
   padding: 10px;
 }
+
+.comments_card{
+  background-color: #8f8c8c;
+}
+
 #comment_author {
   display: flex;
   flex-direction: row;

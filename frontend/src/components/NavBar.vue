@@ -47,6 +47,7 @@
 <script>
 export default {
   name: "NavBar",
+  props: ["token"],
   data() {
     return {
       isLoggedIn: false
@@ -83,6 +84,8 @@ header {
 }
 
 h1 {
+  color: black;
+  font-size: 35px;
   display: flex;
   align-items: center;
   margin-top: 25px;
@@ -96,7 +99,7 @@ h1 {
   width: 100px;
   display: flex;
   flex-direction: flex-start;
-  margin-left: 180px;
+  margin-left: 100px;
   @media screen and (max-width: 992px) {
     margin-left: 0px;
   }
@@ -112,14 +115,11 @@ h1 {
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  margin: 10px;
-  padding-right: 150px;
+  margin: 20px;
   @media (min-width: 768px) and (max-width: 992px) {
-    padding-right: 0px;
     flex-direction: column;
   }
   @media screen and (max-width: 768px) {
-    padding-right: 0px;
     align-content: center;
   }
 }
@@ -134,9 +134,6 @@ ul {
 .text_desktop {
   color: black;
   text-decoration: none;
-  &:hover {
-    color: red;
-  }
   @media screen and (max-width: 768px) {
     display: none;
   }
@@ -146,11 +143,16 @@ ul {
 .fa-sign-out-alt,
 .fa-portrait {
   color: black;
+  font-size: 20px;
   &:hover {
-    color: red;
+     background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+              linear-gradient(127deg, rgba(240, 231, 54, 0.8), rgba(0,255,0,0) 70.71%),
+              linear-gradient(336deg, rgba(236, 151, 14, 0.8), rgba(0,0,255,0) 70.71%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   @media (min-width: 768px) and (max-width: 992px) {
-    font-size: 15px
+    font-size: 20px
   }
   @media screen and (max-width: 768px) {
     font-size: 30px;

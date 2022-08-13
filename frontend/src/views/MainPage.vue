@@ -1,20 +1,22 @@
 <template>
   <section class="posts">
-    <PostForm :createPost="createPost" />
+    <h2>Bonjour {{ user.pseudo }}</h2>
+    <PostForm
+      @createPost="addPost"
+      :pseudo="user.pseudo"
+      :imageUrl="user.imageUrl"
+      :token="token"
+      :title="post.title"
+      :content="post.content"
+    />
 
     <div id="separate_barre"></div>
     <h2>Nouvelles publications</h2>
 
-    <PostCard
-      v-for="post in posts"
+    <PostCard 
+      v-for="post in posts" 
       :key="post.postId"
-      :post="post"
-      
-      :addLike="addLike"
-      :addComment="addComment"
-      :loadComments="loadComments"
-      :comments="comments[post.postId]"
-      :deleteComment="deleteComment"
+      :token="token"
     />
 
     <!-- Bouton Scroll to Top-->
@@ -35,6 +37,15 @@ export default {
     PostForm,
     PostCard,
   },
+  //props: ["userId", "user.pseudo", "user.imageUrl", "post.title", "post.content", "post.imageUrl"],
+  data() {
+    return {
+      token: localStorage.getItem("token"),
+      user: ref([]),
+      post: ref([]),
+      comment: ref([])
+    };
+  },
   beforeCreate() {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
@@ -42,47 +53,28 @@ export default {
       this.$router.push({ name: "LogIn" });
     }
   },
-  data() {
-    return {
-      token : localStorage.getItem("token"),
-      userId : localStorage.getItem("userId"),
-      user: [{
-        pseudo: ref(""),
-        imageUrl: ref(""),
-      }],
-      post: [{
-        title: ref(""),
-        content: ref(""),
-        imageUrl: ref(""),
-      }],
-      comment: [{
-        content: ref("")
-      }],
-    };
-  },
-  getItem() {
-    this.token = localStorage.getItem("token");
-    this.userId = localStorage.getItem("userId");
-
-    //get the user
-    fetch(`http://localhost:3000/api/users/${this.userId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${this.token}`,
-      },
-    })
-      .then((res) => {
-        if (res.status == 401) {
-          this.$router.push({ name: "LogIn" });
-          return;
-        }
-        return res.json();
-      })
-      .then((res) => {
-        this.posts = res;
-      });
-  },
+  
+  //getItem() {
+  // 
+  //  //get the user
+  //  fetch(`http://localhost:3000/api/users/${this.userId}`, {
+  //    method: "GET",
+  //    headers: {
+  //      "Content-Type": "application/json",
+  //      "Authorization": `Bearer ${this.token}`,
+  //    },
+  //  })
+  //    .then((res) => {
+  //      if (res.status == 401) {
+  //        this.$router.push({ name: "LogIn" });
+  //        return;
+  //      }
+  //      return res.json();
+  //    })
+  //    .then((res) => {
+  //      this.posts = res;
+  //    });
+  //},
   methods: {
     //button scroll top
     toTop() {
@@ -92,7 +84,35 @@ export default {
       });
     },
 
-    
+    addPost(data) {
+      console.log("MainPage||addPost||data", data);
+      fetch(`http://localhost:3000/api/posts/add`, {
+        methods: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+          Authorization: `Bearer ${this.token}`,
+        },
+        body: {
+          title: this.$post.title,
+          content: this.$post.content,
+          imageUrl: this.$post.imageUrl,
+          pseudo: this.$user.pseudo,
+          userImageUrl: this.$user.imageUrl,
+        },
+      })
+        .then(function (res) {
+          return res.json();
+        })
+        .then((res) => {
+          console.log("res", res);
+          return res.status(201).json(("message : post publié"))
+        })
+        .catch((err) => {
+          console.log("err", err);
+          return err.status(404).json(("message: échec de la publication"))
+        });
+    },
   },
 };
 </script>

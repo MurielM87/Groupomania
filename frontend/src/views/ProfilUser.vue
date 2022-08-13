@@ -1,5 +1,5 @@
 <template>
-  <form id="profil_form" v-bind="isLoggedIn">
+  <form id="profil_form">
     <h2>Profil de {{ user.pseudo }}</h2>
 
     <!--user profile image -->
@@ -15,9 +15,9 @@
         class="profil_image"
         alt="avatar"
         title="mon avatar"
-        :src="`http://localhost:3000/users/profil/${user.imageUrl}`"
+        :src="`http://localhost:3000/users/profil/${this.$user.imageUrl}`"
       />
-      <router-link to="/edit-profil" v-if="userId"
+      <router-link to="/profil/${this.userId}/edit-profil" :userId="userId" :token="token"
         ><i class="fas fa-pencil-alt"></i
       ></router-link>
     </div>
@@ -44,10 +44,9 @@
 <script>
 export default {
   name: "ProfilUser",
-  props: ["isLoggedIn"],
+  props: ["userId"],
   data() {
     return {
-      userId: localStorage.getItem("userId"),
       token: localStorage.getItem("token"),
       user: {
         pseudo: "",
@@ -59,15 +58,15 @@ export default {
       posts: [""],
     };
   },
-//  beforeCreate() {
-//    const token = localStorage.getItem("token");
-//    const userId = localStorage.getItem("userId");
-//    console.log("profil||beforeCreate||userId", userId);
-//    if (token == null && userId == null) {
-//      this.$router.push({ name: "LogIn" });
-//    }
-//  },
-/*  mounted(userId) {
+  beforeCreate() {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    console.log("profil||beforeCreate||userId", userId);
+    if (token == null && userId == null) {
+      this.$router.push({ name: "LogIn" });
+    }
+  },
+  created(userId) {
     fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
       methods: "GET",
       headers: {
@@ -82,7 +81,8 @@ export default {
         console.log("profil||mounted||userId", userId);
       })
       .catch((err) => console.log(err));
-  },*/
+  },
+
   methods: {
     //get all the informations about the user
     async getUserProfil(userId) {
@@ -91,11 +91,9 @@ export default {
       //const userId = localStorage.getItem("userId", userId);
       await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
         method: "GET",
-        withCredentials: true,
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
+          "Authorization": `Bearer ${this.token}`,
         },
       })
         .then((res) => {
@@ -114,7 +112,7 @@ export default {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
+          "Authorization": `Bearer ${this.token}`,
         },
       })
         .then((res) => {
@@ -173,8 +171,11 @@ export default {
   &:hover {
     color: red;
   }
+  @media (min-width: 768px) and (max-width: 992px){
+    right: 36%;
+  }
   @media screen and (max-width: 768px) {
-    top: 19%;
+    top: 35%;
   }
 }
 .fa-pencil-alt:hover {

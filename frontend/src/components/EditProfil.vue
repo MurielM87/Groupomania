@@ -31,7 +31,6 @@
             class="form_input"
             required
           />
-          <div class="form-err"></div>
         </div>
         <div class="form_group">
           <label for="firstname">Prénom : </label>
@@ -44,7 +43,6 @@
             class="form_input"
             required
           />
-          <div class="form-err"></div>
         </div>
         <div class="form_group">
           <label for="lastname">Nom : </label>
@@ -57,27 +55,23 @@
             class="form_input"
             required
           />
-          <div class="form-err"></div>
         </div>
         <button
-          @click="updateProfil(userId)"
+          @click="updateProfil"
           class="form_btn"
           title="enregistrer les modifications"
-        >
-          <i class="fas fa-save"></i>
-          Enregistrer les modifications
-        </button>
+        ><i class="fas fa-save"></i> Enregistrer les modifications </button>
         <button @click="cancelProfil" class="form_btn">
-          <i class="far fa-times-circle"></i>Annuler les modifications</button
+          <i class="fas fa-times-circle"></i> Annuler les modifications </button
         ><br />
 
         <button
           class="delete_btn"
-          @click="deleteUser(userId)"
+          @click="deleteUser"
           title="supprimer le compte"
         >
           <i class="fas fa-trash-alt"></i>
-          supprimer le compte
+          Supprimer le compte
         </button>
       </div>
     </div>
@@ -89,6 +83,7 @@ import { ref } from "vue";
 
 export default {
   name: "ProfilUser",
+  props: ["userId", "token"],
   data() {
     return {
       user: ref({
@@ -101,7 +96,7 @@ export default {
     };
   },
   created() {
-    this.token = localStorage.getItem("token");
+  //  this.token = localStorage.getItem("token");
     this.getUserProfil;
   },
   methods: {
@@ -125,23 +120,32 @@ export default {
     },
     //upload profil image
     onFileSelected(e) {
-      const file = e.target.files[0];
+      const imageUrl = e.target.files[0];
       //preview image
-      this.image = URL.createObjectURL(file);
+      this.image = URL.createObjectURL(imageUrl);
+      this.$emit("input", e.target.files[0]);
+      console.log("ProfilEdit||file", imageUrl)
     },
 
-    //    onFileSelected(e) {
-    //      this.$emit("input", e.target.files[0]);
-    //    },
-    //  onFileSelected(e) {
-    //    console.log(e)
-    //    //this.selectedFile = event.target.files[0]
-    //    this.$emit("input", e.target.files[0]);
-    //  },
+    updateProfil() {
+      const user = {
+        pseudo: this.pseudo,
+        firstname: this.firstname,
+        lastname: this.lastname,
+        image: this.imageUrl,
+      }
+      console.log("ProfilEdit||userProfil", user);
+      console.log("ProfilEdit||pseudo", this.pseudo);
+      console.log("ProfilEdit||firstname", this.firstname);
+      console.log("ProfilEdit||lastname", this.lastname);
+      console.log("ProfilEdit||imageUrl", this.imageUrl);
+      const fd = new FormData();
+      console.log("ProfilEdit||FormData", fd);
+    //  this.$refs.file();
+    },
     //  onUpload(){
-    //    const fd = new FormData();
-    //    this.$refs.file.click();
-    //    //fd.append('image', this.selectedFile, this.selectedFile.name)
+    //    
+    //    fd.append('image', this.selectedFile, this.selectedFile.name)
     //    fetch(`http://localhost:3000/api/users/profil/${this.userId}`, fd, {
     //      method: "POST",
     //      headers: {
@@ -156,7 +160,7 @@ export default {
     //    })
     //  },
 
-    //modify userProfil
+    /*//modify userProfil
     computed: {
       updateProfil(userId) {
         fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
@@ -183,10 +187,10 @@ export default {
             console.log("err", err);
           });
       },
-    },
+    },*/
 
     //delete user
-    deleteUser(userId) {
+    deleteUser() {
       if (
         window.confirm(
           "vous allez supprimer votre compte. Êtes-vous certain de votre choix?"
@@ -199,16 +203,16 @@ export default {
             Authorization: `Bearer ${this.token}`,
           },
           body: JSON.stringify({
-            user: this.user,
+            user: this.$user,
           }),
         })
-          .then((res) => {
-            if (res) {
-              console.log("userId", userId);
-              localStorage.removeItem("token");
-              localStorage.removeItem("userId");
-              this.$router.push({ name: "SignUp" });
-            }
+          .then((res) => {            
+              console.log("res", res)
+              this.$emit('deleteUser')
+              //localStorage.removeItem("token");
+              //localStorage.removeItem("userId");
+              //this.$router.push({ name: "SignUp" });
+            
           })
           .catch((err) => {
             console.log(err);
@@ -236,4 +240,5 @@ export default {
   margin-bottom: 20px;
   margin-top: 20px;
 }
+
 </style>

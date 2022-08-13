@@ -19,7 +19,7 @@ export default {
 <style lang="scss">
 #not_found {
   font-size: 30px;
-  margin: 50px;
+  margin-top: 70px;
   min-height: 300px;
 }
 

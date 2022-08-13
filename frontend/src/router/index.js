@@ -26,15 +26,17 @@ const routes = [
         name: 'ProfilUser',
         path: '/profil/:id',
         component: ProfilUser,
-    },
-    {
-        name: 'EditProfil',
-        path: '/edit-profil',
-        component: EditProfil,
+        children: [
+            {
+                name: 'EditProfil',
+                path: '/edit-profil',
+                component: EditProfil,
+            }
+        ]
     },
     {
         name: 'NotFound',
-        path: '/:pathMatch(.*)*', 
+        path: '/:pathMatch(.*)*',
         component: NotFound,
     }
 ];
@@ -44,27 +46,5 @@ const router = createRouter({
     routes,
 });
 
-/*
-router.beforeEach((to) => {
-    if (isLoginRequired(to)) {
-        return router.push("/login")
-    }
-})
-
-function isLoginRequired(to) {
-    if (!isPrivatePage(to)) return false
-    if (!isTokenInCache()) return true
-    return false
-}
-
-function isPrivatePage(to) {
-    const publicPages = ["/login", "/signup"]
-    return !publicPages.includes(to.path)
-}
-
-function isTokenInCache() {
-    return localStorage.getItem("token") != null
-}
-*/
 
 export default router;

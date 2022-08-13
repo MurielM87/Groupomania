@@ -3,7 +3,7 @@
     <textarea
       type="text"
       class="comment_input"
-      v-model="content"
+      v-model="comment"
       placeholder="laissez un commentaire"
       rows="10"
       cols="30"
@@ -20,9 +20,10 @@ import { ref } from "vue";
 
 export default {
   name: "CommentCard",
+  props: ["token"],
   data() {
     return {
-      content: ref(""),
+      comment: ref(""),
     };
   },
   methods: {

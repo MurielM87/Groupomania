@@ -1,6 +1,6 @@
 <template>
   <!--to write a new message -->
-  <section id="card">
+  <section id="card" class="card_writing">
     <h2>Nouveau message</h2>
     <div class="post_form">
       <input
@@ -22,7 +22,7 @@
       <div class="post_img">
         <label for="addContent"></label>
         <input
-          @input="uploadImg($event)"
+          @input="uploadImg"
           type="file"
           ref="fileInput"
           id="addContent"
@@ -30,17 +30,16 @@
           accept=".jpeg, .jpg, .png, .webp, .gif"
         />
       </div>
+      <br />
 
       <!-- button to publish -->
       <button
-        @click.prevent="addPost()"
-        class="post-btn"
+        @click.prevent="createPost"
+        class="btn post-btn"
         title="valider la publication"
       >
         <i class="far fa-edit"></i>Publier
       </button>
-      <button @click="cancelPost" class="form_btn">
-          <i class="far fa-times-circle"></i>Annuler</button>
     </div>
   </section>
 </template>
@@ -50,23 +49,14 @@ import { ref } from "vue";
 
 export default {
   name: "PostForm",
-  props: {
-    createPost: Function,
-  },
+  emits:["createPost"],
   data() {
     return {
       userId: localStorage.getItem("userId"),
-      token: localStorage.getItem("token"),
-      postForm: {
-        title: ref(""),
-        content: ref(""),
-        imageUrl: ref(""),
-      },
-      previewImage: null,
+      postForm: ref([]),
     };
   },
-
-
+  props: ["token"],
   methods: {
     selectImage() {
       this.$ref.fileInput.click()
@@ -77,60 +67,70 @@ export default {
       console.log("image-target", this.imageUrl);
     },
 
-    addPost() {
-      this.postForm = {
+    createPost() {
+       const postForm = {
         title: this.title,
         content: this.content,
         image: this.imageUrl,
-      };
-      console.log("title", this.title);
-      console.log("content", this.content);
-      console.log("imageUrl", this.imageUrl);
-
-      const fd = new FormData();
-      console.log("newFormData", fd);
-      fd.append("title", this.title);
-      fd.append("content", this.content);
-      fd.append("image", this.imageUrl);
-
-      fetch(`http://localhost:3000/api/posts/add`, {
+        };        
+      console.log("PostForm||postForm", postForm)
+        
+      if (this.imageUrl === ''){
+        fetch(`http://localhost:3000/api/posts/add`, {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",
-          Authorization: `Bearer ${this.token}`,
-        },
-        body: fd,
-      }).then(
-        function (res) {
-          if (res.status != 201) {
-            this.fetchError = res.status;
-            console.log("res", res);
-          } else {
-            res.json().then(
-              function (data) {
-                this.fetchResponse = data;
-                console.log("data", data);
-              }.bind(this)
-            );
-          }
-        }.bind(this)
-      );
+          "Authorization": `Bearer ${this.token}`,
+        },body: postForm,
+      })
+      .then((res) => {
+        this.title = '';
+        this.content = '';
+        //this.$emit("createPost", postForm);
+        this.post.push(this.postForm);
+        console.log("res", res)
+      })
+      .catch((err) => console.log("err", err))
+      }else{
+        let postForm = new FormData();
+        const post = JSON.stringify({title: this.title, content: this.content})
+        const image = this.file
+        postForm.append('post', post)
+        postForm.append('image', image)
+         if(this.file === 'jpeg' || this.file === 'jpg' || this.file === 'png'){
+          fetch(`http://localhost:3000/api/posts/add`, postForm, {
+            method: "POST",
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Accept: "application/json",
+                "Authorization": `Bearer ${this.token}`,
+        },body: FormData,
+        })
+        .then((res) => {
+          console.log("res", res);
+          this.title = '';
+          this.content = '';
+          this.file = '';
+          this.$emit("createPost", postForm)
+        })
+        .catch((err) => console.log("err", err))
+         }
+      }
+       
+      this.postForm = "";
     },
-
-    //cancel Post
-    cancelPost(){
-      this.$router.push({ name: "MainPage"})
-    }
+   
   },
-};
+}
 </script>
 
 <style lang="scss">
 #card {
   display: flex;
   flex-direction: column;
-  width: 45rem;
+  width: 600px;
+  background-color: white;
   border-radius: 20px;
   border: 1px solid #fd2d01;
   padding: 20px;
@@ -146,6 +146,14 @@ export default {
   }
 }
 
+h2 {
+  margin-bottom: 10px;
+}
+
+.card_writing {
+  box-shadow: 5px 5px 7px #ffd7d7;
+}
+
 #label_file_input {
   text-align: right;
 }
@@ -158,7 +166,13 @@ export default {
   padding: 5px;
   border-radius: 5px;
   &:focus {
-    background-color: #fd2d01;
+    background-color: #b4b6be;
+  }
+  @media (min-width: 768px) and (max-width: 992px) {
+    font-size: 20px;
+  }
+  @media screen and (max-width: 768px) {
+    font-size: 25px;
   }
 }
 .fa-save,
@@ -166,13 +180,19 @@ export default {
 .fa-trash-alt,
 .fa-folder-open,
 .fa-pen,
+.fa-envelope,
+.fa-eraser,
 .fa-times-circle {
   font-size: 20px;
   margin: 2px;
-}
-
-.preview_img{
-  width: 40px;
-  height: 40px;
+  background: linear-gradient(
+      217deg,
+      rgba(255, 0, 0, 0.8),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(225, 255, 0, 0.8), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(255, 170, 0, 0.8), rgba(0, 0, 255, 0) 70.71%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 </style>
