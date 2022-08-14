@@ -42,20 +42,23 @@
 </template>
 
 <script>
+import { ref } from "vue";
+
 export default {
   name: "ProfilUser",
+  props: ["userId", "token"],
   data() {
     return {
-      token: localStorage.getItem("token"),
-      userId: localStorage.getItem("userId"),
-      user: {
+    //  token: localStorage.getItem("token"),
+    //  userId: localStorage.getItem("userId"),
+      user: ref({
         pseudo: "",
         firstname: "",
         lastname: "",
         email: "",
         imageUrl: "",
-      },
-      posts: [""],
+      }),
+      posts: ref([]),
     };
   },
   beforeCreate() {
@@ -66,21 +69,21 @@ export default {
       this.$router.push({ name: "LogIn" });
     }
   },
-  created(userId) {
-    fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+  async mounted() {
+    const response = await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
       methods: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${this.token}`,
+        "Authorization": `Bearer ${this.token}`,
       },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        userId = data;
-        console.log("profil||mounted||data", data);
-        console.log("profil||mounted||userId", userId);
-      })
-      .catch((err) => console.log(err));
+    }); 
+    console.log(await response)
+    //  .then((res) => res.json())
+    //  .then((data) => {
+    //    console.log("profil||data", data);
+    //    this.user = data;
+    //  })
+    //  .catch((err) => console.log(err));
   },
 
   methods: {
@@ -96,10 +99,9 @@ export default {
           "Authorization": `Bearer ${this.token}`,
         },
       })
-        .then((res) => {
-          console.log("res", res);
-          this.user = res.data;
-          console.log("res.data", res.data)
+        .then((data) => {
+          this.user = data;
+          console.log("user||data", data)
         })
         .catch((err) => {
           console.log(err)
@@ -115,12 +117,12 @@ export default {
           "Authorization": `Bearer ${this.token}`,
         },
       })
-        .then((res) => {
-          console.log("res", res);
-          this.posts = res.data;
+        .then((data) => {
+          this.posts = data;
+          console.log("posts||data", data)
         })
-        .catch(() => {
-          this.$router.push({ name: "Login" });
+        .catch((err) => {
+          console.log("err", err)
         });
     },
   },

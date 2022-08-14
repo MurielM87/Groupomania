@@ -3,10 +3,10 @@
     <h2>Bonjour {{ user.pseudo }}</h2>
     <PostForm
       @createPost="addPost"
-      :user="user"
       :token="token"
       :userId="userId"
       :post="post"
+      :user="user"
     />
 
     <div id="separate_barre"></div>

@@ -17,7 +17,7 @@
     <div id="barre">
       <li v-if="this.isLoggedIn" class="menu">
         <ul>
-          <router-link to="/profil/${this.userId}"
+          <router-link :to="{name: 'ProfilUser', params: {id: this.userId}}"
             ><i class="fas fa-portrait"><span class="text_desktop"> Mon profil</span></i></router-link
           >
         </ul>
@@ -59,6 +59,8 @@ export default {
     const userId = localStorage.getItem('userId')
     if (token !== null && userId !== null) {
       this.isLoggedIn = true
+      this.$emit('userId')
+      console.log("NavBar||mounted||userId", userId)
     } else {
       this.$router.push({name: "LogIn"})
     }

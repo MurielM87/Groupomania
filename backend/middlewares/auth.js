@@ -3,8 +3,8 @@ require("dotenv").config()
 
 module.exports = (req, res, next) => {
   try {    
-    const token = req.headers.cookie
-    console.log("cookie", token)
+    const token = req.cookies.token
+    console.log("cookie||token", token)
     if(token) {
       const decodedToken = jwt.verify(token, process.env.TOKEN)
       req.user = decodedToken

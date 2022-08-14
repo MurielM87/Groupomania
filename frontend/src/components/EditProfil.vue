@@ -110,12 +110,12 @@ export default {
           Authorization: `Bearer ${this.token}`,
         },
       })
-        .then((res) => {
-          console.log("res", res);
-          this.user = res.data;
+        .then((data) => {
+          this.user = data;
+          console.log("user||data", data)
         })
-        .catch(() => {
-          this.$router.push({ name: "Login" });
+        .catch((err) => {
+          console.log("err", err)
         });
     },
     //upload profil image
@@ -139,29 +139,18 @@ export default {
       console.log("ProfilEdit||firstname", this.firstname);
       console.log("ProfilEdit||lastname", this.lastname);
       console.log("ProfilEdit||imageUrl", this.imageUrl);
+
       const fd = new FormData();
       console.log("ProfilEdit||FormData", fd);
+      fd.append('image', this.selectedFile, this.selectedFile.name)
     //  this.$refs.file();
-    },
-    //  onUpload(){
-    //    
-    //    fd.append('image', this.selectedFile, this.selectedFile.name)
-    //    fetch(`http://localhost:3000/api/users/profil/${this.userId}`, fd, {
-    //      method: "POST",
-    //      headers: {
-    //        "Content-Type": "multipart/form-data",
-    //        "Accept": "application/json",
-    //        "Authorization": `Bearer ${this.token}`
-    //      },
-    //      body: FormData,
-    //    })
-    //    .then(res => {
-    //      console.log(res)
-    //    })
-    //  },
 
-    /*//modify userProfil
-    computed: {
+    },
+    
+    
+    methods: {
+      
+      //modify userProfil
       updateProfil(userId) {
         fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
           method: "PUT",
@@ -181,13 +170,13 @@ export default {
             console.log("this.userId", this.userId);
             let user = JSON.parse(localStorage.getItem("user"));
             console.log("edit-profil||user", user);
-            //this.$router.push({ name: "ProfilUser"})
+            //this.$router.push("/profil/${this.userId}")
           })
           .catch((err) => {
             console.log("err", err);
           });
       },
-    },*/
+    },
 
     //delete user
     deleteUser() {
