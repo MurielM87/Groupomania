@@ -105,6 +105,7 @@ export default {
       const userId = localStorage.getItem("userId", userId);
       fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
         method: "GET",
+        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.token}`,
@@ -132,13 +133,13 @@ export default {
         pseudo: this.pseudo,
         firstname: this.firstname,
         lastname: this.lastname,
-        image: this.imageUrl,
+        imageUrl: this.image,
       }
       console.log("ProfilEdit||userProfil", user);
       console.log("ProfilEdit||pseudo", this.pseudo);
       console.log("ProfilEdit||firstname", this.firstname);
       console.log("ProfilEdit||lastname", this.lastname);
-      console.log("ProfilEdit||imageUrl", this.imageUrl);
+      console.log("ProfilEdit||imageUrl", this.image);
 
       const fd = new FormData();
       console.log("ProfilEdit||FormData", fd);
@@ -154,6 +155,7 @@ export default {
       updateProfil(userId) {
         fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
           method: "PUT",
+          withCredentials: true,
           data: this.user,
           headers: {
             "Content-Type": "application/json",
@@ -187,6 +189,7 @@ export default {
       )
         fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
           method: "DELETE",
+          withCredentials: true,
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${this.token}`,
@@ -210,7 +213,7 @@ export default {
 
     //cancel the modifications
     cancelProfil(){
-      this.$router.push("/profil/${this.userId}")    
+      this.$router.push("{name: 'ProfilUser', params: {id: this.userId}}")    
     }
   },
 };

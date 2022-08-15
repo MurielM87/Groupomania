@@ -58,6 +58,7 @@ export default {
   //  //get the user
   //  fetch(`http://localhost:3000/api/users/${this.userId}`, {
   //    method: "GET",
+  //    withCredentials: true,
   //    headers: {
   //      "Content-Type": "application/json",
   //      "Authorization": `Bearer ${this.token}`,
@@ -87,6 +88,7 @@ export default {
       console.log("MainPage||addPost||data", data);
       fetch(`http://localhost:3000/api/posts/add`, {
         methods: "POST",
+        withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",

@@ -63,6 +63,7 @@ export default {
       } else {
         fetch(`http://localhost:3000/api/users/login`, {
           method: "POST",
+          withCredentials: true,
           headers: {
             "Content-Type": "application/json",
           },
@@ -75,9 +76,9 @@ export default {
           .then((data) => {
             console.log(data);
             localStorage.setItem("token", data.token);
-            localStorage.setItem("userId", data.userId)
+            localStorage.setItem("userId", data.userId);
             console.log("token", data.token);
-            console.log("userId", data.userId)
+            console.log("userId", data.userId);
 
             this.$router.push("/");
           })

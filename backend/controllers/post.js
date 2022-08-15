@@ -13,7 +13,7 @@ exports.createPost = async (req, res) => {
       attributes: ["pseudo", "id"],
       where: { id: userId },
     })
-    console.log("userDatabase 16", user)
+    console.log("user", user)
     
     if (user !== null) {
       if (req.file) {
@@ -34,7 +34,7 @@ exports.createPost = async (req, res) => {
         imageUrl: req.body.imageUrl,
         id: userId,
       })
-      console.log("postDatabase 37", post)
+      console.log("post", post)
 
       res
         .status(201)

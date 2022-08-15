@@ -2,7 +2,7 @@
   <article id="card">
     
     <!--informations from the author of the post-->
-    <router-link to="/profil/${this.userId}">
+    <router-link :to="{name: 'ProfilUser', params: {id: this.userId}}">
       <div id="post_author">
         <div id="author_img">
           <img
@@ -91,7 +91,7 @@
         :key="comment.id" 
         :comment="comment"
       >
-        <router-link to="/profil/{this.userId}" :token="token">
+        <router-link :to="{name: 'ProfilUser', params: {id: this.userId}}">
           <div class="comment_author">
             <img
               v-if="user.imageUrl"
@@ -153,6 +153,7 @@ export default {
     async created(){
       await fetch(`http://localhost:3000/api/posts/`, {
         methods: "GET",
+        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${this.token}`,
@@ -204,6 +205,7 @@ export default {
       if(userId == userId && token == token) {
         fetch(`http://localhost:3000/api/posts/${this.postId}`, {
           method: "PUT",
+          withCredentials: true,
           data: { postId },
           headers: {
             "Content-Type": "application/json",
@@ -234,6 +236,7 @@ export default {
       if(userId == userId && token == token) {
         fetch(`http://localhost:3000/api/posts/${this.postId}`, {
           method: "DELETE",
+          withCredentials: true,
           data: { postId },
           headers: {
             "Content-Type": "application/json",
@@ -253,6 +256,7 @@ export default {
       console.log("PostCard||addLike||postId", postId);
       //  fetch(`http://localhost:3000/api/posts/${this.postId}/like`, {
       //    method: "POST",
+      //    withCredentials: true,
       //    data: { postId },
       //    headers: {
       //      "Content-Type": "application/json",
@@ -278,6 +282,7 @@ export default {
       console.log("PostCard||addContent||postId, content", postId, content);
       //  fetch(`http://localhost:3000/api/posts/${this.postId}/comment`, {
       //    method: "POST",
+      //    withCredentials: true,
       //    data: { postId, content },
       //    headers: {
       //      "Content-Type": "application/json",
@@ -290,6 +295,7 @@ export default {
     loadComments(/*postId*/) {
       //  fetch(`http://localhost:3000/api/posts/comments/${this.postId}`, {
       //    method: "GET",
+      //    withCredentials: true,
       //    headers: {
       //      "Content-Type": "application/json",
       //      "Authorization": `Bearer ${this.token}`,
@@ -309,7 +315,8 @@ export default {
       console.log("PostCard||deleteComment||commentId", commentId);
       //  fetch(`http://localhost:3000/api/posts/comment/${this.commentId}`, {
       //    method: "DELETE",
-      //    data: { postId, commentId },
+      //    data:
+      //    withCredentials: true, { postId, commentId },
       //    headers: {
       //      "Content-Type": "application/json",
       //      "Authorization": `Bearer ${this.token}`,

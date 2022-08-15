@@ -174,6 +174,7 @@ export default {
       } else {
         fetch(`http://localhost:3000/api/users/signup`, {
           method: "POST",
+          withCredentials: true,
           headers: {
             "Content-Type": "application/json",
           },

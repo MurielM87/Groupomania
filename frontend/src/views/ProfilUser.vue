@@ -17,7 +17,7 @@
         title="mon avatar"
         :src="`http://localhost:3000/users/profil/${this.$user.imageUrl}`"
       />
-      <router-link to="/profil/${this.userId}/edit-profil" :userId="userId" :token="token"
+      <router-link :to="{name: 'EditProfil', params: {id: this.userId}}"
         ><i class="fas fa-pencil-alt"></i
       ></router-link>
     </div>
@@ -72,12 +72,13 @@ export default {
   async mounted() {
     const response = await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
       methods: "GET",
+      withCredentials: true,
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${this.token}`,
       },
     }); 
-    console.log(await response)
+    console.log(response)
     //  .then((res) => res.json())
     //  .then((data) => {
     //    console.log("profil||data", data);

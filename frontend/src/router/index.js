@@ -29,7 +29,7 @@ const routes = [
         children: [
             {
                 name: 'EditProfil',
-                path: '/edit-profil',
+                path: '/edit',
                 component: EditProfil,
             }
         ]
