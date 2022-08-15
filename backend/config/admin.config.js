@@ -1,11 +1,6 @@
 const Database = require("../models")
 const bcrypt = require("bcrypt")
 
-//ADMIN
-//pseudo = Admin
-//email = admin@groupomania.com
-//password = Adminis1!
-
 function createAdmin(req, res) {
   // check if an admin account already exists
   Database.User.findOne({
