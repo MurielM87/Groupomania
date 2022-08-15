@@ -57,10 +57,9 @@ exports.login = async (req, res) => {
         if (!valid) {
           return res.status(401).json({ error: 'mot de passe incorrect' });
         } return res.cookie("token", token).status(200).json({
-          userId: user.id, token
-         
-        });
-      })
+          userId: user.id, token   
+        }); 
+      }) 
 
   } catch (error) {
     return res.status(500).send({ error: "Erreur serveur" })

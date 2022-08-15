@@ -4,8 +4,8 @@ const jwt = require("jsonwebtoken")
 
 //add a comment
 exports.createComment = async (req, res) => {
-    const token = req.headers.cookies.split(" ")[1];
-    const decodedToken = jwt.verify(token, "Jtsr843aIc78adGa_korT2aN_171a00");
+    const token = req.cookies.token;
+    const decodedToken = jwt.verify(token, process.env.TOKEN);
     const userId = decodedToken.userId;
     if (req.body.content === "") {
         return res.status(401).json({ error: "Veuillez remplir le champs" });
