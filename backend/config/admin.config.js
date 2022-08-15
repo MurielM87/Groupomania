@@ -4,17 +4,17 @@ const bcrypt = require("bcrypt")
 function createAdmin(req, res) {
   // check if an admin account already exists
   Database.User.findOne({
-    where: { email: "admin@groupomania.com" } || { pseudo: "admin" },
+    where: { email: process.env.ADMIN_EMAIL } || { pseudo: process.env.ADMIN_PSEUDO },
   })
     .then((user) => {
       // if not create one
       if (!user) {
         bcrypt
-          .hash("Adminis1", 10)
+          .hash(process.env.ADMIN_PASSWORD, 10)
           .then((hash) => {
             const admin = Database.User.create({
-              pseudo: "admin",
-              email: "admin@groupomania.com",
+              pseudo: process.env.ADMIN_PSEUDO,
+              email: process.env.ADMIN_EMAIL,
               password: hash,
               isAdmin: true,
             })
