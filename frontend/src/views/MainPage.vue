@@ -45,7 +45,7 @@ export default {
       comment: ref([])
     };
   },
-  beforeCreate() {
+  mounted() {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
     if (token == null && userId == null) {

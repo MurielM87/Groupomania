@@ -54,7 +54,7 @@ export default {
       isLoggedIn: false
     }
   },
-  created() {
+  mounted() {
     const token = localStorage.getItem('token')
     const userId = localStorage.getItem('userId')
     if (token !== null && userId !== null) {

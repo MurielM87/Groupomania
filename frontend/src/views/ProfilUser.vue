@@ -61,15 +61,16 @@ export default {
       posts: ref([]),
     };
   },
-  beforeCreate() {
+  mounted() {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
-    console.log("profil||beforeCreate||userId", userId);
+    console.log("profil||mounted||userId", userId);
     if (token == null && userId == null) {
       this.$router.push({ name: "LogIn" });
     }
   },
-  async mounted() {
+  
+  async created() {
     const response = await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
       methods: "GET",
       withCredentials: true,
