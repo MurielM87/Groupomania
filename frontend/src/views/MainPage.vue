@@ -53,28 +53,28 @@ export default {
     }
   },
   
-  //getItem() {
-  // 
-  //  //get the user
-  //  fetch(`http://localhost:3000/api/users/${this.userId}`, {
-  //    method: "GET",
-  //    withCredentials: true,
-  //    headers: {
-  //      "Content-Type": "application/json",
-  //      "Authorization": `Bearer ${this.token}`,
-  //    },
-  //  })
-  //    .then((res) => {
-  //      if (res.status == 401) {
-  //        this.$router.push({ name: "LogIn" });
-  //        return;
-  //      }
-  //      return res.json();
-  //    })
-  //    .then((res) => {
-  //      this.posts = res;
-  //    });
-  //},
+  getItem() { 
+    //get the user
+    fetch(`http://localhost:3000/api/users/${this.userId}`, {
+      method: "GET",
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${this.token}`,
+      },
+    })
+      .then((res) => {
+        if (res.status == 401) {
+          this.$router.push({ name: "LogIn" });
+          return;
+        }
+        return res.json();
+      })
+      .then((res) => {
+        this.posts = res;
+      });
+  },
+  
   methods: {
     //button scroll top
     toTop() {
@@ -92,14 +92,13 @@ export default {
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",
-          Authorization: `Bearer ${this.token}`,
+          "Authorization": `Bearer ${this.token}`,
         },
         body: {
           title: this.$post.title,
           content: this.$post.content,
           imageUrl: this.$post.imageUrl,
-          pseudo: this.$user.pseudo,
-          userImageUrl: this.$user.imageUrl,
+          userId: this.$user.userId,
         },
       })
         .then(function (res) {
