@@ -77,7 +77,7 @@ export default {
       if (this.imageUrl === ''){
         fetch(`http://localhost:3000/api/posts/add`, {
         method: "POST",
-        withCredentials: true,
+        credentials: "include",
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",
@@ -101,7 +101,7 @@ export default {
          if(this.file === 'jpeg' || this.file === 'jpg' || this.file === 'png'){
           fetch(`http://localhost:3000/api/posts/add`, postForm, {
             method: "POST",
-            withCredentials: true,
+            credentials: "include",
             headers: {
                 "Content-Type": "multipart/form-data",
                 Accept: "application/json",

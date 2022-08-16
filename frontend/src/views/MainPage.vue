@@ -57,7 +57,7 @@ export default {
     //get the user
     fetch(`http://localhost:3000/api/users/${this.userId}`, {
       method: "GET",
-      withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${this.token}`,

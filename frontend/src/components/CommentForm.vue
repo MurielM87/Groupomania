@@ -30,7 +30,7 @@ export default {
     submitComment(postId) {
       fetch(`http://localhost:3000/api/posts/${postId}/comment`, {
         method: "POST",
-        withCredentials: true,
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.token}`,

@@ -105,7 +105,7 @@ export default {
       const userId = localStorage.getItem("userId", userId);
       fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
         method: "GET",
-        withCredentials: true,
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.token}`,
@@ -155,7 +155,7 @@ export default {
       updateProfil(userId) {
         fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
           method: "PUT",
-          withCredentials: true,
+          credentials: "include",
           data: this.user,
           headers: {
             "Content-Type": "application/json",
@@ -189,7 +189,7 @@ export default {
       )
         fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
           method: "DELETE",
-          withCredentials: true,
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${this.token}`,

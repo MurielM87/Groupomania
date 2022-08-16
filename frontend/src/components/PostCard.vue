@@ -153,7 +153,7 @@ export default {
     async created(){
       await fetch(`http://localhost:3000/api/posts/`, {
         methods: "GET",
-        withCredentials: true,
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${this.token}`,
@@ -205,7 +205,7 @@ export default {
       if(userId == userId && token == token) {
         fetch(`http://localhost:3000/api/posts/${this.postId}`, {
           method: "PUT",
-          withCredentials: true,
+          credentials: "include",
           data: { postId },
           headers: {
             "Content-Type": "application/json",
@@ -236,7 +236,7 @@ export default {
       if(userId == userId && token == token) {
         fetch(`http://localhost:3000/api/posts/${this.postId}`, {
           method: "DELETE",
-          withCredentials: true,
+          credentials: "include",
           data: { postId },
           headers: {
             "Content-Type": "application/json",
@@ -256,7 +256,7 @@ export default {
       console.log("PostCard||addLike||postId", postId);
       //  fetch(`http://localhost:3000/api/posts/${this.postId}/like`, {
       //    method: "POST",
-      //    withCredentials: true,
+      //    credentials: "include",
       //    data: { postId },
       //    headers: {
       //      "Content-Type": "application/json",
@@ -282,7 +282,7 @@ export default {
       console.log("PostCard||addContent||postId, content", postId, content);
       //  fetch(`http://localhost:3000/api/posts/${this.postId}/comment`, {
       //    method: "POST",
-      //    withCredentials: true,
+      //    credentials: "include",
       //    data: { postId, content },
       //    headers: {
       //      "Content-Type": "application/json",
@@ -295,7 +295,7 @@ export default {
     loadComments(/*postId*/) {
       //  fetch(`http://localhost:3000/api/posts/comments/${this.postId}`, {
       //    method: "GET",
-      //    withCredentials: true,
+      //    credentials: "include",
       //    headers: {
       //      "Content-Type": "application/json",
       //      "Authorization": `Bearer ${this.token}`,
@@ -316,7 +316,7 @@ export default {
       //  fetch(`http://localhost:3000/api/posts/comment/${this.commentId}`, {
       //    method: "DELETE",
       //    data:
-      //    withCredentials: true, { postId, commentId },
+      //    credentials: "include", { postId, commentId },
       //    headers: {
       //      "Content-Type": "application/json",
       //      "Authorization": `Bearer ${this.token}`,
