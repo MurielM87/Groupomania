@@ -4,7 +4,7 @@ require("dotenv").config()
 module.exports = (req, res, next) => {
   try {    
     const token = req.cookies.token
-    console.log("req.cookies", req.cookies)
+    //console.log("req.cookies", req.cookies)
     console.log("auth.js||cookie||token", token)
     if(token) {
       const decodedToken = jwt.verify(token, process.env.TOKEN)

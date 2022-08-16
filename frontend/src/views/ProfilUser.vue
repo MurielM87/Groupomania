@@ -73,7 +73,7 @@ export default {
   async created() {
     const response = await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
       methods: "GET",
-      withCredentials: true,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${this.token}`,

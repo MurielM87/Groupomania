@@ -63,7 +63,7 @@ export default {
       } else {
         fetch(`http://localhost:3000/api/users/login`, {
           method: "POST",
-          withCredentials: true,
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },

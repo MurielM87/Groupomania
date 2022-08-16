@@ -4,20 +4,26 @@ const helmet = require("helmet")
 const path = require("path")
 require("dotenv").config()
 const cookieParser = require('cookie-parser');
-
+const cors = require('cors')
 
 const app = express()
+
+app.use(cors({
+  origin: `http://localhost:8080`, credentials: true
+}))
+
 app.use(express.json())
 app.use(cookieParser());
 app.use(morgan("tiny"))
 app.use(express.urlencoded({ extended: true }))
 
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
-});
+});*/
 
 app.use(helmet())
 
