@@ -17,7 +17,7 @@
         title="mon avatar"
         :src="`http://localhost:3000/users/profil/${this.$user.imageUrl}`"
       />
-      <router-link :to="{name: 'EditProfil', params: {id: this.userId}}"
+      <router-link :to="`/profil/${this.userId}/edit`"
         ><i class="fas fa-pencil-alt"></i
       ></router-link>
     </div>

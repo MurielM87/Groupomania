@@ -137,12 +137,16 @@ exports.deleteUser = async (req, res) => {
 
 //get One User
 exports.getOneUser = async (req, res) => {
+  const id = req.params.id
+  console.log("getOneUser||req.params", req.params);
+  console.log("getOneUser||id", id)
   try {
     // try to find a user by Id
     const user = await database.User.findOne({
       where: { id: req.params.id },
     })
     res.status(200).send(user)
+    console.log("getOneUser||req.params.id", req.params.id);
   } catch (error) {
     return res.status(500).send({ error: "Erreur serveur" })
   }

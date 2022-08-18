@@ -26,11 +26,13 @@ const routes = [
         name: 'ProfilUser',
         path: '/profil/:id',
         component: ProfilUser,
-    },
-    {
-        name: 'EditProfil',
-        path: '/edit',
-        component: EditProfil,
+        children: [
+            {
+                name: 'EditProfil',
+                path: '/profil/:id/edit',
+                component: EditProfil,
+            }
+        ]
     },
     {
         name: 'NotFound',
