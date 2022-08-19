@@ -55,12 +55,16 @@
             class="form_input"
             required
           />
-        </div><br />
+        </div>
         <button
           @click="updateProfil"
           class="form_btn"
           title="enregistrer les modifications"
         ><i class="fas fa-save"></i> Enregistrer les modifications </button>
+        <button @click="$router.go(-1)" class="form_btn">
+          <i class="fas fa-times-circle"></i> Annuler les modifications </button
+        ><br />
+
         <button
           class="delete_btn"
           @click="deleteUser"
