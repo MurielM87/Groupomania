@@ -55,16 +55,12 @@
             class="form_input"
             required
           />
-        </div>
+        </div><br />
         <button
           @click="updateProfil"
           class="form_btn"
           title="enregistrer les modifications"
         ><i class="fas fa-save"></i> Enregistrer les modifications </button>
-        <button @click="cancelProfil" class="form_btn">
-          <i class="fas fa-times-circle"></i> Annuler les modifications </button
-        ><br />
-
         <button
           class="delete_btn"
           @click="deleteUser"
@@ -211,10 +207,6 @@ export default {
           });
     },
 
-    //cancel the modifications
-    cancelProfil(){
-      this.$router.push("{name: 'ProfilUser', params: {id: this.userId}}")    
-    }
   },
 };
 </script>
