@@ -46,30 +46,21 @@ import { ref } from "vue";
 
 export default {
   name: "ProfilUser",
-  props: ["userId", "token"],
   data() {
     return {
-    //  token: localStorage.getItem("token"),
-    //  userId: localStorage.getItem("userId"),
+      token: localStorage.getItem("token"),
+      userId: localStorage.getItem("userId"),
       user: ref({
-        pseudo: "",
-        firstname: "",
-        lastname: "",
-        email: "",
-        imageUrl: "",
+        //pseudo: "",
+        //firstname: "",
+        //lastname: "",
+        //email: "",
+        //imageUrl: "",
       }),
       posts: ref([]),
     };
   },
-  mounted() {
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-    console.log("profil||mounted||userId", userId);
-    if (token == null && userId == null) {
-      this.$router.push({ name: "LogIn" });
-    }
-  },
-  
+    
   async created() {
     const response = await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
       methods: "GET",
@@ -171,7 +162,7 @@ export default {
   padding: 10px;
   position: absolute;
   right: 30%;
-  top: 40%;
+  top: 55%;
   &:hover {
     color: red;
   }

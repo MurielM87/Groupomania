@@ -5,7 +5,7 @@ const fs = require("fs")
 //create a post
 exports.createPost = async (req, res) => {
   const userId = req.auth.userId  
-  console.log('auth', req.auth.userId)
+  console.log('createPost||req.auth.userId', req.auth.userId)
   let imageUrl
   try {
     //find the user by Id
@@ -13,7 +13,7 @@ exports.createPost = async (req, res) => {
       attributes: ["pseudo", "id"],
       where: { id: userId },
     })
-    console.log("user", user)
+    console.log("createPost||user", user)
     
     if (user !== null) {
       if (req.file) {
