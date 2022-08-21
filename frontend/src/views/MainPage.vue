@@ -1,11 +1,12 @@
 <template>
+  <NavBar />
   <section class="posts">
     <h2>Bonjour {{ user.pseudo }}</h2>
     <PostForm
       @createPost="addPost"
       :token="token"
       :userId="userId"
-      :post="post"
+      :post="post"      
       :user="user"
     />
 
@@ -29,13 +30,15 @@
 import { ref } from "vue";
 import PostForm from "@/components/PostForm.vue";
 import PostCard from "@/components/PostCard.vue";
+import NavBar from "@/components/NavBar.vue";
 
 export default {
   name: "MainPage",
   components: {
     PostForm,
     PostCard,
-  },
+    NavBar
+},
   data() {
     return {
       token: localStorage.getItem("token"),
@@ -45,7 +48,7 @@ export default {
       comment: ref([])
     };
   },
-  mounted() {
+  beforeCreate() {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
     if (token == null && userId == null) {
@@ -53,27 +56,24 @@ export default {
     }
   },
   
-  getItem() { 
-    //get the user
-    fetch(`http://localhost:3000/api/users/${this.userId}`, {
-      method: "GET",
+  async created() {
+    const response = await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+      methods: "GET",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${this.token}`,
       },
-    })
-      .then((res) => {
-        if (res.status == 401) {
-          this.$router.push({ name: "LogIn" });
-          return;
-        }
-        return res.json();
-      })
-      .then((res) => {
-        this.posts = res;
-      });
+    }); 
+    console.log(response)
+    //  .then((res) => res.json())
+    //  .then((data) => {
+    //    console.log("profil||data", data);
+    //    this.user = data;
+    //  })
+    //  .catch((err) => console.log(err));
   },
+ 
   
   methods: {
     //button scroll top
@@ -85,7 +85,6 @@ export default {
     },
 
     addPost(data) {
-      console.log("MainPage||addPost||data", data);
       fetch(`http://localhost:3000/api/posts/add`, {
         methods: "POST",
         withCredentials: true,
@@ -112,6 +111,7 @@ export default {
           console.log("err", err);
           return err.status(404).json(("message: échec de la publication"))
         });
+      console.log("MainPage||addPost||data", data);
     },
   },
 };

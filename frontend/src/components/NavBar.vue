@@ -17,7 +17,7 @@
     <div id="barre">
       <li v-if="this.isLoggedIn" class="menu">
         <ul>
-          <router-link :to="{name: 'ProfilUser', params: {id: this.userId}}"
+          <router-link :to="{name: 'ProfilUser', params: {id: this.userId}}" 
             ><i class="fas fa-portrait"><span class="text_desktop"> Mon profil</span></i></router-link
           >
         </ul>

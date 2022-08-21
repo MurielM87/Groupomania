@@ -1,14 +1,15 @@
 <template>
+<NavBar/>
   <form id="profil_form">
     <h2>Modifier votre profil</h2>
 
     <div class="img" enctype="multipart/form-data">
       <div id="photo_icone">
-        <img :src="image" alt="Avatar" class="profil_image" />
+        <img :src="image" class="profil_image" /><i class="far fa-user-circle"></i>
         <input
           @change="onFileSelected"
           type="file"
-          name="avatar"
+          name="avatar de {{user.pseudo}}"
           id="profil_image"
           accept=".jpeg, .jpg, .png, .webp, .gif"
           ref="fileInput"
@@ -80,138 +81,127 @@
 
 <script>
 import { ref } from "vue";
+import NavBar from "./NavBar.vue";
 
 export default {
-  name: "ProfilUser",
-  props: ["userId", "token"],
-  data() {
-    return {
-      user: ref({
-        pseudo: "",
-        firstname: "",
-        lastname: "",
-        imageUrl: "",
-      }),
-      image: this.imageUrl,
-    };
-  },
-  created() {
-  //  this.token = localStorage.getItem("token");
-    this.getUserProfil;
-  },
-  methods: {
-    //get all the informations about the user
-    getUserProfil() {
-      const userId = localStorage.getItem("userId", userId);
-      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
-        },
-      })
-        .then((data) => {
-          this.user = data;
-          console.log("user||data", data)
-        })
-        .catch((err) => {
-          console.log("err", err)
-        });
+    name: "ProfilUser",
+    props: ["userId", "token"],
+    data() {
+        return {
+            user: ref({
+                pseudo: "",
+                firstname: "",
+                lastname: "",
+                imageUrl: "",
+            }),
+            image: this.imageUrl,
+        };
     },
-    //upload profil image
-    onFileSelected(e) {
-      const imageUrl = e.target.files[0];
-      //preview image
-      this.image = URL.createObjectURL(imageUrl);
-      this.$emit("input", e.target.files[0]);
-      console.log("ProfilEdit||file", imageUrl)
+    created() {
+        //  this.token = localStorage.getItem("token");
+        this.getUserProfil;
     },
-
-    updateProfil() {
-      const user = {
-        pseudo: this.pseudo,
-        firstname: this.firstname,
-        lastname: this.lastname,
-        imageUrl: this.image,
-      }
-      console.log("ProfilEdit||userProfil", user);
-      console.log("ProfilEdit||pseudo", this.pseudo);
-      console.log("ProfilEdit||firstname", this.firstname);
-      console.log("ProfilEdit||lastname", this.lastname);
-      console.log("ProfilEdit||imageUrl", this.image);
-
-      const fd = new FormData();
-      console.log("ProfilEdit||FormData", fd);
-      fd.append('image', this.selectedFile, this.selectedFile.name)
-    //  this.$refs.file();
-
-    },
-    
-    
     methods: {
-      
-      //modify userProfil
-      updateProfil(userId) {
-        fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-          method: "PUT",
-          credentials: "include",
-          data: this.user,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.token}`,
-          },
-          body: JSON.stringify({
-            user: this.user,
-            selectedFile: this.selectedFile,
-          }),
-        })
-          .then(() => {
-            alert("profil modifié");
-            console.log("userId", userId);
-            console.log("this.userId", this.userId);
-            let user = JSON.parse(localStorage.getItem("user"));
-            console.log("edit-profil||user", user);
-            //this.$router.push("/profil/${this.userId}")
-          })
-          .catch((err) => {
-            console.log("err", err);
-          });
-      },
+        //get all the informations about the user
+        getUserProfil() {
+            const userId = localStorage.getItem("userId", userId);
+            fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${this.token}`,
+                },
+            })
+                .then((data) => {
+                this.user = data;
+                console.log("user||data", data);
+            })
+                .catch((err) => {
+                console.log("err", err);
+            });
+        },
+        //upload profil image
+        onFileSelected(e) {
+            const imageUrl = e.target.files[0];
+            //preview image
+            this.image = URL.createObjectURL(imageUrl);
+            this.$emit("input", e.target.files[0]);
+            console.log("ProfilEdit||file", imageUrl);
+        },
+        updateProfil() {
+            const user = {
+                pseudo: this.pseudo,
+                firstname: this.firstname,
+                lastname: this.lastname,
+                imageUrl: this.image,
+            };
+            console.log("ProfilEdit||userProfil", user);
+            console.log("ProfilEdit||pseudo", this.pseudo);
+            console.log("ProfilEdit||firstname", this.firstname);
+            console.log("ProfilEdit||lastname", this.lastname);
+            console.log("ProfilEdit||imageUrl", this.image);
+            const fd = new FormData();
+            console.log("ProfilEdit||FormData", fd);
+            fd.append("image", this.selectedFile, this.selectedFile.name);
+            //  this.$refs.file();
+        },
+        methods: {
+            //modify userProfil
+            updateProfil(userId) {
+                fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+                    method: "PUT",
+                    credentials: "include",
+                    data: this.user,
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${this.token}`,
+                    },
+                    body: JSON.stringify({
+                        user: this.user,
+                        selectedFile: this.selectedFile,
+                    }),
+                })
+                    .then(() => {
+                    alert("profil modifié");
+                    console.log("userId", userId);
+                    console.log("this.userId", this.userId);
+                    let user = JSON.parse(localStorage.getItem("user"));
+                    console.log("edit-profil||user", user);
+                    //this.$router.push("/profil/${this.userId}")
+                })
+                    .catch((err) => {
+                    console.log("err", err);
+                });
+            },
+        },
+        //delete user
+        deleteUser() {
+            if (window.confirm("vous allez supprimer votre compte. Êtes-vous certain de votre choix?"))
+                fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+                    method: "DELETE",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${this.token}`,
+                    },
+                    body: JSON.stringify({
+                        user: this.$user,
+                    }),
+                })
+                    .then((res) => {
+                    console.log("res", res);
+                    this.$emit("deleteUser");
+                    //localStorage.removeItem("token");
+                    //localStorage.removeItem("userId");
+                    //this.$router.push({ name: "SignUp" });
+                })
+                    .catch((err) => {
+                    console.log(err);
+                });
+        },
     },
-
-    //delete user
-    deleteUser() {
-      if (
-        window.confirm(
-          "vous allez supprimer votre compte. Êtes-vous certain de votre choix?"
-        )
-      )
-        fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-          method: "DELETE",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.token}`,
-          },
-          body: JSON.stringify({
-            user: this.$user,
-          }),
-        })
-          .then((res) => {            
-              console.log("res", res)
-              this.$emit('deleteUser')
-              //localStorage.removeItem("token");
-              //localStorage.removeItem("userId");
-              //this.$router.push({ name: "SignUp" });
-            
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-    },
-
-  },
+    components: { NavBar }
 };
 </script>
 

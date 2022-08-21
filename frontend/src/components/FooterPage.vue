@@ -20,6 +20,8 @@ footer {
   line-height: 25px;
   padding: 20px;
   text-align: center;
+  position: absolute;
+  bottom: -180px;
   @media screen and (max-width: 992px) {
     width: 100%;
     padding: 20px 0px;

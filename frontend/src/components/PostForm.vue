@@ -14,8 +14,7 @@
         type="text"
         v-model="content"
         placeholder="message"
-        rows="10"
-        cols="30"
+        rows="3"
         required
       ></textarea>
       <!--add an image -->
@@ -40,6 +39,7 @@
       >
         <i class="far fa-edit"></i>Publier
       </button>
+      
     </div>
   </section>
 </template>
@@ -55,7 +55,7 @@ export default {
       postForm: ref([]),
     };
   },
-  props: ["token", "userId"],
+  props: ["token", "userId", "this.title", "this.content", "this.imageUrl"],
   methods: {
     selectImage() {
       this.$ref.fileInput.click()
@@ -74,7 +74,7 @@ export default {
         };        
       console.log("PostForm||postForm", postForm)
         
-      if (this.imageUrl === ''){
+      /*if (this.imageUrl === ''){
         fetch(`http://localhost:3000/api/posts/add`, {
         method: "POST",
         credentials: "include",
@@ -92,7 +92,7 @@ export default {
         console.log("res", res)
       })
       .catch((err) => console.log("err", err))
-      }else{
+      }else*/{
         let postForm = new FormData();
         const post = JSON.stringify({title: this.title, content: this.content})
         const image = this.file
@@ -111,10 +111,10 @@ export default {
         .then((data) => {
           console.log("data", data);
           this.postForm = data;
-        //  this.title = '';
-        //  this.content = '';
-        //  this.file = '';
-        //  this.$emit("createPost", postForm)
+          this.title = '';
+          this.content = '';
+          this.file = '';
+          this.$emit("createPost", postForm)
         })
         .catch((err) => console.log("err", err))
          }

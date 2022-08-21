@@ -1,4 +1,5 @@
 <template>
+<NavBar/>
     <div class="cube">
         <img src="../assets/icon.png" class="side" id="front" />
         <img src="../assets/icon.png" class="side" id="bottom" />
@@ -11,8 +12,10 @@
 </template>
 
 <script>
+import NavBar from '@/components/NavBar.vue';
 export default {
-  name: "NotFound",
+    name: "NotFound",
+    components: { NavBar }
 };
 </script>
 

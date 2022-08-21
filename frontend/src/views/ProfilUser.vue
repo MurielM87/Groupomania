@@ -1,4 +1,5 @@
 <template>
+<NavBar />
   <form id="profil_form" >
     <h2>Profil de {{ user.pseudo }}</h2>
 
@@ -43,82 +44,88 @@
 
 <script>
 import { ref } from "vue";
+import NavBar from "@/components/NavBar.vue";
 
 export default {
-  name: "ProfilUser",
-  data() {
-    return {
-      token: localStorage.getItem("token"),
-      userId: localStorage.getItem("userId"),
-      user: ref({
-        //pseudo: "",
-        //firstname: "",
-        //lastname: "",
-        //email: "",
-        //imageUrl: "",
-      }),
-      posts: ref([]),
-    };
-  },
-    
-  async created() {
-    const response = await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-      methods: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${this.token}`,
-      },
-    }); 
-    console.log(response)
-    //  .then((res) => res.json())
-    //  .then((data) => {
-    //    console.log("profil||data", data);
-    //    this.user = data;
-    //  })
-    //  .catch((err) => console.log(err));
-  },
-
-  methods: {
-    //get all the informations about the user
-    async getUserProfil(userId) {
-      console.log("getUserProfil||this.userId", this.userId);
-      console.log("getUserProfil||userId", userId);
-      //const userId = localStorage.getItem("userId", userId);
-      await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.token}`,
-        },
-      })
-        .then((data) => {
-          this.user = data;
-          console.log("user||data", data)
-        })
-        .catch((err) => {
-          console.log(err)
-        });
+    name: "ProfilUser",
+    data() {
+        return {
+            token: localStorage.getItem("token"),
+            userId: localStorage.getItem("userId"),
+            user: ref({
+              pseudo: "",
+              firstname: "",
+              lastname: "",
+              email: "",
+              imageUrl: "",
+            }),
+            posts: ref([]),
+        };
     },
-
-    //get all posts from a user
-    getAllPosts() {
-      fetch(`http://localhost:3000/api/posts/${this.userId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.token}`,
-        },
-      })
-        .then((data) => {
-          this.posts = data;
-          console.log("posts||data", data)
-        })
-        .catch((err) => {
-          console.log("err", err)
-        });
+    beforeCreate() {
+        const token = localStorage.getItem("token");
+        const userId = localStorage.getItem("userId");
+        console.log("profil||beforeCreate||userId", userId);
+        if (token == null && userId == null) {
+            this.$router.push({ name: "LogIn" });
+        }
     },
-  },
+    async created() {
+        const response = await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+            methods: "GET",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${this.token}`,
+            },
+        });
+        console.log(response);
+       
+        //  .then((res) => res.json())
+        //  .then((data) => {
+        //    console.log("profil||data", data);
+        //    this.user = data;
+        //  })
+        //  .catch((err) => console.log(err));
+    },
+    methods: {
+        //get all the informations about the user
+        async getUserProfil() {
+            console.log("getUserProfil||this.userId", this.userId);
+            await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${this.token}`,
+                },
+            })
+                .then((data) => {
+                this.user = data.data;
+                console.log("user||data", data);
+            })
+                .catch((err) => {
+                console.log(err);
+            });
+        },
+        //get all posts from a user
+        getAllPosts() {
+            fetch(`http://localhost:3000/api/posts/${this.userId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${this.token}`,
+                },
+            })
+                .then((data) => {
+                this.posts = data;
+                console.log("posts||data", data);
+            })
+                .catch((err) => {
+                console.log("err", err);
+            });
+        },
+    },
+    components: { NavBar }
 };
 </script>
 

@@ -1,4 +1,5 @@
 <template>
+<NavBar />
   <form id="login" class="card">
     <div class="title_card">
       <h2 class="card_title">Connexion</h2>
@@ -44,50 +45,51 @@
 </template>
 
 <script>
+import NavBar from '@/components/NavBar.vue';
 export default {
-  name: "LogIn",
-  data() {
-    return {
-      email: "",
-      password: "",
-      emailErrorMessage: "",
-      passwordErrorMessage: "",
-    };
-  },
-
-  methods: {
-    logIn: function () {
-      if (this.email === "" || this.password === "") {
-        this.emailErrorMessage = "Adresse email invalide";
-        this.passwordErrorMessage = "Mot de passe invalide";
-      } else {
-        fetch(`http://localhost:3000/api/users/login`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: this.email,
-            password: this.password,
-          }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data);
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("userId", data.userId);
-            console.log("token", data.token);
-            console.log("userId", data.userId);
-
-            this.$router.push("/");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
+    name: "LogIn",
+    components: { NavBar },
+    data() {
+        return {
+            email: "",
+            password: "",
+            emailErrorMessage: "",
+            passwordErrorMessage: "",
+        };
     },
-  },
+    methods: {
+        logIn: function () {
+            if (this.email === "" || this.password === "") {
+                this.emailErrorMessage = "Adresse email invalide";
+                this.passwordErrorMessage = "Mot de passe invalide";
+            }
+            else {
+                fetch(`http://localhost:3000/api/users/login`, {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email: this.email,
+                        password: this.password,
+                    }),
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                    console.log(data);
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("userId", data.userId);
+                    console.log("token", data.token);
+                    console.log("userId", data.userId);
+                    this.$router.push("/");
+                })
+                    .catch((error) => {
+                    console.log(error);
+                });
+            }
+        },
+    },
 };
 </script>
 
