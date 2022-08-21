@@ -57,22 +57,21 @@ export default {
   },
   
   async created() {
-    const response = await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+    await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
       methods: "GET",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${this.token}`,
       },
-    }); 
-    console.log(response)
-    //  .then((res) => res.json())
-    //  .then((data) => {
-    //    console.log("profil||data", data);
-    //    this.user = data;
-    //  })
-    //  .catch((err) => console.log(err));
-  },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("MainPage||profil||data", data);
+        this.user = data;
+      })
+      .catch((err) => console.log(err));
+    },
  
   
   methods: {

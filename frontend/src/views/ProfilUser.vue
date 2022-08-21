@@ -70,6 +70,8 @@ export default {
             this.$router.push({ name: "LogIn" });
         }
     },
+    
+    //get all the informations about the user
     async created() {
         await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
             methods: "GET",
@@ -86,25 +88,10 @@ export default {
           })
           .catch((err) => console.log(err));
     },
+
+    
     methods: {
-        //get all the informations about the user
-        async getUserProfil() {
-            console.log("getUserProfil||this.userId", this.userId);
-            await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${this.token}`,
-                },
-            })
-                .then((data) => {
-                this.user = data.data;
-                console.log("user||data", data);
-            })
-                .catch((err) => {
-                console.log(err);
-            });
-        },
+        
         //get all posts from a user
         getAllPosts() {
             fetch(`http://localhost:3000/api/posts/${this.userId}`, {
