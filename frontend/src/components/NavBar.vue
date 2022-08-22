@@ -18,7 +18,7 @@
       <li v-if="this.isLoggedIn" class="menu">
         <ul>
           <router-link :to="{name: 'ProfilUser', params: {id: this.userId}}" 
-            ><i class="fas fa-portrait"><span class="text_desktop"> Mon profil</span></i></router-link
+            ><i class="fas fa-user-circle"><span class="text_desktop"> Mon profil</span></i></router-link
           >
         </ul>
         <ul>
@@ -144,13 +144,13 @@ ul {
 .fa-sign-in-alt,
 .fa-user-plus,
 .fa-sign-out-alt,
-.fa-portrait {
+.fa-user-circle {
   color: black;
   font-size: 20px;
   &:hover {
      background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
-              linear-gradient(127deg, rgba(240, 231, 54, 0.8), rgba(0,255,0,0) 70.71%),
-              linear-gradient(336deg, rgba(236, 151, 14, 0.8), rgba(0,0,255,0) 70.71%);
+              linear-gradient(127deg, rgba(209, 166, 14, 0.8), rgba(0,255,0,0) 70.71%),
+              linear-gradient(336deg, rgba(233, 193, 134, 0.8), rgba(0,0,255,0) 70.71%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }

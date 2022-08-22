@@ -71,6 +71,7 @@ export default {
         this.$router.push({ name: "LogIn" });
       }
     },
+    //
     
     //get all the informations about the user
     async created() {
@@ -91,25 +92,24 @@ export default {
     },
 
 
-    methods: {
-        
-        //get all posts from a user
-        getAllPosts() {
-            fetch(`http://localhost:3000/api/posts/${this.userId}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${this.token}`,
-                },
-            })
-                .then((data) => {
-                this.posts = data;
-                console.log("posts||data", data);
-            })
-                .catch((err) => {
-                console.log("err", err);
-            });
-        },
+    methods: {        
+      //get all posts from a user
+      getAllPosts() {
+        fetch(`http://localhost:3000/api/posts/${this.userId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${this.token}`,
+          },
+        })
+        .then((data) => {
+          this.posts = data;
+          console.log("posts||data", data);
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
+      },
     },
 };
 </script>

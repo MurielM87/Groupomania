@@ -95,7 +95,7 @@
           <div class="comment_author">
             <img
               v-if="user.imageUrl"
-              :src="`http://localhost:3000/api/users/${userId.imageUrl}`"
+              :src="`http://localhost:3000/api/users/${this.imageUrl}`"
             />
             <img v-else src="../assets/avatar.png" alt="avatar de l'auteur" />
             <span class="comment_author_pseudo">
@@ -143,30 +143,29 @@ export default {
   props: ["token", "userId"],
   data() {
     return {
-      post: ref([]),
-      comment: ref([]),
+      post: ref({}),
+      comment: ref({}),
     };
   },
   
 
   //get all the posts
-    //get all the informations about the user
-    async created() {
-      await fetch(`http://localhost:3000/api/posts`, {
-        methods: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.token}`,
-        },
+  async created() {
+    await fetch(`http://localhost:3000/api/posts`, {
+      methods: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${this.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("PostCard||data", data);
+        this.user = data;
       })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("PostCard||data", data);
-          this.user = data;
-        })
-        .catch((err) => console.log(err));
-    },
+      .catch((err) => console.log(err));
+  },
 
   methods: {
     //date of the post
