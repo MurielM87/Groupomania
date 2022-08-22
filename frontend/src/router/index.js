@@ -21,19 +21,16 @@ const routes = [
         name: 'MainPage',
         path: '/',
         component: MainPage,
-        meta: { requiresAuth: true },
     },
     {
         name: 'ProfilUser',
         path: '/profil/:id',
         component: ProfilUser,
-        meta: { requiresAuth: true },
     },
     {
         name: 'EditProfil',
         path: '/profil/:id/edit',
         component: EditProfil,
-        meta: { requiresAuth: true },
     },
     {
         name: 'NotFound',

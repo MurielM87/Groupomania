@@ -48,48 +48,49 @@ import NavBar from "@/components/NavBar.vue";
 
 export default {
     name: "ProfilUser",
+    components: { NavBar },
     data() {
-        return {
-            token: localStorage.getItem("token"),
-            userId: localStorage.getItem("userId"),
-            user: ref({
-              pseudo: "",
-              firstname: "",
-              lastname: "",
-              email: "",
-              imageUrl: "",
-            }),
-            posts: ref([]),
-        };
+      return {
+        token: localStorage.getItem("token"),
+        userId: localStorage.getItem("userId"),
+        user: ref({
+          pseudo: "",
+          firstname: "",
+          lastname: "",
+          email: "",
+          imageUrl: "",
+        }),
+        posts: ref([]),
+      };
     },
     beforeCreate() {
-        const token = localStorage.getItem("token");
-        const userId = localStorage.getItem("userId");
-        console.log("profil||beforeCreate||userId", userId);
-        if (token == null && userId == null) {
-            this.$router.push({ name: "LogIn" });
-        }
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+      console.log("profil||beforeCreate||userId", userId);
+      if (token == null && userId == null) {
+        this.$router.push({ name: "LogIn" });
+      }
     },
     
     //get all the informations about the user
     async created() {
-        await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-            methods: "GET",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${this.token}`,
-            },
+      await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+        methods: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("profil||data", data);
+          this.user = data;
         })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log("profil||data", data);
-            this.user = data;
-          })
-          .catch((err) => console.log(err));
+        .catch((err) => console.log(err));
     },
 
-    
+
     methods: {
         
         //get all posts from a user
@@ -110,7 +111,6 @@ export default {
             });
         },
     },
-    components: { NavBar }
 };
 </script>
 

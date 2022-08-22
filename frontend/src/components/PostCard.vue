@@ -150,23 +150,22 @@ export default {
   
 
   //get all the posts
-    async created(){
-      await fetch(`http://localhost:3000/api/posts/`, {
+    //get all the informations about the user
+    async created() {
+      await fetch(`http://localhost:3000/api/posts`, {
         methods: "GET",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${this.token}`,
-        }
+        },
       })
-      .then((res) => {
-        console.log(res)
-        this.posts = res.data
-        this.comments = res.data
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("PostCard||data", data);
+          this.user = data;
         })
-      .catch((err) => {
-        console.log(err)
-      })
+        .catch((err) => console.log(err));
     },
 
   methods: {

@@ -25,7 +25,7 @@
           <label for="pseudo">Pseudo : </label>
           <input
             type="text"
-            v-model.lazy="user.pseudo"
+            v-model="pseudo"
             placeholder="{{user.pseudo}}"
             name="pseudo"
             id="pseudo"
@@ -37,7 +37,7 @@
           <label for="firstname">Prénom : </label>
           <input
             type="text"
-            v-model.lazy="user.firstname"
+            v-model="firstname"
             placeholder="{{user.firstname}}"
             name="firstname"
             id="firstname"
@@ -49,7 +49,7 @@
           <label for="lastname">Nom : </label>
           <input
             type="text"
-            v-model.lazy="user.lastname"
+            v-model="lastname"
             placeholder="{{user.lastname}}"
             name="lastname"
             id="lastname"
@@ -85,22 +85,39 @@ import NavBar from "./NavBar.vue";
 
 export default {
     name: "ProfilUser",
-    props: ["userId", "token"],
+  //  props: ["userId", "token"],
     data() {
-        return {
-            user: ref({
-                pseudo: "",
-                firstname: "",
-                lastname: "",
-                imageUrl: "",
-            }),
-            image: this.imageUrl,
-        };
+      return {
+        userId: localStorage.getItem("userId"),
+        token: localStorage.getItem("token"),
+        user: ref({
+          pseudo: "",
+          firstname: "",
+          lastname: "",
+          imageUrl: "",
+        }),
+        image: this.imageUrl,
+      };
     },
-    created() {
-        //  this.token = localStorage.getItem("token");
-        this.getUserProfil;
+    //get all the informations about the user
+    async created() {
+      await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+        methods: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("EditProfil||data", data);
+          this.user = data;
+        })
+        .catch((err) => console.log(err));
     },
+
+
     methods: {
         //get all the informations about the user
         getUserProfil() {
