@@ -8,12 +8,12 @@
       <div class="photo_icone">
         <img :src="image" class="profil_image" />
         <input
-          @change="onFileSelected"
+          @change="uploadFile"
           type="file"
           name="avatar de {{user.pseudo}}"
           id="profil_image"
           accept=".jpeg, .jpg, .png, .webp, .gif"
-          ref="fileInput"
+          ref="file"
         />
       </div>
     </div>
@@ -121,7 +121,7 @@ export default {
 
   methods: {
     //upload profil image
-    onFileSelected(e) {
+    uploadFile(e) {
       const imageUrl = e.target.files[0];
       //preview image
       this.image = URL.createObjectURL(imageUrl);
@@ -129,24 +129,27 @@ export default {
       console.log("ProfilEdit||file", imageUrl);
     },
       
-    async updateProfil() {
+    updateProfil() {
       const user = {
-        pseudo: this.pseudo,
-        firstname: this.firstname,
-        lastname: this.lastname,
+        pseudo: this.user.pseudo,
+        firstname: this.user.firstname,
+        lastname: this.user.lastname,
         imageUrl: this.image,
       };
+      console.log(this.imageUrl);
       console.log("ProfilEdit||userProfil", user);
       console.log("ProfilEdit||pseudo", user.pseudo);
-      console.log("ProfilEdit||firstname", this.firstname);
-      console.log("ProfilEdit||lastname", this.lastname);
+      console.log("ProfilEdit||firstname", user.firstname);
+      console.log("ProfilEdit||lastname", user.lastname);
       console.log("ProfilEdit||image", this.image);
+      console.log("ProfilEdit||imageUrl", user.imageUrl)
       
-      const fd = new FormData();
-      console.log("ProfilEdit||FormData", fd);
-      fd.append("image", this.image);
+      const FormData = new FormData(user);
+      console.log("ProfilEdit||FormData", FormData);
+    //  FormData.append("image", this.image);
+    //  FormData.append("user", this.user);
       
-      await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
           method: "PUT",
           credentials: "include",
           headers: {
@@ -155,8 +158,7 @@ export default {
             "Authorization": `Bearer ${this.token}`,
           },
           body: JSON.stringify({
-            user: this.user,
-            selectedFile: this.selectedFile,
+            FormData
           }),
         })
         .then(() => {
