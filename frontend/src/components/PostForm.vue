@@ -53,9 +53,9 @@ export default {
   data() {
     return {
       postForm: ref({
-        title: this.title,
-        content: this.content,
-        imageUrl: this.imageUrl,
+        title: "",
+        content: "",
+        imageUrl: "",
       }),
     };
   },

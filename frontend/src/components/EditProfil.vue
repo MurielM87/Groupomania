@@ -145,12 +145,12 @@ export default {
       console.log("ProfilEdit||image", this.image);
       console.log("ProfilEdit||imageUrl", user.imageUrl)
       
-      const FormData = new FormData(user);
-      console.log("ProfilEdit||FormData", FormData);
-    //  FormData.append("image", this.image);
-    //  FormData.append("user", this.user);
+      const fd = new FormData();
+      console.log("ProfilEdit||FormData", fd);
+      fd.append("image", this.image);
+      fd.append("user", user);
       
-      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, fd, {
           method: "PUT",
           credentials: "include",
           headers: {
@@ -159,7 +159,10 @@ export default {
             "Authorization": `Bearer ${this.token}`,
           },
           body: JSON.stringify({
-            FormData
+            pseudo: this.pseudo,
+            firstname: this.firstname,
+            lastname: this.lastname,
+            imageUrl: this.imageUrl,
           }),
         })
         .then(() => {
