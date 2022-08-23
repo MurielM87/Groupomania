@@ -71,7 +71,6 @@ export default {
         this.$router.push({ name: "LogIn" });
       }
     },
-    //
     
     //get all the informations about the user
     async created() {
