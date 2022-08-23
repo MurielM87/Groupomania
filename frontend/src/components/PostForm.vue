@@ -52,10 +52,14 @@ export default {
   emits:["createPost"],
   data() {
     return {
-      postForm: ref([]),
+      postForm: ref({
+        title: this.title,
+        content: this.content,
+        imageUrl: this.imageUrl,
+      }),
     };
   },
-  props: ["token", "userId", "this.title", "this.content", "this.imageUrl"],
+  props: ["token", "userId"],
   methods: {
     selectImage() {
       this.$ref.fileInput.click()
@@ -66,63 +70,37 @@ export default {
       console.log("image-target", this.imageUrl);
     },
 
-    createPost() {
-       const postForm = {
-        title: this.title,
-        content: this.content,
-        image: this.imageUrl,
-        };        
+    async createPost() {  
+      if(!this.title) {
+        return
+      } if(!this.content){
+        return
+      }
+
+      const postForm = new FormData()
+      postForm.append("title", this.title)
+      postForm.append("content", this.content)
+      postForm.append("imageUrl", this.imageUrl)
       console.log("PostForm||postForm", postForm)
-        
-      /*if (this.imageUrl === ''){
-        fetch(`http://localhost:3000/api/posts/add`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Accept: "application/json",
-          "Authorization": `Bearer ${this.token}`,
-        },body: postForm,
-      })
-      .then((res) => {
-        this.title = '';
-        this.content = '';
-        this.$emit("createPost", postForm);
-        this.post.push(this.postForm);
-        console.log("res", res)
-      })
-      .catch((err) => console.log("err", err))
-      }else*/{
-        let postForm = new FormData();
-        const post = JSON.stringify({title: this.title, content: this.content})
-        const image = this.file
-        postForm.append('post', post)
-        postForm.append('image', image)
-         if(this.file === 'jpeg' || this.file === 'jpg' || this.file === 'png'){
-          fetch(`http://localhost:3000/api/posts/add`, postForm, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "multipart/form-data",
-                Accept: "application/json",
-                "Authorization": `Bearer ${this.token}`,
-        },body: FormData,
+
+      await fetch(`http://localhost:3000/api/posts/add`, postForm, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+            "Authorization": `Bearer ${this.token}`,
+          },
+          body: 
+            this.postForm 
         })
         .then((data) => {
-          console.log("data", data);
-          this.postForm = data;
-          this.title = '';
-          this.content = '';
-          this.file = '';
-          this.$emit("createPost", postForm)
+        console.log("PostForm||data", data);
+        this.postForm = data;
         })
-        .catch((err) => console.log("err", err))
-         }
-      }
-       
-      this.postForm = "";
-    },
-   
+        .catch((err) => console.log(err));
+      this.postForm = ""  
+    },  
   },
 }
 </script>

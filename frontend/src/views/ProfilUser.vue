@@ -88,10 +88,9 @@ export default {
           this.user = data;
         })
         .catch((err) => console.log(err));
-    },
+    },    
 
-
-    methods: {        
+    methods: {
       //get all posts from a user
       getAllPosts() {
         fetch(`http://localhost:3000/api/posts/${this.userId}`, {

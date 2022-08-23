@@ -159,10 +159,9 @@ export default {
         "Authorization": `Bearer ${this.token}`,
       },
     })
-      .then((res) => res.json())
       .then((data) => {
         console.log("PostCard||data", data);
-        this.user = data;
+        this.post = data;
       })
       .catch((err) => console.log(err));
   },

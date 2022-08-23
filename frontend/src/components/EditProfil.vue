@@ -129,6 +129,7 @@ export default {
       console.log("ProfilEdit||file", imageUrl);
     },
       
+    //modify profil
     updateProfil() {
       const user = {
         pseudo: this.user.pseudo,
@@ -170,13 +171,8 @@ export default {
           console.log("err", err);
         });
 
-    //  
     },
        
-           //modify userProfil
-          //  updateProfil(userId) {
-          //      
-          //  },
 
     //delete user
     deleteUser() {
@@ -189,15 +185,15 @@ export default {
             "Authorization": `Bearer ${this.token}`,
           },
           body: JSON.stringify({
-            user: this.$user,
+            user: this.user,
           }),
         })
         .then((res) => {
           console.log("res", res);
           this.$emit("deleteUser");
-          //localStorage.removeItem("token");
-          //localStorage.removeItem("userId");
-          //this.$router.push({ name: "SignUp" });
+          localStorage.removeItem("token");
+          localStorage.removeItem("userId");
+          this.$router.push({ name: "SignUp" });
         })
         .catch((err) => {
           console.log(err);
