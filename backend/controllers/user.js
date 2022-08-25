@@ -103,11 +103,13 @@ exports.updateUser = async (req, res) => {
   console.log(req.body.image)
   console.log(req.file)
   console.log(req.params)
-  try {
+  
     let newImage
-    let user = await database.User.findByPk({ where: { id: id } })
+    let user = await database.User.findOne({ where: { id: id } })
     if (user) {
       if (req.file && user.imageUrl) {
+        console.log(req.file)
+        console.log(user.imageUrl)
         newImage = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
         const filename = user.imageUrl.split("/images")[1]
         fs.unlink(`images/${filename}`, (err) => {
@@ -141,9 +143,6 @@ exports.updateUser = async (req, res) => {
         .status(401)
         .json({ message: "Vous n'êtes pas autorisé" })
     }
-  } catch (error) {
-    return res.status(500).send({ error: "Erreur serveur" })
-  }
 }
 
 //delete User

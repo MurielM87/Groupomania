@@ -138,7 +138,6 @@ export default {
         lastname: this.user.lastname,
         imageUrl: this.image,
       };
-      console.log(this.imageUrl);
       console.log("ProfilEdit||userProfil", user);
       console.log("ProfilEdit||pseudo", user.pseudo);
       console.log("ProfilEdit||firstname", user.firstname);
@@ -151,16 +150,11 @@ export default {
       fd.append("pseudo", user.pseudo);
       fd.append("firstname", user.firstname);
       fd.append("lastname", user.lastname);
-    //  fd.append("user", user);
-  //  for(const pseudo in data) {
-  //  fd.append(pseudo, data[pseudo]);
-  //}
       
       fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
         method: "PUT",
           credentials: "include",
           headers: {
-            //"Content-Type": "multipart/form-data",
             Accept: "application/json",
             "Authorization": `Bearer ${this.token}`,
           },
@@ -169,11 +163,10 @@ export default {
         .then(() => {
           alert("profil modifié");
           console.log("edit-profil||user", this.user);
-          //this.$router.push("/profil/${this.userId}")
+          this.$router.push("/profil/${this.userId}")
         })
         .catch((error) => {
           console.error(error)
-        //  console.log("err", err);
           console.warn("ProfilEdit||FormData", fd);
         });
 
