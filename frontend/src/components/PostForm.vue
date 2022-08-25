@@ -83,7 +83,7 @@ export default {
       postForm.append("imageUrl", this.imageUrl)
       console.log("PostForm||postForm", postForm)
 
-      await fetch(`http://localhost:3000/api/posts/add`, postForm, {
+      await fetch(`http://localhost:3000/api/posts/add`, {
           method: "POST",
           credentials: "include",
           headers: {
@@ -91,8 +91,7 @@ export default {
             Accept: "application/json",
             "Authorization": `Bearer ${this.token}`,
           },
-          body: 
-            this.postForm 
+          body: postForm 
         })
         .then((data) => {
         console.log("PostForm||data", data);

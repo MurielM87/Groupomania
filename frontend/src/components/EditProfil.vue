@@ -1,9 +1,9 @@
 <template>
 <NavBar/>
-  <form id="profil_form">
+  <form id="profil_form" enctype="multipart/form-data">
     <h2>Modifier votre profil</h2>
     
-    <div class="img" enctype="multipart/form-data">
+    <div class="img">
       <i class="far fa-user-circle"></i>
       <div class="photo_icone">
         <img :src="image" class="profil_image" />
@@ -59,7 +59,7 @@
           />
         </div><br />
         <button
-          @click="updateProfil"
+          @click.prevent="updateProfil"
           class="form_btn"
           title="enregistrer les modifications"
         ><i class="fas fa-save"></i> Enregistrer les modifications </button>
@@ -87,6 +87,7 @@ import NavBar from "./NavBar.vue";
 export default {
   name: "ProfilUser",
   components: { NavBar },
+  emit: ["input"],
   data() {
     return {
       userId: localStorage.getItem("userId"),
@@ -146,32 +147,34 @@ export default {
       console.log("ProfilEdit||imageUrl", user.imageUrl)
       
       const fd = new FormData();
-      console.log("ProfilEdit||FormData", fd);
       fd.append("image", this.image);
-      fd.append("user", user);
+      fd.append("pseudo", user.pseudo);
+      fd.append("firstname", user.firstname);
+      fd.append("lastname", user.lastname);
+    //  fd.append("user", user);
+  //  for(const pseudo in data) {
+  //  fd.append(pseudo, data[pseudo]);
+  //}
       
-      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, fd, {
-          method: "PUT",
+      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+        method: "PUT",
           credentials: "include",
           headers: {
-            "Content-Type": "multipart/form-data",
+            //"Content-Type": "multipart/form-data",
             Accept: "application/json",
             "Authorization": `Bearer ${this.token}`,
           },
-          body: JSON.stringify({
-            pseudo: this.pseudo,
-            firstname: this.firstname,
-            lastname: this.lastname,
-            imageUrl: this.imageUrl,
-          }),
+          body: fd,
         })
         .then(() => {
           alert("profil modifié");
           console.log("edit-profil||user", this.user);
           //this.$router.push("/profil/${this.userId}")
         })
-        .catch((err) => {
-          console.log("err", err);
+        .catch((error) => {
+          console.error(error)
+        //  console.log("err", err);
+          console.warn("ProfilEdit||FormData", fd);
         });
 
     },

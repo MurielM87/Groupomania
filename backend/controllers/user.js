@@ -1,7 +1,6 @@
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const database = require("../models")
-const token = require("../middlewares/auth")
 const fs = require("fs")
 require("dotenv").config()
 
@@ -100,14 +99,16 @@ exports.getAllUsers = async (req, res) => {
 //update User
 exports.updateUser = async (req, res) => {
   const id = req.params.id
+  console.log(req.body)
+  console.log(req.body.image)
+  console.log(req.file)
+  console.log(req.params)
   try {
-    const userId = token.getUserId(req)
     let newImage
     let user = await database.User.findByPk({ where: { id: id } })
-    if (userId === user.id) {
+    if (user) {
       if (req.file && user.imageUrl) {
-        newImage = `${req.protocol}://${req.get("host")}/images/${req.file.filename
-          }`
+        newImage = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
         const filename = user.imageUrl.split("/images")[1]
         fs.unlink(`images/${filename}`, (err) => {
           if (err) console.log(err)
@@ -116,8 +117,7 @@ exports.updateUser = async (req, res) => {
           }
         })
       } else if (req.file) {
-        newImage = `${req.protocol}://${req.get("host")}/images/${req.file.filename
-          }`
+        newImage = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
       }
       if (newImage) {
         user.imageUrl = newImage
@@ -131,7 +131,7 @@ exports.updateUser = async (req, res) => {
       if (req.body.lastname) {
         user.lastname = req.body.lastname
       }
-      const newUser = await user.save({ fields: ["pseudo", "firstname", "lastname", "imageUrl"] }) //
+      const newUser = await user.save({ fields: ["pseudo", "firstname", "lastname", "imageUrl"] }) 
       res.status(200).json({
         user: newUser,
         message: "Votre profil a bien été modifié",
