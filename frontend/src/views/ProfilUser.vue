@@ -78,7 +78,7 @@ export default {
         methods: "GET",
         credentials: "include",
         headers: {
-          "Content-Type": "application/json",
+          Accept: "application/json",    
           "Authorization": `Bearer ${this.token}`,
         },
       })

@@ -4,9 +4,13 @@
     <h2>Modifier votre profil</h2>
     
     <div class="img">
-      <i class="far fa-user-circle"></i>
       <div class="photo_icone">
-        <img :src="image" class="profil_image" />
+        <div v-if="!this.image">
+          <img src="../assets/avatar.png" alt="avatar" class="profil_image">
+        </div>
+        <div v-else>          
+          <img :src="image" class="profil_image" />
+        </div>
         <input
           @change="uploadFile"
           type="file"
