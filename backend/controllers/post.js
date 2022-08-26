@@ -17,7 +17,7 @@ exports.createPost = async (req, res) => {
     
     if (user !== null) {
       if (req.file) {
-        imageUrl = `${req.protocol}://${req.get("host")}/upload/${req.file.filename
+        imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename
           }`
       } else {
         imageUrl = null
@@ -59,16 +59,16 @@ exports.updatePost = async (req, res) => {
     if (userId === post.UserId) {
       // if a file is in the request
       if (req.file) {
-        newImageUrl = `${req.protocol}://${req.get("host")}/upload/${req.file.filename
+        newImageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename
           }`
         // if an image was already in database
         if (post.imageUrl) {
-          const filename = post.imageUrl.split("/upload")[1]
+          const filename = post.imageUrl.split("/images")[1]
           // delete it from the "upload" file
-          fs.unlink(`upload/${filename}`, (err) => {
+          fs.unlink(`images/${filename}`, (err) => {
             if (err) console.log(err)
             else {
-              console.log(`Deleted file: upload/${filename}`)
+              console.log(`Deleted file: images/${filename}`)
             }
           })
         }
@@ -100,8 +100,8 @@ exports.deletePost = async (req, res) => {
     const post = await database.Post.findOne({ where: { id: req.params.id } })
     if (userId === post.userId || checkIfAdmin.isAdmin === true) {
       if (post.imageUrl) {
-        const filename = post.imageUrl.split("/upload")[1]
-        fs.unlink(`upload/${filename}`, () => {
+        const filename = post.imageUrl.split("/images")[1]
+        fs.unlink(`images/${filename}`, () => {
           database.Post.destroy({ where: { id: post.id } })
           res.status(200).json({ message: "Post supprimé" })
         })
