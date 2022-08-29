@@ -16,7 +16,7 @@
           type="file"
           name="avatar de {{user.pseudo}}"
           id="profil_image"
-          accept=".jpeg, .jpg, .png, .webp, .gif"
+          accept=".jpeg, .jpg, .png, .webp"
           ref="file"
         />
       </div>
@@ -130,8 +130,10 @@ export default {
       const imageUrl = e.target.files[0];
       //preview image
       this.image = URL.createObjectURL(imageUrl);
-      this.$emit("input", e.target.files[0]);
-      console.log("ProfilEdit||file", imageUrl);
+      this.$emit("input", e.target.files[0]); //emit("imageUrl", imageUrl)?
+      console.log("ProfilEdit||imageUrl", imageUrl);
+      console.log("ProfilEdit||this.image", this.image)
+      console.log("e.target.files[0]", e.target.files[0])
     },
       
     //modify profil
@@ -140,20 +142,23 @@ export default {
         pseudo: this.user.pseudo,
         firstname: this.user.firstname,
         lastname: this.user.lastname,
-        imageUrl: this.image,
+        imageUrl: this.user.imageUrl,
       };
       console.log("ProfilEdit||userProfil", user);
       console.log("ProfilEdit||pseudo", user.pseudo);
       console.log("ProfilEdit||firstname", user.firstname);
       console.log("ProfilEdit||lastname", user.lastname);
-      console.log("ProfilEdit||image", this.image);
-      console.log("ProfilEdit||imageUrl", user.imageUrl)
+      console.log("ProfilEdit||this.user.imageUrl", this.user.imageUrl);
+      console.log("ProfilEdit||user.imageUrl", user.imageUrl);
+      console.log("ProfilEdit||this.imageUrl", this.imageUrl);
+      console.log("ProfilEdit||this.image", this.image)
       
       const fd = new FormData();
-      fd.append("image", this.image);
+      fd.append("image", user.imageUrl);
       fd.append("pseudo", user.pseudo);
       fd.append("firstname", user.firstname);
       fd.append("lastname", user.lastname);
+      console.log('FormData', fd)
       
       fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
         method: "PUT",
@@ -167,7 +172,7 @@ export default {
         .then(() => {
           alert("profil modifié");
           console.log("edit-profil||user", this.user);
-          this.$router.push("/profil/${this.userId}")
+        //  this.$router.push("/profil/${this.userId}")
         })
         .catch((error) => {
           console.error(error)

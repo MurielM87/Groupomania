@@ -107,6 +107,7 @@ exports.updateUser = async (req, res) => {
     let newImage
     let user = await database.User.findOne({ where: { id: id } })
     if (user) {
+      console.log(user)
       if (req.file && user.imageUrl) {
         console.log(req.file)
         console.log(user.imageUrl)

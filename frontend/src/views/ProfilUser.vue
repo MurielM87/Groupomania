@@ -16,7 +16,7 @@
         class="profil_image"
         alt="avatar"
         title="mon avatar"
-        :src="`http://localhost:3000/users/profil/${this.$user.imageUrl}`"
+        :src="`http://localhost:3000/users/profil/${this.userId.imageUrl}`"
       />
       <router-link :to="`/profil/${this.userId}/edit`"
         ><i class="fas fa-pencil-alt"></i

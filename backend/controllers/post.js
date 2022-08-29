@@ -3,50 +3,47 @@ const database = require("../models")
 const fs = require("fs")
 
 //create a post
-exports.createPost = async (req, res) => {
-  const userId = req.auth.userId  
-  console.log('createPost||req.auth.userId', req.auth.userId)
-  let imageUrl
-  try {
-    //find the user by Id
-    const user = await database.User.findOne({
-      attributes: ["pseudo", "id"],
-      where: { id: userId },
-    })
-    console.log("createPost||user", user)
+exports.createPost = (req, res) => {
+ 
+  let imageUrl  
+  
+  //find the user by Id
+  const userId = database.User.findOne({
+    attributes: ["pseudo", "id"]
+  })
+  console.log("createPost||user", userId)
     
-    if (user !== null) {
-      if (req.file) {
-        imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename
-          }`
-      } else {
-        imageUrl = null
-      }
-      // create a post in database
-      const post = await database.Post.create({
-        include: [
-          {
-            model: database.User,
-            attributes: ["pseudo", "id"],
-          },
-        ],
-        content: req.body.content,
-        imageUrl: req.body.imageUrl,
-        id: userId,
-      })
+  if (userId !== null) {
+    if (req.file) {
+      imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+    } else {
+      imageUrl = null
+    }
+    console.log("createPost||req.file", req.file)
+    
+    // create a post in database
+    const post = database.Post.create({
+      include: [
+        {
+          model: database.User,
+          attributes: ["pseudo", "id"],
+        },
+      ],
+      title: req.body.title,
+      content: req.body.content,
+      imageUrl: req.body.imageUrl,
+      id: userId,
+    })
       console.log("post", post)
+      console.log("req.body", req.body)
 
-      res
-        .status(201)
-        .json({ post: post, message: "Votre message est publié" })
+      res.status(201).json({ post: post, message: "Votre message est publié" })
     } else {
       res.status(400).send({ error: "Erreur, votre message n'a pas pu être publié" })
     }
-  } catch (error) {
-    console.log(error)
-    return res.status(500).send({ error })
-  }
+ 
 }
+
 
 //update a post
 exports.updatePost = async (req, res) => {

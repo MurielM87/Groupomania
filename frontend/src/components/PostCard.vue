@@ -140,7 +140,7 @@ export default {
   component: {
     CommentForm,
   },
-  props: ["token", "userId"],
+  props: ["token", "userId", "title", "content", "imageUrl", "pseudo"],
   data() {
     return {
       post: ref({}),

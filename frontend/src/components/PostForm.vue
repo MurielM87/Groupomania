@@ -19,7 +19,6 @@
       ></textarea>
       <!--add an image -->
       <div class="post_img">
-        <label for="addContent"></label>
         <input
           @input="uploadImg"
           type="file"
@@ -52,14 +51,13 @@ export default {
   emits:["createPost"],
   data() {
     return {
-      postForm: ref({
-        title: "",
-        content: "",
-        imageUrl: "",
-      }),
+      title: ref(""),
+      content: ref(""),
+      imageUrl: ref(""),
     };
   },
   props: ["token", "userId"],
+
   methods: {
     selectImage() {
       this.$ref.fileInput.click()
@@ -71,34 +69,33 @@ export default {
     },
 
     async createPost() {  
-      if(!this.title) {
+      if(this.title === "") {
         return
-      } if(!this.content){
+      } if(this.content === ""){
         return
       }
 
-      const postForm = new FormData()
-      postForm.append("title", this.title)
-      postForm.append("content", this.content)
-      postForm.append("imageUrl", this.imageUrl)
-      console.log("PostForm||postForm", postForm)
+      const fd = new FormData()
+      fd.append("title", this.title)
+      fd.append("content", this.content)
+      fd.append("imageUrl", this.imageUrl)
+      console.log("FormData||fd", fd)
 
       await fetch(`http://localhost:3000/api/posts/add`, {
           method: "POST",
           credentials: "include",
           headers: {
-            "Content-Type": "multipart/form-data",
             Accept: "application/json",
             "Authorization": `Bearer ${this.token}`,
           },
-          body: postForm 
+          body: fd
         })
         .then((data) => {
         console.log("PostForm||data", data);
-        this.postForm = data;
+        this.fd = data;
         })
         .catch((err) => console.log(err));
-      this.postForm = ""  
+      this.fd = ""  
     },  
   },
 }

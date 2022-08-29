@@ -1,4 +1,4 @@
-const multer = require('multer');
+const multer = require("multer");
 
 const MIME_TYPES = {
   'image/jpg': 'jpg',
@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
   },
   //definition of the filename image
   filename: (req, file, callback) => {
-     console.log(file)
+     console.log("multer", file)
       //verify if the extension is allowed in all the authorized extnesions
       if (file.mimetype in MIME_TYPES) {
           const extension = MIME_TYPES[file.mimetype];
@@ -35,4 +35,4 @@ const storage = multer.diskStorage({
   },
 });
 
-module.exports = multer({ storage }).single('image');
+module.exports = multer({ storage }).single('imageUrl')
