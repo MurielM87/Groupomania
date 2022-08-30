@@ -20,7 +20,7 @@
       <!--add an image -->
       <div class="post_img">
         <input
-          @input="uploadImg"
+          @change="uploadImg"
           type="file"
           ref="fileInput"
           id="addContent"
@@ -63,8 +63,8 @@ export default {
       this.$ref.fileInput.click()
     },
     //upload image
-    uploadImg(event) {
-      this.imageUrl = event.target.files[0];
+    uploadImg(e) {
+      this.imageUrl = e.target.files[0];
       console.log("image-target", this.imageUrl);
     },
 

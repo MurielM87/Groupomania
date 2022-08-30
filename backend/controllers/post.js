@@ -1,19 +1,20 @@
 const token = require("../middlewares/auth")
+const jwt = require("jsonwebtoken")
 const database = require("../models")
 const fs = require("fs")
 
 //create a post
-exports.createPost = (req, res) => {
- 
-  let imageUrl  
-  
+exports.createPost = async (req, res) => {   
   //find the user by Id
-  const userId = database.User.findOne({
-    attributes: ["pseudo", "id"]
+  const user = await database.User.findOne({
+    where : {id : req.user.userId}
   })
-  console.log("createPost||user", userId)
-    
-  if (userId !== null) {
+  console.log("createPost||user", user)
+  console.log("createPost||user.id", user.id)
+  console.log("createPost||user.pseudo", user.pseudo)
+  let imageUrl    
+
+  if (user !== null) {
     if (req.file) {
       imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
     } else {
@@ -22,17 +23,17 @@ exports.createPost = (req, res) => {
     console.log("createPost||req.file", req.file)
     
     // create a post in database
-    const post = database.Post.create({
-      include: [
-        {
-          model: database.User,
-          attributes: ["pseudo", "id"],
-        },
-      ],
+    const post = await database.Post.create({
+    //  include: [
+    //    {
+    //      model: database.User,
+    //      attributes: ["pseudo", "id"],
+    //    },
+    //  ],
       title: req.body.title,
       content: req.body.content,
-      imageUrl: req.body.imageUrl,
-      id: userId,
+      imageUrl: req.file.filename,
+      UserId: req.user.userId,
     })
       console.log("post", post)
       console.log("req.body", req.body)

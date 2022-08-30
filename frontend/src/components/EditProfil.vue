@@ -12,12 +12,12 @@
           <img :src="image" class="profil_image" />
         </div>
         <input
-          @change="uploadFile"
+          @change="uploadImg"
           type="file"
           name="avatar de {{user.pseudo}}"
           id="profil_image"
           accept=".jpeg, .jpg, .png, .webp"
-          ref="file"
+          ref="fileInput"
         />
       </div>
     </div>
@@ -102,7 +102,7 @@ export default {
         lastname: "",
         imageUrl: "",
       }),
-      image: this.imageUrl,
+      image: null,
     };
   },
   
@@ -126,14 +126,15 @@ export default {
 
   methods: {
     //upload profil image
-    uploadFile(e) {
+    uploadImg(e) {
       const imageUrl = e.target.files[0];
       //preview image
       this.image = URL.createObjectURL(imageUrl);
-      this.$emit("input", e.target.files[0]); //emit("imageUrl", imageUrl)?
+      this.$emit("input", imageUrl); 
       console.log("ProfilEdit||imageUrl", imageUrl);
       console.log("ProfilEdit||this.image", this.image)
       console.log("e.target.files[0]", e.target.files[0])
+      console.log(imageUrl.name)
     },
       
     //modify profil
