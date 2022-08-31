@@ -8,13 +8,13 @@
           <img
             v-if="post.image"
             :src="`http://localhost:3000/api/users/${this.imageUrl}`"
-            title="Avatar de l'auteur"
+            title="Avatar"
             class="author_avatar"
           />
           <img
             v-else
             src="../assets/avatar.png"
-            title="Avatar de l'auteur"
+            title="Avatar"
             class="author_avatar"
           />
         </div>
@@ -27,13 +27,13 @@
     <div
       class="post_content"
       v-for="post in posts"
-      :key="post.postId"
+      :key="post.id"
       :post="post"
     >
       <div class="post_description">
         <h3>titre : {{ post.title }}</h3>
         <p>contenu : {{ post.content }}</p>
-        <p v-if="post.imageUrl">image : {{ post.imageUrl }}</p>
+        <img v-if="post.imageUrl" :src="`http://localhost:3000/api/posts/${post.imageUrl}`" />
       </div>
       <!--add the datetime -->
       <div class="post_date">
@@ -81,7 +81,6 @@
         :id="commentId" 
         :postId="post.postId"         
         :userId="userId"
-        :post="post"
         @createComment="createComment" 
       />
 

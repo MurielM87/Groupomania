@@ -1,5 +1,4 @@
 <template>
-<NavBar />
   <form id="login" class="card">
     <div class="title_card">
       <h2 class="card_title">Connexion</h2>
@@ -45,10 +44,8 @@
 </template>
 
 <script>
-import NavBar from '@/components/NavBar.vue';
 export default {
     name: "LogIn",
-    components: { NavBar },
     data() {
         return {
             email: "",

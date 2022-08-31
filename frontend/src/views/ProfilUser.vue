@@ -1,5 +1,4 @@
 <template>
-<NavBar />
   <form id="profil_form" >
     <h2>Profil de {{ user.pseudo }}</h2>
 
@@ -16,7 +15,7 @@
         class="profil_image"
         alt="avatar"
         title="mon avatar"
-        :src="`http://localhost:3000/users/profil/${this.userId.imageUrl}`"
+        :src="`http://localhost:3000/api/users/${user.imageUrl}`"
       />
       <router-link :to="`/profil/${this.userId}/edit`"
         ><i class="fas fa-pencil-alt"></i
@@ -44,11 +43,9 @@
 
 <script>
 import { ref } from "vue";
-import NavBar from "@/components/NavBar.vue";
 
 export default {
     name: "ProfilUser",
-    components: { NavBar },
     data() {
       return {
         token: localStorage.getItem("token"),
@@ -78,6 +75,7 @@ export default {
         methods: "GET",
         credentials: "include",
         headers: {
+          "Content-Type": "application/json",
           Accept: "application/json",    
           "Authorization": `Bearer ${this.token}`,
         },

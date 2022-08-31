@@ -1,5 +1,4 @@
 <template>
-<NavBar/>
   <form id="profil_form" enctype="multipart/form-data">
     <h2>Modifier votre profil</h2>
     
@@ -14,10 +13,10 @@
         <input
           @change="uploadImg"
           type="file"
-          name="avatar de {{user.pseudo}}"
+          name="imageUrl"
           id="profil_image"
           accept=".jpeg, .jpg, .png, .webp"
-          ref="fileInput"
+          
         />
       </div>
     </div>
@@ -86,11 +85,9 @@
 
 <script>
 import { ref } from "vue";
-import NavBar from "./NavBar.vue";
 
 export default {
   name: "ProfilUser",
-  components: { NavBar },
   emit: ["input"],
   data() {
     return {
@@ -102,6 +99,7 @@ export default {
         lastname: "",
         imageUrl: "",
       }),
+      //si user n'a pas de photo de profil, mettre avatar sinon mettre photo de database
       image: null,
     };
   },
@@ -127,14 +125,10 @@ export default {
   methods: {
     //upload profil image
     uploadImg(e) {
-      const imageUrl = e.target.files[0];
+      this.user.imageUrl = e.target.files[0];
       //preview image
-      this.image = URL.createObjectURL(imageUrl);
-      this.$emit("input", imageUrl); 
-      console.log("ProfilEdit||imageUrl", imageUrl);
-      console.log("ProfilEdit||this.image", this.image)
-      console.log("e.target.files[0]", e.target.files[0])
-      console.log(imageUrl.name)
+      this.image = URL.createObjectURL(this.user.imageUrl);
+      this.$emit("input", this.user.imageUrl); 
     },
       
     //modify profil
@@ -146,20 +140,12 @@ export default {
         imageUrl: this.user.imageUrl,
       };
       console.log("ProfilEdit||userProfil", user);
-      console.log("ProfilEdit||pseudo", user.pseudo);
-      console.log("ProfilEdit||firstname", user.firstname);
-      console.log("ProfilEdit||lastname", user.lastname);
-      console.log("ProfilEdit||this.user.imageUrl", this.user.imageUrl);
-      console.log("ProfilEdit||user.imageUrl", user.imageUrl);
-      console.log("ProfilEdit||this.imageUrl", this.imageUrl);
-      console.log("ProfilEdit||this.image", this.image)
-      
+            
       const fd = new FormData();
-      fd.append("image", user.imageUrl);
+      fd.append("imageUrl", user.imageUrl);
       fd.append("pseudo", user.pseudo);
       fd.append("firstname", user.firstname);
       fd.append("lastname", user.lastname);
-      console.log('FormData', fd)
       
       fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
         method: "PUT",
@@ -173,7 +159,7 @@ export default {
         .then(() => {
           alert("profil modifié");
           console.log("edit-profil||user", this.user);
-        //  this.$router.push("/profil/${this.userId}")
+          this.$router.push(`/profil/${this.userId}`);
         })
         .catch((error) => {
           console.error(error)

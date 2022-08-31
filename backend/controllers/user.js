@@ -100,18 +100,18 @@ exports.getAllUsers = async (req, res) => {
 exports.updateUser = async (req, res) => {
   const id = req.params.id
   console.log("updateUser||req.body", req.body)
-  console.log("updateUser||req.body.image", req.body.image)
   console.log("updateUser||req.file", req.file)
   console.log("updateUser||req.params", req.params)
   
-    let newImage
+    let imageUrl
     let user = await database.User.findOne({ where: { id: id } })
     if (user) {
       console.log(user)
       if (req.file && user.imageUrl) {
-      console.log(req.file)
-      console.log(user.imageUrl)
-        newImage = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+      console.log("updateUser||req.file",req.file)
+      console.log("updateUser||user.imageUrl", user.imageUrl)
+        imageUrl = req.file.filename
+        console.log("updateUser||req.file.filename", req.file.filename)
         const filename = user.imageUrl.split("/images")[1]
         fs.unlink(`images/${filename}`, (err) => {
           if (err) console.log(err)
@@ -120,10 +120,10 @@ exports.updateUser = async (req, res) => {
           }
         })
       } else if (req.file) {
-        newImage = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+        imageUrl = req.file.filename
       }
-      if (newImage) {
-        user.imageUrl = newImage
+      if (imageUrl) {
+        user.imageUrl = imageUrl
       }
       if (req.body.pseudo) {
         user.pseudo = req.body.pseudo

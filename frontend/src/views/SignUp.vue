@@ -1,5 +1,4 @@
 <template>
-<NavBar/>
   <form method="post" id="signup" class="card">
     <div class="title_card">
       <router-link :to="{ name: 'LogIn' }"><h2>Connexion</h2></router-link>
@@ -104,10 +103,8 @@
 </template>
 
 <script>
-import NavBar from '@/components/NavBar.vue';
 export default {
     name: "SignUp",
-    components: { NavBar },
     data() {
         return {
             pseudo: "",

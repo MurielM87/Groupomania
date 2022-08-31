@@ -92,7 +92,7 @@ h1 {
   display: flex;
   align-items: center;
   margin-top: 25px;
-  margin-left: 150px;
+  margin-left: 175px;
   @media screen and (max-width: 992px) {
     margin-left: 0px;
   }

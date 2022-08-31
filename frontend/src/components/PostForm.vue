@@ -51,12 +51,13 @@ export default {
   emits:["createPost"],
   data() {
     return {
+      token: localStorage.getItem('token'),
+      userId: localStorage.getItem('userId'),
       title: ref(""),
       content: ref(""),
       imageUrl: ref(""),
     };
   },
-  props: ["token", "userId"],
 
   methods: {
     selectImage() {

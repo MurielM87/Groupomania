@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    
+    <NavBar />
     <router-view />
 
     <FooterPage />
@@ -8,11 +8,13 @@
 </template>
 
 <script>
+import NavBar from "./components/NavBar.vue"
 import FooterPage from "./components/FooterPage.vue";
 
 export default {
   name: "App",
   components: {
+    NavBar,
     FooterPage,
   }
 };

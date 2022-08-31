@@ -1,5 +1,4 @@
 <template>
-  <NavBar />
   <section class="posts">
     <h2>Bonjour {{ user.pseudo }}</h2>
     <PostForm
@@ -30,14 +29,12 @@
 import { ref } from "vue";
 import PostForm from "@/components/PostForm.vue";
 import PostCard from "@/components/PostCard.vue";
-import NavBar from "@/components/NavBar.vue";
 
 export default {
   name: "MainPage",
   components: {
     PostForm,
     PostCard,
-    NavBar
 },
   data() {
     return {
@@ -74,44 +71,35 @@ export default {
     },
  
   
-  methods: {
-    //button scroll top
-    toTop() {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    },
-
-    addPost(data) {
-      fetch(`http://localhost:3000/api/posts/add`, {
-        methods: "POST",
+  methods: {    
+    addPost() {
+      fetch(`http://localhost:3000/api/posts/`, {
+        methods: "GET",
         withCredentials: true,
         headers: {
-          "Content-Type": "multipart/form-data",
+        //  "Content-Type": "multipart/form-data",
           Accept: "application/json",
           "Authorization": `Bearer ${this.token}`,
         },
-        body: {
-          title: this.$post.title,
-          content: this.$post.content,
-          imageUrl: this.$post.imageUrl,
-          userId: this.$user.userId,
-        },
       })
-        .then(function (res) {
-          return res.json();
-        })
-        .then((res) => {
-          console.log("res", res);
-          return res.status(201).json(("message : post publié"))
-        })
-        .catch((err) => {
-          console.log("err", err);
-          return err.status(404).json(("message: échec de la publication"))
-        });
-      console.log("MainPage||addPost||data", data);
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("MainPage||profil||data", data);
+        this.post = data;
+      })
+      .catch((err) => {
+         console.log(err);
+         console.warn(err);
+      });
     },
+  },
+  
+  //button scroll top
+  toTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   },
 };
 </script>
