@@ -91,7 +91,7 @@ export default {
     methods: {
       //get all posts from a user
       getAllPosts() {
-        fetch(`http://localhost:3000/api/posts/${this.userId}`, {
+        fetch(`http://localhost:3000/api/posts/users/${this.userId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

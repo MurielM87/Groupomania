@@ -1,20 +1,14 @@
 <template>
   <section class="posts">
     <h2>Bonjour {{ user.pseudo }}</h2>
-    <PostForm
-      @createPost="addPost"
-      :token="token"
-      :userId="userId"
-      :post="post"      
-      :user="user"
-    />
+    <PostForm />
 
     <div id="separate_barre"></div>
     <h2>Nouvelles publications</h2>
 
     <PostCard 
       v-for="post in posts" 
-      :key="post.postId"
+      :key="post.id"
       :token="token"
     />
 
@@ -54,7 +48,7 @@ export default {
   },
   
   async created() {
-    await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+    await fetch(`http://localhost:3000/api/posts`, {
       methods: "GET",
       credentials: "include",
       headers: {
@@ -64,15 +58,14 @@ export default {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("MainPage||profil||data", data);
-        this.user = data;
+        console.log("MainPage||posts||data", data);
+        this.posts = data;
       })
       .catch((err) => console.log(err));
     },
  
-  
   methods: {    
-    addPost() {
+  /*  addPost() {
       fetch(`http://localhost:3000/api/posts/`, {
         methods: "GET",
         withCredentials: true,
@@ -84,23 +77,24 @@ export default {
       })
       .then((res) => res.json())
       .then((data) => {
-        console.log("MainPage||profil||data", data);
+        console.log("MainPage||posts||data", data);
         this.post = data;
       })
       .catch((err) => {
          console.log(err);
          console.warn(err);
       });
+    },*/
+    
+    //button scroll top
+    toTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     },
   },
   
-  //button scroll top
-  toTop() {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  },
 };
 </script>
 

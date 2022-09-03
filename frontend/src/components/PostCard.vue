@@ -1,12 +1,12 @@
 <template>
   <article id="card">
-    
+    <h2>Posts publiés</h2>
     <!--informations from the author of the post-->
     <router-link :to="{name: 'ProfilUser', params: {id: this.userId}}">
       <div id="post_author">
         <div id="author_img">
           <img
-            v-if="post.image"
+            v-if="user.image"
             :src="`http://localhost:3000/api/users/${this.imageUrl}`"
             title="Avatar"
             class="author_avatar"
@@ -79,7 +79,7 @@
       <!--write a comment -->
       <CommentForm 
         :id="commentId" 
-        :postId="post.postId"         
+        :postId="post.id"         
         :userId="userId"
         @createComment="createComment" 
       />
@@ -139,7 +139,7 @@ export default {
   component: {
     CommentForm,
   },
-  props: ["token", "userId", "title", "content", "imageUrl", "pseudo"],
+//  props: ["token", "userId", "title", "content", "imageUrl", "pseudo"],
   data() {
     return {
       post: ref({}),
@@ -154,13 +154,14 @@ export default {
       methods: "GET",
       credentials: "include",
       headers: {
-        "Content-Type": "application/json",
+      //  "Content-Type": "application/json",
+        Accept: "application/json",    
         "Authorization": `Bearer ${this.token}`,
       },
     })
       .then((data) => {
-        console.log("PostCard||data", data);
-        this.post = data;
+        console.log("PostCard||posts||data", data);
+        this.posts = data;
       })
       .catch((err) => console.log(err));
   },

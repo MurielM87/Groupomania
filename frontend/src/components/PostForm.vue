@@ -48,7 +48,6 @@ import { ref } from "vue";
 
 export default {
   name: "PostForm",
-  emits:["createPost"],
   data() {
     return {
       token: localStorage.getItem('token'),
