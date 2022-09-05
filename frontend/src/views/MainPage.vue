@@ -9,7 +9,6 @@
     <PostCard 
       v-for="post in posts" 
       :key="post.id"
-      :token="token"
     />
 
     <!-- Bouton Scroll to Top-->
@@ -34,25 +33,45 @@ export default {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
-      user: ref([]),
-      post: ref([]),
-      comment: ref([])
+      user: ref({}),
+      users: ref([]),
+      posts: ref([]),
+      comments: ref([])
     };
   },
-  beforeCreate() {
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-    if (token == null && userId == null) {
-      this.$router.push({ name: "LogIn" });
-    }
-  },
+//  beforeCreate() {
+//    const token = localStorage.getItem("token");
+//    const userId = localStorage.getItem("userId");
+//    if (token == null && userId == null) {
+//      this.$router.push({ name: "LogIn" });
+//    }
+//  },
   
   async created() {
+    await fetch(`http://localhost:3000/api/users`, {
+      methods: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",    
+        "Authorization": `Bearer ${this.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("MainPage||users||data", data);
+        this.users = data;
+      })
+      .catch((err) => console.log(err));
+    },
+
+  async mounted() {
     await fetch(`http://localhost:3000/api/posts`, {
       methods: "GET",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",    
         "Authorization": `Bearer ${this.token}`,
       },
     })
@@ -63,6 +82,24 @@ export default {
       })
       .catch((err) => console.log(err));
     },
+
+/*  async updated() {
+    await fetch(`http://localhost:3000/api/posts/comments`, {
+      methods: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",    
+        "Authorization": `Bearer ${this.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("MainPage||comments||data", data);
+        this.comments = data;
+      })
+      .catch((err) => console.log(err));
+    },*/
  
   methods: {    
   /*  addPost() {
@@ -70,7 +107,7 @@ export default {
         methods: "GET",
         withCredentials: true,
         headers: {
-        //  "Content-Type": "multipart/form-data",
+          "Content-Type": "multipart/form-data",
           Accept: "application/json",
           "Authorization": `Bearer ${this.token}`,
         },

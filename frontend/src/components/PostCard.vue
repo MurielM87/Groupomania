@@ -1,8 +1,7 @@
 <template>
   <article id="card">
-    <h2>Posts publiés</h2>
     <!--informations from the author of the post-->
-    <router-link :to="{name: 'ProfilUser', params: {id: this.userId}}">
+    <router-link :to="{name: 'ProfilUser', params: {id: this.userId} }">
       <div id="post_author">
         <div id="author_img">
           <img
@@ -61,20 +60,22 @@
         <i class="far fa-trash-alt"></i>
         <span>Supprimer</span>
       </button>
+    </div> 
+
+    <!-- add like to the post-->
+    <div @click="addLike" class="post_like" :userId="userId">
+      <div class="like_thumbs">        
+        <i class="far fa-thumbs-up"></i>
+        <i class="far fa-thumbs-down"></i>
+      </div>
+      <p>likes : {{ post.likes }}</p>
     </div>
 
     <div id="separate_barre"></div>
 
-    <!-- add like to the post-->
-    <div @click="addLike" class="post_like" :token="token">
-      <i class="far fa-thumbs-up"></i>
-      <i class="far fa-thumbs-down"></i>
-      <p>post.likes : {{ post.likes }}</p>
-    </div>
-
     <!--add a comment to the post -->
     <div class="post_comments">
-      <h3><i class="far fa-comment-alt"></i> Commentaires</h3>
+      <h3>Commentaires <i class="far fa-comment-alt"></i></h3>
 
       <!--write a comment -->
       <CommentForm 
@@ -82,7 +83,7 @@
         :postId="post.id"         
         :userId="userId"
         @createComment="createComment" 
-      />
+      /> 
 
       <!--get all comments -->
       <div class="comments_card" 
@@ -119,52 +120,76 @@
           <button
             id="comment-delete"
             title="Supprimer le commentaire"
-            @click="deleteComment(postId, commentId)"
+            @click="deleteComment"
           >
             <span>Supprimer</span><i class="far fa-trash-alt"></i>
           </button>
         </div>
         
-      </div>
+      </div> 
     </div>
   </article>
 </template>
 
 <script>
 import { ref } from "vue";
-import CommentForm from "./CommentForm.vue";
+//import CommentForm from "./CommentForm.vue";
 
 export default {
   name: "PostCard",
-  component: {
-    CommentForm,
-  },
-//  props: ["token", "userId", "title", "content", "imageUrl", "pseudo"],
+//  component: {
+//    CommentForm,
+//  },
+//  props: ["token", "userId"],
   data() {
     return {
+      token: localStorage.getItem('token'),
+      userId: localStorage.getItem('userId'),
+      user: ref({}),
       post: ref({}),
-      comment: ref({}),
+      posts: ref([]),
+//      comment: ref({}),
+//      comments: ref([]),
     };
   },
   
 
-  //get all the posts
+  //get the user by id
   async created() {
-    await fetch(`http://localhost:3000/api/posts`, {
+    await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
       methods: "GET",
       credentials: "include",
       headers: {
-      //  "Content-Type": "application/json",
+        "Content-Type": "application/json",
         Accept: "application/json",    
         "Authorization": `Bearer ${this.token}`,
       },
     })
       .then((data) => {
-        console.log("PostCard||posts||data", data);
-        this.posts = data;
+        console.log("PostCard||user||data", data);
+        this.user = data;
       })
       .catch((err) => console.log(err));
   },
+
+  //get the post by id
+  async mounted() {
+    await fetch(`http://localhost:3000/api/posts/${this.postId}`, {
+      methods: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",    
+        "Authorization": `Bearer ${this.token}`,
+      },
+    })
+      .then((data) => {
+        console.log("PostCard||post||data", data);
+        this.post = data;
+      })
+      .catch((err) => console.log(err));
+  },
+
 
   methods: {
     //date of the post
@@ -181,17 +206,17 @@ export default {
     },
     
     //date of the comment
-    dateComment(date) {
-      const event = new Date(date);
-      const options = {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-      };
-      return event.toLocaleDateString("fr-Fr", options);
-    },
+//    dateComment(date) {
+//      const event = new Date(date);
+//      const options = {
+//        day: "numeric",
+//        month: "long",
+//        year: "numeric",
+//        hour: "numeric",
+//        minute: "numeric",
+//      };
+//      return event.toLocaleDateString("fr-Fr", options);
+//    },
 
     
     //modify a post
@@ -247,7 +272,7 @@ export default {
         });
       }
     },
-
+/*
     //add a like
     addLike(postId) {
       console.log("PostCard||addLike||postId", postId);
@@ -289,7 +314,7 @@ export default {
     },
 
     //get all comments from a post
-    loadComments(/*postId*/) {
+    loadComments(postId) {
       //  fetch(`http://localhost:3000/api/posts/comments/${this.postId}`, {
       //    method: "GET",
       //    credentials: "include",
@@ -319,7 +344,7 @@ export default {
       //      "Authorization": `Bearer ${this.token}`,
       //    },
       //  }).then(() => this.loadComments(postId));
-    },
+    },*/
 
   },
 };
@@ -365,6 +390,11 @@ h4 {
   text-align: right;
   padding: 10px;
   margin-right: 25px;
+}
+
+.like_thumbs {
+  display: flex;
+  justify-content: flex-end;
 }
 .fa-thumbs-up {
   color: black;

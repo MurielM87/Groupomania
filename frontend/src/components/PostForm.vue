@@ -48,6 +48,7 @@ import { ref } from "vue";
 
 export default {
   name: "PostForm",
+  //props: ["token", "userId", "postId"],
   data() {
     return {
       token: localStorage.getItem('token'),
@@ -57,6 +58,7 @@ export default {
       imageUrl: ref(""),
     };
   },
+  //props: ["token", "userId"],
 
   methods: {
     selectImage() {

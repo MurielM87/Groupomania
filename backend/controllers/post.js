@@ -119,27 +119,27 @@ exports.getOnePost = async (req, res) => {
     //find the user by Id
     const post = await database.Post.findOne({
       where: { id: req.params.id },
-    //  include: [
-    //    {
-    //      model: database.User,
-    //      attributes: ["pseudo", "id"],
-    //    },
-    //    {
-    //      model: database.Like,
-    //      attributes: ["postId", "userId"],
-    //    },
-    //    {
-    //      model: database.Comment,
-    //      order: [["createdAt", "DESC"]],
-    //      attributes: ["content", "pseudo", "UserId"],
-    //      include: [
-    //        {
-    //          model: database.User,
-    //          attributes: ["pseudo"],
-    //        },
-    //      ],
-    //    },
-    //  ],
+      include: [
+        {
+          model: database.User,
+          attributes: ["pseudo", "id"],
+        },
+        {
+          model: database.Like,
+          attributes: ["postId", "userId"],
+        },
+        {
+          model: database.Comment,
+          order: [["createdAt", "DESC"]],
+          attributes: ["content", "userId"],
+          include: [
+            {
+              model: database.User,
+              attributes: ["pseudo"],
+            },
+          ],
+        },
+      ],
     })
     res.status(200).json(post)
 }
@@ -163,12 +163,12 @@ exports.getAllPosts = async (req, res) => {
           model: database.Comment,
           attributes: ["postId", "userId", "id"],
           order: [["createdAt", "DESC"]],
-        //  include: [
-        //    {
-        //      model: database.User,
-        //      attributes: ["imageUrl", "pseudo", "isAdmin"],
-        //    },
-        //  ],
+          include: [
+            {
+              model: database.User,
+              attributes: ["imageUrl", "pseudo", "isAdmin"],
+            },
+          ],
         },
       ],
     })

@@ -17,7 +17,7 @@
         title="mon avatar"
         :src="`http://localhost:3000/api/users/${user.imageUrl}`"
       />
-      <router-link :to="`/profil/${this.userId}/edit`"
+      <router-link v-if="user = userId" :to="`/profil/${this.userId}/edit`"
         ><i class="fas fa-pencil-alt"></i
       ></router-link>
     </div>

@@ -144,7 +144,8 @@ ul {
 .fa-sign-in-alt,
 .fa-user-plus,
 .fa-sign-out-alt,
-.fa-user-circle {
+.fa-user-circle,
+.fa-comment-alt {
   color: black;
   font-size: 20px;
   &:hover {
