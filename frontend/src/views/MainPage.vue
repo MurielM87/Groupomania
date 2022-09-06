@@ -46,26 +46,9 @@ export default {
 //      this.$router.push({ name: "LogIn" });
 //    }
 //  },
-  
-  async created() {
-    await fetch(`http://localhost:3000/api/users`, {
-      methods: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",    
-        "Authorization": `Bearer ${this.token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("MainPage||users||data", data);
-        this.users = data;
-      })
-      .catch((err) => console.log(err));
-    },
+ 
 
-  async mounted() {
+  async created() {
     await fetch(`http://localhost:3000/api/posts`, {
       methods: "GET",
       credentials: "include",
@@ -79,6 +62,24 @@ export default {
       .then((data) => {
         console.log("MainPage||posts||data", data);
         this.posts = data;
+      })
+      .catch((err) => console.log(err));
+    }, 
+
+  async mounted() {
+    await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+      methods: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",    
+        "Authorization": `Bearer ${this.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("MainPage||this.user||data", data);
+        this.user = data;
       })
       .catch((err) => console.log(err));
     },

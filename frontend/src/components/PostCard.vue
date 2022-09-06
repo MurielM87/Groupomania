@@ -74,19 +74,19 @@
     <div id="separate_barre"></div>
 
     <!--add a comment to the post -->
-    <div class="post_comments">
-      <h3>Commentaires <i class="far fa-comment-alt"></i></h3>
+<!--    <div class="post_comments">
+      <h3>Commentaires <i class="far fa-comment-alt"></i></h3> -->
 
       <!--write a comment -->
-      <CommentForm 
+<!--      <CommentForm 
         :id="commentId" 
         :postId="post.id"         
         :userId="userId"
         @createComment="createComment" 
-      /> 
+      /> -->
 
       <!--get all comments -->
-      <div class="comments_card" 
+<!--      <div class="comments_card" 
         v-for="comment in comments" 
         :key="comment.id" 
         :comment="comment"
@@ -108,9 +108,9 @@
           <p class="comment_text">
             {{ comment.content }}
           </p>
-          <br />
+          <br /> -->
           <!--add the datetime -->
-          <div class="post_date">
+<!--          <div class="post_date">
             <p>publié le {{ dateComment(comment.createdAt) }}</p>
           </div>
         </div>
@@ -124,10 +124,10 @@
           >
             <span>Supprimer</span><i class="far fa-trash-alt"></i>
           </button>
-        </div>
+        </div> 
         
       </div> 
-    </div>
+    </div> -->
   </article>
 </template>
 
@@ -155,25 +155,25 @@ export default {
   
 
   //get the user by id
-  async created() {
-    await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-      methods: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",    
-        "Authorization": `Bearer ${this.token}`,
-      },
-    })
-      .then((data) => {
-        console.log("PostCard||user||data", data);
-        this.user = data;
-      })
-      .catch((err) => console.log(err));
-  },
+//  async created() {
+//    await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+//      methods: "GET",
+//      credentials: "include",
+//      headers: {
+//        "Content-Type": "application/json",
+//        Accept: "application/json",    
+//        "Authorization": `Bearer ${this.token}`,
+//      },
+//    })
+//      .then((data) => {
+//        console.log("PostCard||user||data", data);
+//        this.user = data;
+//      })
+//      .catch((err) => console.log(err));
+//  },
 
   //get the post by id
-  async mounted() {
+  async created() {
     await fetch(`http://localhost:3000/api/posts/${this.postId}`, {
       methods: "GET",
       credentials: "include",
@@ -206,17 +206,17 @@ export default {
     },
     
     //date of the comment
-//    dateComment(date) {
-//      const event = new Date(date);
-//      const options = {
-//        day: "numeric",
-//        month: "long",
-//        year: "numeric",
-//        hour: "numeric",
-//        minute: "numeric",
-//      };
-//      return event.toLocaleDateString("fr-Fr", options);
-//    },
+    dateComment(date) {
+      const event = new Date(date);
+      const options = {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      };
+      return event.toLocaleDateString("fr-Fr", options);
+    },
 
     
     //modify a post

@@ -160,7 +160,8 @@ h2 {
 .fa-pen,
 .fa-envelope,
 .fa-eraser,
-.fa-times-circle {
+.fa-times-circle,
+.fa-comment-alt {
   font-size: 20px;
   margin: 2px;
   background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),

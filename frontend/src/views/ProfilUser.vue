@@ -15,7 +15,7 @@
         class="profil_image"
         alt="avatar"
         title="mon avatar"
-        :src="`http://localhost:3000/api/users/${user.imageUrl}`"
+        :src="`/images/${user.imageUrl}`"
       />
       <router-link v-if="user = userId" :to="`/profil/${this.userId}/edit`"
         ><i class="fas fa-pencil-alt"></i

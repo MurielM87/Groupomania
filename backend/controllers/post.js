@@ -116,32 +116,39 @@ exports.deletePost = async (req, res) => {
 
 //get a post
 exports.getOnePost = async (req, res) => {
+  const id = req.params.id
+  console.log("getOnePost||req.params", req.params);
+  console.log("getOnePost||id", id);
     //find the user by Id
+    try {
     const post = await database.Post.findOne({
       where: { id: req.params.id },
-      include: [
-        {
-          model: database.User,
-          attributes: ["pseudo", "id"],
-        },
-        {
-          model: database.Like,
-          attributes: ["postId", "userId"],
-        },
-        {
-          model: database.Comment,
-          order: [["createdAt", "DESC"]],
-          attributes: ["content", "userId"],
-          include: [
-            {
-              model: database.User,
-              attributes: ["pseudo"],
-            },
-          ],
-        },
-      ],
+      //include: [
+      //  {
+      //    model: database.User,
+      //    attributes: ["pseudo", "id"],
+      //  },
+      //  {
+      //    model: database.Like,
+      //    attributes: ["postId", "userId"],
+      //  },
+      //  {
+      //    model: database.Comment,
+      //    order: [["createdAt", "DESC"]],
+      //    attributes: ["content", "userId"],
+      //    include: [
+      //      {
+      //        model: database.User,
+      //        attributes: ["pseudo"],
+      //      },
+      //    ],
+      //  },
+      //],
     })
     res.status(200).json(post)
+  } catch (error) {
+    return res.status(500).send({ error: "Erreur serveur" })
+  }
 }
 
 //get all posts
