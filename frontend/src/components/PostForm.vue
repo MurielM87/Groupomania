@@ -48,7 +48,7 @@ import { ref } from "vue";
 
 export default {
   name: "PostForm",
-  //props: ["token", "userId", "postId"],
+  //props: ["token", "userId"],
   data() {
     return {
       token: localStorage.getItem('token'),
@@ -58,7 +58,24 @@ export default {
       imageUrl: ref(""),
     };
   },
-  //props: ["token", "userId"],
+  
+  //get the user by id
+  async created() {
+    await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+      methods: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",    
+        "Authorization": `Bearer ${this.token}`,
+      },
+    })
+      .then((data) => {
+        console.log("FormCard||user||data", data);
+        this.user = data;
+      })
+      .catch((err) => console.log(err));
+  },
 
   methods: {
     selectImage() {

@@ -6,7 +6,7 @@
         <div id="author_img">
           <img
             v-if="user.image"
-            :src="`http://localhost:3000/api/users/${this.imageUrl}`"
+            :src="`http://localhost:3000/images/${this.imageUrl}`"  crossorigin="anonymous"
             title="Avatar"
             class="author_avatar"
           />
@@ -18,32 +18,30 @@
           />
         </div>
         <div class="author_name">
-          <h4>Pseudo : {{ user.pseudo }}</h4>
+          <h4>Pseudo : {{ post.User.pseudo }}</h4>
         </div>
       </div>
     </router-link>
     <!--content from the writing post -->
     <div
       class="post_content"
-      v-for="post in posts"
-      :key="post.id"
-      :post="post"
+      
     >
       <div class="post_description">
         <h3>titre : {{ post.title }}</h3>
         <p>contenu : {{ post.content }}</p>
-        <img v-if="post.imageUrl" :src="`http://localhost:3000/api/posts/${post.imageUrl}`" />
+        <img v-if="post.imageUrl" :src="`http://localhost:3000/images/${post.imageUrl}`" crossorigin="anonymous"/>
       </div>
       <!--add the datetime -->
       <div class="post_date">
-        <p>publié le {{ datePost(post.createdAt) }} -</p>
-        <p>modifié le {{ datePost(post.updatedAt) }}</p>
+        <p>publié le {{ datePost(post.createdAt) }}</p>
+        <p v-if="post.updatedAt"> - modifié le {{ datePost(post.updatedAt) }}</p>
       </div>
     </div>
     <br />
 
     <!--add the buttons 'modify' and 'delete' to the published post-->
-    <div class="post_btn" v-if="post.userId" :token="token">
+    <div class="post_btn">
       <button
         id="post_modify"
         title="modifier le message"
@@ -74,19 +72,19 @@
     <div id="separate_barre"></div>
 
     <!--add a comment to the post -->
-<!--    <div class="post_comments">
-      <h3>Commentaires <i class="far fa-comment-alt"></i></h3> -->
+    <div class="post_comments">
+      <h3>Commentaires <i class="far fa-comment-alt"></i></h3> 
 
       <!--write a comment -->
-<!--      <CommentForm 
+      <CommentForm 
         :id="commentId" 
         :postId="post.id"         
         :userId="userId"
         @createComment="createComment" 
-      /> -->
+      /> 
 
       <!--get all comments -->
-<!--      <div class="comments_card" 
+      <div class="comments_card" 
         v-for="comment in comments" 
         :key="comment.id" 
         :comment="comment"
@@ -110,7 +108,7 @@
           </p>
           <br /> -->
           <!--add the datetime -->
-<!--          <div class="post_date">
+          <div class="post_date">
             <p>publié le {{ dateComment(comment.createdAt) }}</p>
           </div>
         </div>
@@ -127,67 +125,27 @@
         </div> 
         
       </div> 
-    </div> -->
+    </div> 
   </article>
 </template>
 
 <script>
 import { ref } from "vue";
-//import CommentForm from "./CommentForm.vue";
+import CommentForm from "./CommentForm.vue";
 
 export default {
   name: "PostCard",
-//  component: {
-//    CommentForm,
-//  },
-//  props: ["token", "userId"],
+  component: {
+    CommentForm,
+  },
+props: ["post", "comment"],
   data() {
     return {
       token: localStorage.getItem('token'),
       userId: localStorage.getItem('userId'),
       user: ref({}),
-      post: ref({}),
-      posts: ref([]),
-//      comment: ref({}),
-//      comments: ref([]),
+      comments: ref([]),
     };
-  },
-  
-
-  //get the user by id
-//  async created() {
-//    await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-//      methods: "GET",
-//      credentials: "include",
-//      headers: {
-//        "Content-Type": "application/json",
-//        Accept: "application/json",    
-//        "Authorization": `Bearer ${this.token}`,
-//      },
-//    })
-//      .then((data) => {
-//        console.log("PostCard||user||data", data);
-//        this.user = data;
-//      })
-//      .catch((err) => console.log(err));
-//  },
-
-  //get the post by id
-  async created() {
-    await fetch(`http://localhost:3000/api/posts/${this.postId}`, {
-      methods: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",    
-        "Authorization": `Bearer ${this.token}`,
-      },
-    })
-      .then((data) => {
-        console.log("PostCard||post||data", data);
-        this.post = data;
-      })
-      .catch((err) => console.log(err));
   },
 
 
@@ -238,12 +196,10 @@ export default {
             content: this.content,
             imageUrl: this.imageUrl,
           }
-      }).then(() => {
-          this.posts = this.posts.filter((post) => {
-            console.log("updatePost || postId", postId);
-            return post.id != postId;
-          });
-        });
+      }).then(() => {         
+          console.log("updatePost || postId", postId);
+          return postId != postId;
+      });
         console.log("post ${postId} updated", postId);
         console.log("PostCard||updatePost", postId);
       }
@@ -272,33 +228,33 @@ export default {
         });
       }
     },
-/*
+
     //add a like
     addLike(postId) {
       console.log("PostCard||addLike||postId", postId);
-      //  fetch(`http://localhost:3000/api/posts/${this.postId}/like`, {
-      //    method: "POST",
-      //    credentials: "include",
-      //    data: { postId },
-      //    headers: {
-      //      "Content-Type": "application/json",
-      //      "Authorization": `Bearer ${this.token}`,
-      //    },
-      //  }).then((res) => {
-      //    for (let post in this.posts) {
-      //      if (this.posts[post].id == postId) {
-      //        if (res.status == 204) {
-      //          this.posts[post].likes -= 1;
-      //        }
-      //        console.log("addLike||posts", post);
-      //        if (res.status == 201) {
-      //          this.posts[post].likes += 1;
-      //        }
-      //      }
-      //    }
-      //  });
+      fetch(`http://localhost:3000/api/posts/${this.postId}/like`, {
+        method: "POST",
+        credentials: "include",
+        data: { postId },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.token}`,
+        },
+      }).then((res) => {
+        for (let post in this.posts) {
+          if (this.posts[post].id == postId) {
+            if (res.status == 204) {
+              this.posts[post].likes -= 1;
+            }
+            console.log("addLike||posts", post);
+            if (res.status == 201) {
+              this.posts[post].likes += 1;
+            }
+          }
+        }
+      });
     },
-
+/*
     //add a comment
     addComment(postId, content) {
       console.log("PostCard||addContent||postId, content", postId, content);

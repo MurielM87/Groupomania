@@ -110,7 +110,7 @@ exports.updateUser = async (req, res) => {
       if (req.file && user.imageUrl) {
       console.log("updateUser||req.file",req.file)
       console.log("updateUser||user.imageUrl", user.imageUrl)
-        imageUrl = req.file.filename
+      imageUrl = req.file.filename
         console.log("updateUser||req.file.filename", req.file.filename)
         const filename = user.imageUrl.split("/images")[1]
         fs.unlink(`images/${filename}`, (err) => {

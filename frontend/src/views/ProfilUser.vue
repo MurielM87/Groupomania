@@ -5,17 +5,17 @@
     <!--user profile image -->
     <div id="photo_icone">
       <img
+        v-if="!this.user.imageUrl"
         :src="require('../assets/avatar.png')"
         alt="avatar par defaut"
         class="profil_image"
-        v-if="!user.imageUrl"
       />
       <img
         v-else
         class="profil_image"
         alt="avatar"
         title="mon avatar"
-        :src="`/images/${user.imageUrl}`"
+        :src="`http://localhost:3000/images/${this.user.imageUrl}`"  crossorigin="anonymous"
       />
       <router-link v-if="user = userId" :to="`/profil/${this.userId}/edit`"
         ><i class="fas fa-pencil-alt"></i
@@ -31,12 +31,12 @@
     <div id="separation_barre"></div>
 
     <h3>Messages publiés</h3>
-    <div id="card" v-for="post in posts" :key="post">
+    <div id="card" v-for="post in posts" :key="post" :post="post">
       <div>titre: {{ post.title }}</div>
       <div>contenu: {{ post.content }}</div>
-      <div>image: {{ post.imageUrl }}</div>
+      <img v-if="post.imageUrl" :src="`http://localhost:3000/images/${post.imageUrl}`" crossorigin="anonymous"/>
       <div>publié le {{ post.createdAt }}</div>
-      <div>modifié le {{ post.updatedAt }}</div>
+      <div v-if="post.updatedAt">modifié le {{ post.updatedAt }}</div>
     </div>
   </form>
 </template>
@@ -84,6 +84,7 @@ export default {
         .then((data) => {
           console.log("profil||data", data);
           this.user = data;
+          console.log(this.user.imageUrl)
         })
         .catch((err) => console.log(err));
     },    

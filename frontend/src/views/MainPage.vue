@@ -9,6 +9,7 @@
     <PostCard 
       v-for="post in posts" 
       :key="post.id"
+      :post="post"
     />
 
     <!-- Bouton Scroll to Top-->
