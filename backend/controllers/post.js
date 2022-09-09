@@ -194,7 +194,7 @@ exports.deletePost = async (req, res) => {
       where : {id : req.user.userId}
     })
     const checkIfAdmin = await database.User.findOne({
-      where: { id: user.isAdmin },
+      where: { id: req.user.isAdmin },
     })
     const post = await database.Post.findOne({ 
       where: { id: req.params.id } 

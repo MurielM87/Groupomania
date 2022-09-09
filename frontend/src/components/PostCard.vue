@@ -44,6 +44,7 @@
     <div class="post_btn">
       <button
         id="post_modify"
+        class="form_btn"
         title="modifier le message"
         @click="updatePost"
       >
@@ -52,6 +53,7 @@
       </button>
       <button
         id="post_delete"
+        class="form_btn"
         title="supprimer le message"
         @click="deletePost"
       >
@@ -59,6 +61,8 @@
         <span>Supprimer</span>
       </button>
     </div> 
+
+    <div class="separate_barre"></div>
 
     <!-- add like to the post-->
     <div @click="addLike" class="post_like" :userId="userId">
@@ -69,31 +73,38 @@
       <p>likes : {{ post.likes }}</p>
     </div>
 
-    <div id="separate_barre"></div>
 
     <!--add a comment to the post -->
     <div class="post_comments">
       <h3>Commentaires <i class="far fa-comment-alt"></i></h3> 
 
-      <!--write a comment -->
-      <CommentForm 
-        :id="commentId" 
-        :postId="post.id"         
-        :userId="userId"
-        @createComment="createComment" 
-      /> 
+      <!--write a comment -->     
+      <div>
+        <textarea
+        type="text"
+        class="comment_input"
+        v-model="comment"
+        placeholder="laissez un commentaire"
+        rows="3"
+        required
+        ></textarea>
+      <button type="submit" @click="submitComment">
+        <span>Publier</span> <i class="far fa-edit"></i>
+      </button>
+    </div>
+
 
       <!--get all comments -->
-      <div class="comments_card" 
+<!--      <div class="comments_card" 
         v-for="comment in comments" 
         :key="comment.id" 
         :comment="comment"
       >
-        <router-link :to="{name: 'ProfilUser', params: {id: this.userId}}">
+        <router-link :to="{name: 'ProfilUser', params: {id: this.comment.userId}}">
           <div class="comment_author">
             <img
               v-if="user.imageUrl"
-              :src="`http://localhost:3000/api/users/${this.imageUrl}`"
+              :src="`http://localhost:3000/api/users/${this.comment.imageUrl}`"
             />
             <img v-else src="../assets/avatar.png" alt="avatar de l'auteur" />
             <span class="comment_author_pseudo">
@@ -108,7 +119,7 @@
           </p>
           <br /> -->
           <!--add the datetime -->
-          <div class="post_date">
+<!--          <div class="post_date">
             <p>publié le {{ dateComment(comment.createdAt) }}</p>
           </div>
         </div>
@@ -117,6 +128,7 @@
         <div v-if="comment.userId" :token="token">
           <button
             id="comment-delete"
+            class="form_btn"
             title="Supprimer le commentaire"
             @click="deleteComment"
           >
@@ -124,21 +136,17 @@
           </button>
         </div> 
         
-      </div> 
+      </div> -->
     </div> 
   </article>
 </template>
 
 <script>
 import { ref } from "vue";
-import CommentForm from "./CommentForm.vue";
 
 export default {
   name: "PostCard",
-  component: {
-    CommentForm,
-  },
-props: ["post", "comment"],
+  props: ["post"],
   data() {
     return {
       token: localStorage.getItem('token'),
@@ -254,6 +262,35 @@ props: ["post", "comment"],
         }
       });
     },
+
+    submitComment(postId) {
+      fetch(`http://localhost:3000/api/posts/${postId}/comment`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token}`,
+        },
+      })
+        .then(
+          function (res) {
+            if (res.status != 201) {
+              this.fetchError = res.status;
+            } else {
+              res.json().then(
+                function (data) {
+                  this.fetchResponse = data;
+                }.bind(this)
+              );
+            }
+          }.bind(this)
+        )
+        .catch((err) => {
+          console.log("err", err);
+        });
+    },
+
+
 /*
     //add a comment
     addComment(postId, content) {

@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <div id="separate_barre"></div>
+    <div class="separate_barre"></div>
 
     <div class="profil_informations">
       <div class="form-profil">
@@ -204,7 +204,7 @@ export default {
   flex-direction: column;
   align-items: center;
 }
-#separate_barre {
+.separate_barre {
   border: 1px solid #455166;
   width: 30%;
   margin: auto;

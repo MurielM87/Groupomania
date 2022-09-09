@@ -128,7 +128,7 @@ export default {
   background-color: white;
   border-radius: 20px;
   border: 1px solid #fd2d01;
-  padding: 20px;
+  padding: 10px;
   margin: auto;
   margin-top: 20px;
   margin-bottom: 20px;
