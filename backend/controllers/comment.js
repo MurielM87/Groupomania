@@ -10,7 +10,7 @@ exports.createComment = async (req, res) => {
     if (req.body.content === "") {
         return res.status(401).json({ error: "Veuillez remplir le champs" });
     } else {
-        database.comment.create({
+        database.Comment.create({
             postId: req.params.id,
             userId: userId,
             content: req.body.content,

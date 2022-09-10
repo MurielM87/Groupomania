@@ -38,8 +38,8 @@ export default {
       user: ref({}),
       users: ref([]),
       posts: ref([]),
-      comment: ref({}),
-      comments: ref([])
+      comments: ref([]),
+      comment: ref(""),
     };
   },
   beforeCreate() {
@@ -87,7 +87,7 @@ export default {
       .catch((err) => console.log(err));
     },
 
-/*  async updated() {
+  async updated() {
     await fetch(`http://localhost:3000/api/posts/comments`, {
       methods: "GET",
       credentials: "include",
@@ -103,7 +103,7 @@ export default {
         this.comments = data;
       })
       .catch((err) => console.log(err));
-    },*/
+    },
  
   methods: {    
   

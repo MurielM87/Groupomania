@@ -13,14 +13,6 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
-      userPseudo: {
-        type: Sequelize.STRING(50),
-        allowNull: false,
-        references: {
-          model: "User",
-          key: "pseudo",
-        },
-      },
       postId: {
         allowNull: false,
         type: Sequelize.INTEGER,
