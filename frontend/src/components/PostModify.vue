@@ -1,5 +1,5 @@
 <template>
-  <div class="modal_background">    
+  <div class="modal_background" v-if="revele">    
     <div class="post_form">
       <h2>Modifier votre message</h2>
       <input
@@ -37,7 +37,7 @@
         <i class="fas fa-save"></i> Enregistrer les modifications
       </button>
       <button 
-        @click.prevent="cancel"
+        @click.prevent="toggleModale"
         class="form_btn">
         <i class="fas fa-times-circle"></i> Annuler les modifications</button
       ><br />
@@ -61,10 +61,11 @@ export default {
       }),
     };
   },
+  props: ["revele", "toggleModale"],
 
   created() {
     fetch(`http://localhost:3000/api/posts/${this.postId}`, {
-      method: "Get",
+      method: "GET",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
@@ -80,7 +81,7 @@ export default {
   },
 
   methods: {
-    //upload profil image
+    //upload image
     uploadImg(e) {
       this.post.imageUrl = e.target.files[0];
       //preview image
@@ -88,7 +89,7 @@ export default {
       this.$emit("input", this.post.imageUrl); 
     },
       
-    //modify profil
+    //modify post
     updatePost() {
       const token = localStorage.getItem("token")
       const userId = localStorage.getItem("userId")
@@ -127,23 +128,24 @@ export default {
       }
     }
   },
-        
-  cancel(ctx){
-    ctx.emit("cancel")
-  }
+  
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .modal_background {
     background-color: rgb(0,0,0,0.3);
     position: fixed;
     z-index: 999;
     top: 0;
+    bottom: 0;
     left: 0;
+    right: 0;
     width: 100%;
     height: 100%;
-    display: table;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     transition: opacity 0.3 ease;
   }
 

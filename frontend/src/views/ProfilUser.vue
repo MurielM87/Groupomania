@@ -1,5 +1,5 @@
 <template>
-  <form id="profil_form" >
+  <form id="profil_form">
     <h2>Profil de {{ user.pseudo }}</h2>
 
     <!--user profile image -->
@@ -15,9 +15,10 @@
         class="profil_image"
         alt="avatar"
         title="mon avatar"
-        :src="`http://localhost:3000/images/${this.user.imageUrl}`"  crossorigin="anonymous"
+        :src="`http://localhost:3000/images/${this.user.imageUrl}`"
+        crossorigin="anonymous"
       />
-      <router-link v-if="user = userId" :to="`/profil/${this.userId}/edit`"
+      <router-link :to="`/profil/${this.userId}/edit`"
         ><i class="fas fa-pencil-alt"></i
       ></router-link>
     </div>
@@ -34,7 +35,11 @@
     <div id="card" v-for="post in posts" :key="post" :post="post">
       <div>titre: {{ post.title }}</div>
       <div>contenu: {{ post.content }}</div>
-      <img v-if="post.imageUrl" :src="`http://localhost:3000/images/${post.imageUrl}`" crossorigin="anonymous"/>
+      <img
+        v-if="post.imageUrl"
+        :src="`http://localhost:3000/images/${post.imageUrl}`"
+        crossorigin="anonymous"
+      />
       <div>publié le {{ post.createdAt }}</div>
       <div v-if="post.updatedAt">modifié le {{ post.updatedAt }}</div>
     </div>
@@ -45,60 +50,59 @@
 import { ref } from "vue";
 
 export default {
-    name: "ProfilUser",
-    data() {
-      return {
-        token: localStorage.getItem("token"),
-        userId: localStorage.getItem("userId"),
-        user: ref({
-          pseudo: "",
-          firstname: "",
-          lastname: "",
-          email: "",
-          imageUrl: "",
-        }),
-        posts: ref([]),
-      };
-    },
-    beforeCreate() {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
-      console.log("profil||beforeCreate||userId", userId);
-      if (token == null && userId == null) {
-        this.$router.push({ name: "LogIn" });
-      }
-    },
-    
-    //get all the informations about the user
-    async created() {
-      await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-        methods: "GET",
-        credentials: "include",
+  name: "ProfilUser",
+  data() {
+    return {
+      token: localStorage.getItem("token"),
+      userId: localStorage.getItem("userId"),
+      user: ref({
+        pseudo: "",
+        firstname: "",
+        lastname: "",
+        email: "",
+        imageUrl: "",
+      }),
+      posts: ref([]),
+    };
+  },
+
+  beforeCreate() {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    console.log("profil||beforeCreate||userId", userId);
+    if (token == null && userId == null) {
+      this.$router.push({ name: "LogIn" });
+    }
+  },
+
+  //get all the informations about the user
+  async created() {
+    await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+      methods: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("ProfilUser||data", data);
+        this.user = data;
+      })
+      .catch((err) => console.log(err));
+  },
+
+  methods: {
+    //get all posts from a user
+    getAllPosts() {
+      fetch(`http://localhost:3000/api/posts/users/${this.userId}`, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",    
-          "Authorization": `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.token}`,
         },
       })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("profil||data", data);
-          this.user = data;
-          console.log(this.user.imageUrl)
-        })
-        .catch((err) => console.log(err));
-    },    
-
-    methods: {
-      //get all posts from a user
-      getAllPosts() {
-        fetch(`http://localhost:3000/api/posts/users/${this.userId}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${this.token}`,
-          },
-        })
         .then((data) => {
           this.posts = data;
           console.log("posts||data", data);
@@ -106,8 +110,8 @@ export default {
         .catch((err) => {
           console.log("err", err);
         });
-      },
     },
+  },
 };
 </script>
 
@@ -155,7 +159,7 @@ export default {
   &:hover {
     color: red;
   }
-  @media (min-width: 768px) and (max-width: 992px){
+  @media (min-width: 768px) and (max-width: 992px) {
     right: 36%;
   }
   @media screen and (max-width: 768px) {

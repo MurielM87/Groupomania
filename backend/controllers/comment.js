@@ -15,8 +15,8 @@ exports.createComment = async (req, res) => {
             userId: userId,
             content: req.body.content,
         })
-            .then((response) => res.status(201).json({ message: "Commentaire ajouté !", comment: response }))
-            .catch((error) => res.status(400).json({ error }));
+        .then((response) => res.status(201).json({ message: "Commentaire ajouté !", comment: response }))
+        .catch((error) => res.status(400).json({ error }));
     }
 }
 

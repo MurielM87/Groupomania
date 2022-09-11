@@ -65,17 +65,21 @@
           @click.prevent="updateProfil"
           class="form_btn"
           title="enregistrer les modifications"
+          type="submit"
         ><i class="fas fa-save"></i> Enregistrer les modifications </button>
-        <button @click="$router.go(-1)" class="form_btn">
+        <button 
+          @click.prevent="onCancel" 
+          class="form_btn"
+          type="button"
+        >
           <i class="fas fa-times-circle"></i> Annuler les modifications </button
         ><br />
 
         <button
           class="delete_btn"
-          @click="deleteUser"
+          @click.prevent="deleteUser"
           title="supprimer le compte"
-        >
-          <i class="fas fa-trash-alt"></i>
+        ><i class="fas fa-trash-alt"></i>
           Supprimer le compte
         </button>
       </div>
@@ -195,6 +199,10 @@ export default {
         });
       },
   },
+
+  onCancel() {
+    this.$router.push(`/profil/${this.userId}`);
+  }
 };
 </script>
 
