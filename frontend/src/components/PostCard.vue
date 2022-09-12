@@ -6,17 +6,17 @@
       <div id="post_author">
         <div id="author_img">
           <img
-            v-if="user.image"
-            :src="`http://localhost:3000/images/${this.imageUrl}`"
-            crossorigin="anonymous"
-            title="Avatar"
+            v-if="!this.user.imageUrl"
+            :src="require('../assets/avatar.png')"
+            alt="avatar"
             class="author_avatar"
           />
           <img
             v-else
-            src="../assets/avatar.png"
-            title="Avatar"
             class="author_avatar"
+            alt="avatar"
+            :src="`http://localhost:3000/images/${this.User.imageUrl}`"
+            crossorigin="anonymous"
           />
         </div>
         <div class="author_name">
@@ -27,8 +27,8 @@
     <!--content from the writing post -->
     <div class="post_content">
       <div class="post_description">
-        <h3>titre : {{ post.title }}</h3>
-        <p>contenu : {{ post.content }}</p>
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.content }}</p>
         <img
           v-if="post.imageUrl"
           :src="`http://localhost:3000/images/${post.imageUrl}`"
@@ -110,7 +110,7 @@
               v-if="user.imageUrl"
               :src="`http://localhost:3000/api/users/${this.comment.imageUrl}`"
             />
-            <img v-else src="../assets/avatar.png" alt="avatar de l'auteur" />
+            <img v-else :src="require('../assets/avatar.png')" alt="avatar de l'auteur" />
             <span class="comment_author_pseudo">
               {{ user.pseudo }}
             </span>
@@ -201,11 +201,11 @@ export default {
       const userId = localStorage.getItem("userId");
       const token = localStorage.getItem("token");
       console.log("PostCard||deletePost", postId);
-      if (userId == userId && token == token) {
+      if (userId === userId && token === token) {
         fetch(`http://localhost:3000/api/posts/${this.postId}`, {
           method: "DELETE",
           credentials: "include",
-          data: { postId },
+        //  data: { postId },
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${this.token}`,
@@ -333,7 +333,7 @@ export default {
 
 .author_avatar {
   width: 50px;
-  padding: 10px;
+  margin: 10px;
 }
 h4 {
   margin: 25px;

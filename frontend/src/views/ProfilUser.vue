@@ -7,7 +7,7 @@
       <img
         v-if="!this.user.imageUrl"
         :src="require('../assets/avatar.png')"
-        alt="avatar par defaut"
+        alt="avatar"
         class="profil_image"
       />
       <img
@@ -18,7 +18,7 @@
         :src="`http://localhost:3000/images/${this.user.imageUrl}`"
         crossorigin="anonymous"
       />
-      <router-link :to="`/profil/${this.userId}/edit`"
+      <router-link v-if="userId === userId && token === token" :to="`/profil/${this.userId}/edit`"
         ><i class="fas fa-pencil-alt"></i
       ></router-link>
     </div>
@@ -31,8 +31,9 @@
 
     <div id="separation_barre"></div>
 
-    <h3>Messages publiés</h3>
+    <h3>{{posts.length}} Message{{posts.lenght > 1 ? 's' : ""}} publié{{posts.lenght > 1 ? 's' : ""}}</h3>
     <div id="card" v-for="post in posts" :key="post" :post="post">
+      <h3>On retente {{posts.length}} Message{{posts.lenght > 1 ? 's' : ""}} publié{{posts.lenght > 1 ? 's' : ""}}</h3>
       <div>titre: {{ post.title }}</div>
       <div>contenu: {{ post.content }}</div>
       <img
@@ -41,7 +42,7 @@
         crossorigin="anonymous"
       />
       <div>publié le {{ post.createdAt }}</div>
-      <div v-if="post.updatedAt">modifié le {{ post.updatedAt }}</div>
+      <div v-if="post.updatedAt"> - modifié le {{ post.updatedAt }}</div>
     </div>
   </form>
 </template>
@@ -93,25 +94,24 @@ export default {
       .catch((err) => console.log(err));
   },
 
-  methods: {
     //get all posts from a user
-    getAllPosts() {
-      fetch(`http://localhost:3000/api/posts/users/${this.userId}`, {
+    async mounted() {
+      await fetch(`http://localhost:3000/api/posts/user/${this.UserId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.token}`,
         },
       })
+        .then((res) => res.json())
         .then((data) => {
           this.posts = data;
-          console.log("posts||data", data);
+          console.log("ProfilUser||posts||data", data);
         })
         .catch((err) => {
           console.log("err", err);
         });
     },
-  },
 };
 </script>
 
@@ -150,7 +150,7 @@ export default {
 .fa-pencil-alt {
   background: #f5f5f5;
   color: black;
-  width: 25px;
+  width: 35px;
   border-radius: 50%;
   padding: 10px;
   position: absolute;

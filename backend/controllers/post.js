@@ -38,13 +38,14 @@ exports.createPost = async (req, res) => {
 
 //get a post
 exports.getOnePost = async (req, res) => {
-  const id = req.params.id
-  console.log(req.params);
+  const id = await database.User.findOne({
+    where : {id : req.user.userId}
+  })
   console.log("getOnePost||id", id);
 
-    //find the user by Id
-    try {
-    const post = await database.Post.findOne({
+    //find the post by Id
+  //  try {
+    let post = await database.Post.findOne({
       where: { id: req.params.id },
       include: [
         {
@@ -58,7 +59,7 @@ exports.getOnePost = async (req, res) => {
         {
           model: database.Comment,
           order: [["createdAt", "DESC"]],
-          attributes: ["content", "userId"],
+          attributes: ["content", "postId", "userId"],
           include: [
             {
               model: database.User,
@@ -70,9 +71,10 @@ exports.getOnePost = async (req, res) => {
     })
     res.status(200).json(post)
     console.log("getOnePost||req.params.id", req.params.id);
-  } catch (error) {
-    return res.status(500).send({ error: "Erreur serveur" })
-  }
+    console.log("getOnePost||post", post)
+//  } catch (error) {
+//    return res.status(500).send({ error: "Erreur serveur" })
+//  }
 }
 
 //get all posts
@@ -113,9 +115,11 @@ exports.getAllPostsOfOneUser = async (req, res, next) => {
     where : {id : req.user.userId}
   })
   console.log("AllPostsOneUser||user", user)
-	database.Post.findAll({ 
+  console.log("AllPostsOneUser||req.user", req.user)
+	
+  database.Post.findAll({ 
     where: { userId: req.params.id },
-    attributes: ["id", "post", "imageUrl", "createdAt"],
+    attributes: ["id", "title", "content", "imageUrl", "createdAt"],
       order: [["createdAt", "DESC"]],
       include: [
         {
@@ -128,7 +132,7 @@ exports.getAllPostsOfOneUser = async (req, res, next) => {
         },
         {
           model: database.Comment,
-          attributes: ["post", "pseudo", "userId", "id"],
+          attributes: ["postId", "userId", "id"],
           order: [["createdAt", "DESC"]],
           include: [
             {
