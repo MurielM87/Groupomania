@@ -1,5 +1,3 @@
-const token = require("../middlewares/auth")
-const jwt = require("jsonwebtoken")
 const database = require("../models")
 const fs = require("fs")
 
@@ -124,7 +122,7 @@ exports.getAllPostsOfOneUser = async (req, res, next) => {
       include: [
         {
           model: database.User,
-          attributes: ["pseudo", "id", "imageUrl", "isAdmin"],
+          attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
         },
         {
           model: database.Like,
@@ -137,7 +135,7 @@ exports.getAllPostsOfOneUser = async (req, res, next) => {
           include: [
             {
               model: database.User,
-              attributes: ["imageUrl", "pseudo", "isAdmin"],
+              attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
             },
           ],
         },
@@ -161,8 +159,7 @@ exports.updatePost = async (req, res) => {
     if (userId === post.UserId) {
       // if a file is in the request
       if (req.file) {
-        newImageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename
-          }`
+        newImageUrl = req.file.filename
         // if an image is already in database
         if (post.imageUrl) {
           const filename = post.imageUrl.split("/images")[1]
@@ -188,7 +185,7 @@ exports.updatePost = async (req, res) => {
       })
       res.status(200).json({ newPost: newPost, message: "message modifié" })
     } else {
-      res.status(400).json({ message: "Vous n'avez pas l'autorisation" })
+      res.status(401).json({ message: "Vous n'avez pas l'autorisation" })
     }
 }
 
@@ -197,13 +194,13 @@ exports.deletePost = async (req, res) => {
     const userId = await database.User.findOne({
       where : {id : req.user.userId}
     })
-    const checkIfAdmin = await database.User.findOne({
+    const checkAdmin = await database.User.findOne({
       where: { id: req.user.isAdmin },
     })
     const post = await database.Post.findOne({ 
       where: { id: req.params.id } 
     })
-    if (userId === post.userId || checkIfAdmin.isAdmin === true) {
+    if (userId === post.userId || checkAdmin.isAdmin === true) {
       if (post.imageUrl) {
         const filename = post.imageUrl.split("/images")[1]
         fs.unlink(`images/${filename}`, () => {
@@ -234,7 +231,7 @@ exports.likePost = async (req, res, next) => {
       where: {id: req.params.postId}
     })
     console.log("likePost||postId", postId)
-    console.log(req.body)
+    console.log(req.params)
     const user = await database.Like.findOne({
       where: { userId: userId, postId: postId },
     })
@@ -245,10 +242,9 @@ exports.likePost = async (req, res, next) => {
       )
       res.status(200).send({ message: "vous n'aimez plus ce post" })
     } else {
-      await database.Like.create({
-        userId: userId,
-        postId: postId,
-      })
+      await database.Like.create(
+      { where: { userId: userId, postId: postId }},      
+      { truncate: true, restartIdentity: true })
       res.status(201).json({ message: "vous aimez ce post" })
     }
 }

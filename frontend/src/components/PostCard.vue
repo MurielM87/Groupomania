@@ -6,7 +6,7 @@
       <div id="post_author">
         <div id="author_img">
           <img
-            v-if="!this.user.imageUrl"
+            v-if="!post.User.imageUrl"
             :src="require('../assets/avatar.png')"
             alt="avatar"
             class="author_avatar"
@@ -15,7 +15,7 @@
             v-else
             class="author_avatar"
             alt="avatar"
-            :src="`http://localhost:3000/images/${this.User.imageUrl}`"
+            :src="`http://localhost:3000/images/${post.User.imageUrl}`"
             crossorigin="anonymous"
           />
         </div>
@@ -68,7 +68,7 @@
     <div class="separate_barre"></div>
 
     <!-- add like to the post-->
-    <div @click="addLike" class="post_like" :userId="userId">
+    <div @click.prevent="addLike" class="post_like" :userId="userId">
       <div class="like_thumbs">
         <i class="far fa-thumbs-up"></i>
         <i class="far fa-thumbs-down"></i>
@@ -90,7 +90,7 @@
           rows="3"
           required
         ></textarea>
-        <button type="submit" @click="submitComment">
+        <button type="submit" @click.prevent="submitComment">
           <span>Publier</span> <i class="far fa-edit"></i>
         </button>
       </div>
@@ -334,6 +334,7 @@ export default {
 .author_avatar {
   width: 50px;
   margin: 10px;
+  border-radius: 50%;
 }
 h4 {
   margin: 25px;

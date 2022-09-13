@@ -150,8 +150,13 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     const id = req.params.id
-    const user = await database.User.findOne({ where: { id: id } })
-    if (user !== null) {
+    const user = await database.User.findOne({ 
+      where: { id: id } }
+    )
+    const checkAdmin = await database.User.findOne({
+      where: { id: isAdmin },
+    })
+    if (user !== null || checkAdmin.isAdmin === true) {
       const filename = user.imageUrl.split("/images")[1]
       fs.unlink(`images/${filename}`, () => {
         database.User.destroy({ where: { id: id } })

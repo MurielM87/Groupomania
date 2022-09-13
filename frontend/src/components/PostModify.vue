@@ -50,6 +50,7 @@ import { ref } from "vue";
 
 export default {
   name: "PostModify",
+  emit: ["input"],
   data() {
     return {
       token: localStorage.getItem("token"),

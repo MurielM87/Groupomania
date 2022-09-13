@@ -103,7 +103,6 @@ export default {
         lastname: "",
         imageUrl: "",
       }),
-      //si user n'a pas de photo de profil, mettre avatar sinon mettre photo de database
       image: null,
     };
   },

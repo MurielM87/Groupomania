@@ -31,9 +31,9 @@
 
     <div id="separation_barre"></div>
 
-    <h3>{{posts.length}} Message{{posts.lenght > 1 ? 's' : ""}} publié{{posts.lenght > 1 ? 's' : ""}}</h3>
+    <h3>Essai titre: {{posts.length}} Message{{posts.lenght > 1 ? 's' : ""}} publié{{posts.lenght > 1 ? 's' : ""}}</h3>
     <div id="card" v-for="post in posts" :key="post" :post="post">
-      <h3>On retente {{posts.length}} Message{{posts.lenght > 1 ? 's' : ""}} publié{{posts.lenght > 1 ? 's' : ""}}</h3>
+      <h3>On retente : {{posts.length}} Message{{posts.lenght > 1 ? 's' : ""}} publié{{posts.lenght > 1 ? 's' : ""}}</h3>
       <div>titre: {{ post.title }}</div>
       <div>contenu: {{ post.content }}</div>
       <img
@@ -83,7 +83,7 @@ export default {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${this.token}`,
+        "Authorization": `Bearer ${this.token}`,
       },
     })
       .then((res) => res.json())
@@ -95,17 +95,18 @@ export default {
   },
 
     //get all posts from a user
-    async mounted() {
-      await fetch(`http://localhost:3000/api/posts/user/${this.UserId}`, {
+    updated() {
+      fetch(`http://localhost:3000/api/posts/user/${this.posts.userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
+          Accept: "application/json",
+          "Authorization": `Bearer ${this.token}`,
         },
       })
         .then((res) => res.json())
         .then((data) => {
-          this.posts = data;
+          this.post = data;
           console.log("ProfilUser||posts||data", data);
         })
         .catch((err) => {

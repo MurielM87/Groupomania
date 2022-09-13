@@ -1,12 +1,10 @@
-const token = require("../middlewares/auth")
 const database = require("../models")
-const jwt = require("jsonwebtoken")
 
 //add a comment
 exports.createComment = async (req, res) => {
-    const token = req.cookies.token;
-    const decodedToken = jwt.verify(token, process.env.TOKEN);
-    const userId = decodedToken.userId;
+    const userId = await database.User.findOne({
+        where : {id : req.user.userId}
+    })
     if (req.body.content === "") {
         return res.status(401).json({ error: "Veuillez remplir le champs" });
     } else {
@@ -23,8 +21,12 @@ exports.createComment = async (req, res) => {
 //delete a comment
 exports.deleteComment = async (req, res) => {
     try {
-        const userId = token.getUserId(req)
-        const checkAdmin = await database.User.findOne({ where: { id: userId } })
+        const userId = await database.User.findOne({
+            where : {id : req.user.userId}
+        })
+        const checkAdmin = await database.User.findOne({ 
+            where: { id: req.user.isAdmin } 
+        })
         const comment = await database.Comment.findOne({
             where: { id: req.params.id },
         })
@@ -36,7 +38,7 @@ exports.deleteComment = async (req, res) => {
             )
             res.status(200).json({ message: "commentaire supprimé" })
         } else {
-            res.status(401).json({ message: "Vous n'êtes pas autorisé" })
+            res.status(401).json({ message: "Vous n'avez pas l'autorisation" })
         }
     } catch (error) {
         return res.status(501).send({ error: "Erreur serveur" })
@@ -46,13 +48,13 @@ exports.deleteComment = async (req, res) => {
 //get all comments from a post
 exports.getAllComments = (req, res) => {
     database.Comment.findAll({
-        where: { postId: req.params.id }, include: [database.user],
-        attributes: ["id", "post", "imageUrl", "createdAt"],
+        where: { postId: req.params.id }, 
+        attributes: ["id", "title", "content", "imageUrl", "createdAt"],
         order: [["createdAt", "DESC"]],
         include: [
             {
                 model: database.User,
-                attributes: ["pseudo", "id", "imageUrl", "isAdmin"],
+                attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
             },
             {
                 model: database.Like,
@@ -60,7 +62,7 @@ exports.getAllComments = (req, res) => {
             },
             {
                 model: database.Comment,
-                attributes: ["post", "pseudo", "userId", "id"],
+                attributes: ["content", "postId", "userId", "id"],
                 order: [["createdAt", "DESC"]],
                 include: [
                     {
