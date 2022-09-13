@@ -40,8 +40,11 @@
         :src="`http://localhost:3000/images/${post.imageUrl}`"
         crossorigin="anonymous"
       />
-      <div>publié le {{ post.createdAt }}</div>
-      <div v-if="post.updatedAt"> - modifié le {{ post.updatedAt }}</div>
+      <!--add the datetime -->
+      <div class="post_date">
+        <p>publié le {{ datePost(post.createdAt) }}</p>
+        <p v-if="post.updatedAt">- modifié le {{ datePost(post.updatedAt) }}</p>
+      </div>
     </div>
   </form>
 </template>
@@ -115,6 +118,33 @@ export default {
       })
       .catch((err) => console.log(err));
     }, 
+
+    methods: {
+    //date of the post
+    datePost(date) {
+      const event = new Date(date);
+      const options = {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      };
+      return event.toLocaleDateString("fr-Fr", options);
+    },
+    //date of the comment
+    dateComment(date) {
+      const event = new Date(date);
+      const options = {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      };
+      return event.toLocaleDateString("fr-Fr", options);
+    },
+  }
 };
 </script>
 
