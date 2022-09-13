@@ -32,14 +32,14 @@
       <button
         @click.prevent="updatePost"
         class="form_btn"
-        title="enregistrer les modifications"
-      >
+        title="enregistrer les modifications">
         <i class="fas fa-save"></i> Enregistrer les modifications
       </button>
       <button 
         @click.prevent="toggleModale"
         class="form_btn">
-        <i class="fas fa-times-circle"></i> Annuler les modifications</button
+        <i class="fas fa-times-circle"></i> Annuler les modifications
+      </button
       ><br />
     </div>
   </div>

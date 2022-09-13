@@ -123,6 +123,7 @@ export default {
 <style lang="scss">
 img {
   width: 250px;
+  margin: auto;
 }
 .toTop {
   display: flex;

@@ -103,14 +103,15 @@
         :comment="comment"
       >
         <router-link
-          :to="{ name: 'ProfilUser', params: { id: this.comment.userId } }"
+          :to="{ name: 'ProfilUser', params: { id: this.Comment.userId } }"
         >
           <div class="comment_author">
             <img
-              v-if="user.imageUrl"
-              :src="`http://localhost:3000/api/users/${this.comment.imageUrl}`"
+              v-if="comment.User.imageUrl"
+              :src="`http://localhost:3000/api/users/${comment.User.imageUrl}`"
+              alt="avatar"
             />
-            <img v-else :src="require('../assets/avatar.png')" alt="avatar de l'auteur" />
+            <img v-else :src="require('../assets/avatar.png')" alt="avatar par default" />
             <span class="comment_author_pseudo">
               {{ user.pseudo }}
             </span>
@@ -134,7 +135,7 @@
             id="comment-delete"
             class="form_btn"
             title="Supprimer le commentaire"
-            @click="deleteComment"
+            @click.prevent="deleteComment"
           >
             <span>Supprimer</span><i class="far fa-trash-alt"></i>
           </button>

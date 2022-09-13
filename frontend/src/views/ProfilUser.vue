@@ -31,11 +31,10 @@
 
     <div id="separation_barre"></div>
 
-    <h3>Essai titre: {{posts.length}} Message{{posts.lenght > 1 ? 's' : ""}} publié{{posts.lenght > 1 ? 's' : ""}}</h3>
-    <div id="card" v-for="post in posts" :key="post" :post="post">
-      <h3>On retente : {{posts.length}} Message{{posts.lenght > 1 ? 's' : ""}} publié{{posts.lenght > 1 ? 's' : ""}}</h3>
-      <div>titre: {{ post.title }}</div>
-      <div>contenu: {{ post.content }}</div>
+    <h2>{{posts.length}} Message{{posts.length > 1 ? 's' : ""}} publié{{posts.length > 1 ? 's' : ""}}</h2>
+    <div id="card" v-for="post in posts" :key="post.id" :posts="posts">
+      <h3>{{ post.title }}</h3>
+      <p>{{ post.content }}</p>
       <img
         v-if="post.imageUrl"
         :src="`http://localhost:3000/images/${post.imageUrl}`"
@@ -63,7 +62,11 @@ export default {
         email: "",
         imageUrl: "",
       }),
-      posts: ref([]),
+      posts: ref({
+        title: "",
+        content: "",
+        imageUrl:"",
+      }),
     };
   },
 
@@ -95,24 +98,23 @@ export default {
   },
 
     //get all posts from a user
-    updated() {
-      fetch(`http://localhost:3000/api/posts/user/${this.posts.userId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "Authorization": `Bearer ${this.token}`,
-        },
+    async mounted() {
+      await fetch(`http://localhost:3000/api/posts/user/${this.userId}`, {
+      methods: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",    
+        "Authorization": `Bearer ${this.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("ProfilUser||posts||data", data);
+        this.posts = data;
       })
-        .then((res) => res.json())
-        .then((data) => {
-          this.post = data;
-          console.log("ProfilUser||posts||data", data);
-        })
-        .catch((err) => {
-          console.log("err", err);
-        });
-    },
+      .catch((err) => console.log(err));
+    }, 
 };
 </script>
 
@@ -156,7 +158,7 @@ export default {
   padding: 10px;
   position: absolute;
   right: 30%;
-  top: 55%;
+  top: 290px;
   &:hover {
     color: red;
   }
