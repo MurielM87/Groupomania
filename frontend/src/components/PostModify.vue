@@ -33,7 +33,7 @@
         @click.prevent="updatePost"
         class="form_btn"
         title="enregistrer les modifications">
-        <i class="fas fa-save"></i> Enregistrer les modifications
+        <i class="fas fa-save"></i> Publier les modifications
       </button>
       <button 
         @click.prevent="toggleModale"

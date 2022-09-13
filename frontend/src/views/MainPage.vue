@@ -36,10 +36,8 @@ export default {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
       user: ref({}),
-    //  users: ref([]),
       posts: ref([]),
-    //  comments: ref([]),
-      comment: ref(""),
+      comment: ref({}),
     };
   },
   beforeCreate() {

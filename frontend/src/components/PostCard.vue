@@ -2,7 +2,7 @@
   <PostModify :revele="revele" :toggleModale="toggleModale" />
   <article id="card">
     <!--informations from the author of the post-->
-    <router-link :to="`/profil/${this.post.userId}`">
+    <router-link :to="`/profil/${post.User.id}`">
       <div id="post_author">
         <div id="author_img">
           <img
@@ -58,7 +58,7 @@
         id="post_delete"
         class="form_btn"
         title="supprimer le message"
-        @click.prevent="deletePost"
+        @click.prevent="deletePost(post.id)"
       >
         <i class="far fa-trash-alt"></i>
         <span>Supprimer</span>
@@ -151,7 +151,7 @@ import PostModify from "./PostModify.vue";
 
 export default {
   name: "PostCard",
-  props: ["users", "post", "comment"],
+  props: ["user", "post", "comment"],
   components: {
     PostModify,
   },
@@ -159,9 +159,8 @@ export default {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
-      user: ref({}),
-      content: ref({}),
-    //  comment: ref({}),
+      content: ref(""),
+      users: ref([]),
       comments: ref([]),
       revele: false,
     };
@@ -178,8 +177,8 @@ export default {
       },
     })
       .then((data) => {
-        console.log("PostCard||user||data", data);
-        this.user = data;
+        console.log("PostCard||users||data", data);
+        this.users = data;
       })
       .catch((err) => console.log(err));
   },
@@ -210,8 +209,9 @@ export default {
       return event.toLocaleDateString("fr-Fr", options);
     },
     //modify a post
-    toggleModale: function () {
+    toggleModale(postId) {
       this.revele = !this.revele;
+      console.log("PostCard||toggleModale||postId", postId)
     },
 
     //delete a post
@@ -220,7 +220,7 @@ export default {
       const token = localStorage.getItem("token");
       console.log("PostCard||deletePost", postId);
       if (userId === userId && token === token) {
-        fetch(`http://localhost:3000/api/posts/${this.postId}`, {
+        fetch(`http://localhost:3000/api/posts/${postId}`, {
           method: "DELETE",
           credentials: "include",
         //  data: { postId },
@@ -233,35 +233,36 @@ export default {
             console.log("deletePost || postId", postId);
             return post.id != postId;
           });
-        });
+        })
+        .catch((err)=> console.error(err));
       }
     },
     
     //add a like
-    addLike(postId) {
-      console.log("PostCard||addLike||postId", postId);
-      fetch(`http://localhost:3000/api/posts/${this.postId}/like`, {
-        method: "POST",
-        credentials: "include",
-        data: { postId },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
-        },
-      }).then((res) => {
-        for (let post in this.posts) {
-          if (this.posts[post].id == postId) {
-            if (res.status == 204) {
-              this.posts[post].likes -= 1;
-            }
-            console.log("addLike||posts", post);
-            if (res.status == 201) {
-              this.posts[post].likes += 1;
-            }
-          }
-        }
-      });
-    },
+//    addLike(postId) {
+//      console.log("PostCard||addLike||postId", postId);
+//      fetch(`http://localhost:3000/api/posts/${this.postId}/like`, {
+//        method: "POST",
+//        credentials: "include",
+//        data: { postId },
+//        headers: {
+//          "Content-Type": "application/json",
+//          Authorization: `Bearer ${this.token}`,
+//        },
+//      }).then((res) => {
+//        for (let post in this.posts) {
+//          if (this.posts[post].id == postId) {
+//            if (res.status == 204) {
+//              this.posts[post].likes -= 1;
+//            }
+//            console.log("addLike||posts", post);
+//            if (res.status == 201) {
+//              this.posts[post].likes += 1;
+//            }
+//          }
+//        }
+//      });
+//    },
 
     submitComment(postId) {
       fetch(`http://localhost:3000/api/posts/${postId}/comment`, {

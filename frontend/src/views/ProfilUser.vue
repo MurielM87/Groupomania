@@ -57,7 +57,8 @@ export default {
   data() {
     return {
       token: localStorage.getItem("token"),
-      userId: localStorage.getItem("userId"),
+    //  userId: localStorage.getItem("userId"),
+    userId: this.$route.params.id,
       user: ref({
         pseudo: "",
         firstname: "",
@@ -100,7 +101,7 @@ export default {
       .catch((err) => console.log(err));
   },
 
-    //get all posts from a user
+    //get all posts from the user
     async mounted() {
       await fetch(`http://localhost:3000/api/posts/user/${this.userId}`, {
       methods: "GET",

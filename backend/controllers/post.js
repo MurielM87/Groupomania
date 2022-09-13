@@ -8,7 +8,7 @@ exports.createPost = async (req, res) => {
     where : {id : req.user.userId}
   })
   console.log("createPost||user", user)
-//  let imageUrl    
+  let imageUrl    
 
   if (user !== null) {
     if (req.file) {
@@ -36,11 +36,6 @@ exports.createPost = async (req, res) => {
 
 //get a post
 exports.getOnePost = async (req, res) => {
-//  const id = await database.User.findOne({
-//    where : {id : req.user.userId}
-//  })
-//  console.log("getOnePost||id", id);
-
   //find the post by Id
   let post = await database.Post.findOne({
     where: { id: req.params.id },
@@ -60,7 +55,7 @@ exports.getOnePost = async (req, res) => {
         include: [
           {
             model: database.User,
-            attributes: ["pseudo"],
+            attributes: ["id", "pseudo"],
           },
         ],
       },
@@ -187,16 +182,20 @@ exports.updatePost = async (req, res) => {
 
 //delete a post
 exports.deletePost = async (req, res) => {
+  console.log(req.params.id)
     const userId = await database.User.findOne({
       where : {id : req.user.userId}
     })
-    const checkAdmin = await database.User.findOne({
-      where: { id: req.user.isAdmin },
-    })
+    console.log("deletePost||userId", userId)
+  //  const checkAdmin = await database.User.findOne({
+  //    where: { id: req.user.userId },
+   // })
+    console.log(`arrivée ici`)
     const post = await database.Post.findOne({ 
       where: { id: req.params.id } 
     })
-    if (userId === post.userId || checkAdmin.isAdmin === true) {
+    console.log("deletePost||post", post)
+    if (userId.id === post.UserId || userId.isAdmin === true) {
       if (post.imageUrl) {
         const filename = post.imageUrl.split("/images")[1]
         fs.unlink(`images/${filename}`, () => {
