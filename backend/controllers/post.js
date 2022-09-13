@@ -36,43 +36,39 @@ exports.createPost = async (req, res) => {
 
 //get a post
 exports.getOnePost = async (req, res) => {
-  const id = await database.User.findOne({
-    where : {id : req.user.userId}
-  })
-  console.log("getOnePost||id", id);
+//  const id = await database.User.findOne({
+//    where : {id : req.user.userId}
+//  })
+//  console.log("getOnePost||id", id);
 
-    //find the post by Id
-  //  try {
-    let post = await database.Post.findOne({
-      where: { id: req.params.id },
-      include: [
-        {
-          model: database.User,
-          attributes: ["pseudo", "id"],
-        },
-        {
-          model: database.Like,
-          attributes: ["postId", "userId"],
-        },
-        {
-          model: database.Comment,
-          order: [["createdAt", "DESC"]],
-          attributes: ["content", "postId", "userId"],
-          include: [
-            {
-              model: database.User,
-              attributes: ["pseudo"],
-            },
-          ],
-        },
-      ],
-    })
-    res.status(200).json(post)
+  //find the post by Id
+  let post = await database.Post.findOne({
+    where: { id: req.params.id },
+    include: [
+      {
+        model: database.User,
+        attributes: ["id", "pseudo", "imageUrl"],
+      },
+      {
+        model: database.Like,
+        attributes: ["id", "postId", "userId"],
+      },
+      {
+        model: database.Comment,
+        order: [["createdAt", "DESC"]],
+        attributes: ["id", "content", "postId", "userId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["pseudo"],
+          },
+        ],
+      },
+    ],
+  })
+  res.status(200).json(post)
     console.log("getOnePost||req.params.id", req.params.id);
     console.log("getOnePost||post", post)
-//  } catch (error) {
-//    return res.status(500).send({ error: "Erreur serveur" })
-//  }
 }
 
 //get all posts

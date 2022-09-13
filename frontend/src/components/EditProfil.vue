@@ -66,13 +66,13 @@
           class="form_btn"
           title="enregistrer les modifications"
           type="submit"
-        ><i class="fas fa-save"></i> Enregistrer les modifications </button>
+        ><i class="fas fa-save"></i> Enregistrer</button>
         <button 
           @click.prevent="onCancel" 
           class="form_btn"
+          title="annuler les modifications"
           type="button"
-        >
-          <i class="fas fa-times-circle"></i> Annuler les modifications </button
+        ><i class="fas fa-times-circle"></i> Annuler</button
         ><br />
 
         <button
@@ -171,6 +171,11 @@ export default {
 
     },
        
+    //cancel modification
+    onCancel() {
+      this.$router.go(-1);
+      console.log("edit")
+    },
 
     //delete user
     deleteUser() {
@@ -199,9 +204,6 @@ export default {
       },
   },
 
-  onCancel() {
-    this.$router.push(`/profil/${this.userId}`);
-  }
 };
 </script>
 
@@ -221,10 +223,12 @@ export default {
 
 .form_btn {
   margin-right: 10px;
+  padding: 2px;
 }
 
 .delete_btn {
   margin-top : 10px;
+  padding: 2px;
 }
 
 </style>

@@ -36,9 +36,9 @@ export default {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
       user: ref({}),
-      users: ref([]),
+    //  users: ref([]),
       posts: ref([]),
-      comments: ref([]),
+    //  comments: ref([]),
       comment: ref(""),
     };
   },

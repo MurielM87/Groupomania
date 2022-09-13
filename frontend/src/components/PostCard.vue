@@ -2,7 +2,7 @@
   <PostModify :revele="revele" :toggleModale="toggleModale" />
   <article id="card">
     <!--informations from the author of the post-->
-    <router-link :to="{ name: 'ProfilUser', params: { id: this.userId } }">
+    <router-link :to="`/profil/${this.post.userId}`">
       <div id="post_author">
         <div id="author_img">
           <img
@@ -151,7 +151,7 @@ import PostModify from "./PostModify.vue";
 
 export default {
   name: "PostCard",
-  props: ["post", "comment"],
+  props: ["users", "post", "comment"],
   components: {
     PostModify,
   },
@@ -160,11 +160,28 @@ export default {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
       user: ref({}),
-      content: ref(""),
-    //  comment: ref(""),
+      content: ref({}),
+    //  comment: ref({}),
       comments: ref([]),
       revele: false,
     };
+  },
+
+  async created() {
+    await fetch(`http://localhost:3000/api/users/`, {
+      methods: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",    
+        "Authorization": `Bearer ${this.token}`,
+      },
+    })
+      .then((data) => {
+        console.log("PostCard||user||data", data);
+        this.user = data;
+      })
+      .catch((err) => console.log(err));
   },
 
   methods: {
@@ -245,6 +262,7 @@ export default {
         }
       });
     },
+
     submitComment(postId) {
       fetch(`http://localhost:3000/api/posts/${postId}/comment`, {
         method: "POST",
@@ -254,70 +272,46 @@ export default {
           Authorization: `Bearer ${this.token}`,
         },
       })
-        .then(
-          function (res) {
-            if (res.status != 201) {
-              this.fetchError = res.status;
-            } else {
-              res.json().then(
-                function (data) {
-                  this.fetchResponse = data;
-                }.bind(this)
-              );
-            }
-          }.bind(this)
-        )
-        .catch((err) => {
-          console.log("err", err);
-        });
+      .then((data) => {
+        console.log("CardForm||data", data);
+        this.content = data;
+      })
+      .catch((err) => console.log(err));  
     },
-    /*
-            //add a comment
-            addComment(postId, content) {
-              console.log("PostCard||addContent||postId, content", postId, content);
-              //  fetch(`http://localhost:3000/api/posts/${this.postId}/comment`, {
-              //    method: "POST",
-              //    credentials: "include",
-              //    data: { postId, content },
-              //    headers: {
-              //      "Content-Type": "application/json",
-              //      "Authorization": `Bearer ${this.token}`,
-              //    },
-              //  }).then(() => this.loadcomments(postId));
-            },
+ 
+    //get all comments from a post
+    loadComments(postId) {
+      fetch(`http://localhost:3000/api/posts/comments/${this.postId}`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.token}`,
+        },
+      }).then((res) => {
+        this.comments = {
+          ...this.comments,
+          [postId]: res.data,
+        };
+        console.log("PostCard||comments", this.comments)
+        console.log("loadComments||res.data", res.data);
+      });
+    },
         
-            //get all comments from a post
-            loadComments(postId) {
-              //  fetch(`http://localhost:3000/api/posts/comments/${this.postId}`, {
-              //    method: "GET",
-              //    credentials: "include",
-              //    headers: {
-              //      "Content-Type": "application/json",
-              //      "Authorization": `Bearer ${this.token}`,
-              //    },
-              //  }).then((res) => {
-              //    this.comments = {
-              //      ...this.comments,
-              //      [postId]: res.data,
-              //    };
-              //    console.log("loadComments||res.data", res.data);
-              //  });
-            },
-        
-            //delete a comment from a post
-            deleteComment(postId, commentId) {
-              console.log("PostCard||deleteComment||postId", postId);
-              console.log("PostCard||deleteComment||commentId", commentId);
-              //  fetch(`http://localhost:3000/api/posts/comment/${this.commentId}`, {
-              //    method: "DELETE",
-              //    data:
-              //    credentials: "include", { postId, commentId },
-              //    headers: {
-              //      "Content-Type": "application/json",
-              //      "Authorization": `Bearer ${this.token}`,
-              //    },
-              //  }).then(() => this.loadComments(postId));
-            },*/
+    //delete a comment from a post
+    deleteComment(postId, commentId) {
+      console.log("PostCard||deleteComment||postId", postId);
+      console.log("PostCard||deleteComment||commentId", commentId);
+      fetch(`http://localhost:3000/api/posts/comment/${this.commentId}`, {
+        method: "DELETE",
+        credentials: "include", 
+        data: { postId, commentId },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${this.token}`,
+        },
+      }).then(() => this.loadComments(postId));
+    },
   },
 };
 </script>
@@ -370,12 +364,14 @@ h4 {
   justify-content: flex-end;
 }
 .fa-thumbs-up {
+  font-size: 25px;
   color: black;
   &:focus {
     color: green;
   }
 }
 .fa-thumbs-down {
+  font-size: 25px;
   color: black;
   padding-left: 15px;
   &:focus {
