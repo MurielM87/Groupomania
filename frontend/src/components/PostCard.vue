@@ -264,8 +264,8 @@ export default {
 //      });
 //    },
 
-    submitComment(postId) {
-      fetch(`http://localhost:3000/api/posts/${postId}/comment`, {
+    submitComment(post) {
+      fetch(`http://localhost:3000/api/posts/${post.id}/comment`, {
         method: "POST",
         credentials: "include",
         headers: {

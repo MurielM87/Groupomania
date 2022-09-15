@@ -8,7 +8,7 @@ exports.createPost = async (req, res) => {
     where : {id : req.user.userId}
   })
   console.log("createPost||user", user)
-  let imageUrl    
+  //let imageUrl    
 
   if (user !== null) {
     if (req.file) {
@@ -55,7 +55,7 @@ exports.getOnePost = async (req, res) => {
         include: [
           {
             model: database.User,
-            attributes: ["id", "pseudo"],
+            attributes: ["id", "pseudo", "imageUrl"],
           },
         ],
       },
@@ -75,11 +75,11 @@ exports.getAllPosts = async (req, res) => {
       include: [
         {
           model: database.User,
-          attributes: ["pseudo", "id", "imageUrl", "isAdmin"],
+          attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
         },
         {
           model: database.Like,
-          attributes: ["userId"],
+          attributes: ["id", "userId"],
         },
         {
           model: database.Comment,
@@ -88,7 +88,7 @@ exports.getAllPosts = async (req, res) => {
           include: [
             {
               model: database.User,
-              attributes: ["imageUrl", "pseudo", "isAdmin"],
+              attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
             },
           ],
         },
@@ -138,46 +138,49 @@ exports.getAllPostsOfOneUser = async (req, res, next) => {
 
 //update a post
 exports.updatePost = async (req, res) => {
-    //find the post by Id
-    let newImageUrl
-    const userId = await database.User.findOne({
-      where : {id : req.user.userId}
-    })
-    let post = await database.Post.findOne({ 
-      where: { id: req.params.id } 
-    })
-
-    if (userId === post.UserId) {
-      // if a file is in the request
-      if (req.file) {
-        newImageUrl = req.file.filename
-        // if an image is already in database
-        if (post.imageUrl) {
-          const filename = post.imageUrl.split("/images")[1]
-          // delete it from the "upload" file
-          fs.unlink(`images/${filename}`, (err) => {
-            if (err) console.log(err)
-            else {
-              console.log(`Deleted file: images/${filename}`)
-            }
-          })
-        }
-      } // if a new message is in the request
-      if (req.body.title) {
-        post.title = req.body.title
+  //find the post by Id
+  let newImageUrl
+  const userId = await database.User.findOne({
+    where : {id : req.user.userId}
+  })
+  console.log("updatePost||userId", userId)
+  console.log(req.user)
+  const post = await database.Post.findOne({ 
+    where: { id: req.params.id } 
+  })
+  console.log("updatePost||post", post)
+  console.log(req.params)
+  if (userId.id === post.UserId.id) {
+    // if a file is in the request
+    if (req.file) {
+      newImageUrl = req.file.filename
+      // if an image is already in database
+      if (post.imageUrl) {
+        const filename = post.imageUrl.split("/images")[1]
+        // delete it from the "upload" file
+        fs.unlink(`images/${filename}`, (err) => {
+          if (err) console.log(err)
+          else {
+            console.log(`Deleted file: images/${filename}`)
+          }
+        })
       }
-      if (req.body.content) {
-        post.content = req.body.content
-      }
-      post.imageUrl = newImageUrl
-      //save in database
-      const newPost = await post.save({
-        fields: ["title", "content", "imageUrl"],
-      })
-      res.status(200).json({ newPost: newPost, message: "message modifié" })
-    } else {
-      res.status(401).json({ message: "Vous n'avez pas l'autorisation" })
+    } // if a new message is in the request
+    if (req.body.title) {
+      post.title = req.body.title
     }
+    if (req.body.content) {
+      post.content = req.body.content
+    }
+    post.imageUrl = newImageUrl
+    //save in database
+    const newPost = await post.save({
+      fields: ["title", "content", "imageUrl"],
+    })
+      res.status(200).json({ newPost: newPost, message: "message modifié" })
+  } else {
+    res.status(401).json({ message: "Vous n'avez pas l'autorisation" })
+  }
 }
 
 //delete a post
@@ -187,10 +190,6 @@ exports.deletePost = async (req, res) => {
       where : {id : req.user.userId}
     })
     console.log("deletePost||userId", userId)
-  //  const checkAdmin = await database.User.findOne({
-  //    where: { id: req.user.userId },
-   // })
-    console.log(`arrivée ici`)
     const post = await database.Post.findOne({ 
       where: { id: req.params.id } 
     })

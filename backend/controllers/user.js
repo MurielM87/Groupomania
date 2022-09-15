@@ -99,9 +99,6 @@ exports.getAllUsers = async (req, res) => {
 //update User
 exports.updateUser = async (req, res) => {
   const id = req.params.id
-  console.log("updateUser||req.body", req.body)
-  console.log("updateUser||req.file", req.file)
-  console.log("updateUser||req.params", req.params)
   
     let imageUrl
     let user = await database.User.findOne({ where: { id: id } })
@@ -149,14 +146,10 @@ exports.updateUser = async (req, res) => {
 //delete User
 exports.deleteUser = async (req, res) => {
   try {
-    const id = req.params.id
-    const user = await database.User.findOne({ 
-      where: { id: id } }
-    )
-    const checkAdmin = await database.User.findOne({
-      where: { id: isAdmin },
+    const userId = await database.User.findOne({
+      where : {id : req.user.userId}
     })
-    if (user !== null || checkAdmin.isAdmin === true) {
+    if (userId.id === post.UserId || userId.isAdmin === true) {
       const filename = user.imageUrl.split("/images")[1]
       fs.unlink(`images/${filename}`, () => {
         database.User.destroy({ where: { id: id } })

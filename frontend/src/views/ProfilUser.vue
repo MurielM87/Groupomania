@@ -18,7 +18,7 @@
         :src="`http://localhost:3000/images/${this.user.imageUrl}`"
         crossorigin="anonymous"
       />
-      <router-link v-if="userId === userId && token === token" :to="`/profil/${this.userId}/edit`"
+      <router-link :to="`/profil/${this.userId}/edit`"
         ><i class="fas fa-pencil-alt"></i
       ></router-link>
     </div>

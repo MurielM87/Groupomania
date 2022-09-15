@@ -5,6 +5,12 @@ exports.createComment = async (req, res) => {
     const userId = await database.User.findOne({
         where : {id : req.user.userId}
     })
+    console.log("CreateComment||userId", userId)
+    const post = await database.Post.findOne({ 
+        where: { id: req.params.id } 
+      })
+      console.log("CreateComment||post", post)
+      console.log(req.params)
     if (req.body.content === "") {
         return res.status(401).json({ error: "Veuillez remplir le champs" });
     } else {
@@ -24,14 +30,13 @@ exports.deleteComment = async (req, res) => {
         const userId = await database.User.findOne({
             where : {id : req.user.userId}
         })
-        const checkAdmin = await database.User.findOne({ 
-            where: { id: req.user.isAdmin } 
-        })
+        console.log("DeleteComment||userId", userId)
         const comment = await database.Comment.findOne({
             where: { id: req.params.id },
         })
+        console.log("deleteComment||comment", comment)
 
-        if (userId === comment.userId || checkAdmin.isAdmin === true) {
+        if (userId === comment.UserId || userId.isAdmin === true) {
             database.Comment.destroy(
                 { where: { id: req.params.id } },
                 { truncate: true }
@@ -62,12 +67,12 @@ exports.getAllComments = (req, res) => {
             },
             {
                 model: database.Comment,
-                attributes: ["content", "postId", "userId", "id"],
+                attributes: ["id", "content", "postId", "userId"],
                 order: [["createdAt", "DESC"]],
                 include: [
                     {
                         model: database.User,
-                        attributes: ["imageUrl", "pseudo", "isAdmin"],
+                        attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
                     },
                 ],
             },

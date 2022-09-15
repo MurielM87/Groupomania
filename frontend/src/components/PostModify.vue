@@ -4,20 +4,20 @@
       <h2>Modifier votre message</h2>
       <input
         type="text"
-        v-model="post.title"
+        v-model="this.title"
         class="post_title"
         placeholder="titre du message"
         required
       />
       <textarea
         type="text"
-        v-model="post.content"
+        v-model="content"
         placeholder="message"
         rows="3"
         required
       ></textarea>
       <!--add an image -->
-      <img v-if="imageUrl" :src="`http://localhost:3000/api/images/${this.post.imageUrl}`"/>
+      <img v-if="imageUrl" :src="`http://localhost:3000/api/images/${this.post.imageUrl}`"/><img v-else :src="image"/>
       <div class="post_img">
         <input
           @change="uploadImg"
@@ -55,11 +55,12 @@ export default {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
-      post: ref({
-        title: "",
-        content: "",
-        imageUrl: "",
+      post: ({
+        title: ref(""),
+        content: ref(""),
+        imageUrl: ref(""),
       }),
+      image: null,
     };
   },
   props: ["revele", "toggleModale"],
@@ -96,9 +97,9 @@ export default {
       const userId = localStorage.getItem("userId")
 
       const post = {
-        title: this.post.title,
-        content: this.post.content,
-        imageUrl: this.post.imageUrl,
+        title: this.title,
+        content: this.content,
+        imageUrl: this.imageUrl,
       };
       console.log("ModifyPost||post", post);
            
