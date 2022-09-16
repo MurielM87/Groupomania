@@ -11,18 +11,17 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: "CASCADE",
       }),
-        models.Comment.belongsTo(models.Post, {
-          foreignKey: {
-          allowNull: false,
-          },
-          onDelete: "CASCADE",
-        })
+      models.Comment.belongsTo(models.Post, {
+        foreignKey: {
+        allowNull: false,
+        },
+        onDelete: "CASCADE",
+      })
     }
   }
   Comment.init(
     {
       content: { type: DataTypes.TEXT, allowNull: false },
-      userPseudo: { type: DataTypes.STRING, allowNull: false },
     },
     {
       sequelize,

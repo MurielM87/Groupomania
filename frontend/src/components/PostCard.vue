@@ -49,7 +49,7 @@
         id="post_modify"
         class="form_btn"
         title="modifier le message"
-        @click.prevent="toggleModale"
+        @click.prevent="toggleModale(post.id)"
       >
         <i class="far fa-edit"></i>
         <span class="btn_modify">Modifier</span>
@@ -90,8 +90,8 @@
           rows="3"
           required
         ></textarea>
-        <button type="submit" @click.prevent="submitComment">
-          <span>Publier</span> <i class="far fa-edit"></i>
+        <button type="submit" @click.prevent="submitComment(post.id)">
+          <span>Publier </span> <i class="far fa-edit"></i>
         </button>
       </div>
 
@@ -130,14 +130,14 @@
         </div>
         <br />
 
-        <div v-if="comment.userId" :token="token">
+        <div v-if="comment.User.id" :token="token">
           <button
             id="comment-delete"
             class="form_btn"
             title="Supprimer le commentaire"
             @click.prevent="deleteComment"
           >
-            <span>Supprimer</span><i class="far fa-trash-alt"></i>
+            <span>Supprimer </span><i class="far fa-trash-alt"></i>
           </button>
         </div>
       </div>
@@ -264,14 +264,18 @@ export default {
 //      });
 //    },
 
-    submitComment(post) {
-      fetch(`http://localhost:3000/api/posts/${post.id}/comment`, {
+    submitComment(postId) {
+      console.log("PostCard||submitComment", postId);
+      fetch(`http://localhost:3000/api/posts/${postId}/comment`, {
         method: "POST",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.token}`,
         },
+        body: JSON.stringify({
+          content: this.content
+        }),
       })
       .then((data) => {
         console.log("CardForm||data", data);

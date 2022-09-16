@@ -25,14 +25,6 @@ module.exports = {
           key: "id",
         },
       },
-      userPseudo:{
-        allowNull: false,
-        type: Sequelize.STRING,
-        references: {
-          model: "User",
-          key: "pseudo"
-        }
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

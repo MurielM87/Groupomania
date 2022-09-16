@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: "CASCADE",
       }),
-        models.Post.hasMany(models.Comment)
+      models.Post.hasMany(models.Comment)
       models.Post.hasMany(models.Like)
     }
   }
@@ -23,7 +23,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-
       modelName: "Post",
     }
   )

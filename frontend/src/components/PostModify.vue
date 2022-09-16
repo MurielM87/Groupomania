@@ -55,11 +55,9 @@ export default {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
-      post: ({
-        title: ref(""),
-        content: ref(""),
-        imageUrl: ref(""),
-      }),
+      title: ref(""),
+      content: ref(""),
+      imageUrl: ref(""),
       image: null,
     };
   },
