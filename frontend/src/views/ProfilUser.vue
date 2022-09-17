@@ -57,8 +57,7 @@ export default {
   data() {
     return {
       token: localStorage.getItem("token"),
-    //  userId: localStorage.getItem("userId"),
-    userId: this.$route.params.id,
+      userId: this.$route.params.id,
       user: ref({
         pseudo: "",
         firstname: "",
