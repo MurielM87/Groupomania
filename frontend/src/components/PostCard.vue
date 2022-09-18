@@ -239,32 +239,34 @@ export default {
     },
     
     //add a like
-//    addLike(postId) {
-//      console.log("PostCard||addLike||postId", postId);
-//      fetch(`http://localhost:3000/api/posts/${this.postId}/like`, {
-//        method: "POST",
-//        credentials: "include",
-//        data: { postId },
-//        headers: {
-//          "Content-Type": "application/json",
-//          Authorization: `Bearer ${this.token}`,
-//        },
-//      }).then((res) => {
-//        for (let post in this.posts) {
-//          if (this.posts[post].id == postId) {
-//            if (res.status == 204) {
-//              this.posts[post].likes -= 1;
-//            }
-//            console.log("addLike||posts", post);
-//            if (res.status == 201) {
-//              this.posts[post].likes += 1;
-//            }
-//          }
-//        }
-//      });
-//    },
+    addLike(postId) {
+      console.log("PostCard||addLike||postId", postId);
+      fetch(`http://localhost:3000/api/posts/${this.postId}/like`, {
+        method: "POST",
+        credentials: "include",
+        data: { postId },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token}`,
+        },
+      }).then((res) => {
+        for (let post in this.posts) {
+          if (this.posts[post].id == postId) {
+            if (res.status == 204) {
+              this.posts[post].likes -= 1;
+            }
+            console.log("addLike||posts", post);
+            if (res.status == 201) {
+              this.posts[post].likes += 1;
+            }
+          }
+        }
+      });
+    },
 
     submitComment(postId) {
+      const userId = localStorage.getItem("userId");
+      console.log("PostCard||submitComment", userId)
       console.log("PostCard||submitComment", postId);
       fetch(`http://localhost:3000/api/posts/${postId}/comment`, {
         method: "POST",

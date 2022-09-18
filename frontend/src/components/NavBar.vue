@@ -17,7 +17,7 @@
     <div id="barre">
       <li v-if="this.isLoggedIn" class="menu">
         <ul>
-          <router-link :to="{name: 'ProfilUser', params: {id: this.userId}}" 
+          <router-link :to="{name: 'ProfilUser', params: {id: this.userId} }" 
             ><i class="fas fa-user-circle"><span class="text_desktop"> Mon profil</span></i></router-link
           >
         </ul>
@@ -51,15 +51,15 @@ export default {
     return {
       token: localStorage.getItem('token'),
       userId: localStorage.getItem('userId'),
-      isLoggedIn: false
+      isLoggedIn: false,
     }
   },
   mounted() {
     const token = localStorage.getItem('token')
     const userId = localStorage.getItem('userId')
     if (token !== null && userId !== null) {
-      this.isLoggedIn = true
       this.$emit('userId')
+      this.isLoggedIn = true
       console.log("NavBar||mounted||userId", userId)
     } else {
       this.$router.push({name: "LogIn"})
@@ -70,6 +70,7 @@ export default {
       localStorage.removeItem('token');
       localStorage.removeItem('userId');
       this.$router.push({name : "LogIn"});
+      this.isLoggedIn = false;
     },
   },
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <NavBar />
+    <NavBar :key="componentKey"/>
     <router-view />
 
     <FooterPage />
@@ -16,6 +16,16 @@ export default {
   components: {
     NavBar,
     FooterPage,
+  },
+  data(){
+    return {
+      componentKey: 0
+    }
+  },
+  methods: {
+    forceRerender() {
+      this.componentKey ++;
+    }
   }
 };
 </script>

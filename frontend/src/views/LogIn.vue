@@ -45,48 +45,60 @@
 
 <script>
 export default {
-    name: "LogIn",
-    data() {
-        return {
-            email: "",
-            password: "",
-            emailErrorMessage: "",
-            passwordErrorMessage: "",
-        };
+  name: "LogIn",
+  data() {
+    return {
+      email: "",
+      password: "",
+      emailErrorMessage: "",
+      passwordErrorMessage: "",
+      isLoggedIn: false,
+    };
+  },
+  mounted() {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    if (token !== null && userId !== null) {
+      this.isLoggedIn = true;
+      this.$emit("userId");
+      console.log("Login||mounted||userId", userId);
+    } else {
+      this.$router.push({ name: "LogIn" });
+    }
+  },
+  methods: {
+    logIn: function () {
+      if (this.email === "" || this.password === "") {
+        this.emailErrorMessage = "Adresse email invalide";
+        this.passwordErrorMessage = "Mot de passe invalide";
+      } else {
+        fetch(`http://localhost:3000/api/users/login`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: this.email,
+            password: this.password,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("userId", data.userId);
+            console.log("token", data.token);
+            console.log("userId", data.userId);
+            this.$router.push("/");
+            this.isLoggedIn = true;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
-    methods: {
-        logIn: function () {
-            if (this.email === "" || this.password === "") {
-                this.emailErrorMessage = "Adresse email invalide";
-                this.passwordErrorMessage = "Mot de passe invalide";
-            }
-            else {
-                fetch(`http://localhost:3000/api/users/login`, {
-                    method: "POST",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        email: this.email,
-                        password: this.password,
-                    }),
-                })
-                    .then((res) => res.json())
-                    .then((data) => {
-                    console.log(data);
-                    localStorage.setItem("token", data.token);
-                    localStorage.setItem("userId", data.userId);
-                    console.log("token", data.token);
-                    console.log("userId", data.userId);
-                    this.$router.push("/");
-                })
-                    .catch((error) => {
-                    console.log(error);
-                });
-            }
-        },
-    },
+  },
 };
 </script>
 

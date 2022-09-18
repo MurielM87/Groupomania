@@ -221,15 +221,13 @@ exports.likePost = async (req, res, next) => {
       where : {id : req.user.userId}
     })
     console.log("likePost||userId", userId)
-    const postId = await database.Post.findOne({
-      where: {id: req.params.postId}
+    const postId = await database.Post.findOne({ 
+      where: { id: req.params.id } 
     })
-    console.log("likePost||postId", postId)
-    console.log(req.params)
-    const user = await database.Like.findOne({
-      where: { userId: userId, postId: postId },
-    })
-    if (user) {
+    console.log("likePost||post", postId)
+    console.log(req)
+  
+    if (userId) {
       await database.Like.destroy(
         { where: { userId: userId, postId: postId } },
         { truncate: true, restartIdentity: true }

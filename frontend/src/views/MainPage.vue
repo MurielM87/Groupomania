@@ -1,7 +1,7 @@
 <template>
   <section class="posts">
     <h2>Bonjour {{ user.pseudo }}</h2>
-    <PostForm />
+    <PostForm :key="componentKey"/>
 
     <div class="separate_barre"></div>
     <h2>Nouvelles publications</h2>
@@ -38,6 +38,7 @@ export default {
       user: ref({}),
       posts: ref([]),
       comment: ref({}),
+      componentKey: 0,
     };
   },
   beforeCreate() {
@@ -104,7 +105,9 @@ export default {
     },
  
   methods: {    
-  
+    forceRerender() {
+      this.componentKey ++;
+    },
     
     //button scroll top
     toTop() {

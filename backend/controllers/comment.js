@@ -63,7 +63,7 @@ exports.getAllComments = (req, res) => {
             },
             {
                 model: database.Like,
-                attributes: ["userId"],
+                attributes: ["userId", "postId"],
             },
             {
                 model: database.Comment,
