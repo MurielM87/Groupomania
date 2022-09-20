@@ -39,6 +39,8 @@ exports.getOnePost = async (req, res) => {
   //find the post by Id
   let post = await database.Post.findOne({
     where: { id: req.params.id },
+    attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
+    order: [["createdAt", "DESC"]],
     include: [
       {
         model: database.User,
@@ -57,12 +59,16 @@ exports.getOnePost = async (req, res) => {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl"],
           },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
         ],
       },
     ],
   })
   res.status(200).json(post)
-    console.log("getOnePost||req.params.id", req.params.id);
+    console.log("getOnePost||req.params.id", req.params);
     console.log("getOnePost||post", post)
 }
 
@@ -70,7 +76,7 @@ exports.getOnePost = async (req, res) => {
 exports.getAllPosts = async (req, res) => {
     // get all posts from database
     const posts = await database.Post.findAll({
-      attributes: ["id", "title", "content", "imageUrl", "createdAt"],
+      attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
       order: [["createdAt", "DESC"]],
       include: [
         {
@@ -79,17 +85,21 @@ exports.getAllPosts = async (req, res) => {
         },
         {
           model: database.Like,
-          attributes: ["id", "userId"],
+          attributes: ["id", "userId", "postId"],
         },
         {
           model: database.Comment,
-          attributes: ["postId", "userId", "id"],
+          attributes: ["id", "postId", "userId"],
           order: [["createdAt", "DESC"]],
           include: [
             {
               model: database.User,
               attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
             },
+            {
+              model: database.Post,
+              attributes: ["id", "title", "content", "imageUrl", "userId"]
+            }
           ],
         },
       ],
@@ -117,17 +127,21 @@ exports.getAllPostsOfOneUser = async (req, res, next) => {
         },
         {
           model: database.Like,
-          attributes: ["userId"],
+          attributes: ["id", "postId", "userId"],
         },
         {
           model: database.Comment,
-          attributes: ["postId", "userId", "id"],
+          attributes: ["id", "postId", "userId"],
           order: [["createdAt", "DESC"]],
           include: [
             {
               model: database.User,
               attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
             },
+            {
+              model: database.Post,
+              attributes: ["id", "title", "content", "imageUrl", "userId"]
+            }
           ],
         },
       ],
@@ -138,19 +152,19 @@ exports.getAllPostsOfOneUser = async (req, res, next) => {
 
 //update a post
 exports.updatePost = async (req, res) => {
+  console.log(req.params.id)
   //find the post by Id
   let newImageUrl
   const userId = await database.User.findOne({
     where : {id : req.user.userId}
   })
-  console.log("updatePost||userId", userId)
-  console.log(req.user)
+  console.log("updatePost||userId", userId.id)
   const post = await database.Post.findOne({ 
     where: { id: req.params.id } 
   })
   console.log("updatePost||post", post)
-  console.log(req.params)
-  if (userId.id === post.UserId.id) {
+  console.log(req)
+  if (userId.id === post.UserId) {
     // if a file is in the request
     if (req.file) {
       newImageUrl = req.file.filename
@@ -225,7 +239,7 @@ exports.likePost = async (req, res, next) => {
       where: { id: req.params.id } 
     })
     console.log("likePost||post", postId)
-    console.log(req)
+    console.log(req.params)
   
     if (userId) {
       await database.Like.destroy(

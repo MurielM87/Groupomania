@@ -1,12 +1,13 @@
-<template>
+<template :key="componentKey">
   <header>
     <div v-if="this.isLoggedIn">
+       <img alt="logo Groupomania" src="../assets/icon.png" class="logo" />
+     
+    </div>
+    <div v-else>
       <router-link :to="{ name: 'MainPage' }"
         ><img alt="logo Groupomania" src="../assets/icon.png" class="logo"
       /></router-link>
-    </div>
-    <div v-else>
-      <img alt="logo Groupomania" src="../assets/icon.png" class="logo" />
     </div>
 
     <div v-if="this.isLoggedIn">
@@ -52,20 +53,29 @@ export default {
       token: localStorage.getItem('token'),
       userId: localStorage.getItem('userId'),
       isLoggedIn: false,
+      componentKey: 0,
     }
   },
-  mounted() {
+
+  async created() {
     const token = localStorage.getItem('token')
     const userId = localStorage.getItem('userId')
-    if (token !== null && userId !== null) {
+    console.log("NavBar||created", userId)
+    console.log("NavBar||created", token)
+    if (token && userId) {
       this.$emit('userId')
       this.isLoggedIn = true
-      console.log("NavBar||mounted||userId", userId)
+      console.log("NavBar||created||userId", userId)
     } else {
       this.$router.push({name: "LogIn"})
     }
   },
+  
   methods: {
+    forceRerender() {
+      this.componentKey +1;
+    },
+    
     logOut() {
       localStorage.removeItem('token');
       localStorage.removeItem('userId');

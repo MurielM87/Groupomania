@@ -18,9 +18,12 @@
         :src="`http://localhost:3000/images/${this.user.imageUrl}`"
         crossorigin="anonymous"
       />
-      <router-link :to="`/profil/${this.userId}/edit`"
-        ><i class="fas fa-pencil-alt"></i
-      ></router-link>
+      <div v-if="this.user.id = userId">
+        <router-link :to="`/profil/${this.userId}/edit`">
+        <i class="fas fa-pencil-alt"></i>
+        </router-link>
+      </div>
+      
     </div>
 
     <!--user information -->
@@ -47,6 +50,10 @@
       </div>
     </div>
   </form>
+  <!-- Bouton Scroll to Top-->
+  <button class="toTop" @click="toTop" title="Retour en haut de page">
+      <span class="fa fa-chevron-up"></span>
+    </button>
 </template>
 
 <script>
@@ -143,6 +150,14 @@ export default {
         minute: "numeric",
       };
       return event.toLocaleDateString("fr-Fr", options);
+    },
+
+    //button scroll top
+    toTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     },
   }
 };

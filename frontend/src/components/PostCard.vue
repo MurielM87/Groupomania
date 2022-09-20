@@ -44,7 +44,7 @@
     <br />
 
     <!--add the buttons 'modify' and 'delete' to the published post-->
-    <div class="post_btn">
+    <div v-if="post.User.id == userId" class="post_btn">
       <button
         id="post_modify"
         class="form_btn"
@@ -130,7 +130,7 @@
         </div>
         <br />
 
-        <div v-if="comment.User.id" :token="token">
+        <div v-if="comment.User.id = UserId">
           <button
             id="comment-delete"
             class="form_btn"
@@ -151,7 +151,7 @@ import PostModify from "./PostModify.vue";
 
 export default {
   name: "PostCard",
-  props: ["user", "post", "comment"],
+  props: ["post", "comment"],
   components: {
     PostModify,
   },
@@ -160,6 +160,7 @@ export default {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
       content: ref(""),
+      user: ref({}),
       users: ref([]),
       comments: ref([]),
       revele: false,
@@ -176,9 +177,28 @@ export default {
         "Authorization": `Bearer ${this.token}`,
       },
     })
+      .then((res) => res.json())
       .then((data) => {
         console.log("PostCard||users||data", data);
         this.users = data;
+      })
+      .catch((err) => console.log(err));
+  },
+
+  async mounted() {
+    await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+      methods: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",    
+        "Authorization": `Bearer ${this.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("PostCard||user||data", data);
+        this.user = data;
       })
       .catch((err) => console.log(err));
   },
@@ -223,12 +243,13 @@ export default {
         fetch(`http://localhost:3000/api/posts/${postId}`, {
           method: "DELETE",
           credentials: "include",
-        //  data: { postId },
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${this.token}`,
           },
-        }).then(() => {
+        })
+        .then((res) => res.json())
+        .then(() => {
           this.posts = this.posts.splice((post) => {
             console.log("deletePost || postId", postId);
             return post.id != postId;
@@ -249,7 +270,9 @@ export default {
           "Content-Type": "application/json",
           Authorization: `Bearer ${this.token}`,
         },
-      }).then((res) => {
+      })
+      .then((res) => res.json())
+      .then((res) => {
         for (let post in this.posts) {
           if (this.posts[post].id == postId) {
             if (res.status == 204) {
@@ -261,13 +284,14 @@ export default {
             }
           }
         }
-      });
+      })
+      .catch((err) => console.log(err));  
     },
 
     submitComment(postId) {
       const userId = localStorage.getItem("userId");
-      console.log("PostCard||submitComment", userId)
-      console.log("PostCard||submitComment", postId);
+      console.log("PostCard||submitComment||userId", userId);
+      console.log("PostCard||submitComment||postId", postId);
       fetch(`http://localhost:3000/api/posts/${postId}/comment`, {
         method: "POST",
         credentials: "include",
@@ -279,6 +303,7 @@ export default {
           content: this.content
         }),
       })
+      .then((res) => res.json())
       .then((data) => {
         console.log("CardForm||data", data);
         this.content = data;
@@ -295,14 +320,17 @@ export default {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${this.token}`,
         },
-      }).then((res) => {
+      })
+      .then((res) => res.json())
+      .then((res) => {
         this.comments = {
           ...this.comments,
           [postId]: res.data,
         };
         console.log("PostCard||comments", this.comments)
         console.log("loadComments||res.data", res.data);
-      });
+      })
+      .catch((err) => console.log(err));  
     },
         
     //delete a comment from a post
@@ -317,7 +345,10 @@ export default {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${this.token}`,
         },
-      }).then(() => this.loadComments(postId));
+      })
+      .then((res) => res.json())
+      .then(() => this.loadComments(postId))
+      .catch((err) => console.log(err));  
     },
   },
 };

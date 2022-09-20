@@ -10,6 +10,7 @@
 <script>
 import NavBar from "./components/NavBar.vue"
 import FooterPage from "./components/FooterPage.vue";
+import { ref } from "vue"
 
 export default {
   name: "App",
@@ -19,12 +20,13 @@ export default {
   },
   data(){
     return {
-      componentKey: 0
+      componentKey: ref(0),
     }
   },
+  
   methods: {
     forceRerender() {
-      this.componentKey ++;
+      this.componentKey +1;
     }
   }
 };

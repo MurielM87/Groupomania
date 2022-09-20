@@ -30,7 +30,7 @@
       </div>
 
       <button
-        @click.prevent="updatePost"
+        @click.prevent="updatePost()"
         class="form_btn"
         title="enregistrer les modifications">
         <i class="fas fa-save"></i> Publier les modifications
@@ -55,9 +55,11 @@ export default {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
-      title: ref(""),
-      content: ref(""),
-      imageUrl: ref(""),
+      post: ref({
+        titre: "",
+        content: "", 
+        imageUrl: "",
+      }),
       image: null,
     };
   },
@@ -81,16 +83,17 @@ export default {
   },
 
   methods: {
+    selectImage() {
+      this.$ref.fileInput.click()
+    },
     //upload image
     uploadImg(e) {
-      this.post.imageUrl = e.target.files[0];
-      //preview image
-      this.image = URL.createObjectURL(this.post.imageUrl);
-      this.$emit("input", this.post.imageUrl); 
+      this.imageUrl = e.target.files[0];
+      console.log("image-target", this.imageUrl);
     },
       
     //modify post
-    updatePost() {
+    updatePost(postId) {
       const token = localStorage.getItem("token")
       const userId = localStorage.getItem("userId")
 
@@ -107,7 +110,7 @@ export default {
       fd.append("content", post.content);
 
       if(userId == userId && token == token) {
-        fetch(`http://localhost:3000/api/posts/${this.postId}`, {
+        fetch(`http://localhost:3000/api/posts/${postId}`, {
           method: "PUT",
           credentials: "include",
           headers: {
@@ -116,6 +119,7 @@ export default {
           },
           body: fd,
         })
+        .then((res) => res.json())
         .then(() => {
           alert("post modifié");
           console.log("ModifyPost||post", this.post);

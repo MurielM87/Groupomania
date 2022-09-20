@@ -9,8 +9,7 @@ exports.createComment = async (req, res) => {
     const post = await database.Post.findOne({ 
         where: { id: req.params.id } 
       })
-      console.log("CreateComment||post", post)
-      console.log(req.params)
+    console.log("CreateComment||post", post)
     if (req.body.content === "") {
         return res.status(401).json({ error: "Veuillez remplir le champs" });
     } else {
@@ -63,7 +62,7 @@ exports.getAllComments = (req, res) => {
             },
             {
                 model: database.Like,
-                attributes: ["userId", "postId"],
+                attributes: ["id", "userId", "postId"],
             },
             {
                 model: database.Comment,
@@ -74,6 +73,10 @@ exports.getAllComments = (req, res) => {
                         model: database.User,
                         attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
                     },
+                    {
+                        model: database.Post,
+                        attributes: ["id", "title", "content", "imageUrl", "userId"]
+                    }
                 ],
             },
         ],
