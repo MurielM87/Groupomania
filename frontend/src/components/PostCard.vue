@@ -289,8 +289,8 @@ export default {
     },
 
     submitComment(postId) {
-      const userId = localStorage.getItem("userId");
-      console.log("PostCard||submitComment||userId", userId);
+    //  const userId = localStorage.getItem("userId");
+    //  console.log("PostCard||submitComment||userId", userId);
       console.log("PostCard||submitComment||postId", postId);
       fetch(`http://localhost:3000/api/posts/${postId}/comment`, {
         method: "POST",
@@ -313,7 +313,7 @@ export default {
  
     //get all comments from a post
     loadComments(postId) {
-      fetch(`http://localhost:3000/api/posts/comments/${this.postId}`, {
+      fetch(`http://localhost:3000/api/posts/comments/${postId}`, {
         method: "GET",
         credentials: "include",
         headers: {

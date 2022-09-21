@@ -3,31 +3,40 @@ const database = require("../models")
 //add a comment
 exports.createComment = async (req, res) => {
     const userId = await database.User.findOne({
-        where : {id : req.user.userId}
+        where: { id: req.user.userId }
     })
     console.log("CreateComment||userId", userId)
-    const post = await database.Post.findOne({ 
-        where: { id: req.params.id } 
-      })
+    const post = await database.Post.findOne({
+        where: { id: req.params.id }
+    })
     console.log("CreateComment||post", post)
-    if (req.body.content === "") {
-        return res.status(401).json({ error: "Veuillez remplir le champs" });
+
+    if (userId !== null && post !== null) {
+        if (req.body.content === "") {
+            return res.status(401).json({ error: "Veuillez remplir le champs" });
+        } else {
+            database.Comment.create({
+                postId: post,
+                userId: userId,
+                content: req.body.content,
+            })
+            .then((response) => res.status(201).json({ message: "Commentaire ajouté !", comment: response }))
+            console.log("arrivé ici")
+            console.log(post)
+            console.log(userId)
+            console.log(req.body.content)
+           // .catch((error) => res.status(400).json({ error }));
+        }
     } else {
-        database.Comment.create({
-            postId: post,
-            userId: userId,
-            content: req.body.content,
-        })
-        .then((response) => res.status(201).json({ message: "Commentaire ajouté !", comment: response }))
-        .catch((error) => res.status(400).json({ error }));
-    }
+        res.status(400).send({ error: "Erreur, votre commentaire n'a pas pu être publié" })
+    } 
 }
 
 //delete a comment
 exports.deleteComment = async (req, res) => {
     try {
         const userId = await database.User.findOne({
-            where : {id : req.user.userId}
+            where: { id: req.user.userId }
         })
         console.log("DeleteComment||userId", userId)
         const comment = await database.Comment.findOne({
@@ -52,7 +61,7 @@ exports.deleteComment = async (req, res) => {
 //get all comments from a post
 exports.getAllComments = (req, res) => {
     database.Comment.findAll({
-        where: { postId: req.params.id }, 
+        where: { postId: req.params.id },
         attributes: ["id", "title", "content", "imageUrl", "createdAt"],
         order: [["createdAt", "DESC"]],
         include: [

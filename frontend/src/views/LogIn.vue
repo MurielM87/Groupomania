@@ -52,7 +52,6 @@ export default {
       password: "",
       emailErrorMessage: "",
       passwordErrorMessage: "",
-      isLoggedIn: false,
     };
   },
   mounted() {
@@ -90,8 +89,8 @@ export default {
             localStorage.setItem("userId", data.userId);
             console.log("token", data.token);
             console.log("userId", data.userId);
+            this.$emit('isLoggedIn');
             this.$router.push("/");
-            this.isLoggedIn = true;
           })
           .catch((error) => {
             console.log(error);

@@ -8,8 +8,7 @@ exports.createPost = async (req, res) => {
     where : {id : req.user.userId}
   })
   console.log("createPost||user", user)
-  //let imageUrl    
-
+  
   if (user !== null) {
     if (req.file) {
       imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
@@ -163,7 +162,7 @@ exports.updatePost = async (req, res) => {
     where: { id: req.params.id } 
   })
   console.log("updatePost||post", post)
-  console.log(req)
+  console.log(req.params)
   if (userId.id === post.UserId) {
     // if a file is in the request
     if (req.file) {

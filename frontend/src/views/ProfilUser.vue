@@ -18,7 +18,7 @@
         :src="`http://localhost:3000/images/${this.user.imageUrl}`"
         crossorigin="anonymous"
       />
-      <div v-if="this.user.id = userId">
+      <div v-if="userValue == this.userId">
         <router-link :to="`/profil/${this.userId}/edit`">
         <i class="fas fa-pencil-alt"></i>
         </router-link>
@@ -64,6 +64,7 @@ export default {
   data() {
     return {
       token: localStorage.getItem("token"),
+      userValue: localStorage.getItem("userId"),
       userId: this.$route.params.id,
       user: ref({
         pseudo: "",
@@ -103,6 +104,10 @@ export default {
       .then((data) => {
         console.log("ProfilUser||data", data);
         this.user = data;
+        console.log(this.user)
+        console.log(this.userId)
+        console.log(localStorage)
+        console.log(localStorage.userId)
       })
       .catch((err) => console.log(err));
   },

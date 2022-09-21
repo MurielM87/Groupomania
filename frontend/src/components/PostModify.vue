@@ -30,7 +30,7 @@
       </div>
 
       <button
-        @click.prevent="updatePost()"
+        @click.prevent="updatePost(post.id)"
         class="form_btn"
         title="enregistrer les modifications">
         <i class="fas fa-save"></i> Publier les modifications
@@ -55,18 +55,18 @@ export default {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
-      post: ref({
-        titre: "",
-        content: "", 
-        imageUrl: "",
-      }),
+    //  post: ref({
+        title: ref(""),
+        content: ref(""), 
+        imageUrl: ref(""),
+    //  }),
       image: null,
     };
   },
   props: ["revele", "toggleModale"],
 
-  created() {
-    fetch(`http://localhost:3000/api/posts/${this.postId}`, {
+  created(postId) {
+    fetch(`http://localhost:3000/api/posts/${postId}`, {
       method: "GET",
       credentials: "include",
       headers: {
