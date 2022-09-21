@@ -1,5 +1,10 @@
 const database = require("../models")
 
+//get all comments from a post
+exports.getAllComments = (req, res) => {
+    res.status(201).send("coucou")
+}
+
 //add a comment
 exports.createComment = async (req, res) => {
     const userId = await database.User.findOne({
@@ -16,8 +21,8 @@ exports.createComment = async (req, res) => {
             return res.status(401).json({ error: "Veuillez remplir le champs" });
         } else {
             database.Comment.create({
-                postId: post,
-                userId: userId,
+                PostId: post.id,
+                UserId: userId.id,
                 content: req.body.content,
             })
             .then((response) => res.status(201).json({ message: "Commentaire ajouté !", comment: response }))
@@ -58,23 +63,14 @@ exports.deleteComment = async (req, res) => {
     }
 }
 
-//get all comments from a post
-exports.getAllComments = (req, res) => {
-    database.Comment.findAll({
-        where: { postId: req.params.id },
-        attributes: ["id", "title", "content", "imageUrl", "createdAt"],
-        order: [["createdAt", "DESC"]],
-        include: [
-            {
-                model: database.User,
-                attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-            },
-            {
-                model: database.Like,
-                attributes: ["id", "userId", "postId"],
-            },
-            {
-                model: database.Comment,
+
+
+/*exports.getAllComments = async (req, res) => {
+    console.log('coucou')
+   const comments = await database.Comment.findAll(
+       
+           
+              model: database.Comment,
                 attributes: ["id", "content", "postId", "userId"],
                 order: [["createdAt", "DESC"]],
                 include: [
@@ -87,9 +83,15 @@ exports.getAllComments = (req, res) => {
                         attributes: ["id", "title", "content", "imageUrl", "userId"]
                     }
                 ],
-            },
-        ],
-    })
-        .then((res) => res.status(200).send(comments))
-        .catch((err) => err.status(500).send({ err: "erreur serveur " }))
-} 
+            
+        
+    ); 
+    console.log(comments)
+    if(comments === null) {
+        return res.status(500).send('erreur serveur')
+    } else {
+        return res.status(200).send({comments})
+    }
+       // .then((res) => res.status(200).send(comments))
+        //.catch((err) => err.status(500).send({ err: "erreur serveur " }))
+} */

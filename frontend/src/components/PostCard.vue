@@ -1,5 +1,5 @@
 <template>
-  <PostModify :revele="revele" :toggleModale="toggleModale" />
+  <PostModify :revele="revele" :toggleModale="toggleModale" :modifyPost="post" />
   <article id="card">
     <!--informations from the author of the post-->
     <router-link :to="`/profil/${post.User.id}`">
@@ -38,7 +38,7 @@
       <!--add the datetime -->
       <div class="post_date">
         <p>publié le {{ datePost(post.createdAt) }}</p>
-        <p v-if="post.updatedAt">- modifié le {{ datePost(post.updatedAt) }}</p>
+        <p v-if="this.post.updatedAt">- modifié le {{ datePost(post.updatedAt) }}</p>
       </div>
     </div>
     <br />
@@ -90,7 +90,7 @@
           rows="3"
           required
         ></textarea>
-        <button type="submit" @click.prevent="submitComment(post.id)">
+        <button type="submit" @click.prevent="submitComment(post.id, user.id)">
           <span>Publier </span> <i class="far fa-edit"></i>
         </button>
       </div>
@@ -98,29 +98,31 @@
       <!--get all comments -->
       <div
         class="comments_card"
-        v-for="comment in comments"
+        v-for="comment in post.Comments"
         :key="comment.id"
+        :user="userId"
+        :post="postId"
         :comment="comment"
       >
-        <router-link
-          :to="{ name: 'ProfilUser', params: { id: this.Comment.userId } }"
-        >
+    <!--    <router-link
+          :to="{ name: 'ProfilUser', params: { id: post.Comments.User.id } }"
+        > -->
           <div class="comment_author">
             <img
               v-if="comment.User.imageUrl"
-              :src="`http://localhost:3000/api/users/${comment.User.imageUrl}`"
+              :src="`http://localhost:3000/api/users/${user.imageUrl}`"
               alt="avatar"
             />
             <img v-else :src="require('../assets/avatar.png')" alt="avatar par default" />
-            <span class="comment_author_pseudo">
+            <span class="comment_author_pseudo"> PSEUDO : 
               {{ user.pseudo }}
             </span>
           </div>
-        </router-link>
+    <!--    </router-link> -->
 
         <div class="comment_content">
-          <p class="comment_text">
-            {{ comment.content }}
+          <p class="comment_text"> TEXTE : 
+            {{ post.Comments.content }}
           </p>
           <br />
           <!--add the datetime -->
@@ -167,7 +169,8 @@ export default {
     };
   },
 
-  async created() {
+  async created() {    
+    console.log(this.post)
     await fetch(`http://localhost:3000/api/users/`, {
       methods: "GET",
       credentials: "include",
@@ -268,7 +271,8 @@ export default {
         data: { postId },
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
+          Accept: "application/json",    
+          "Authorization": `Bearer ${this.token}`,
         },
       })
       .then((res) => res.json())
@@ -297,7 +301,8 @@ export default {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
+          Accept: "application/json",    
+          "Authorization": `Bearer ${this.token}`,
         },
         body: JSON.stringify({
           content: this.content
@@ -308,7 +313,7 @@ export default {
         console.log("CardForm||data", data);
         this.content = data;
       })
-      .catch((err) => console.log(err));  
+      .catch((err) => console.error(err));  
     },
  
     //get all comments from a post
@@ -318,6 +323,7 @@ export default {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json",    
           "Authorization": `Bearer ${this.token}`,
         },
       })

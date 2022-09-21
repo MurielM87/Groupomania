@@ -16,8 +16,8 @@ router.delete("/:id", auth, multer, postCtrl.deletePost)
 router.post("/:id/like", auth, postCtrl.likePost)
 
 //comments
+//router.get("/comments", auth, commentCtrl.getAllComments)
 router.post("/:id/comment", auth, commentCtrl.createComment)
-router.get("/comments", auth, commentCtrl.getAllComments)
-router.delete("/comment/:id", auth, commentCtrl.deleteComment)
+router.delete("/:id/comment", auth, commentCtrl.deleteComment)
 
 module.exports = router

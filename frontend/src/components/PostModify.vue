@@ -11,13 +11,13 @@
       />
       <textarea
         type="text"
-        v-model="content"
+        v-model="this.content"
         placeholder="message"
         rows="3"
         required
       ></textarea>
       <!--add an image -->
-      <img v-if="imageUrl" :src="`http://localhost:3000/api/images/${this.post.imageUrl}`"/><img v-else :src="image"/>
+      <img v-if="this.imageUrl" :src="`http://localhost:3000/api/images/${this.post.imageUrl}`"/><img v-else :src="image"/>
       <div class="post_img">
         <input
           @change="uploadImg"
@@ -30,7 +30,7 @@
       </div>
 
       <button
-        @click.prevent="updatePost(post.id)"
+        @click.prevent="updatePost()"
         class="form_btn"
         title="enregistrer les modifications">
         <i class="fas fa-save"></i> Publier les modifications
@@ -63,10 +63,10 @@ export default {
       image: null,
     };
   },
-  props: ["revele", "toggleModale"],
+  props: ["revele", "toggleModale", "modifyPost"],
 
-  created(postId) {
-    fetch(`http://localhost:3000/api/posts/${postId}`, {
+  created() {
+    fetch(`http://localhost:3000/api/posts/${this.postId}`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -78,6 +78,7 @@ export default {
     .then((data) => {
       console.log("PostModify||data", data);
       this.post = data;
+      console.log(this.postId)
     })
     .catch((err) => console.log(err));
   },
@@ -98,6 +99,7 @@ export default {
       const userId = localStorage.getItem("userId")
 
       const post = {
+        postId: this.modifyPost.id,
         title: this.title,
         content: this.content,
         imageUrl: this.imageUrl,
@@ -110,7 +112,8 @@ export default {
       fd.append("content", post.content);
 
       if(userId == userId && token == token) {
-        fetch(`http://localhost:3000/api/posts/${postId}`, {
+        console.log(postId)
+        fetch(`http://localhost:3000/api/posts/${post.postId}`, {
           method: "PUT",
           credentials: "include",
           headers: {
