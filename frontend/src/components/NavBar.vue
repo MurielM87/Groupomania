@@ -1,13 +1,12 @@
 <template :key="componentKey">
   <header>
     <div v-if="this.isLoggedIn">
-       <img alt="logo Groupomania" src="../assets/icon.png" class="logo" />
-     
-    </div>
-    <div v-else>
       <router-link :to="{ name: 'MainPage' }"
         ><img alt="logo Groupomania" src="../assets/icon.png" class="logo"
       /></router-link>
+    </div>
+    <div v-else>
+       <img alt="logo Groupomania" src="../assets/icon.png" class="logo" />        
     </div>
 
     <div v-if="this.isLoggedIn">
