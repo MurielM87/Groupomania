@@ -104,10 +104,6 @@ export default {
       .then((data) => {
         console.log("ProfilUser||data", data);
         this.user = data;
-        console.log(this.user)
-        console.log(this.userId)
-        console.log(localStorage)
-        console.log(localStorage.userId)
       })
       .catch((err) => console.log(err));
   },
