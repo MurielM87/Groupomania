@@ -88,7 +88,7 @@ exports.getAllPosts = async (req, res) => {
         },
         {
           model: database.Comment,
-          attributes: ["id", "postId", "userId", "content"],
+          attributes: ["id", "postId", "userId", "content", "createdAt"],
           order: [["createdAt", "DESC"]],
           include: [
             {
@@ -97,7 +97,7 @@ exports.getAllPosts = async (req, res) => {
             },
             {
               model: database.Post,
-              attributes: ["id", "title", "content", "imageUrl", "userId"]
+              attributes: ["id", "title", "content", "imageUrl", "userId", "createdAt"]
             }
           ],
         },

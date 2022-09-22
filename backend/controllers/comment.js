@@ -1,10 +1,5 @@
 const database = require("../models")
 
-//get all comments from a post
-exports.getAllComments = (req, res) => {
-    res.status(201).send("coucou")
-}
-
 //add a comment
 exports.createComment = async (req, res) => {
     const userId = await database.User.findOne({
@@ -62,36 +57,3 @@ exports.deleteComment = async (req, res) => {
         return res.status(501).send({ error: "Erreur serveur" })
     }
 }
-
-
-
-/*exports.getAllComments = async (req, res) => {
-    console.log('coucou')
-   const comments = await database.Comment.findAll(
-       
-           
-              model: database.Comment,
-                attributes: ["id", "content", "postId", "userId"],
-                order: [["createdAt", "DESC"]],
-                include: [
-                    {
-                        model: database.User,
-                        attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-                    },
-                    {
-                        model: database.Post,
-                        attributes: ["id", "title", "content", "imageUrl", "userId"]
-                    }
-                ],
-            
-        
-    ); 
-    console.log(comments)
-    if(comments === null) {
-        return res.status(500).send('erreur serveur')
-    } else {
-        return res.status(200).send({comments})
-    }
-       // .then((res) => res.status(200).send(comments))
-        //.catch((err) => err.status(500).send({ err: "erreur serveur " }))
-} */

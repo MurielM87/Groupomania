@@ -95,6 +95,8 @@
         </button>
       </div>
 
+      <div class="separate_barre"></div>
+
       <!--get all comments -->
       <div
         class="comments_card"
@@ -104,25 +106,23 @@
         :post="postId"
         :comment="comment"
       >
-    <!--    <router-link
-          :to="{ name: 'ProfilUser', params: { id: post.Comments.User.id } }"
-        > -->
+        <router-link :to="{ name: 'ProfilUser', params: { id: comment.User.id } }"> 
           <div class="comment_author">
             <img
               v-if="comment.User.imageUrl"
-              :src="`http://localhost:3000/api/users/${user.imageUrl}`"
+              :src="`http://localhost:3000/images/${comment.User.imageUrl}`"
               alt="avatar"
             />
             <img v-else :src="require('../assets/avatar.png')" alt="avatar par default" />
-            <span class="comment_author_pseudo"> PSEUDO : 
-              {{ user.pseudo }}
+            <span class="comment_author_pseudo"> 
+              {{ comment.User.pseudo }}
             </span>
           </div>
-    <!--    </router-link> -->
+        </router-link> 
 
         <div class="comment_content">
-          <p class="comment_text"> TEXTE : 
-            {{ post.Comments.content }}
+          <p class="comment_text">  
+            {{ comment.content }}
           </p>
           <br />
           <!--add the datetime -->
@@ -132,7 +132,7 @@
         </div>
         <br />
 
-        <div v-if="comment.User.id = UserId">
+        <div>
           <button
             id="comment-delete"
             class="form_btn"
@@ -170,7 +170,7 @@ export default {
   },
 
   async created() {    
-    console.log(this.post)
+    console.log("post", this.post)
     await fetch(`http://localhost:3000/api/users/`, {
       methods: "GET",
       credentials: "include",
@@ -265,7 +265,7 @@ export default {
     //add a like
     addLike(postId) {
       console.log("PostCard||addLike||postId", postId);
-      fetch(`http://localhost:3000/api/posts/${this.postId}/like`, {
+      fetch(`http://localhost:3000/api/posts/${postId}/like`, {
         method: "POST",
         credentials: "include",
         data: { postId },
@@ -293,8 +293,6 @@ export default {
     },
 
     submitComment(postId) {
-    //  const userId = localStorage.getItem("userId");
-    //  console.log("PostCard||submitComment||userId", userId);
       console.log("PostCard||submitComment||postId", postId);
       fetch(`http://localhost:3000/api/posts/${postId}/comment`, {
         method: "POST",
@@ -422,25 +420,25 @@ h4 {
     color: red;
   }
 }
-#comment_card {
+.comments_card {
   background-color: #ffd7d7;
-  border: 1px solid #fd2d01;
+  border: 1px solid #8f8c8c;
   margin-bottom: 15px;
   border-radius: 10px;
   padding: 10px;
 }
 
-.comments_card {
-  background-color: #8f8c8c;
-}
-
-#comment_author {
+.comment_author {
+  width: 60%;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
+  border: 1px solid #4E5166;
+  border-radius: 10px;
+  margin-bottom: 20px;
 }
 
-#comment_author img {
+.comment_author img {
   width: 40px;
   padding: 10px;
 }
