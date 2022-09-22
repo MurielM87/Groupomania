@@ -127,7 +127,13 @@ img {
   margin: auto;
 }
 .toTop {
-  display: flex;
-  margin-left: 30px;
+  width: 20px;
+  height: 20px;
+  position: fixed;
+  left: 30px;
+  bottom: 30px;
+  background-color: #FFD7D7;
+  color: #FD2D01;
+  border: 1px solid #FD2D01;
 }
 </style>

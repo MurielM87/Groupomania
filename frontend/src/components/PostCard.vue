@@ -68,7 +68,7 @@
     <div class="separate_barre"></div>
 
     <!-- add like to the post-->
-    <div @click.prevent="addLike" class="post_like" :userId="userId">
+    <div @click.prevent="addLike(post.id)" class="post_like" :userId="userId">
       <div class="like_thumbs">
         <i class="far fa-thumbs-up"></i>
         <i class="far fa-thumbs-down"></i>
@@ -90,7 +90,7 @@
           rows="3"
           required
         ></textarea>
-        <button type="submit" @click.prevent="submitComment(post.id, user.id)">
+        <button type="submit" @click.prevent="submitComment(post.id)">
           <span>Publier </span> <i class="far fa-edit"></i>
         </button>
       </div>
@@ -133,11 +133,11 @@
         <br />
 
         <div>
-          <button
+          <button v-if="comment.User.id == userId"
             id="comment-delete"
             class="form_btn"
             title="Supprimer le commentaire"
-            @click.prevent="deleteComment"
+            @click.prevent="deleteComment(post.id)"
           >
             <span>Supprimer </span><i class="far fa-trash-alt"></i>
           </button>
@@ -243,7 +243,7 @@ export default {
       const token = localStorage.getItem("token");
       console.log("PostCard||deletePost", postId);
       if (userId === userId && token === token) {
-        fetch(`http://localhost:3000/api/posts/${postId}`, {
+        fetch(`http://localhost:3000/api/posts/${this.postId}/comment`, {
           method: "DELETE",
           credentials: "include",
           headers: {
@@ -268,7 +268,6 @@ export default {
       fetch(`http://localhost:3000/api/posts/${postId}/like`, {
         method: "POST",
         credentials: "include",
-        data: { postId },
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",    
@@ -282,10 +281,11 @@ export default {
             if (res.status == 204) {
               this.posts[post].likes -= 1;
             }
-            console.log("addLike||posts", post);
+            console.log("addLike||dislike||posts", post);
             if (res.status == 201) {
               this.posts[post].likes += 1;
             }
+            console.log("addLike||like||posts", post);
           }
         }
       })
@@ -313,45 +313,25 @@ export default {
       })
       .catch((err) => console.error(err));  
     },
- 
-    //get all comments from a post
-    loadComments(postId) {
-      fetch(`http://localhost:3000/api/posts/comments/${postId}`, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",    
-          "Authorization": `Bearer ${this.token}`,
-        },
-      })
-      .then((res) => res.json())
-      .then((res) => {
-        this.comments = {
-          ...this.comments,
-          [postId]: res.data,
-        };
-        console.log("PostCard||comments", this.comments)
-        console.log("loadComments||res.data", res.data);
-      })
-      .catch((err) => console.log(err));  
-    },
-        
+    
     //delete a comment from a post
-    deleteComment(postId, commentId) {
+    deleteComment(postId) {
       console.log("PostCard||deleteComment||postId", postId);
-      console.log("PostCard||deleteComment||commentId", commentId);
-      fetch(`http://localhost:3000/api/posts/comment/${this.commentId}`, {
+      fetch(`http://localhost:3000/api/posts/${postId}/comment`, {
         method: "DELETE",
         credentials: "include", 
-        data: { postId, commentId },
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${this.token}`,
         },
       })
       .then((res) => res.json())
-      .then(() => this.loadComments(postId))
+      .then(() => {
+          this.comments = this.comments.splice((comment) => {
+            console.log("deleteComment || commentId", postId);
+            return comment.id != this.commentId;
+          });
+        })
       .catch((err) => console.log(err));  
     },
   },
