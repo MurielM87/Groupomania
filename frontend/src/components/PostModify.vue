@@ -126,6 +126,7 @@ export default {
         .then(() => {
           alert("post modifié");
           console.log("ModifyPost||post", this.post);
+          this.$emit('close');
           this.$router.push(`/`);
         })
         .catch((error) => {

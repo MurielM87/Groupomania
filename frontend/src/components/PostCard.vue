@@ -98,6 +98,7 @@
       <div class="separate_barre"></div>
 
       <!--get all comments -->
+      <p class="comment_title">{{post.Comments.length}} commentaire{{post.Comments.length > 1 ? 's' : ""}} publié{{post.Comments.length > 1 ? 's' : ""}}</p>
       <div
         class="comments_card"
         v-for="comment in post.Comments"
@@ -130,7 +131,6 @@
             <p>publié le {{ dateComment(comment.createdAt) }}</p>
           </div>
         </div>
-        <br />
 
         <div>
           <button v-if="comment.User.id == userId"
@@ -153,7 +153,7 @@ import PostModify from "./PostModify.vue";
 
 export default {
   name: "PostCard",
-  props: ["post", "comment"],
+  props: ["post", "comment", "postId"],
   components: {
     PostModify,
   },
@@ -399,6 +399,10 @@ h4 {
   &:focus {
     color: red;
   }
+}
+.comment_title {
+  display: flex;
+  justify-content: flex-end;
 }
 .comments_card {
   background-color: #ffd7d7;

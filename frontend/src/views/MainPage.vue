@@ -85,24 +85,6 @@ export default {
       })
       .catch((err) => console.log(err));
     },
-
-  async updated() {
-    await fetch(`http://localhost:3000/api/posts/comments`, {
-      methods: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",    
-        "Authorization": `Bearer ${this.token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("MainPage||comments||data", data);
-        this.comments = data;
-      })
-      .catch((err) => console.log(err));
-    },
  
   methods: {    
     forceRerender() {

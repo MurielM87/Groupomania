@@ -21,14 +21,10 @@ exports.createComment = async (req, res) => {
                 content: req.body.content,
             })
             .then((response) => res.status(201).json({ message: "Commentaire ajouté !", comment: response }))
-            console.log("arrivé ici")
-            console.log(post)
-            console.log(userId)
-            console.log(req.body.content)
-           // .catch((error) => res.status(400).json({ error }));
+            .catch((error) => res.status(400).json({ error: "Erreur, votre commentaire n'a pas pu être publié" }));
         }
     } else {
-        res.status(400).send({ error: "Erreur, votre commentaire n'a pas pu être publié" })
+        res.status(500).send({ error })
     } 
 }
 

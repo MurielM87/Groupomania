@@ -45,8 +45,8 @@
       />
       <!--add the datetime -->
       <div class="post_date">
-        <p>publié le {{ datePost(post.createdAt) }}</p>
-        <p v-if="post.updatedAt">- modifié le {{ datePost(post.updatedAt) }}</p>
+        <p>publié le {{ datePost(post.createdAt) }}</p><br/>
+        <p v-if="post.updatedAt !== post.createdAt">- modifié le {{ datePost(post.updatedAt) }}</p>
       </div>
     </div>
   </form>

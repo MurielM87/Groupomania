@@ -52,11 +52,11 @@ exports.getOnePost = async (req, res) => {
       {
         model: database.Comment,
         order: [["createdAt", "DESC"]],
-        attributes: ["id", "content", "postId", "userId"],
+        attributes: ["id", "content", "postId", "userId", "createdAt"],
         include: [
           {
             model: database.User,
-            attributes: ["id", "pseudo", "imageUrl"],
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
           },
           {
             model: database.Post,
@@ -117,7 +117,7 @@ exports.getAllPostsOfOneUser = async (req, res, next) => {
 	
   database.Post.findAll({ 
     where: { userId: req.params.id },
-    attributes: ["id", "title", "content", "imageUrl", "createdAt"],
+    attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
       order: [["createdAt", "DESC"]],
       include: [
         {
