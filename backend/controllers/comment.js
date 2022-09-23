@@ -40,7 +40,7 @@ exports.deleteComment = async (req, res) => {
         })
         console.log("deleteComment||comment", comment)
 
-        if (userId === comment.UserId || userId.isAdmin === true) {
+        if (userId.id === comment.UserId || userId.isAdmin === true) {
             database.Comment.destroy(
                 { where: { id: req.params.id } },
                 { truncate: true }
@@ -50,6 +50,6 @@ exports.deleteComment = async (req, res) => {
             res.status(401).json({ message: "Vous n'avez pas l'autorisation" })
         }
     } catch (error) {
-        return res.status(501).send({ error: "Erreur serveur" })
+        return res.status(500).send({ error: "Erreur serveur" })
     }
 }

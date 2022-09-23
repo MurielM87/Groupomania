@@ -137,7 +137,7 @@
             id="comment-delete"
             class="form_btn"
             title="Supprimer le commentaire"
-            @click.prevent="deleteComment(post.id)"
+            @click.prevent="deleteComment(comment.id)"
           >
             <span>Supprimer </span><i class="far fa-trash-alt"></i>
           </button>
@@ -315,9 +315,10 @@ export default {
     },
     
     //delete a comment from a post
-    deleteComment(postId) {
-      console.log("PostCard||deleteComment||postId", postId);
-      fetch(`http://localhost:3000/api/posts/${postId}/comment`, {
+    deleteComment(commentId) {
+    //  console.log("PostCard||deleteComment||postId", postId);
+      console.log("PostCard||deleteComment||commentId", commentId);
+      fetch(`http://localhost:3000/api/posts/comment/${commentId}`, {
         method: "DELETE",
         credentials: "include", 
         headers: {
@@ -327,8 +328,9 @@ export default {
       })
       .then((res) => res.json())
       .then(() => {
+        console.log("commentId", commentId)
           this.comments = this.comments.splice((comment) => {
-            console.log("deleteComment || commentId", postId);
+            console.log("deleteComment || commentId", commentId);
             return comment.id != this.commentId;
           });
         })

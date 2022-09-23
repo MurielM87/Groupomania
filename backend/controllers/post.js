@@ -130,7 +130,7 @@ exports.getAllPostsOfOneUser = async (req, res, next) => {
         },
         {
           model: database.Comment,
-          attributes: ["id", "postId", "userId"],
+          attributes: ["id", "content", "postId", "userId"],
           order: [["createdAt", "DESC"]],
           include: [
             {
