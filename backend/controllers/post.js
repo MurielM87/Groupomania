@@ -2,13 +2,13 @@ const database = require("../models")
 const fs = require("fs")
 
 //create a post
-exports.createPost = async (req, res) => {   
+exports.createPost = async (req, res) => {
   //find the user by Id
   const user = await database.User.findOne({
-    where : {id : req.user.userId}
+    where: { id: req.user.userId }
   })
   console.log("createPost||user", user)
-  
+
   if (user !== null) {
     if (req.file) {
       imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
@@ -16,7 +16,7 @@ exports.createPost = async (req, res) => {
       imageUrl = null
     }
     console.log("createPost||req.file", req.file)
-    
+
     // create a post in database
     const post = await database.Post.create({
       title: req.body.title,
@@ -30,7 +30,7 @@ exports.createPost = async (req, res) => {
     res.status(201).json({ post: post, message: "Votre message est publié" })
   } else {
     res.status(400).send({ error: "Erreur, votre message n'a pas pu être publié" })
-  } 
+  }
 }
 
 //get a post
@@ -67,86 +67,86 @@ exports.getOnePost = async (req, res) => {
     ],
   })
   res.status(200).json(post)
-    console.log("getOnePost||req.params.id", req.params);
-    console.log("getOnePost||post", post)
+  console.log("getOnePost||req.params.id", req.params);
+  console.log("getOnePost||post", post)
 }
 
 //get all posts
 exports.getAllPosts = async (req, res) => {
-    // get all posts from database
-    const posts = await database.Post.findAll({
-      attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
-      order: [["createdAt", "DESC"]],
-      include: [
-        {
-          model: database.User,
-          attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-        },
-        {
-          model: database.Like,
-          attributes: ["id", "userId", "postId"],
-        },
-        {
-          model: database.Comment,
-          attributes: ["id", "postId", "userId", "content", "createdAt"],
-          order: [["createdAt", "DESC"]],
-          include: [
-            {
-              model: database.User,
-              attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-            },
-            {
-              model: database.Post,
-              attributes: ["id", "title", "content", "imageUrl", "userId", "createdAt"]
-            }
-          ],
-        },
-      ],
-    })
-    res.status(200).send(posts)
+  // get all posts from database
+  const posts = await database.Post.findAll({
+    attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
+    order: [["createdAt", "DESC"]],
+    include: [
+      {
+        model: database.User,
+        attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+      },
+      {
+        model: database.Like,
+        attributes: ["id", "userId", "postId"],
+      },
+      {
+        model: database.Comment,
+        attributes: ["id", "postId", "userId", "content", "createdAt"],
+        order: [["createdAt", "DESC"]],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId", "createdAt"]
+          }
+        ],
+      },
+    ],
+  })
+  res.status(200).send(posts)
 }
 
 //get all posts of one user
 exports.getAllPostsOfOneUser = async (req, res, next) => {
   //find the user by Id
   const user = await database.User.findOne({
-    where : {id : req.user.userId}
+    where: { id: req.user.userId }
   })
   console.log("AllPostsOneUser||user", user)
   console.log("AllPostsOneUser||req.user", req.user)
-	
-  database.Post.findAll({ 
+
+  database.Post.findAll({
     where: { userId: req.params.id },
     attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
-      order: [["createdAt", "DESC"]],
-      include: [
-        {
-          model: database.User,
-          attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-        },
-        {
-          model: database.Like,
-          attributes: ["id", "postId", "userId"],
-        },
-        {
-          model: database.Comment,
-          attributes: ["id", "content", "postId", "userId"],
-          order: [["createdAt", "DESC"]],
-          include: [
-            {
-              model: database.User,
-              attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-            },
-            {
-              model: database.Post,
-              attributes: ["id", "title", "content", "imageUrl", "userId"]
-            }
-          ],
-        },
-      ],
+    order: [["createdAt", "DESC"]],
+    include: [
+      {
+        model: database.User,
+        attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+      },
+      {
+        model: database.Like,
+        attributes: ["id", "postId", "userId"],
+      },
+      {
+        model: database.Comment,
+        attributes: ["id", "content", "postId", "userId"],
+        order: [["createdAt", "DESC"]],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+    ],
   })
-		.then((posts) => res.status(200).json(posts))
-		.catch((error) => res.status(400).json({ error }));
+    .then((posts) => res.status(200).json(posts))
+    .catch((error) => res.status(400).json({ error }));
 };
 
 //update a post
@@ -155,11 +155,11 @@ exports.updatePost = async (req, res) => {
   //find the post by Id
   let newImageUrl
   const userId = await database.User.findOne({
-    where : {id : req.user.userId}
+    where: { id: req.user.userId }
   })
   console.log("updatePost||userId", userId.id)
-  const post = await database.Post.findOne({ 
-    where: { id: req.params.id } 
+  const post = await database.Post.findOne({
+    where: { id: req.params.id }
   })
   console.log("updatePost||post", post)
   console.log(req.params)
@@ -190,7 +190,7 @@ exports.updatePost = async (req, res) => {
     const newPost = await post.save({
       fields: ["title", "content", "imageUrl"],
     })
-      res.status(200).json({ newPost: newPost, message: "message modifié" })
+    res.status(200).json({ newPost: newPost, message: "message modifié" })
   } else {
     res.status(401).json({ message: "Vous n'avez pas l'autorisation" })
   }
@@ -199,57 +199,93 @@ exports.updatePost = async (req, res) => {
 //delete a post
 exports.deletePost = async (req, res) => {
   console.log(req.params.id)
-    const userId = await database.User.findOne({
-      where : {id : req.user.userId}
-    })
-    console.log("deletePost||userId", userId)
-    const post = await database.Post.findOne({ 
-      where: { id: req.params.id } 
-    })
-    console.log("deletePost||post", post)
-    if (userId.id === post.UserId || userId.isAdmin === true) {
-      if (post.imageUrl) {
-        const filename = post.imageUrl.split("/images")[1]
-        fs.unlink(`images/${filename}`, () => {
-          database.Post.destroy({ 
-            where: { id: post.id } 
-          })
-          res.status(200).json({ message: "Post supprimé" })
+  const userId = await database.User.findOne({
+    where: { id: req.user.userId }
+  })
+  console.log("deletePost||userId", userId)
+  const post = await database.Post.findOne({
+    where: { id: req.params.id }
+  })
+  console.log("deletePost||post", post)
+  if (userId.id === post.UserId || userId.isAdmin === true) {
+    if (post.imageUrl) {
+      const filename = post.imageUrl.split("/images")[1]
+      fs.unlink(`images/${filename}`, () => {
+        database.Post.destroy({
+          where: { id: post.id }
         })
-      } else {
-        database.Post.destroy({ 
-          where: { id: req.params.id } 
-        }, { truncate: true })
         res.status(200).json({ message: "Post supprimé" })
-      }
+      })
     } else {
-      res.status(401).json({ message: "Vous n'avez pas l'autorisation" })
+      database.Post.destroy({
+        where: { id: req.params.id }
+      }, { truncate: true })
+      res.status(200).json({ message: "Post supprimé" })
     }
+  } else {
+    res.status(401).json({ message: "Vous n'avez pas l'autorisation" })
+  }
 }
 
 
 //like a post
 exports.likePost = async (req, res, next) => {
-    const userId = await database.User.findOne({
-      where : {id : req.user.userId}
-    })
-    console.log("likePost||userId", userId)
-    const postId = await database.Post.findOne({ 
-      where: { id: req.params.id } 
-    })
-    console.log("likePost||post", postId)
-    console.log(req.params)
-  
-    if (userId) {
-      await database.Like.destroy(
-        { where: { userId: userId, postId: postId } },
-        { truncate: true, restartIdentity: true }
-      )
-      res.status(200).send({ message: "vous n'aimez plus ce post" })
-    } else {
-      await database.Like.create(
-      { where: { userId: userId, postId: postId }},      
+  const userId = await database.User.findOne({
+    where: { id: req.user.userId }
+  })
+  console.log("likePost||userId", userId.id)
+  const postId = await database.Post.findOne({
+    where: { id: req.params.id }
+  })
+  console.log("likePost||post", postId.id)
+
+  if (postId) {
+    console.log("likePost||postId", postId.id)
+    if (userId.id) {
+      console.log("userId", userId.id)
+
+      if (postId.id) {
+        console.log("postId", postId.id)
+        await database.Like.create({
+          UserId: userId.id,
+          PostId: postId.id
+        }),
+          res.status(201).json({ message: "vous aimez ce post" })
+      } else {
+        await database.Like.destroy(
+          { where: { userId: userId.id, postId: postId.id } },
+          { truncate: true, restartIdentity: true }
+        )
+        res.status(200).send({ message: "vous n'aimez plus ce post" })
+      }
+    } else { return res.status(404).json("utilisateur inconnu") }
+  } else { return res.status(500).json("erreur serveur") }
+
+};
+
+//dislike a post
+exports.dislikePost = async (req, res, next) => {
+  const userId = await database.User.findOne({
+    where: { id: req.user.userId }
+  })
+  console.log("dislikePost||userId", userId)
+  const postId = await database.Post.findOne({
+    where: { id: req.params.id }
+  })
+  console.log("dislikePost||post", postId)
+  console.log(req.params)
+
+  if (userId.id) {
+    console.log("userId", userId)
+    await database.Like.destroy(
+      { where: { userId: userId.id, postId: postId.id } },
+      { truncate: true, restartIdentity: true }
+    )
+    res.status(200).send({ message: "retirer dislike" })
+  } else {
+    await database.Like.create(
+      { where: { userId: userId, postId: postId } },
       { truncate: true, restartIdentity: true })
-      res.status(201).json({ message: "vous aimez ce post" })
-    }
-}
+    res.status(201).json({ message: "dislike ce post" })
+  }
+};

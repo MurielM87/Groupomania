@@ -68,12 +68,12 @@
     <div class="separate_barre"></div>
 
     <!-- add like to the post-->
-    <div @click.prevent="addLike(post.id)" class="post_like" :userId="userId">
+    <div class="post_like" :userId="userId">
       <div class="like_thumbs">
-        <i class="far fa-thumbs-up"></i>
-        <i class="far fa-thumbs-down"></i>
+        <i class="far fa-thumbs-up" @click.prevent="addLike(post.id)">{{post.Likes.length}}</i>
+        <i class="far fa-thumbs-down" @click.prevent="addDislike(post.id)"></i>
       </div>
-      <p>likes : {{ post.likes }}</p>
+      <p>likes : {{ post.Likes.UserId }}</p>
     </div>
 
     <!--add a comment to the post -->
@@ -166,6 +166,8 @@ export default {
       users: ref([]),
       comments: ref([]),
       revele: false,
+      like: ref([]),
+      dislike: ref([]),
     };
   },
 
@@ -264,7 +266,9 @@ export default {
     
     //add a like
     addLike(postId) {
+      const userId = localStorage.getItem("userId");
       console.log("PostCard||addLike||postId", postId);
+      console.log("PostCard||addLike||userId", userId)
       fetch(`http://localhost:3000/api/posts/${postId}/like`, {
         method: "POST",
         credentials: "include",
@@ -276,18 +280,22 @@ export default {
       })
       .then((res) => res.json())
       .then((res) => {
-        for (let post in this.posts) {
-          if (this.posts[post].id == postId) {
-            if (res.status == 204) {
-              this.posts[post].likes -= 1;
-            }
-            console.log("addLike||dislike||posts", post);
-            if (res.status == 201) {
-              this.posts[post].likes += 1;
-            }
-            console.log("addLike||like||posts", post);
-          }
-        }
+        alert("like", postId)
+        console.log(res)
+        this.like = res.data;
+      
+      //  for (let post in this.posts) {
+      //    if (this.posts[post].id == postId) {
+      //      if (res.status == 204) {
+      //        this.posts[post].likes -= 1;
+      //      }
+      //      console.log("addLike||dislike||posts", post);
+      //      if (res.status == 201) {
+      //        this.posts[post].likes += 1;
+      //      }
+      //      console.log("addLike||like||posts", post);
+      //    }
+      //  }
       })
       .catch((err) => console.log(err));  
     },
