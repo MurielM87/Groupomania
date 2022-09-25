@@ -85,6 +85,16 @@ exports.getAllPosts = async (req, res) => {
       {
         model: database.Like,
         attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
       },
       {
         model: database.Comment,
@@ -127,6 +137,16 @@ exports.getAllPostsOfOneUser = async (req, res, next) => {
       {
         model: database.Like,
         attributes: ["id", "postId", "userId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
       },
       {
         model: database.Comment,
@@ -227,9 +247,8 @@ exports.deletePost = async (req, res) => {
   }
 }
 
-
 //like a post
-exports.likePost = async (req, res, next) => {
+exports.likePost = async (req, res) => {
   const userId = await database.User.findOne({
     where: { id: req.user.userId }
   })
@@ -239,30 +258,32 @@ exports.likePost = async (req, res, next) => {
   })
   console.log("likePost||post", postId.id)
 
-  if (postId) {
-    console.log("likePost||postId", postId.id)
-    if (userId.id) {
-      console.log("userId", userId.id)
-
-      if (postId.id) {
-        console.log("postId", postId.id)
-        await database.Like.create({
-          UserId: userId.id,
-          PostId: postId.id
-        }),
-          res.status(201).json({ message: "vous aimez ce post" })
-      } else {
-        await database.Like.destroy(
-          { where: { userId: userId.id, postId: postId.id } },
-          { truncate: true, restartIdentity: true }
-        )
-        res.status(200).send({ message: "vous n'aimez plus ce post" })
-      }
-    } else { return res.status(404).json("utilisateur inconnu") }
-  } else { return res.status(500).json("erreur serveur") }
-
+  if (userId.id) {
+    console.log("userId", userId.id)
+    if (postId.id) {
+      console.log("postId", postId.id)
+      await database.Like.create({
+        UserId: userId.id,
+        PostId: postId.id
+      }),
+        res.status(201).json({ message: "vous aimez ce post" })
+    } else {
+      await database.Like.destroy({ 
+      //  where: { 
+          UserId: userId.id, 
+          PostId: postId.id 
+      //  } 
+      },
+      //  { truncate: true, restartIdentity: true }
+      )
+      res.status(200).send({ message: "vous n'aimez plus ce post" })
+    }
+  } else { return res.status(404).json("utilisateur inconnu") }
 };
 
+
+
+/*
 //dislike a post
 exports.dislikePost = async (req, res, next) => {
   const userId = await database.User.findOne({
@@ -288,4 +309,4 @@ exports.dislikePost = async (req, res, next) => {
       { truncate: true, restartIdentity: true })
     res.status(201).json({ message: "dislike ce post" })
   }
-};
+};*/

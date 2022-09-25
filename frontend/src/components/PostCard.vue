@@ -70,10 +70,10 @@
     <!-- add like to the post-->
     <div class="post_like" :userId="userId">
       <div class="like_thumbs">
-        <i class="far fa-thumbs-up" @click.prevent="addLike(post.id)">{{post.Likes.length}}</i>
+        <i class="far fa-thumbs-up" @click.prevent="addLike(post.id)">{{ post.Likes.length }}</i>
         <i class="far fa-thumbs-down" @click.prevent="addDislike(post.id)"></i>
       </div>
-      <p>likes : {{ post.Likes.UserId }}</p>
+      <p>likes: {{ post.Likes.length }}</p>
     </div>
 
     <!--add a comment to the post -->
@@ -166,7 +166,7 @@ export default {
       users: ref([]),
       comments: ref([]),
       revele: false,
-      like: ref([]),
+      likes: ref([]),
       dislike: ref([]),
     };
   },
@@ -282,20 +282,12 @@ export default {
       .then((res) => {
         alert("like", postId)
         console.log(res)
-        this.like = res.data;
-      
-      //  for (let post in this.posts) {
-      //    if (this.posts[post].id == postId) {
-      //      if (res.status == 204) {
-      //        this.posts[post].likes -= 1;
-      //      }
-      //      console.log("addLike||dislike||posts", post);
-      //      if (res.status == 201) {
-      //        this.posts[post].likes += 1;
-      //      }
-      //      console.log("addLike||like||posts", post);
-      //    }
-      //  }
+      //  this.like = res.data;
+        if(this.like === 1) {
+          this.like -= 1
+        } else {
+          this.like += 1
+        }
       })
       .catch((err) => console.log(err));  
     },
@@ -398,7 +390,7 @@ h4 {
 .fa-thumbs-up {
   font-size: 25px;
   color: black;
-  &:focus {
+  &:hover, &:active, &:link {
     color: green;
   }
 }
@@ -406,7 +398,7 @@ h4 {
   font-size: 25px;
   color: black;
   padding-left: 15px;
-  &:focus {
+  &:hover, &:active, &:link {
     color: red;
   }
 }
