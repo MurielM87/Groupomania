@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <NavBar :key="componentKey"/>
+    <NavBar :key="componentKey" />
     <router-view />
 
     <FooterPage />
@@ -8,9 +8,9 @@
 </template>
 
 <script>
-import NavBar from "./components/NavBar.vue"
+import NavBar from "./components/NavBar.vue";
 import FooterPage from "./components/FooterPage.vue";
-import { ref } from "vue"
+import { ref } from "vue";
 
 export default {
   name: "App",
@@ -18,17 +18,19 @@ export default {
     NavBar,
     FooterPage,
   },
-  data(){
+  data() {
     return {
       componentKey: ref(0),
-    }
+    };
   },
-  
+
   methods: {
     forceRerender() {
-      this.componentKey +1;
-    }
-  }
+      this.componentKey + 1;
+    },
+
+    
+  },
 };
 </script>
 
@@ -47,7 +49,7 @@ export default {
 }
 #app {
   position: relative;
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

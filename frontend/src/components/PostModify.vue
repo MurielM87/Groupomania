@@ -126,7 +126,7 @@ export default {
         .then(() => {
           alert("post modifié");
           console.log("ModifyPost||post", this.post);
-          this.$router.push(`/`);
+          this.$router.go(`/`);
         })
         .catch((error) => {
           console.error(error)

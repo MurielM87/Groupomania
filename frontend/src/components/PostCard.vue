@@ -254,11 +254,14 @@ export default {
           },
         })
         .then((res) => res.json())
-        .then(() => {
-          this.posts = this.posts.splice((post) => {
+        .then((res) => {
+          if(res.status === 200) {
+            this.posts = this.posts.splice((post) => {
             console.log("deletePost || postId", postId);
             return post.id != postId;
-          });
+            })
+            this.$router.go()	// Refresh page
+          }          
         })
         .catch((err)=> console.error(err));
       }
@@ -283,11 +286,12 @@ export default {
         alert("like", postId)
         console.log(res)
       //  this.like = res.data;
-        if(this.like === 1) {
+        if(this.like == 1) {
           this.like -= 1
         } else {
           this.like += 1
         }
+        this.$router.go() //refresh page
       })
       .catch((err) => console.log(err));  
     },
@@ -307,9 +311,12 @@ export default {
         }),
       })
       .then((res) => res.json())
-      .then((data) => {
+      .then((data) => {     
         console.log("CardForm||data", data);
         this.content = data;
+        this.$router.go()	// Refresh page
+        //window.location.reload();
+        //$router.go();
       })
       .catch((err) => console.error(err));  
     },
@@ -333,6 +340,7 @@ export default {
             console.log("deleteComment || commentId", commentId);
             return comment.id != this.commentId;
           });
+          this.$router.go()	// Refresh page
         })
       .catch((err) => console.log(err));  
     },

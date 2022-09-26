@@ -49,7 +49,7 @@ export default {
   name: "NavBar",
   data() {
     return {
-      token: localStorage.getItem('token'),
+    //  token: localStorage.getItem('token'),
       userId: localStorage.getItem('userId'),
       isLoggedIn: false,
       componentKey: 0,
