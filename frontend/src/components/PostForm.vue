@@ -112,6 +112,7 @@ export default {
         .then((data) => {
         console.log("PostForm||data", data);
         this.fd = data;
+        this.$router.go()
         })
         .catch((err) => console.log(err));
       this.fd = ""  

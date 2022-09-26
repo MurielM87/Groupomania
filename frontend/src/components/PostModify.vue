@@ -78,7 +78,6 @@ export default {
     .then((data) => {
       console.log("PostModify||data", data);
       this.post = data;
-      console.log(this.postId)
     })
     .catch((err) => console.log(err));
   },

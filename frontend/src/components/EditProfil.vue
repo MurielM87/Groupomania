@@ -119,8 +119,8 @@ export default {
     })
     .then((res) => res.json())
     .then((data) => {
-    console.log("EditProfil||data", data);
-    this.user = data;
+      console.log("EditProfil||data", data);
+      this.user = data;
     })
     .catch((err) => console.log(err));
   },

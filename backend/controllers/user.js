@@ -145,22 +145,20 @@ exports.updateUser = async (req, res) => {
 
 //delete User
 exports.deleteUser = async (req, res) => {
-  try {
     const userId = await database.User.findOne({
       where : {id : req.user.userId}
     })
-    if (userId.id === post.UserId || userId.isAdmin === true) {
-      const filename = user.imageUrl.split("/images")[1]
+    console.log("deleteUser||userId", userId)
+
+    if (userId.id === userId.id || userId.isAdmin === true) {
+      const filename = userId.imageUrl.split("/images")[1]
       fs.unlink(`images/${filename}`, () => {
-        database.User.destroy({ where: { id: id } })
+        database.User.destroy({ where: { id: userId.id } })
         res.status(200).json({ message: "utilisateur supprimé" })
       })
     } else {
-      database.User.destroy({ where: { id: id } })
+      database.User.destroy({ where: { id: userId.id } })
       res.status(200).json({ message: "utilisateur supprimé" })
     }
-  } catch (error) {
-    return res.status(500).send({ error: "Erreur serveur" })
-  }
 }
 

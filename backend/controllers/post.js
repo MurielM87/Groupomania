@@ -257,9 +257,34 @@ exports.likePost = async (req, res) => {
     where: { id: req.params.id }
   })
   console.log("likePost||post", postId.id)
+  if (!postId) {
+    return res.status(404).send({ message: "post inconnu" })
+  }
 
-  if (userId.id) {
-    console.log("userId", userId.id)
+  let like = await database.Like.findOne({
+    where: {
+      UserId: userId.id,
+      PostId: postId.id
+    }
+  });
+  if (!like) {
+    let newLike = await database.Like.create({
+      UserId: userId.id,
+      PostId: postId.id
+    });
+    return res.json(newLike);
+  } else {
+    await database.Like.destroy({
+      where: {
+        UserId: userId.id,
+        PostId: postId.id
+      },
+      truncate: true, restartIdentity: true 
+    });
+    return res.send();
+  }
+  /*
+  
     if (postId.id) {
       console.log("postId", postId.id)
       await database.Like.create({
@@ -269,16 +294,13 @@ exports.likePost = async (req, res) => {
         res.status(201).json({ message: "vous aimez ce post" })
     } else {
       await database.Like.destroy({ 
-      //  where: { 
+        where: { 
           UserId: userId.id, 
           PostId: postId.id 
-      //  } 
-      },
-      //  { truncate: true, restartIdentity: true }
-      )
+        } 
+      })
       res.status(200).send({ message: "vous n'aimez plus ce post" })
-    }
-  } else { return res.status(404).json("utilisateur inconnu") }
+    }*/
 };
 
 
@@ -299,7 +321,7 @@ exports.dislikePost = async (req, res, next) => {
   if (userId.id) {
     console.log("userId", userId)
     await database.Like.destroy(
-      { where: { userId: userId.id, postId: postId.id } },
+      { where: { UserId: userId.id, PostId: postId.id } },
       { truncate: true, restartIdentity: true }
     )
     res.status(200).send({ message: "retirer dislike" })
