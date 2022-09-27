@@ -1,5 +1,5 @@
 <template>
-  <PostModify :revele="revele" :toggleModale="toggleModale" :modifyPost="post" />
+  <PostModify :revele="revele" :toggleModale="toggleModale" :modifyPost="post" :key="componentKey" />
   <article id="card">
     <!--informations from the author of the post-->
     <router-link :to="`/profil/${post.User.id}`">
@@ -44,8 +44,8 @@
     <br />
 
     <!--add the buttons 'modify' and 'delete' to the published post-->
-    <div v-if="post.User.id == userId" class="post_btn">
-      <button
+    <div v-if="post.User.id == userId || userId == 1">
+      <button 
         id="post_modify"
         class="form_btn"
         title="modifier le message"
@@ -133,7 +133,7 @@
         </div>
 
         <div>
-          <button v-if="comment.User.id == userId"
+          <button v-if="comment.User.id == userId || userId == 1"
             id="comment-delete"
             class="form_btn"
             title="Supprimer le commentaire"
@@ -166,8 +166,9 @@ export default {
       users: ref([]),
       comments: ref([]),
       revele: false,
-      likes: ref([]),
-      dislike: ref([]),
+      likes: ref(0),
+      dislike: ref(0),
+      componentKey: 0,
     };
   },
 
@@ -209,6 +210,10 @@ export default {
   },
 
   methods: {
+    forceRerender() {
+      this.componentKey ++;
+    },
+    
     //date of the post
     datePost(date) {
       const event = new Date(date);
@@ -245,7 +250,7 @@ export default {
       const token = localStorage.getItem("token");
       console.log("PostCard||deletePost", postId);
       if (userId === userId && token === token) {
-        fetch(`http://localhost:3000/api/posts/${this.postId}/comment`, {
+        fetch(`http://localhost:3000/api/posts/${postId}`, {
           method: "DELETE",
           credentials: "include",
           headers: {
@@ -285,12 +290,12 @@ export default {
       .then((res) => {
         alert("like", postId)
         console.log(res)
-      //  this.like = res.data;
-        if(this.like == 1) {
-          this.like -= 1
-        } else {
-          this.like += 1
-        }
+        this.like = res.data;
+    //    if(this.like == 1) {
+    //      this.like -= 1
+    //    } else {
+    //      this.like += 1
+    //    }
         this.$router.go() //refresh page
       })
       .catch((err) => console.log(err));  

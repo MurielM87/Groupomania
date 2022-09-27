@@ -123,7 +123,6 @@ export default {
         })
         .then((res) => res.json())
         .then(() => {
-          alert("post modifié");
           console.log("ModifyPost||post", this.post);
           this.$router.go(`/`);
         })

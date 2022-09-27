@@ -183,7 +183,7 @@ exports.updatePost = async (req, res) => {
   })
   console.log("updatePost||post", post)
   console.log(req.params)
-  if (userId.id === post.UserId) {
+  if (userId.id === post.UserId || userId.isAdmin === true) {
     // if a file is in the request
     if (req.file) {
       newImageUrl = req.file.filename

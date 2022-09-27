@@ -45,6 +45,32 @@
 </template>
 
 <script>
+  /*
+  data () {
+    return {
+      isLogged: this.checkIfIsLogged()
+    }
+  },
+  created () {
+    this.$bus.$on('logged', () => {
+      this.isLogged = this.checkIfIsLogged()
+    })
+  },
+  methods: {
+    singout () {
+      this.$localStorage.remove('access_token')
+      this.isLogged = this.checkIfIsLogged()
+      this.$router.push('/')
+    },
+    checkIfIsLogged () {
+      let token = this.$localStorage.get('access_token')
+      if (token) {
+        return true
+      } else {
+        return false
+      }
+    }
+  */
 export default {
   name: "NavBar",
   data() {
@@ -69,6 +95,7 @@ export default {
       this.$router.push({name: "LogIn"})
     }
   },
+
   
   methods: {
     forceRerender() {
