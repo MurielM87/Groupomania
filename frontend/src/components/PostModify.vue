@@ -3,10 +3,10 @@
     <div class="post_form">
       <h2>Modifier votre message</h2>
       <input
-        type="text"
-        v-model="this.title"
+        type="text"        
         class="post_title"
         placeholder="titre du message"
+        v-model="this.title"
         required
       />
       <textarea
@@ -51,21 +51,22 @@ import { ref } from "vue";
 export default {
   name: "PostModify",
   emit: ["input"],
+  props: ["revele", "toggleModale", "modifyPost"],
   data() {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
     //  post: ref({
-        title: ref(""),
-        content: ref(""), 
+        title: this.modifyPost.title,
+        content: this.modifyPost.content, 
         imageUrl: ref(""),
     //  }),
       image: null,
     };
   },
-  props: ["revele", "toggleModale", "modifyPost"],
 
   created() {
+    console.log(this.modifyPost)
     fetch(`http://localhost:3000/api/posts/${this.postId}`, {
       method: "GET",
       credentials: "include",

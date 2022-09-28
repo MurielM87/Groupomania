@@ -16,12 +16,12 @@ exports.createPost = async (req, res) => {
       imageUrl = null
     }
     console.log("createPost||req.file", req.file)
-
+const pushToImg = req.file == undefined ? null : req.file.filename;
     // create a post in database
     const post = await database.Post.create({
       title: req.body.title,
       content: req.body.content,
-      imageUrl: req.file.filename,
+      imageUrl: pushToImg,
       UserId: req.user.userId,
     })
     console.log("post", post)
@@ -275,13 +275,10 @@ exports.likePost = async (req, res) => {
     return res.json(newLike);
   } else {
     await database.Like.destroy({
-      where: {
-        UserId: userId.id,
-        PostId: postId.id
-      },
-      truncate: true, restartIdentity: true 
+      where: { id: like.id },
+    
     });
-    return res.send();
+    return res.json({message: "delete like"});
   }
   /*
   

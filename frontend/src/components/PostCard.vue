@@ -113,6 +113,7 @@
               v-if="comment.User.imageUrl"
               :src="`http://localhost:3000/images/${comment.User.imageUrl}`"
               alt="avatar"
+              crossorigin="anonymous"
             />
             <img v-else :src="require('../assets/avatar.png')" alt="avatar par default" />
             <span class="comment_author_pseudo"> 
@@ -173,7 +174,7 @@ export default {
   },
 
   async created() {    
-    console.log("post", this.post)
+  //  console.log("post", this.post)
     await fetch(`http://localhost:3000/api/users/`, {
       methods: "GET",
       credentials: "include",
@@ -185,7 +186,7 @@ export default {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("PostCard||users||data", data);
+      //  console.log("PostCard||users||data", data);
         this.users = data;
       })
       .catch((err) => console.log(err));
@@ -203,7 +204,7 @@ export default {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("PostCard||user||data", data);
+      //  console.log("PostCard||user||data", data);
         this.user = data;
       })
       .catch((err) => console.log(err));
@@ -213,7 +214,7 @@ export default {
     forceRerender() {
       this.componentKey ++;
     },
-    
+
     //date of the post
     datePost(date) {
       const event = new Date(date);
@@ -289,16 +290,16 @@ export default {
       .then((res) => res.json())
       .then((res) => {
         alert("like", postId)
-        console.log(res)
+        console.log({res})
         this.like = res.data;
     //    if(this.like == 1) {
     //      this.like -= 1
     //    } else {
     //      this.like += 1
     //    }
-        this.$router.go() //refresh page
+    //    this.$router.go() //refresh page
       })
-      .catch((err) => console.log(err));  
+      .catch((err) => console.error(err));  
     },
 
     submitComment(postId) {
