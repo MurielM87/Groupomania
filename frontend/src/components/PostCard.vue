@@ -289,9 +289,9 @@ export default {
       })
       .then((res) => res.json())
       .then((res) => {
-        alert("like", postId)
         console.log({res})
         this.like = res.data;
+        this.componentKey ++;
     //    if(this.like == 1) {
     //      this.like -= 1
     //    } else {
@@ -376,7 +376,7 @@ h4 {
 #card h3,
 #card p {
   margin: 0;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
   padding-left: 10px;
 }
 
@@ -388,7 +388,7 @@ h4 {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  padding: 20px;
+  padding: 5px;
 }
 
 #like_post {
@@ -421,26 +421,32 @@ h4 {
   justify-content: flex-end;
 }
 .comments_card {
+  width: 80%;
   background-color: #ffd7d7;
-  border: 1px solid #8f8c8c;
-  margin-bottom: 15px;
+  border: 1px solid #4E5166;
+  margin-bottom: 10px;
+  margin-left: auto;
   border-radius: 10px;
   padding: 10px;
 }
 
 .comment_author {
-  width: 60%;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   border: 1px solid #4E5166;
   border-radius: 10px;
-  margin-bottom: 20px;
 }
-
+.comment_author_pseudo {
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+}
 .comment_author img {
-  width: 40px;
-  padding: 10px;
+  width: 50px;
+  padding: 5px;
+  border-radius: 50%;
+  margin: 0;
 }
 textarea {
   width: 100%;

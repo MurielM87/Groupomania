@@ -130,7 +130,7 @@ export default {
   background-color: white;
   border-radius: 20px;
   border: 1px solid #fd2d01;
-  padding: 10px;
+  padding: 10px 10px 0px 10px;
   margin: auto;
   margin-top: 20px;
   margin-bottom: 20px;

@@ -17,7 +17,10 @@
         required
       ></textarea>
       <!--add an image -->
-      <img v-if="this.imageUrl" :src="`http://localhost:3000/api/images/${this.post.imageUrl}`"/><img v-else :src="image"/>
+      <img v-if="this.imageUrl" 
+            :src="`http://localhost:3000/api/images/${modifyPost.imageUrl}`"
+            crossorigin="anonymous"/>
+      <img v-else :src="image"/>
       <div class="post_img">
         <input
           @change="uploadImg"
@@ -46,7 +49,6 @@
 </template>
 
 <script>
-import { ref } from "vue";
 
 export default {
   name: "PostModify",
@@ -56,11 +58,9 @@ export default {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
-    //  post: ref({
-        title: this.modifyPost.title,
-        content: this.modifyPost.content, 
-        imageUrl: ref(""),
-    //  }),
+      title: this.modifyPost.title,
+      content: this.modifyPost.content, 
+      imageUrl: this.modifyPost.imageUrl,
       image: null,
     };
   },
@@ -77,7 +77,7 @@ export default {
     })
     .then((res) => res.json())
     .then((data) => {
-      console.log("PostModify||data", data);
+    //  console.log("PostModify||data", data);
       this.post = data;
     })
     .catch((err) => console.log(err));
@@ -160,7 +160,7 @@ export default {
     background-color: #FFD7D7;
     width: 55%;
     margin: auto;
-    margin-top: 90px;
+    margin-top: 70px;
     padding: 30px;
   }
 </style>
