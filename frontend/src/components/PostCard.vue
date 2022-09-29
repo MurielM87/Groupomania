@@ -72,6 +72,7 @@
       <div class="like_thumbs">
         <i class="far fa-thumbs-up" @click.prevent="addLike(post.id)">{{ post.Likes.length }}</i>
         <i class="far fa-thumbs-down" @click.prevent="addDislike(post.id)"></i>
+        <i class="far fa-grin-wink"></i>
       </div>
       <p>likes: {{ post.Likes.length }}</p>
     </div>
@@ -297,7 +298,7 @@ export default {
     //    } else {
     //      this.like += 1
     //    }
-    //    this.$router.go() //refresh page
+        this.$router.go() //refresh page
       })
       .catch((err) => console.error(err));  
     },
@@ -355,9 +356,6 @@ export default {
 </script>
 
 <style lang="scss">
-.posts {
-  margin-top : 115px;
-}
 #post_author {
   display: flex;
   flex-direction: row;
@@ -392,6 +390,10 @@ h4 {
   flex-direction: row;
   justify-content: flex-end;
   padding: 5px;
+  @media screen and (max-width: 992px) {
+    flex-direction: column;
+    align-items: flex-end;
+  }
 }
 
 #like_post {

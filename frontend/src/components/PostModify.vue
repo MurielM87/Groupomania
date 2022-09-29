@@ -53,7 +53,7 @@
 export default {
   name: "PostModify",
   emit: ["input"],
-  props: ["revele", "toggleModale", "modifyPost"],
+  props: ["revele", "toggleModale", "modifyPost", "componentKey"],
   data() {
     return {
       token: localStorage.getItem("token"),

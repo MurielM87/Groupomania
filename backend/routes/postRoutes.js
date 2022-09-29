@@ -1,5 +1,6 @@
 const router = require("express").Router()
 const postCtrl = require("../controllers/post")
+const likeCtrl = require("../controllers/likes")
 const commentCtrl = require("../controllers/comment")
 const auth = require("../middlewares/auth")
 const multer = require("../middlewares/multer-config")
@@ -13,8 +14,12 @@ router.put("/:id", auth, multer, postCtrl.updatePost)
 router.delete("/:id", auth, multer, postCtrl.deletePost)
 
 //like
-router.post("/:id/like", auth, postCtrl.likePost)
-//router.post("/:id/dislike", auth, postCtrl.dislikePost)
+router.post("/:id/like", auth, likeCtrl.likePost)
+router.post("/:id/dislike", auth, likeCtrl.dislikePost)
+router.post("/:id/love", auth, likeCtrl.lovePost)
+router.post("/:id/funny", auth, likeCtrl.funnyPost)
+router.post("/:id/interest", auth, likeCtrl.interestPost)
+router.post("/:id/support", auth, likeCtrl.supportPost)
 
 //comments
 router.post("/:id/comment", auth, commentCtrl.createComment)

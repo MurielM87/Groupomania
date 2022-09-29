@@ -1,34 +1,22 @@
 <template :key="componentKey">
   <div id="navbar">
   <header>
-    <div v-if="this.isLoggedIn">
+    <div v-if="!this.isLoggedIn">
+      <img alt="logo Groupomania" src="../assets/icon.png" class="logo" />  
+    </div>
+    <div v-else>             
       <router-link :to="{ name: 'MainPage' }"
         ><img alt="logo Groupomania" src="../assets/icon.png" class="logo"
       /></router-link>
     </div>
+    
+    <h1 v-if="!this.isLoggedIn">Groupomania</h1>
     <div v-else>
-       <img alt="logo Groupomania" src="../assets/icon.png" class="logo" />        
-    </div>
-
-    <div v-if="this.isLoggedIn">
       <router-link :to="{ name: 'MainPage' }"><h1>Groupomania</h1></router-link>
     </div>
-    <h1 v-else>Groupomania</h1>
 
     <div id="barre">
-      <li v-if="this.isLoggedIn" class="menu">
-        <ul>
-          <router-link :to="{name: 'ProfilUser', params: {id: this.userId} }" 
-            ><i class="fas fa-user-circle"><span class="text_desktop"> Mon profil</span></i></router-link
-          >
-        </ul>
-        <ul>
-          <router-link :to="{ name: 'LogIn' }" @click="this.logOut"
-            ><i class="fas fa-sign-out-alt"><span class="text_desktop"> Déconnexion</span></i></router-link
-          >
-        </ul>
-      </li>
-      <li v-else class="menu">
+      <li v-if="!this.isLoggedIn" class="menu">
         <ul>
           <router-link :to="{ name: 'LogIn' }"
             ><i class="fas fa-sign-in-alt"><span class="text_desktop"> Connexion</span></i></router-link
@@ -37,6 +25,18 @@
         <ul>
           <router-link :to="{ name: 'SignUp' }"
             ><i class="fas fa-user-plus"><span class="text_desktop"> Inscription</span></i></router-link
+          >
+        </ul>
+      </li>
+      <li v-else class="menu">
+        <ul>
+          <router-link :to="{name: 'ProfilUser', params: {id: this.userId} }" 
+            ><i class="fas fa-user-circle"><span class="text_desktop"> Mon profil</span></i></router-link
+          >
+        </ul>
+        <ul>
+          <router-link :to="{ name: 'LogIn' }" @click="this.logOut"
+            ><i class="fas fa-sign-out-alt"><span class="text_desktop"> Déconnexion</span></i></router-link
           >
         </ul>
       </li>
@@ -93,13 +93,11 @@ export default {
 </script>
 
 <style lang="scss">
-  #navbar {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-  }
+#navbar {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
 header {
   width: 100%;
   height: 100px;
