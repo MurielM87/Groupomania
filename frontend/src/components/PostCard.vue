@@ -355,6 +355,9 @@ export default {
 </script>
 
 <style lang="scss">
+.posts {
+  margin-top : 115px;
+}
 #post_author {
   display: flex;
   flex-direction: row;

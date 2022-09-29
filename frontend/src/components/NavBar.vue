@@ -1,4 +1,5 @@
 <template :key="componentKey">
+  <div id="navbar">
   <header>
     <div v-if="this.isLoggedIn">
       <router-link :to="{ name: 'MainPage' }"
@@ -42,6 +43,7 @@
     </div>
   </header>
   <div class="barre_color"></div>
+</div>
 </template>
 
 <script>
@@ -83,15 +85,27 @@ export default {
       this.isLoggedIn = false;
     },
   },
+
+  onMounted() {
+    this.isLoggedIn == !this.isLoggedIn
+  }
 }
 </script>
 
 <style lang="scss">
+  #navbar {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+  }
 header {
   width: 100%;
   height: 100px;
   margin: auto;
   color: black;
+  background-color: #fffbfb;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
