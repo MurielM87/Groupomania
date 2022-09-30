@@ -4,6 +4,7 @@ import LogIn from '@/views/LogIn.vue';
 import MainPage from '@/views/MainPage';
 import ProfilUser from '@/views/ProfilUser';
 import EditProfil from '@/components/EditProfil';
+import UsersProfil from '@/components/UsersProfil'
 import NotFound from '@/views/NotFound';
 
 const routes = [
@@ -31,6 +32,11 @@ const routes = [
         name: 'EditProfil',
         path: '/profil/:id/edit',
         component: EditProfil,
+    },
+    {
+        name: 'UsersProfil',
+        path:'/profils',
+        component: UsersProfil,
     },
     {
         name: 'NotFound',

@@ -207,10 +207,6 @@ export default {
   },
 
   methods: {
-    forceRerender() {
-      this.componentKey ++;
-    },
-
     //date of the post
     datePost(date) {
       const event = new Date(date);
@@ -262,6 +258,7 @@ export default {
             console.log("deletePost || postId", postId);
             return post.id != postId;
             })
+          //  this.posts --
             this.$router.go()	// Refresh page
           }          
         })
@@ -287,9 +284,9 @@ export default {
       .then((data) => {     
         console.log("CardForm||data", data);
         this.content = data;
-        this.$router.go()	// Refresh page
-        //window.location.reload();
-        //$router.go();
+        this.$router.go(data)
+        //this.$router.go()	// Refresh page
+        //window.location.reload();        
       })
       .catch((err) => console.error(err));  
     },
@@ -353,13 +350,9 @@ h4 {
 
 .post_date {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-end;
   padding: 5px;
-  @media screen and (max-width: 992px) {
-    flex-direction: column;
-    align-items: flex-end;
-  }
 }
 
 .comment_title {
@@ -377,6 +370,7 @@ h4 {
 }
 
 .comment_author {
+  width: 50%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -399,7 +393,8 @@ textarea {
   margin-top: 5px;
   margin-bottom: 5px;
 }
-.fa-comments {
+.fa-comments,
+.fa-feather-alt {
   font-size: 40px;
   margin: 2px;
   background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),

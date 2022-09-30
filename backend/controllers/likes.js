@@ -36,6 +36,7 @@ exports.likePost = async (req, res) => {
     }
 },
 
+
 //dislike a post
 exports.dislikePost= async (req, res) => {
     const userId = await database.User.findOne({

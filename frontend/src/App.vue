@@ -24,6 +24,8 @@ export default {
     };
   },
 
+  
+
   methods: {
     forceRerender() {
       this.componentKey + 1;

@@ -125,7 +125,7 @@ export default {
 #card {
   display: flex;
   flex-direction: column;
-  width: 600px;
+  width: 100%;
   background-color: white;
   border-radius: 20px;
   border: 1px solid #fd2d01;
@@ -178,8 +178,7 @@ h2 {
 .fa-pen,
 .fa-envelope,
 .fa-eraser,
-.fa-times-circle,
-.fa-feather-alt {
+.fa-times-circle {
   font-size: 20px;
   margin: 2px;
   background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),

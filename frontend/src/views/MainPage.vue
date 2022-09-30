@@ -1,10 +1,17 @@
 <template>
-  <section class="posts">
-    <h2>Bonjour {{ user.pseudo }}</h2>
-    <PostForm :key="componentKey"/>
-
-    <div class="separate_barre"></div>
-    <h2>Nouvelles publications</h2>
+  <h2>Bonjour {{ user.pseudo }}</h2>
+  <section id="posts">
+    
+    <div class="post_column">
+      <PostForm :key="componentKey"/>
+      <div class="profil_column">
+        <UsersProfil />
+        <router-link :to="{ name: 'UsersProfil' }">autres membres</router-link>
+      </div>      
+    </div>
+    
+    <div class="post_column">
+      <h2>Nouvelles publications</h2>
 
     <PostCard 
       v-for="post in posts" 
@@ -12,6 +19,8 @@
       :post="post"
       :comment="comment"
     />
+    </div>
+    
 
     <!-- Bouton Scroll to Top-->
     <button class="toTop" @click="toTop" title="Retour en haut de page">
@@ -24,12 +33,14 @@
 import { ref } from "vue";
 import PostForm from "@/components/PostForm.vue";
 import PostCard from "@/components/PostCard.vue";
+import UsersProfil from "@/components/UsersProfil.vue";
 
 export default {
   name: "MainPage",
   components: {
     PostForm,
     PostCard,
+    UsersProfil
 },
   data() {
     return {
@@ -41,13 +52,14 @@ export default {
       componentKey: 0,
     };
   },
-  beforeCreate() {
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-    if (token == null && userId == null) {
-      this.$router.push({ name: "LogIn" });
-    }
-  },
+  props: ["isLoggedIn"],
+//  beforeCreate() {
+//    const token = localStorage.getItem("token");
+//    const userId = localStorage.getItem("userId");
+//    if (token == null && userId == null) {
+//      this.$router.push({ name: "LogIn" });
+//    }
+//  },
  
 
   async created() {
@@ -104,6 +116,28 @@ export default {
 </script>
 
 <style lang="scss">
+#posts {
+  display: flex;
+  flex-direction: row;
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+.post_column {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+.profil_column {
+  width: 90%;
+  margin: auto;
+  margin-top: 15px;
+  border: 1px solid #FD2D01;
+  border-radius: 20px;
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+}
 img {
   width: 250px;
   margin: auto;

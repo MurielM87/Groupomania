@@ -2,13 +2,25 @@
   <!-- add like to the post-->
   <div class="post_like">
     <div class="like_thumbs">
-      <i class="far fa-thumbs-up" @click.prevent="addLike(post.id)">{{ post.Likes.length }}</i>
-      <i class="far fa-thumbs-down" @click.prevent="addDislike(post.id)">{{ post.Dislikes.length }}</i>
-      <i class="far fa-grin-tears" @click.prevent="addFunny(post.id)">{{ post.Funnies.length }}</i>
-      <i class="far fa-lightbulb" @click.prevent="addInterest(post.id)">{{ post.Interests.length }}</i>
-      <i class="far fa-grin-hearts" @click.prevent="addLove(post.id)">{{ post.Loves.length }}</i>
-      <i class="fa fa-hand-holding-heart" @click.prevent="addSupport(post.id)">{{ post.Supports.length }}</i>
-    </div>   
+      <i class="far fa-thumbs-up" @click.prevent="addLike(post.id)">
+        <div v-if="post.Likes.length">{{ post.Likes.length }}</div>
+      </i>
+      <i class="far fa-thumbs-down" @click.prevent="addDislike(post.id)">
+        <div v-if="post.Dislikes.length">{{ post.Dislikes.length }}</div>
+      </i>
+      <i class="far fa-grin-tears" @click.prevent="addFunny(post.id)">
+        <div v-if="post.Funnies.length">{{ post.Funnies.length }}</div>
+      </i>
+      <i class="far fa-lightbulb" @click.prevent="addInterest(post.id)">
+        <div v-if="post.Interests.length">{{ post.Interests.length }}</div>
+      </i>
+      <i class="far fa-grin-hearts" @click.prevent="addLove(post.id)">
+        <div v-if="post.Loves.length">{{ post.Loves.length }}</div>
+      </i>
+      <i class="fas fa-hand-holding-heart" @click.prevent="addSupport(post.id)">
+        <div v-if="post.Supports.length">{{ post.Supports.length }}</div>
+      </i>
+    </div>  
   </div>
 </template>
 
@@ -181,8 +193,10 @@ export default {
 .like_thumbs {
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 20px;
 }
 .fa-thumbs-up {
+  display: flex;
   font-size: 25px;
   color: black;
   &:hover, &:active, &:link {
@@ -190,11 +204,49 @@ export default {
   }
 }
 .fa-thumbs-down {
+  display: flex;
   font-size: 25px;
   color: black;
   padding-left: 15px;
   &:hover, &:active, &:link {
     color: red;
+  }
+}
+
+.fa-grin-tears {
+  display: flex;
+  font-size: 25px;
+  color: black;
+  padding-left: 15px;
+  &:hover, &:active, &:link {
+    color: turquoise;
+  }
+}
+.fa-lightbulb {
+  display: flex;
+  font-size: 25px;
+  color: black;
+  padding-left: 15px;
+  &:hover, &:active, &:link {
+    color: yellow;
+  }
+}
+.fa-grin-hearts{
+  display: flex;
+  font-size: 25px;
+  color: black;
+  padding-left: 15px;
+  &:hover, &:active, &:link {
+    color: rgb(248, 20, 142);
+  }
+}
+.fa-hand-holding-heart {
+  display: flex;
+  font-size: 25px;
+  color: black;
+  padding-left: 15px;
+  &:hover, &:active, &:link {    
+    color: blue;
   }
 }
 </style>
