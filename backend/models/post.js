@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       }),
       models.Post.hasMany(models.Comment)
       models.Post.hasMany(models.Like)
+      models.Post.hasMany(models.Dislike)
+      models.Post.hasMany(models.Funny)
+      models.Post.hasMany(models.Love)
+      models.Post.hasMany(models.Interest)
+      models.Post.hasMany(models.Support)
     }
   }
   Post.init(

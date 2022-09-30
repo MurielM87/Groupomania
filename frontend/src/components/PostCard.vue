@@ -68,18 +68,11 @@
     <div class="separate_barre"></div>
 
     <!-- add like to the post-->
-    <div class="post_like" :userId="userId">
-      <div class="like_thumbs">
-        <i class="far fa-thumbs-up" @click.prevent="addLike(post.id)">{{ post.Likes.length }}</i>
-        <i class="far fa-thumbs-down" @click.prevent="addDislike(post.id)"></i>
-        <i class="far fa-grin-wink"></i>
-      </div>
-      <p>likes: {{ post.Likes.length }}</p>
-    </div>
-
+    <PostLike :post="post" />
+  
     <!--add a comment to the post -->
     <div class="post_comments">
-      <h3>Commentaires <i class="far fa-comment-alt"></i></h3>
+      <h3>Commentaires <i class="fas fa-comments"></i></h3>
 
       <!--write a comment -->
       <div>
@@ -152,13 +145,15 @@
 <script>
 import { ref } from "vue";
 import PostModify from "./PostModify.vue";
+import PostLike from "./PostLike.vue";
 
 export default {
   name: "PostCard",
   props: ["post", "comment", "postId"],
   components: {
     PostModify,
-  },
+    PostLike
+},
   data() {
     return {
       token: localStorage.getItem("token"),
@@ -274,35 +269,6 @@ export default {
       }
     },
     
-    //add a like
-    addLike(postId) {
-      const userId = localStorage.getItem("userId");
-      console.log("PostCard||addLike||postId", postId);
-      console.log("PostCard||addLike||userId", userId)
-      fetch(`http://localhost:3000/api/posts/${postId}/like`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",    
-          "Authorization": `Bearer ${this.token}`,
-        },
-      })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log({res})
-        this.like = res.data;
-        this.componentKey ++;
-    //    if(this.like == 1) {
-    //      this.like -= 1
-    //    } else {
-    //      this.like += 1
-    //    }
-        this.$router.go() //refresh page
-      })
-      .catch((err) => console.error(err));  
-    },
-
     submitComment(postId) {
       console.log("PostCard||submitComment||postId", postId);
       fetch(`http://localhost:3000/api/posts/${postId}/comment`, {
@@ -396,31 +362,6 @@ h4 {
   }
 }
 
-#like_post {
-  text-align: right;
-  padding: 10px;
-  margin-right: 25px;
-}
-
-.like_thumbs {
-  display: flex;
-  justify-content: flex-end;
-}
-.fa-thumbs-up {
-  font-size: 25px;
-  color: black;
-  &:hover, &:active, &:link {
-    color: green;
-  }
-}
-.fa-thumbs-down {
-  font-size: 25px;
-  color: black;
-  padding-left: 15px;
-  &:hover, &:active, &:link {
-    color: red;
-  }
-}
 .comment_title {
   display: flex;
   justify-content: flex-end;
@@ -457,5 +398,14 @@ textarea {
   width: 100%;
   margin-top: 5px;
   margin-bottom: 5px;
+}
+.fa-comments {
+  font-size: 40px;
+  margin: 2px;
+  background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+              linear-gradient(127deg, rgba(209, 166, 14, 0.8), rgba(0,255,0,0) 70.71%),
+              linear-gradient(336deg, rgba(236, 147, 14, 0.8), rgba(0,0,255,0) 70.71%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
 }
 </style>

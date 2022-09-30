@@ -42,12 +42,88 @@ exports.getOnePost = async (req, res) => {
     order: [["createdAt", "DESC"]],
     include: [
       {
-        model: database.User,
-        attributes: ["id", "pseudo", "imageUrl"],
+        model: database.Like,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
       },
       {
-        model: database.Like,
-        attributes: ["id", "postId", "userId"],
+        model: database.Dislike,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+      {
+        model: database.Love,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+      {
+        model: database.Funny,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+      {
+        model: database.Support,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+      {
+        model: database.Interest,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
       },
       {
         model: database.Comment,
@@ -84,6 +160,76 @@ exports.getAllPosts = async (req, res) => {
       },
       {
         model: database.Like,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+      {
+        model: database.Dislike,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+      {
+        model: database.Love,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+      {
+        model: database.Funny,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+      {
+        model: database.Support,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+      {
+        model: database.Interest,
         attributes: ["id", "userId", "postId"],
         include: [
           {

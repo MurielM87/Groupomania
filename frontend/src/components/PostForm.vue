@@ -1,7 +1,7 @@
 <template>
   <!--to write a new message -->
   <section id="card" class="card_writing">
-    <h2>Nouveau message</h2>
+    <h2><i class="fas fa-feather-alt"></i> écrire un nouveau message</h2>
     <div class="post_form">
       <input
         type="text"
@@ -179,7 +179,7 @@ h2 {
 .fa-envelope,
 .fa-eraser,
 .fa-times-circle,
-.fa-comment-alt {
+.fa-feather-alt {
   font-size: 20px;
   margin: 2px;
   background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),

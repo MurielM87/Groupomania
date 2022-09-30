@@ -29,7 +29,7 @@ export default {
       this.componentKey + 1;
     },
 
-    
+ 
   },
 };
 </script>

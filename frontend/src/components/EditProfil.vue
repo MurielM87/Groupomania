@@ -215,7 +215,7 @@ export default {
 }
 .separate_barre {
   border: 1px solid #455166;
-  width: 30%;
+  width: 50%;
   margin: auto;
   margin-bottom: 20px;
   margin-top: 20px;

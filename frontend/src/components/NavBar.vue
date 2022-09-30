@@ -1,4 +1,4 @@
-<template :key="componentKey">
+<template>
   <div id="navbar">
   <header>
     <div v-if="!this.isLoggedIn">
