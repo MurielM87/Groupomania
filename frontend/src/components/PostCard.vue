@@ -38,7 +38,7 @@
       <!--add the datetime -->
       <div class="post_date">
         <p>publié le {{ datePost(post.createdAt) }}</p>
-        <p v-if="this.post.updatedAt !== this.post.createdAt">- modifié le {{ datePost(post.updatedAt) }}</p>
+        <p v-if="this.post.updatedAt !== this.post.createdAt">modifié le {{ datePost(post.updatedAt) }}</p>
       </div>
     </div>
     <br />
@@ -69,6 +69,8 @@
 
     <!-- add like to the post-->
     <PostLike :post="post" />
+    <div>Likes</div>
+    <div v-for="like in likes" :key="like">nom: {{post.Likes.length}}</div>
   
     <!--add a comment to the post -->
     <div class="post_comments">
@@ -163,8 +165,8 @@ export default {
       users: ref([]),
       comments: ref([]),
       revele: false,
-      likes: ref(0),
-      dislike: ref(0),
+      likes: ref([]),
+      dislike: ref([]),
       componentKey: 0,
     };
   },
@@ -182,7 +184,6 @@ export default {
     })
       .then((res) => res.json())
       .then((data) => {
-      //  console.log("PostCard||users||data", data);
         this.users = data;
       })
       .catch((err) => console.log(err));
@@ -200,7 +201,6 @@ export default {
     })
       .then((res) => res.json())
       .then((data) => {
-      //  console.log("PostCard||user||data", data);
         this.user = data;
       })
       .catch((err) => console.log(err));
@@ -326,6 +326,10 @@ export default {
   border: 1px solid black;
   border-radius: 10px;
   margin-bottom: 20px;
+  &:hover {
+    background-color: #FFD7D7;
+    color: #FD2D01;
+  }
 }
 
 .author_avatar {
@@ -349,6 +353,7 @@ h4 {
 }
 
 .post_date {
+  font-size: 13px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -376,6 +381,10 @@ h4 {
   justify-content: flex-start;
   border: 1px solid #4E5166;
   border-radius: 10px;
+  &:hover {
+    background-color: #f0d1d1;
+    color: #FD2D01;
+  }
 }
 .comment_author_pseudo {
   display: flex;

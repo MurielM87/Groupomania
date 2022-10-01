@@ -21,6 +21,7 @@
         <div v-if="post.Supports.length">{{ post.Supports.length }}</div>
       </i>
     </div>  
+    <div v-for="like in likes" :key="like">liste :{{post.Likes.User.pseudo}} </div>
   </div>
 </template>
 
@@ -32,15 +33,15 @@ export default {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
-      like: ref(0),
-      dislike: ref(0),
-      love: ref(0),
-      funny: ref(0),
-      interest: ref(0),
-      support: ref(0),
+      like: ref[0],
+      dislike: ref[0],
+      love: ref[0],
+      funny: ref[0],
+      interest: ref[0],
+      support: ref[0],
     };
   },
-  props: ["post"],
+  props: ["post", "likes"],
 
   methods: {
     //add a like

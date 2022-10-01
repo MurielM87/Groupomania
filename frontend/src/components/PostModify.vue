@@ -18,7 +18,7 @@
       ></textarea>
       <!--add an image -->
       <img v-if="this.imageUrl" 
-          :src="`http://localhost:3000/api/images/${imageUrl}`"
+          :src="`http://localhost:3000/api/images/${this.imageUrl}`"
           crossorigin="anonymous"/>
       <img v-else :src="image"/>
       <div class="post_img">

@@ -33,38 +33,37 @@
 import { ref } from "vue";
 
 export default {
-  name: "UsersProfil",
-  data() {
-    return {
-      userId: localStorage.getItem("userId"),
-      token: localStorage.getItem("token"),
-      user: ref({
-        pseudo: "",
-        firstname: "",
-        lastname: "",
-        imageUrl: "",
-      }),
-      users: ref([]),
-    };
-  },
-
-  async created() {    
-    await fetch(`http://localhost:3000/api/users/`, {
-      methods: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",    
-        "Authorization": `Bearer ${this.token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("UsersProfil||users||data", data);
-        this.users = data;
-      })
-      .catch((err) => console.log(err));
-  },
+    name: "UsersProfil",
+    data() {
+        return {
+            userId: localStorage.getItem("userId"),
+            token: localStorage.getItem("token"),
+            user: ref({
+                pseudo: "",
+                firstname: "",
+                lastname: "",
+                imageUrl: "",
+            }),
+            users: ref([]),
+        };
+    },
+    async created() {
+        await fetch(`http://localhost:3000/api/users/`, {
+            methods: "GET",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                "Authorization": `Bearer ${this.token}`,
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+            console.log("UsersProfil||users||data", data);
+            this.users = data;
+        })
+            .catch((err) => console.log(err));
+    },
 };
 </script>
 
@@ -81,12 +80,21 @@ export default {
     border-radius: 20px;
     background-color: #FFD7D7;
     align-items: center;
+    &:hover {
+      border: 2px solid #4E5166;
+      color: #FD2D01;
+  }
 }
 
 .user_name {
     display: flex;
     flex-direction: column;
     text-align: left;
+}
+
+a {
+  color: black;
+  text-decoration: none;
 }
 
 </style>
