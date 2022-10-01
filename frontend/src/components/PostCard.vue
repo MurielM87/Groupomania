@@ -167,6 +167,10 @@ export default {
       revele: false,
       likes: ref([]),
       dislike: ref([]),
+      loves: ref([]),
+      interests: ref([]),
+      funnies: ref([]),
+      supports: ref([]),
       componentKey: 0,
     };
   },

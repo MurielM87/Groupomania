@@ -1,5 +1,5 @@
 <template>
-  <h2>Bonjour {{ user.pseudo }}</h2>
+  <h2>Bonjour <span id="user_name">{{ user.pseudo }}</span></h2>
   <section id="posts">
     
     <div class="post_column">
@@ -116,6 +116,10 @@ export default {
 </script>
 
 <style lang="scss">
+#user_name {
+  font-family: Niconne, 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 30px;
+}
 #posts {
   display: flex;
   flex-direction: row;

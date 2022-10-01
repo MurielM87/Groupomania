@@ -2,26 +2,42 @@
   <!-- add like to the post-->
   <div class="post_like">
     <div class="like_thumbs">
-      <i class="far fa-thumbs-up" @click.prevent="addLike(post.id)">
-        <div v-if="post.Likes.length">{{ post.Likes.length }}</div>
-      </i>
-      <i class="far fa-thumbs-down" @click.prevent="addDislike(post.id)">
-        <div v-if="post.Dislikes.length">{{ post.Dislikes.length }}</div>
-      </i>
-      <i class="far fa-grin-tears" @click.prevent="addFunny(post.id)">
-        <div v-if="post.Funnies.length">{{ post.Funnies.length }}</div>
-      </i>
-      <i class="far fa-lightbulb" @click.prevent="addInterest(post.id)">
-        <div v-if="post.Interests.length">{{ post.Interests.length }}</div>
-      </i>
-      <i class="far fa-grin-hearts" @click.prevent="addLove(post.id)">
-        <div v-if="post.Loves.length">{{ post.Loves.length }}</div>
-      </i>
-      <i class="fas fa-hand-holding-heart" @click.prevent="addSupport(post.id)">
-        <div v-if="post.Supports.length">{{ post.Supports.length }}</div>
-      </i>
-    </div>  
-    <div v-for="like in likes" :key="like">liste :{{post.Likes.User.pseudo}} </div>
+      <div class="tooltip">
+        <i class="far fa-thumbs-up" @click.prevent="addLike(post.id)">
+          <div v-if="post.Likes.length">{{ post.Likes.length }}</div> </i
+        ><span class="tooltiptext">J'aime</span>
+      </div>
+      <div class="tooltip">
+        <i class="far fa-thumbs-down" @click.prevent="addDislike(post.id)">
+          <div v-if="post.Dislikes.length">{{ post.Dislikes.length }}</div> </i
+        ><span class="tooltiptext">Je n'aime pas</span>
+      </div>
+      <div class="tooltip">
+        <i class="far fa-grin-tears" @click.prevent="addFunny(post.id)">
+          <div v-if="post.Funnies.length">{{ post.Funnies.length }}</div> </i
+        ><span class="tooltiptext">Marrant</span>
+      </div>
+      <div class="tooltip">
+        <i class="far fa-lightbulb" @click.prevent="addInterest(post.id)">
+          <div v-if="post.Interests.length">
+            {{ post.Interests.length }}
+          </div> </i
+        ><span class="tooltiptext">Intéressant</span>
+      </div>
+      <div class="tooltip">
+        <i class="far fa-grin-hearts" @click.prevent="addLove(post.id)">
+          <div v-if="post.Loves.length">{{ post.Loves.length }}</div> </i
+        ><span class="tooltiptext">J'adore</span>
+      </div>
+      <div class="tooltip">
+        <i
+          class="fas fa-hand-holding-heart"
+          @click.prevent="addSupport(post.id)"
+        >
+          <div v-if="post.Supports.length">{{ post.Supports.length }}</div> </i
+        ><span class="tooltiptext">Soutien</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -55,7 +71,7 @@ export default {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          "Authorization": `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.token}`,
         },
       })
         .then((res) => res.json())
@@ -78,7 +94,7 @@ export default {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          "Authorization": `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.token}`,
         },
       })
         .then((res) => res.json())
@@ -101,7 +117,7 @@ export default {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          "Authorization": `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.token}`,
         },
       })
         .then((res) => res.json())
@@ -124,7 +140,7 @@ export default {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          "Authorization": `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.token}`,
         },
       })
         .then((res) => res.json())
@@ -146,7 +162,7 @@ export default {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          "Authorization": `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.token}`,
         },
       })
         .then((res) => res.json())
@@ -168,7 +184,7 @@ export default {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
-          "Authorization": `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.token}`,
         },
       })
         .then((res) => res.json())
@@ -184,11 +200,37 @@ export default {
 </script>
 
 <style lang="scss">
-    
 #like_post {
   text-align: right;
   padding: 10px;
   margin-right: 25px;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  //Position the tooltip
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }
 
 .like_thumbs {
@@ -200,7 +242,9 @@ export default {
   display: flex;
   font-size: 25px;
   color: black;
-  &:hover, &:active, &:link {
+  &:hover,
+  &:active,
+  &:link {
     color: green;
   }
 }
@@ -209,7 +253,9 @@ export default {
   font-size: 25px;
   color: black;
   padding-left: 15px;
-  &:hover, &:active, &:link {
+  &:hover,
+  &:active,
+  &:link {
     color: red;
   }
 }
@@ -219,7 +265,9 @@ export default {
   font-size: 25px;
   color: black;
   padding-left: 15px;
-  &:hover, &:active, &:link {
+  &:hover,
+  &:active,
+  &:link {
     color: turquoise;
   }
 }
@@ -228,16 +276,20 @@ export default {
   font-size: 25px;
   color: black;
   padding-left: 15px;
-  &:hover, &:active, &:link {
+  &:hover,
+  &:active,
+  &:link {
     color: yellow;
   }
 }
-.fa-grin-hearts{
+.fa-grin-hearts {
   display: flex;
   font-size: 25px;
   color: black;
   padding-left: 15px;
-  &:hover, &:active, &:link {
+  &:hover,
+  &:active,
+  &:link {
     color: rgb(248, 20, 142);
   }
 }
@@ -246,7 +298,9 @@ export default {
   font-size: 25px;
   color: black;
   padding-left: 15px;
-  &:hover, &:active, &:link {    
+  &:hover,
+  &:active,
+  &:link {
     color: blue;
   }
 }
