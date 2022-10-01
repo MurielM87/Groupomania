@@ -7,7 +7,6 @@ exports.createPost = async (req, res) => {
   const user = await database.User.findOne({
     where: { id: req.user.userId }
   })
-  console.log("createPost||user", user)
 
   if (user !== null) {
     if (req.file) {
@@ -15,8 +14,8 @@ exports.createPost = async (req, res) => {
     } else {
       imageUrl = null
     }
-    console.log("createPost||req.file", req.file)
-const pushToImg = req.file == undefined ? null : req.file.filename;
+
+    const pushToImg = req.file == undefined ? null : req.file.filename;
     // create a post in database
     const post = await database.Post.create({
       title: req.body.title,
@@ -24,9 +23,6 @@ const pushToImg = req.file == undefined ? null : req.file.filename;
       imageUrl: pushToImg,
       UserId: req.user.userId,
     })
-    console.log("post", post)
-    console.log("req.body", req.body)
-
     res.status(201).json({ post: post, message: "Votre message est publié" })
   } else {
     res.status(400).send({ error: "Erreur, votre message n'a pas pu être publié" })
@@ -143,8 +139,6 @@ exports.getOnePost = async (req, res) => {
     ],
   })
   res.status(200).json(post)
-  console.log("getOnePost||req.params.id", req.params);
-  console.log("getOnePost||post", post)
 }
 
 //get all posts
@@ -268,8 +262,6 @@ exports.getAllPostsOfOneUser = async (req, res, next) => {
   const user = await database.User.findOne({
     where: { id: req.user.userId }
   })
-  console.log("AllPostsOneUser||user", user)
-  console.log("AllPostsOneUser||req.user", req.user)
 
   database.Post.findAll({
     where: { userId: req.params.id },
@@ -317,18 +309,14 @@ exports.getAllPostsOfOneUser = async (req, res, next) => {
 
 //update a post
 exports.updatePost = async (req, res) => {
-  console.log(req.params.id)
   //find the post by Id
   let newImageUrl
   const userId = await database.User.findOne({
     where: { id: req.user.userId }
   })
-  console.log("updatePost||userId", userId.id)
   const post = await database.Post.findOne({
     where: { id: req.params.id }
   })
-  console.log("updatePost||post", post)
-  console.log(req.params)
   if (userId.id === post.UserId || userId.isAdmin === true) {
     // if a file is in the request
     if (req.file) {
@@ -364,15 +352,12 @@ exports.updatePost = async (req, res) => {
 
 //delete a post
 exports.deletePost = async (req, res) => {
-  console.log(req.params.id)
   const userId = await database.User.findOne({
     where: { id: req.user.userId }
   })
-  console.log("deletePost||userId", userId)
   const post = await database.Post.findOne({
     where: { id: req.params.id }
   })
-  console.log("deletePost||post", post)
   if (userId.id === post.UserId || userId.isAdmin === true) {
     if (post.imageUrl) {
       const filename = post.imageUrl.split("/images")[1]

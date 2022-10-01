@@ -87,9 +87,6 @@ export default {
             console.log(data);
             localStorage.setItem("token", data.token);
             localStorage.setItem("userId", data.userId);
-            console.log("token", data.token);
-            console.log("userId", data.userId);
-            this.$emit('isLoggedIn');
             this.$router.push("/");
           })
           .catch((error) => {

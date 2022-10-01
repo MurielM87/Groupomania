@@ -5,11 +5,9 @@ exports.createComment = async (req, res) => {
     const userId = await database.User.findOne({
         where: { id: req.user.userId }
     })
-    console.log("CreateComment||userId", userId)
     const post = await database.Post.findOne({
         where: { id: req.params.id }
     })
-    console.log("CreateComment||post", post)
 
     if (userId !== null && post !== null) {
         if (req.body.content === "") {
@@ -34,11 +32,9 @@ exports.deleteComment = async (req, res) => {
         const userId = await database.User.findOne({
             where: { id: req.user.userId }
         })
-        console.log("DeleteComment||userId", userId)
         const comment = await database.Comment.findOne({
             where: { id: req.params.id },
         })
-        console.log("deleteComment||comment", comment)
 
         if (userId.id === comment.UserId || userId.isAdmin === true) {
             database.Comment.destroy(

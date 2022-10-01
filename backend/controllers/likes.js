@@ -50,7 +50,7 @@ exports.dislikePost= async (req, res) => {
     if (!postId) {
         return res.status(404).send({ message: "post inconnu" })
     }
-
+   
     let dislike = await database.Dislike.findOne({
         where: {
             UserId: userId.id,

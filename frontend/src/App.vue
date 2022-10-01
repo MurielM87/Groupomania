@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <NavBar :key="componentKey" />
+    <NavBar :key="isLoggedIn" />
     <router-view />
 
     <FooterPage />
@@ -20,16 +20,27 @@ export default {
   },
   data() {
     return {
-      componentKey: ref(0),
+      isLoggedIn: ref(false),
     };
   },
 
   
 
   methods: {
-    forceRerender() {
-      this.componentKey + 1;
-    },
+    logIn () {
+      const token = localStorage.getItem('token')
+      const userId = localStorage.getItem('userId')
+      console.log("App", token)
+      console.log("App", userId)
+      if (token && userId) {
+      this.isLoggedIn = true
+      this.$emit(this.isLoggedIn)
+      console.log("App||userId", userId)
+      this.$router.push({name: "MainPage"})
+    } else {
+      this.$router.push({name: "LogIn"})
+    }
+    }
 
  
   },

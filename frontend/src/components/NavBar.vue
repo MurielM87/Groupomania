@@ -1,4 +1,4 @@
-<template>
+<template :key="isLoggedIn">
   <div id="navbar">
   <header>
     <div v-if="!this.isLoggedIn">
@@ -47,14 +47,14 @@
 </template>
 
 <script>
+import { ref } from "vue"
+
 export default {
   name: "NavBar",
   data() {
     return {
-    //  token: localStorage.getItem('token'),
       userId: localStorage.getItem('userId'),
-      isLoggedIn: false,
-      componentKey: 0,
+      isLoggedIn: ref(false),
     }
   },
 
@@ -64,7 +64,6 @@ export default {
     console.log("NavBar||created", userId)
     console.log("NavBar||created", token)
     if (token && userId) {
-      this.$emit('userId')
       this.isLoggedIn = true
       console.log("NavBar||created||userId", userId)
     } else {
@@ -74,10 +73,6 @@ export default {
 
   
   methods: {
-    forceRerender() {
-      this.componentKey +1;
-    },
-    
     logOut() {
       localStorage.removeItem('token');
       localStorage.removeItem('userId');

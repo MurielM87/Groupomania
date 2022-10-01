@@ -46,7 +46,6 @@ exports.login = async (req, res) => {
     }
     bcrypt.compare(req.body.password, user.password)
       .then(valid => {
-        console.log("user", user.id);
         const token = jwt.sign(
           { userId: user.id },
           process.env.TOKEN,
@@ -68,15 +67,12 @@ exports.login = async (req, res) => {
 //Get One User
 exports.getOneUser = async (req, res) => {
   const id = req.params.id
-  console.log("getOneUser||req.params", req.params);
-  console.log("getOneUser||id", id);
   try {
     // try to find a user by Id
     const user = await database.User.findOne({
       where: { id: req.params.id },
     })
     res.status(200).send(user)
-    console.log("getOneUser||req.params.id", req.params.id);
   } catch (error) {
     return res.status(500).send({ error: "Erreur serveur" })
   }
@@ -103,12 +99,8 @@ exports.updateUser = async (req, res) => {
     let imageUrl
     let user = await database.User.findOne({ where: { id: id } })
     if (user) {
-      console.log(user)
       if (req.file && user.imageUrl) {
-      console.log("updateUser||req.file",req.file)
-      console.log("updateUser||user.imageUrl", user.imageUrl)
       imageUrl = req.file.filename
-        console.log("updateUser||req.file.filename", req.file.filename)
         const filename = user.imageUrl.split("/images")[1]
         fs.unlink(`images/${filename}`, (err) => {
           if (err) console.log(err)
@@ -148,7 +140,6 @@ exports.deleteUser = async (req, res) => {
     const userId = await database.User.findOne({
       where : {id : req.user.userId}
     })
-    console.log("deleteUser||userId", userId)
 
     if (userId.id === userId.id || userId.isAdmin === true) {
       const filename = userId.imageUrl.split("/images")[1]
