@@ -1,6 +1,6 @@
 <template>
   <PostModify :revele="revele" :toggleModale="toggleModale" :modifyPost="post" :key="componentKey" />
-  <article id="card">
+  <article id="card_post">
     <!--informations from the author of the post-->
     <router-link :to="`/profil/${post.User.id}`">
       <div id="post_author">
@@ -323,6 +323,27 @@ export default {
 </script>
 
 <style lang="scss">
+  #card_post {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: 47%;
+  height: 100%;
+  background-color: white;
+  border-radius: 20px;
+  border: 2px solid #fd2d01;
+  padding: 10px 10px 0px 10px;
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  @media (min-width: 768px) and (max-width: 992px) {
+    width: 90%;
+  }
+  @media screen and (max-width: 768px) {
+    width: 90%;
+    padding: 10px;
+  }
+}
 #post_author {
   display: flex;
   flex-direction: row;
@@ -345,14 +366,14 @@ h4 {
   margin: 25px;
 }
 
-#card h3,
-#card p {
+#card_post h3,
+#card_post p {
   margin: 0;
   padding-bottom: 5px;
   padding-left: 10px;
 }
 
-#card p {
+#card_post p {
   text-align: justify;
 }
 

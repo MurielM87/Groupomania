@@ -10,16 +10,18 @@
       </div>      
     </div>
     
-    <div class="post_column">
+    <div class="post_card">
       <h2>Nouvelles publications</h2>
-
-    <PostCard 
-      v-for="post in posts" 
-      :key="post.id"
-      :post="post"
-      :comment="comment"
-    />
+      <div class="post_column_center">
+      <PostCard 
+        v-for="post in posts" 
+        :key="post.id"
+        :post="post"
+        :comment="comment"
+      />
+      </div>
     </div>
+    
     
 
     <!-- Bouton Scroll to Top-->
@@ -127,13 +129,21 @@ export default {
     flex-direction: column;
   }
 }
+.post_card {
+  margin-top: 20px;
+}
 .post_column {
   display: flex;
   flex-direction: column;
   margin-left: 10px;
 }
+.post_column_center {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
 .profil_column {
-  width: 90%;
+  width: 100%;
   margin: auto;
   margin-top: 15px;
   border: 1px solid #FD2D01;

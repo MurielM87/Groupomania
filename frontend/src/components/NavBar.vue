@@ -98,7 +98,7 @@ header {
   height: 100px;
   margin: auto;
   color: black;
-  background-color: #fffbfb;
+  background-color: #fffefe;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

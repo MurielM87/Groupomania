@@ -69,8 +69,8 @@ export default {
 
 <style lang="scss">
 #profil_users {
-    width: 90%;
-    margin: auto;
+    width: 100%;
+    padding: 10px;
 }
 
 #user {
