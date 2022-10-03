@@ -24,11 +24,10 @@ module.exports = {
           key: "id",
         },
       },
-      createdAt: {
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        type: Sequelize.DATE
+      isDislike: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        default: false,
       },
       createdAt: {
         allowNull: false,

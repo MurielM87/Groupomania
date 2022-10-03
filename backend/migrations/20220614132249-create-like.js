@@ -1,5 +1,7 @@
 "use strict"
 
+const { BOOLEAN } = require("sequelize/types")
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("Like", {
@@ -24,6 +26,11 @@ module.exports = {
           model: "User",
           key: "id",
         },
+      },
+      isLike: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        default: false,
       },
       createdAt: {
         allowNull: false,

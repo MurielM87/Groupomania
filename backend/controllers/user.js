@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const database = require("../models")
 const fs = require("fs")
+const { sequelize } = require("../models")
 require("dotenv").config()
 
 //SignUp
@@ -84,7 +85,7 @@ exports.getAllUsers = async (req, res) => {
     // get all users from database
     const users = await database.User.findAll({
       attributes: ["id", "pseudo", "firstname", "lastname", "email", "imageUrl"],
-      order: [["createdAt", "DESC"]],
+      order: sequelize.random(),
     })
     res.status(200).send(users)
   } catch (error) {

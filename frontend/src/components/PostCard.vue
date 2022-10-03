@@ -262,8 +262,7 @@ export default {
             console.log("deletePost || postId", postId);
             return post.id != postId;
             })
-          //  this.posts --
-            this.$router.go()	// Refresh page
+            //this.$router.go()	// Refresh page
           }          
         })
         .catch((err)=> console.error(err));

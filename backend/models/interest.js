@@ -20,7 +20,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Interest.init(
-    {},
+    {
+      isInterest: {type: DataTypes.BOOLEAN, allowNull: false, default: false}
+    },
     {
       sequelize,
       modelName: "Interest",

@@ -87,12 +87,13 @@ export default {
             console.log(data);
             localStorage.setItem("token", data.token);
             localStorage.setItem("userId", data.userId);
-            this.$router.push("/");
+            this.$router.go();      
           })
           .catch((error) => {
             console.log(error);
           });
-      }
+      }     
+            this.$router.push("/");  
     },
   },
 };

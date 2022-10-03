@@ -20,7 +20,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Support.init(
-    {},
+    {
+      isSupport: {type: DataTypes.BOOLEAN, allowNull: false, default: false}
+    },
     {
       sequelize,
       modelName: "Support",

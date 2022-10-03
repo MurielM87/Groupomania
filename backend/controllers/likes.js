@@ -14,17 +14,19 @@ exports.likePost = async (req, res) => {
     if (!postId) {
         return res.status(404).send({ message: "post inconnu" })
     }
-
+    
     let like = await database.Like.findOne({
         where: {
             UserId: userId.id,
-            PostId: postId.id
+            PostId: postId.id,
+            isLike: true
         }
     });
     if (!like) {
         let newLike = await database.Like.create({
             UserId: userId.id,
-            PostId: postId.id
+            PostId: postId.id,
+            isLike: true,
         });
         return res.json(newLike);
     } else {
@@ -54,13 +56,15 @@ exports.dislikePost= async (req, res) => {
     let dislike = await database.Dislike.findOne({
         where: {
             UserId: userId.id,
-            PostId: postId.id
+            PostId: postId.id,
+            isDislike: true,
         }
     });
     if (!dislike) {
         let newDislike = await database.Dislike.create({
             UserId: userId.id,
-            PostId: postId.id
+            PostId: postId.id,
+            isDislike: true,
         });
         return res.json(newDislike);
     } else {
@@ -89,13 +93,15 @@ exports.lovePost= async (req, res) => {
     let love = await database.Love.findOne({
         where: {
             UserId: userId.id,
-            PostId: postId.id
+            PostId: postId.id,
+            isLove: true,
         }
     });
     if (!love) {
         let newLove = await database.Love.create({
             UserId: userId.id,
-            PostId: postId.id
+            PostId: postId.id,
+            isLove: true,
         });
         return res.json(newLove);
     } else {
@@ -124,13 +130,15 @@ exports.funnyPost = async (req, res) => {
     let funny= await database.Funny.findOne({
         where: {
             UserId: userId.id,
-            PostId: postId.id
+            PostId: postId.id,
+            isFunny: true,
         }
     });
     if (!funny) {
         let newFunny = await database.Funny.create({
             UserId: userId.id,
-            PostId: postId.id
+            PostId: postId.id,
+            isFunny: true,
         });
         return res.json(newFunny);
     } else {
@@ -159,13 +167,15 @@ exports.interestPost = async (req, res) => {
     let interest = await database.Interest.findOne({
         where: {
             UserId: userId.id,
-            PostId: postId.id
+            PostId: postId.id,
+            isInterest: true,
         }
     });
     if (!interest) {
         let newInterest = await database.Interest.create({
             UserId: userId.id,
-            PostId: postId.id
+            PostId: postId.id,
+            isInterest: true,
         });
         return res.json(newInterest);
     } else {
@@ -194,13 +204,15 @@ exports.supportPost= async (req, res) => {
     let support = await database.Support.findOne({
         where: {
             UserId: userId.id,
-            PostId: postId.id
+            PostId: postId.id,
+            isSupport: true,
         }
     });
     if (!support) {
         let newSupport = await database.Support.create({
             UserId: userId.id,
-            PostId: postId.id
+            PostId: postId.id,
+            isSupport: true,
         });
         return res.json(newSupport);
     } else {

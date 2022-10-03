@@ -20,7 +20,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Like.init(
-    {},
+    {
+      isLike: {type: DataTypes.BOOLEAN, allowNull: false, default: false}
+    },
     {
       sequelize,
       modelName: "Like",

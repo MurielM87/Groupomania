@@ -6,7 +6,6 @@
       <PostForm :key="componentKey"/>
       <div class="profil_column">
         <UsersProfil />
-        <router-link :to="{ name: 'UsersProfil' }">autres membres</router-link>
       </div>      
     </div>
     
@@ -136,6 +135,7 @@ export default {
   display: flex;
   flex-direction: column;
   margin-left: 10px;
+  width: 80%;
 }
 .post_column_center {
   display: flex;
