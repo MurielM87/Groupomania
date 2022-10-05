@@ -49,15 +49,15 @@ export default {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
-      like: ref[0],
-      dislike: ref[0],
-      love: ref[0],
-      funny: ref[0],
-      interest: ref[0],
-      support: ref[0],
+      like: ref(0),
+      dislike: ref(0),
+      love: ref(0),
+      funny: ref(0),
+      interest: ref(0),
+      support: ref(0),
     };
   },
-  props: ["post", "likes"],
+  props: ["post", "likes", "dislikes", "loves", "funnies", "interests", "supports", "users"],
 
   methods: {
     //add a like

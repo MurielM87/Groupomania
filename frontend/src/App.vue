@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <NavBar :key="componentKey" />
-    <router-view />
+    <NavBar :isLoggedIn="isLoggedIn" :userId="userId" />
+    <router-view  />
 
     <FooterPage />
   </div>
@@ -10,6 +10,7 @@
 <script>
 import NavBar from "./components/NavBar.vue";
 import FooterPage from "./components/FooterPage.vue";
+import { ref } from "vue"
 
 export default {
   name: "App",
@@ -17,6 +18,33 @@ export default {
     NavBar,
     FooterPage,
   },
+  data() {
+    return {
+      isLoggedIn: ref(false),
+      userId: localStorage.getItem('userId')
+    }
+  },
+
+  computed(){
+    return this.isLoggedIn
+  },
+
+
+  watch: {
+    $route:'refreshData',    
+  },
+  methods: {
+    refreshData() {
+      const token = localStorage.getItem('token')
+      let userId = localStorage.getItem('userId')
+      if (token && userId) {
+        this.isLoggedIn = true
+        this.userId = userId
+      } else {
+        this.isLoggedIn = false
+      }
+    }
+  }
 };
 </script>
 

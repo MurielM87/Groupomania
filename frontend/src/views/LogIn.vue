@@ -54,17 +54,7 @@ export default {
       passwordErrorMessage: "",
     };
   },
-  mounted() {
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-    if (token !== null && userId !== null) {
-      this.isLoggedIn = true;
-      this.$emit("userId");
-      console.log("Login||mounted||userId", userId);
-    } else {
-      this.$router.push({ name: "LogIn" });
-    }
-  },
+
   methods: {
     logIn: function () {
       if (this.email === "" || this.password === "") {
@@ -86,14 +76,15 @@ export default {
           .then((data) => {
             console.log(data);
             localStorage.setItem("token", data.token);
-            localStorage.setItem("userId", data.userId);
-            this.$router.go();      
+            localStorage.setItem("userId", data.userId); 
+            this.$emit("token")
+            this.$emit("userId")
+            this.$router.push("/"); 
           })
           .catch((error) => {
             console.log(error);
           });
       }     
-            this.$router.push("/");  
     },
   },
 };

@@ -3,7 +3,7 @@
   <section id="posts">
     
     <div class="post_column">
-      <PostForm :key="componentKey"/>
+      <PostForm />
       <div class="profil_column">
         <UsersProfil />
       </div>      
@@ -50,38 +50,11 @@ export default {
       user: ref({}),
       posts: ref([]),
       comment: ref({}),
-      componentKey: 0,
     };
   },
   props: ["isLoggedIn"],
-//  beforeCreate() {
-//    const token = localStorage.getItem("token");
-//    const userId = localStorage.getItem("userId");
-//    if (token == null && userId == null) {
-//      this.$router.push({ name: "LogIn" });
-//    }
-//  },
- 
-
+  
   async created() {
-    await fetch(`http://localhost:3000/api/posts`, {
-      methods: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",    
-        "Authorization": `Bearer ${this.token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("MainPage||posts||data", data);
-        this.posts = data;
-      })
-      .catch((err) => console.log(err));
-    }, 
-
-  async mounted() {
     await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
       methods: "GET",
       credentials: "include",
@@ -93,17 +66,31 @@ export default {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("MainPage||this.user||data", data);
+        console.log("MainPage||user||data", data);
         this.user = data;
+      })
+      .catch((err) => console.log(err));
+    }, 
+
+  async mounted() {
+    await fetch(`http://localhost:3000/api/posts`, {
+      methods: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",    
+        "Authorization": `Bearer ${this.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("MainPage||this.posts||data", data);
+        this.posts = data;
       })
       .catch((err) => console.log(err));
     },
  
-  methods: {    
-    forceRerender() {
-      this.componentKey ++;
-    },
-    
+  methods: {        
     //button scroll top
     toTop() {
       window.scrollTo({

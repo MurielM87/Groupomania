@@ -47,57 +47,39 @@
 </template>
 
 <script>
-import { ref } from "vue"
 
 export default {
   name: "NavBar",
   data() {
     return {
-      userId: localStorage.getItem('userId'),
-      isLoggedIn: ref(false),
+      //userId: localStorage.getItem('userId'),
     }
+  },
+  props: {
+    isLoggedIn: Boolean,
+    userId: Number,
+  },
+  
+  computed(){
+    return this.isLoggedIn
   },
 
-  created() {
-    const token = localStorage.getItem("token")
-    if (token != null) {
-      this.isLoggedIn = true   
-    }
-    this.isLoggedIn == !this.isLoggedIn
-  },
+
+//  created() {
+//    const token = localStorage.getItem("token")
+//    if (token != null) {
+//      this.isLoggedIn = true   
+//    }
+//  },
 
   methods: {
-    checkLogIn(){
-      const token = localStorage.getItem('token')
-    //  const userId = localStorage.getItem('userId')
-      if (!token){
-        this.isLoggedIn == false;
-        this.$router.push({name: "Login"})
-      } else {
-        this.isLoggedIn == true;
-        this.$router.push({name: "MainPage"})
-      }   
-    },
-
+   
     logOut() {
       localStorage.removeItem('token');
       localStorage.removeItem('userId');
       this.$router.push({name : "LogIn"});
-      this.isLoggedIn = false;
+    //  this.isLoggedIn = false;
     },
-  },
-
-  async mounted() {
-    const token = localStorage.getItem('token')
-    const userId = localStorage.getItem('userId')
-    console.log("NavBar||created", userId)
-    console.log("NavBar||created", token)
-    if (token && userId) {
-      this.isLoggedIn = true
-      console.log("NavBar||created||userId", userId)
-    } else {
-      this.$router.push({name: "LogIn"})
-    }
   },
 
   
