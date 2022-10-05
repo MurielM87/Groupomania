@@ -57,7 +57,7 @@ export default {
       support: ref(0),
     };
   },
-  props: ["post", "likes", "dislikes", "loves", "funnies", "interests", "supports", "users"],
+  props: ["post", "likes", "dislikes", "loves", "funnies", "interests", "supports"],
 
   methods: {
     //add a like

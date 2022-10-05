@@ -50,35 +50,20 @@
 
 export default {
   name: "NavBar",
-  data() {
-    return {
-      //userId: localStorage.getItem('userId'),
-    }
-  },
   props: {
     isLoggedIn: Boolean,
-    userId: Number,
+    userId: String,
   },
   
   computed(){
     return this.isLoggedIn
   },
 
-
-//  created() {
-//    const token = localStorage.getItem("token")
-//    if (token != null) {
-//      this.isLoggedIn = true   
-//    }
-//  },
-
-  methods: {
-   
+  methods: {   
     logOut() {
       localStorage.removeItem('token');
       localStorage.removeItem('userId');
       this.$router.push({name : "LogIn"});
-    //  this.isLoggedIn = false;
     },
   },
 

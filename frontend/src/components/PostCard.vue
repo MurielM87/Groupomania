@@ -1,5 +1,5 @@
 <template>
-  <PostModify :revele="revele" :toggleModale="toggleModale" :modifyPost="post" :key="componentKey" />
+  <PostModify :revele="revele" :toggleModale="toggleModale" :modifyPost="post" />
   <article id="card_post">
     <!--informations from the author of the post-->
     <router-link :to="`/profil/${post.User.id}`">
@@ -178,12 +178,10 @@ export default {
       funnies: ref([]),
       support: ref(0),
       supports: ref([]),
-      componentKey: 0,
     };
   },
 
   async created() {    
-  //  console.log("post", this.post)
     await fetch(`http://localhost:3000/api/users/`, {
       methods: "GET",
       credentials: "include",
@@ -269,7 +267,6 @@ export default {
             console.log("deletePost || postId", postId);
             return post.id != postId;
             })
-            //this.$router.go()	// Refresh page
           }          
         })
         .catch((err)=> console.error(err));
@@ -294,16 +291,13 @@ export default {
       .then((data) => {     
         console.log("CardForm||data", data);
         this.content = data;
-        this.$router.go(data)
-        //this.$router.go()	// Refresh page
-        //window.location.reload();        
+        this.$router.go(data)      
       })
       .catch((err) => console.error(err));  
     },
     
     //delete a comment from a post
     deleteComment(commentId) {
-    //  console.log("PostCard||deleteComment||postId", postId);
       console.log("PostCard||deleteComment||commentId", commentId);
       fetch(`http://localhost:3000/api/posts/comment/${commentId}`, {
         method: "DELETE",
@@ -320,7 +314,6 @@ export default {
             console.log("deleteComment || commentId", commentId);
             return comment.id != this.commentId;
           });
-          this.$router.go()	// Refresh page
         })
       .catch((err) => console.log(err));  
     },

@@ -82,11 +82,10 @@ export default {
   },
 
   beforeCreate() {
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-    console.log("profil||beforeCreate||userId", userId);
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
     if (token == null && userId == null) {
-      this.$router.push({ name: "LogIn" });
+      this.$router.push({name: 'LogIn'})
     }
   },
 

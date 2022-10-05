@@ -106,6 +106,14 @@ export default {
       image: null,
     };
   },
+
+  beforeCreate() {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    if (token == null && userId == null) {
+      this.$router.push({name: 'LogIn'})
+    }
+  },
   
   //get all the informations about the user
   async created() {

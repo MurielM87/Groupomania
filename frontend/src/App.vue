@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <NavBar :isLoggedIn="isLoggedIn" :userId="userId" />
-    <router-view  />
+    <router-view />
 
     <FooterPage />
   </div>
@@ -29,10 +29,10 @@ export default {
     return this.isLoggedIn
   },
 
-
   watch: {
     $route:'refreshData',    
   },
+  
   methods: {
     refreshData() {
       const token = localStorage.getItem('token')

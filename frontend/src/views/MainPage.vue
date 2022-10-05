@@ -52,7 +52,17 @@ export default {
       comment: ref({}),
     };
   },
-  props: ["isLoggedIn"],
+  props: {
+    isLoggedIn: Boolean,
+  },
+
+  beforeCreate() {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    if (token == null && userId == null) {
+      this.$router.push({name: 'LogIn'})
+    }
+  },
   
   async created() {
     await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
