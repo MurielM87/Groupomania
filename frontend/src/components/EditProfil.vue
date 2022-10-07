@@ -127,6 +127,9 @@ export default {
     })
     .then((res) => res.json())
     .then((data) => {
+      if(data.redirect) {
+          this.$router.push({name: 'LogIn'})
+        }
       console.log("EditProfil||data", data);
       this.user = data;
     })

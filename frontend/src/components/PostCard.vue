@@ -68,10 +68,7 @@
     <div class="separate_barre"></div>
 
     <!-- add like to the post-->
-    <PostLike :post="post" :likes="likes" :dislikes="dislikes" :interests="interests" :funnies="funnies" :supports="supports" :loves="loves" />
-    <div style="background-color: red">faire apparaître Likes</div>
-    <div v-for="like in likes" :key="like">nom: {{post.Likes.length}}</div>
-    <div>likes: {{post.Likes.length}}</div>
+    <PostLike :post="post" :likes="likes" :dislikes="dislikes" />
   
     <!--add a comment to the post -->
     <div class="post_comments">
@@ -170,14 +167,6 @@ export default {
       likes: ref([]),
       dislike: ref(0),
       dislikes: ref([]),
-      love: ref(0),
-      loves: ref([]),
-      interest: ref(0),
-      interests: ref([]),
-      funny: ref(0),
-      funnies: ref([]),
-      support: ref(0),
-      supports: ref([]),
     };
   },
 

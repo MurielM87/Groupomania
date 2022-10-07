@@ -16,10 +16,6 @@ router.delete("/:id", auth, multer, postCtrl.deletePost)
 //like
 router.post("/:id/like", auth, likeCtrl.likePost)
 router.post("/:id/dislike", auth, likeCtrl.dislikePost)
-router.post("/:id/love", auth, likeCtrl.lovePost)
-router.post("/:id/funny", auth, likeCtrl.funnyPost)
-router.post("/:id/interest", auth, likeCtrl.interestPost)
-router.post("/:id/support", auth, likeCtrl.supportPost)
 
 //comments
 router.post("/:id/comment", auth, commentCtrl.createComment)

@@ -3,7 +3,7 @@
   <section id="posts">
     
     <div class="post_column">
-      <PostForm />
+      <PostForm :key="componentKey" />
       <div class="profil_column">
         <UsersProfil />
       </div>      
@@ -50,6 +50,7 @@ export default {
       user: ref({}),
       posts: ref([]),
       comment: ref({}),
+      componentKey: 0
     };
   },
   props: {
@@ -76,6 +77,9 @@ export default {
     })
       .then((res) => res.json())
       .then((data) => {
+        if(data.redirect) {
+          this.$router.push({name: 'LogIn'})
+        }
         console.log("MainPage||user||data", data);
         this.user = data;
       })
@@ -101,6 +105,10 @@ export default {
     },
  
   methods: {        
+    forceRerender() {
+      this.componentKey += 1;
+    },
+
     //button scroll top
     toTop() {
       window.scrollTo({

@@ -9,10 +9,6 @@ module.exports = (sequelize, DataTypes) => {
       models.User.hasMany(models.Comment)
       models.User.hasMany(models.Like)
       models.User.hasMany(models.Dislike)
-      models.User.hasMany(models.Funny)
-      models.User.hasMany(models.Love)
-      models.User.hasMany(models.Interest)
-      models.User.hasMany(models.Support)
     }
   }
   User.init(

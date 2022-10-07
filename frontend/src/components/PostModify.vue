@@ -18,7 +18,7 @@
       ></textarea>
       <!--add an image -->
       <img v-if="this.imageUrl" 
-          :src="`http://localhost:3000/api/images/${this.imageUrl}`"
+          :src="`http://localhost:3000/images/${this.imageUrl}`"
           crossorigin="anonymous"/>
       <img v-else :src="image"/>
       <div class="post_img">
@@ -62,11 +62,11 @@ export default {
       content: this.modifyPost.content, 
       imageUrl: this.modifyPost.imageUrl,
       image: null,
+      tempImage : null
     };
   },
 
   created() {
-    console.log(this.modifyPost)
     fetch(`http://localhost:3000/api/posts/${this.postId}`, {
       method: "GET",
       credentials: "include",
@@ -77,7 +77,6 @@ export default {
     })
     .then((res) => res.json())
     .then((data) => {
-    //  console.log("PostModify||data", data);
       this.post = data;
     })
     .catch((err) => console.log(err));
@@ -89,8 +88,10 @@ export default {
     },
     //upload image
     uploadImg(e) {
-      this.imageUrl = e.target.files[0];
-      console.log("image-target", this.imageUrl);
+      this.imageUrl = null;
+      this.tempImage = e.target.files[0];
+      this.image = URL.createObjectURL(this.tempImage);
+      console.log("image-target", this.image);
     },
       
     //modify post
@@ -102,7 +103,7 @@ export default {
         postId: this.modifyPost.id,
         title: this.title,
         content: this.content,
-        imageUrl: this.imageUrl,
+        imageUrl: this.tempImage,
       };
       console.log("ModifyPost||post", post);
            

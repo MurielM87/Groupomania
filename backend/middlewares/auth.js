@@ -10,6 +10,6 @@ module.exports = (req, res, next) => {
       next()
     }
   } catch (error) {
-    res.status(401).json({error: error | 'rêquete non authentifiée'});
+    res.status(401).json({error: 'rêquete non authentifiée', redirect: true });
   }
 }

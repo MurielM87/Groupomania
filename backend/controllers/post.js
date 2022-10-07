@@ -66,62 +66,6 @@ exports.getOnePost = async (req, res) => {
         ],
       },
       {
-        model: database.Love,
-        attributes: ["id", "userId", "postId"],
-        include: [
-          {
-            model: database.User,
-            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
-          }
-        ],
-      },
-      {
-        model: database.Funny,
-        attributes: ["id", "userId", "postId"],
-        include: [
-          {
-            model: database.User,
-            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
-          }
-        ],
-      },
-      {
-        model: database.Support,
-        attributes: ["id", "userId", "postId"],
-        include: [
-          {
-            model: database.User,
-            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
-          }
-        ],
-      },
-      {
-        model: database.Interest,
-        attributes: ["id", "userId", "postId"],
-        include: [
-          {
-            model: database.User,
-            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
-          }
-        ],
-      },
-      {
         model: database.Comment,
         order: [["createdAt", "DESC"]],
         attributes: ["id", "content", "postId", "userId", "createdAt"],
@@ -181,62 +125,6 @@ exports.getAllPosts = async (req, res) => {
         ],
       },
       {
-        model: database.Love,
-        attributes: ["id", "userId", "postId"],
-        include: [
-          {
-            model: database.User,
-            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
-          }
-        ],
-      },
-      {
-        model: database.Funny,
-        attributes: ["id", "userId", "postId"],
-        include: [
-          {
-            model: database.User,
-            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
-          }
-        ],
-      },
-      {
-        model: database.Support,
-        attributes: ["id", "userId", "postId"],
-        include: [
-          {
-            model: database.User,
-            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
-          }
-        ],
-      },
-      {
-        model: database.Interest,
-        attributes: ["id", "userId", "postId"],
-        include: [
-          {
-            model: database.User,
-            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
-          }
-        ],
-      },
-      {
         model: database.Comment,
         attributes: ["id", "postId", "userId", "content", "createdAt"],
         order: [["createdAt", "DESC"]],
@@ -275,6 +163,20 @@ exports.getAllPostsOfOneUser = async (req, res, next) => {
       {
         model: database.Like,
         attributes: ["id", "postId", "userId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+      {
+        model: database.Dislike,
+        attributes: ["id", "userId", "postId"],
         include: [
           {
             model: database.User,
