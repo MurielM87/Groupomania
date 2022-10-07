@@ -48,6 +48,7 @@ import { ref } from "vue";
 
 export default {
   name: "PostForm",
+  emit: ["input"],
   data() {
     return {
       token: localStorage.getItem('token'),
@@ -109,8 +110,11 @@ export default {
           body: fd
         })
         .then((data) => {
-        console.log("PostForm||data", data);
-        this.fd = data;
+          if(data.redirect) {
+           this.$router.push({name: 'LogIn'})
+          }
+          console.log("PostForm||data", data);
+          this.fd = data;
         })
         .catch((err) => console.log(err));
       this.fd = ""  

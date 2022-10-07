@@ -210,12 +210,15 @@ form {
               linear-gradient(336deg, rgba(255, 170, 0, 0.8), rgba(0,0,255,0) 70.71%);
   width: 400px;
   margin: auto;
+  margin-top: 40px;
   padding: 20px;
   @media (min-width: 768px) and (max-width: 992px) {
     width: 60%;
+    margin: auto;
   }
   @media screen and (max-width:768px) {
     width: 80%;
+    margin: auto;
   }
 }
 

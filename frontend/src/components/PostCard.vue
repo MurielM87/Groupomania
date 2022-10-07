@@ -251,11 +251,15 @@ export default {
         })
         .then((res) => res.json())
         .then((res) => {
+          if(res.redirect) {
+          this.$router.push({name: 'LogIn'})
+        }
           if(res.status === 200) {
             this.posts = this.posts.splice((post) => {
             console.log("deletePost || postId", postId);
             return post.id != postId;
             })
+            window.location.href
           }          
         })
         .catch((err)=> console.error(err));
@@ -278,6 +282,9 @@ export default {
       })
       .then((res) => res.json())
       .then((data) => {     
+        if(data.redirect) {
+          this.$router.push({name: 'LogIn'})
+        }
         console.log("CardForm||data", data);
         this.content = data;
         this.$router.go(data)      
@@ -297,7 +304,10 @@ export default {
         },
       })
       .then((res) => res.json())
-      .then(() => {
+      .then((data) => {
+        if(data.redirect) {
+          this.$router.push({name: 'LogIn'})
+        }
         console.log("commentId", commentId)
           this.comments = this.comments.splice((comment) => {
             console.log("deleteComment || commentId", commentId);

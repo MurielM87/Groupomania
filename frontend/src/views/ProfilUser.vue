@@ -211,10 +211,13 @@ export default {
     color: red;
   }
   @media (min-width: 768px) and (max-width: 992px) {
-    right: 36%;
+    top: 9%;
+    right: 34%;
   }
   @media screen and (max-width: 768px) {
-    top: 35%;
+    top: 7%;
+    right: 32%;
+
   }
 }
 .fa-pencil-alt:hover {

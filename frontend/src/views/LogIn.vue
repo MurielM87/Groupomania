@@ -1,5 +1,6 @@
 <template>
-  <form id="login" class="card">
+  <div id="login_container">
+    <form id="login">
     <div class="title_card">
       <h2 class="card_title">Connexion</h2>
       <router-link :to="{ name: 'SignUp' }"><h2>Inscription</h2></router-link>
@@ -41,6 +42,8 @@
       value="Connexion"
     />
   </form>
+  </div>
+  
 </template>
 
 <script>
@@ -91,8 +94,9 @@ export default {
 </script>
 
 <style>
-.card {
-  margin-bottom: 30px;
+#login_container {
+  height: 100%;
+  margin-bottom: 40%;
 }
 </style>
 

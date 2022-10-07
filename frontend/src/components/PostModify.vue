@@ -124,7 +124,10 @@ export default {
           body: fd,
         })
         .then((res) => res.json())
-        .then(() => {
+        .then((data) => {
+          if(data.redirect) {
+          this.$router.push({name: 'LogIn'})
+        }
           console.log("ModifyPost||post", this.post);
           this.$router.go(`/`);
         })

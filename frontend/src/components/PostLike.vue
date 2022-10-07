@@ -11,19 +11,17 @@
         <i class="far fa-thumbs-down" @click.prevent="addDislike(post.id)">
           <div v-if="post.Dislikes.length">{{ post.Dislikes.length }}</div> 
         </i><span class="tooltiptext">Je n'aime pas</span>
-      </div>
-      
+      </div>      
     </div>
-    <div style="background-color: red">faire apparaître Likes</div>
-    <div v-for="like in likes" :key="like">nom: {{post.Likes.length}}</div>
-    <div>likes: {{post.Likes.length}} {{post.Likes.userId}}</div>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
+
 export default {
   name: "PostLike",
+  emit: ["input"],
   data() {
     return {
       token: localStorage.getItem("token"),
@@ -36,11 +34,11 @@ export default {
 
   methods: {
     //add a like
-    addLike(postId) {
+    async addLike(postId) {
       const userId = localStorage.getItem("userId");
       console.log("PostCard||addLike||postId", postId);
       console.log("PostCard||addLike||userId", userId);
-      fetch(`http://localhost:3000/api/posts/${postId}/like`, {
+      await fetch(`http://localhost:3000/api/posts/${postId}/like`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -52,8 +50,8 @@ export default {
         .then((res) => res.json())
         .then((res) => {
           console.log(res);
-          this.like = res.data;
-          this.$router.go(); //refresh page
+          this.like = res;
+        //  this.$router.go(); //refresh page
         })
         .catch((err) => console.error(err));
     },
@@ -76,7 +74,7 @@ export default {
         .then((res) => {
           console.log({ res });
           this.dislike = res.data;
-          this.$router.go(); //refresh page
+        //  this.$router.go(); //refresh page
         })
         .catch((err) => console.error(err));
     },

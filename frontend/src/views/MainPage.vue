@@ -3,7 +3,7 @@
   <section id="posts">
     
     <div class="post_column">
-      <PostForm :key="componentKey" />
+      <PostForm />
       <div class="profil_column">
         <UsersProfil />
       </div>      
@@ -50,7 +50,6 @@ export default {
       user: ref({}),
       posts: ref([]),
       comment: ref({}),
-      componentKey: 0
     };
   },
   props: {
@@ -104,11 +103,7 @@ export default {
       .catch((err) => console.log(err));
     },
  
-  methods: {        
-    forceRerender() {
-      this.componentKey += 1;
-    },
-
+  methods: {  
     //button scroll top
     toTop() {
       window.scrollTo({
