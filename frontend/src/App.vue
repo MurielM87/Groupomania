@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <NavBar :isLoggedIn="isLoggedIn" :userId="userId" />
-    <router-view />
+    <router-view :key="$route.fullPath" />
 
     <FooterPage />
   </div>
