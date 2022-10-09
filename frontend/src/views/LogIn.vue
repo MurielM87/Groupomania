@@ -96,7 +96,7 @@ export default {
 <style>
 #login_container {
   height: 100%;
-  margin-bottom: 40%;
+  margin-bottom: 30%;
 }
 </style>
 

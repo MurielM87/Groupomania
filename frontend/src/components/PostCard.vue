@@ -167,6 +167,7 @@ export default {
       likes: ref([]),
       dislike: ref(0),
       dislikes: ref([]),
+      componentKey: ref(0),
     };
   },
 
@@ -253,13 +254,13 @@ export default {
         .then((res) => {
           if(res.redirect) {
           this.$router.push({name: 'LogIn'})
-        }
+          }
           if(res.status === 200) {
-            this.posts = this.posts.splice((post) => {
+            this.posts = this.posts.filter((post) => {
             console.log("deletePost || postId", postId);
             return post.id != postId;
             })
-            window.location.href
+            this.$router.go();
           }          
         })
         .catch((err)=> console.error(err));

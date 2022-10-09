@@ -52,9 +52,6 @@ export default {
       comment: ref({}),
     };
   },
-  props: {
-    isLoggedIn: Boolean,
-  },
 
   beforeCreate() {
     const token = localStorage.getItem('token');
