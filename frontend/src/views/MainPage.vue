@@ -17,12 +17,11 @@
         :key="post.id"
         :post="post"
         :comment="comment"
+        :user="user"
       />
       </div>
     </div>
     
-    
-
     <!-- Bouton Scroll to Top-->
     <button class="toTop" @click="toTop" title="Retour en haut de page">
       <span class="fa fa-chevron-up"></span>
@@ -48,6 +47,7 @@ export default {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
       user: ref({}),
+      post: ref({}),
       posts: ref([]),
       comment: ref({}),
     };
@@ -60,9 +60,23 @@ export default {
       this.$router.push({name: 'LogIn'})
     }
   },
+
+  computed(){
+    return this.posts
+  },
+
+  watch: {
+    $route:'getAllPosts',    
+  },
   
-  async created() {
-    await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+  mounted(){
+    this.getOneUser(),
+    this.getAllPosts()
+  },
+ 
+  methods: {  
+    getOneUser() {
+      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
       methods: "GET",
       credentials: "include",
       headers: {
@@ -80,10 +94,10 @@ export default {
         this.user = data;
       })
       .catch((err) => console.log(err));
-    }, 
+    },
 
-  async mounted() {
-    await fetch(`http://localhost:3000/api/posts`, {
+    getAllPosts() {
+      fetch(`http://localhost:3000/api/posts`, {
       methods: "GET",
       credentials: "include",
       headers: {
@@ -99,8 +113,7 @@ export default {
       })
       .catch((err) => console.log(err));
     },
- 
-  methods: {  
+
     //button scroll top
     toTop() {
       window.scrollTo({
@@ -133,6 +146,9 @@ export default {
   flex-direction: column;
   margin-left: 10px;
   width: 80%;
+  @media screen and (max-width: 768px) {
+    margin: auto;
+  }
 }
 .post_column_center {
   display: flex;

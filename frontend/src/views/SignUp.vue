@@ -1,4 +1,5 @@
 <template>
+  <div id="signup_container">
   <form method="post" id="signup" class="card">
     <div class="title_card">
       <router-link :to="{ name: 'LogIn' }"><h2>Connexion</h2></router-link>
@@ -100,6 +101,7 @@
       />
     </div>
   </form>
+</div>
 </template>
 
 <script>
@@ -203,6 +205,10 @@ export default {
 </script>
 
 <style lang="scss">
+#signup_container {
+  height: 100%;
+  margin-bottom: 17%;
+}
 form {
   color: black;
   background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),

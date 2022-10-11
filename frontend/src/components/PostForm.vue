@@ -34,8 +34,7 @@
       <button
         @click.prevent="createPost"
         class="btn post-btn"
-        title="valider la publication"
-      >
+        title="valider la publication">
         <i class="far fa-edit"></i>Publier
       </button>
       
@@ -77,6 +76,10 @@ export default {
       .catch((err) => console.log(err));
   },
 
+  computed() {
+    return this.posts
+  },
+
   methods: {
     selectImage() {
       this.$ref.fileInput.click()
@@ -115,9 +118,12 @@ export default {
           }
           console.log("PostForm||data", data);
           this.fd = data;
+          this.$emit('PostCard')
+          window.location.reload()
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
       this.fd = ""  
+      
     },  
   },
 
@@ -167,11 +173,8 @@ h2 {
   &:focus {
     background-color: #b4b6be;
   }
-  @media (min-width: 768px) and (max-width: 992px) {
+  @media screen and (max-width: 992px) {
     font-size: 20px;
-  }
-  @media screen and (max-width: 768px) {
-    font-size: 25px;
   }
 }
 .fa-save,

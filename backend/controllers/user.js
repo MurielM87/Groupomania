@@ -143,12 +143,6 @@ exports.deleteUser = async (req, res) => {
     })
 
     if (userId.id === userId.id || userId.isAdmin === true) {
-      const filename = userId.imageUrl.split("/images")[1]
-      fs.unlink(`images/${filename}`, () => {
-        database.User.destroy({ where: { id: userId.id } })
-        res.status(200).json({ message: "utilisateur supprimé" })
-      })
-    } else {
       database.User.destroy({ where: { id: userId.id } })
       res.status(200).json({ message: "utilisateur supprimé" })
     }

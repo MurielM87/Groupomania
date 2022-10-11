@@ -2,11 +2,14 @@
   <!-- add like to the post-->
   <div class="post_like">
     <div class="like_thumbs">
-      <div class="tooltip">
-        <i class="far fa-thumbs-up" @click.prevent="addLike(post.id)">
+      <div :class="{ activeLike }">
+        <div class="tooltip">
+        <i class="far fa-thumbs-up"  :class="{active : activeLike}" @click.prevent="addLike(post.id)">
           <div v-if="post.Likes.length">{{ post.Likes.length }}</div> 
         </i><span class="tooltiptext">J'aime</span>
       </div>
+      </div>
+      
       <div class="tooltip">
         <i class="far fa-thumbs-down" @click.prevent="addDislike(post.id)">
           <div v-if="post.Dislikes.length">{{ post.Dislikes.length }}</div> 
@@ -28,6 +31,7 @@ export default {
       userId: localStorage.getItem("userId"),
       like: ref(0),
       dislike: ref(0),
+      activeLike: true,
     };
   },
   props: ["post", "likes", "dislikes"],
@@ -51,7 +55,8 @@ export default {
         .then((res) => {
           console.log(res);
           this.like = res;
-        //  this.$router.go(); //refresh page
+          this.$emit('addLike')
+          this.$router.go(); 
         })
         .catch((err) => console.error(err));
     },
@@ -74,11 +79,14 @@ export default {
         .then((res) => {
           console.log({ res });
           this.dislike = res.data;
-        //  this.$router.go(); //refresh page
+          this.$emit('addDislike')
+          this.$router.go(); 
         })
         .catch((err) => console.error(err));
     },
-
+    watch() {      
+      this.activeLike = !this.activeLike;
+    }
   },
 };
 </script>
@@ -122,70 +130,15 @@ export default {
   justify-content: flex-end;
   margin-bottom: 20px;
 }
-.fa-thumbs-up {
-  display: flex;
-  font-size: 25px;
-  color: black;
-  &:hover,
-  &:active,
-  &:link {
-    color: green;
-  }
-}
+.fa-thumbs-up,
 .fa-thumbs-down {
   display: flex;
   font-size: 25px;
   color: black;
   padding-left: 15px;
-  &:hover,
-  &:active,
-  &:link {
-    color: red;
-  }
+}
+.activeLike {
+  color: green;
 }
 
-.fa-grin-tears {
-  display: flex;
-  font-size: 25px;
-  color: black;
-  padding-left: 15px;
-  &:hover,
-  &:active,
-  &:link {
-    color: turquoise;
-  }
-}
-.fa-lightbulb {
-  display: flex;
-  font-size: 25px;
-  color: black;
-  padding-left: 15px;
-  &:hover,
-  &:active,
-  &:link {
-    color: yellow;
-  }
-}
-.fa-grin-hearts {
-  display: flex;
-  font-size: 25px;
-  color: black;
-  padding-left: 15px;
-  &:hover,
-  &:active,
-  &:link {
-    color: rgb(248, 20, 142);
-  }
-}
-.fa-hand-holding-heart {
-  display: flex;
-  font-size: 25px;
-  color: black;
-  padding-left: 15px;
-  &:hover,
-  &:active,
-  &:link {
-    color: blue;
-  }
-}
 </style>

@@ -97,8 +97,7 @@
         class="comments_card"
         v-for="comment in post.Comments"
         :key="comment.id"
-        :user="userId"
-        :post="postId"
+        :comments="comments"
         :comment="comment"
       >
         <router-link :to="{ name: 'ProfilUser', params: { id: comment.User.id } }"> 
@@ -149,63 +148,56 @@ import PostLike from "./PostLike.vue";
 
 export default {
   name: "PostCard",
-  props: ["post", "comment", "postId"],
+  props:["post", "comment", "user", "postId"],
   components: {
     PostModify,
     PostLike
-},
+  },
+  emit: ['input'],
   data() {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
       content: ref(""),
-      user: ref({}),
       users: ref([]),
+      posts: ref([]),
       comments: ref([]),
       revele: false,
       like: ref(0),
       likes: ref([]),
       dislike: ref(0),
       dislikes: ref([]),
-      componentKey: ref(0),
     };
   },
 
-  async created() {    
-    await fetch(`http://localhost:3000/api/users/`, {
-      methods: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",    
-        "Authorization": `Bearer ${this.token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        this.users = data;
-      })
-      .catch((err) => console.log(err));
+  computed(){
+    return this.post && this.comment
   },
 
-  async mounted() {
-    await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-      methods: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",    
-        "Authorization": `Bearer ${this.token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        this.user = data;
-      })
-      .catch((err) => console.log(err));
-  },
-
+  
   methods: {
+    refreshData() {
+      this.posts = []
+      this.getAllPosts()
+    },
+
+    getAllPosts() {
+      fetch(`http://localhost:3000/api/posts`, {
+      methods: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",    
+        "Authorization": `Bearer ${this.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        this.posts = data;
+      })
+      .catch((err) => console.log(err));
+    },
+
     //date of the post
     datePost(date) {
       const event = new Date(date);
@@ -252,6 +244,7 @@ export default {
         })
         .then((res) => res.json())
         .then((res) => {
+          confirm(("Voulez-vous vraiment supprimer ce message ?"))
           if(res.redirect) {
           this.$router.push({name: 'LogIn'})
           }
@@ -259,16 +252,18 @@ export default {
             this.posts = this.posts.filter((post) => {
             console.log("deletePost || postId", postId);
             return post.id != postId;
-            })
-            this.$router.go();
-          }          
+            })          
+          }   
+          this.$router.go()         
         })
         .catch((err)=> console.error(err));
       }
     },
     
     submitComment(postId) {
-      console.log("PostCard||submitComment||postId", postId);
+      if(this.content === "") {
+        return
+      } else {
       fetch(`http://localhost:3000/api/posts/${postId}/comment`, {
         method: "POST",
         credentials: "include",
@@ -288,14 +283,18 @@ export default {
         }
         console.log("CardForm||data", data);
         this.content = data;
-        this.$router.go(data)      
+        this.$emit('PostCard')
+        this.refreshData();
+        this.$router.go()  
       })
       .catch((err) => console.error(err));  
-    },
+      this.content = ''
+    }
+  },
     
     //delete a comment from a post
     deleteComment(commentId) {
-      console.log("PostCard||deleteComment||commentId", commentId);
+      confirm(("Voulez-vous vraiment supprimer ce commentaire ?"))
       fetch(`http://localhost:3000/api/posts/comment/${commentId}`, {
         method: "DELETE",
         credentials: "include", 
@@ -310,14 +309,19 @@ export default {
           this.$router.push({name: 'LogIn'})
         }
         console.log("commentId", commentId)
-          this.comments = this.comments.splice((comment) => {
+          this.comments = this.comments.splice((commentId) => {
             console.log("deleteComment || commentId", commentId);
-            return comment.id != this.commentId;
-          });
+            return this.comments;
+          })
+          this.getAllPosts;
+          this.$router.go();
         })
       .catch((err) => console.log(err));  
     },
   },
+  mounted(){
+    this.getAllPosts();
+  }
 };
 </script>
 
