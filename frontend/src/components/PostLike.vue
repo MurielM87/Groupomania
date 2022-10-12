@@ -2,12 +2,10 @@
   <!-- add like to the post-->
   <div class="post_like">
     <div class="like_thumbs">
-      <div :class="{ activeLike }">
         <div class="tooltip">
         <i class="far fa-thumbs-up"  :class="{active : activeLike}" @click.prevent="addLike(post.id)">
           <div v-if="post.Likes.length">{{ post.Likes.length }}</div> 
         </i><span class="tooltiptext">J'aime</span>
-      </div>
       </div>
       
       <div class="tooltip">
@@ -31,10 +29,11 @@ export default {
       userId: localStorage.getItem("userId"),
       like: ref(0),
       dislike: ref(0),
-      activeLike: true,
+      postLike: this.post,
+      activeLike: false,
     };
   },
-  props: ["post", "likes", "dislikes"],
+  props: ["post"],
 
   methods: {
     //add a like
@@ -56,6 +55,12 @@ export default {
           console.log(res);
           this.like = res;
           this.$emit('addLike')
+          console.log(this.userId);
+          const userLike = JSON.parse(JSON.stringify(this.postLike));
+          console.log(this.userId == userLike.Likes[0].userId);
+          if(this.userId == userLike.Likes[0].userId) {            
+          this.activeLike = true;
+          }
           this.$router.go(); 
         })
         .catch((err) => console.error(err));
@@ -137,7 +142,7 @@ export default {
   color: black;
   padding-left: 15px;
 }
-.activeLike {
+.active {
   color: green;
 }
 

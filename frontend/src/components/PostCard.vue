@@ -68,7 +68,7 @@
     <div class="separate_barre"></div>
 
     <!-- add like to the post-->
-    <PostLike :post="post" :likes="likes" :dislikes="dislikes" />
+    <PostLike :post="post" />
   
     <!--add a comment to the post -->
     <div class="post_comments">
@@ -254,7 +254,7 @@ export default {
             return post.id != postId;
             })          
           }   
-          this.$router.go()         
+        //  this.$router.go()     
         })
         .catch((err)=> console.error(err));
       }
@@ -282,10 +282,9 @@ export default {
           this.$router.push({name: 'LogIn'})
         }
         console.log("CardForm||data", data);
-        this.content = data;
         this.$emit('PostCard')
         this.refreshData();
-        this.$router.go()  
+      //  this.$router.go()  
       })
       .catch((err) => console.error(err));  
       this.content = ''
@@ -314,12 +313,14 @@ export default {
             return this.comments;
           })
           this.getAllPosts;
-          this.$router.go();
+        //  this.$router.go();
+        this.$forceUpdate();
         })
       .catch((err) => console.log(err));  
     },
   },
   mounted(){
+    console.log('updated')
     this.getAllPosts();
   }
 };

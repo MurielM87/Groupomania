@@ -3,7 +3,7 @@ Openclassroom Projet 7 Groupomania : Créer un réseau social d'entreprise
 Frontend : Vue CLI 
     - npm install
     - npm run serve
-Backend : Nodejs Database : MySQL Workbench
+Backend : Nodejs - Database : MySQL Workbench
     - npm install
     - npm start
 
