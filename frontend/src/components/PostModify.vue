@@ -96,6 +96,7 @@ export default {
       
     //modify post
     updatePost(postId) {
+      console.log(postId)
       const token = localStorage.getItem("token")
       const userId = localStorage.getItem("userId")
 
@@ -113,7 +114,6 @@ export default {
       fd.append("content", post.content);
 
       if(userId == userId && token == token) {
-        console.log(postId)
         fetch(`http://localhost:3000/api/posts/${post.postId}`, {
           method: "PUT",
           credentials: "include",

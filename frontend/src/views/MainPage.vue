@@ -47,10 +47,9 @@ export default {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
       user: ref({}),
-      post: ref({}),
       posts: ref([]),
       comment: ref({}),
-    };
+    }
   },
 
   beforeCreate() {
@@ -69,7 +68,7 @@ export default {
     $route:'getAllPosts',    
   },
   
-  mounted(){
+  created(){
     this.getOneUser(),
     this.getAllPosts()
   },

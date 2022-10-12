@@ -159,19 +159,15 @@ export default {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
       content: ref(""),
-      users: ref([]),
-      posts: ref([]),
       comments: ref([]),
       revele: false,
       like: ref(0),
-      likes: ref([]),
       dislike: ref(0),
-      dislikes: ref([]),
     };
   },
 
   computed(){
-    return this.post && this.comment
+    return this.posts
   },
 
   
@@ -252,7 +248,8 @@ export default {
             this.posts = this.posts.filter((post) => {
             console.log("deletePost || postId", postId);
             return post.id != postId;
-            })          
+            })     
+          this.refreshData()     
           }   
         //  this.$router.go()     
         })

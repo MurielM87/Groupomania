@@ -119,7 +119,7 @@ export default {
           console.log("PostForm||data", data);
           this.fd = data;
           this.$emit('PostCard')
-          window.location.reload()
+        //  window.location.reload()
         })
         .catch((err) => console.log(err))
       this.fd = ""  
