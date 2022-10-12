@@ -44,8 +44,8 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','Admin','Admin','admin@groupomania.com','$2b$10$rQizhlmoFDtokKKOIc1jyeC3gcu1GXMoPtuAKVIr1w5/RXg5C3vZm',1,'Le-Grand-Schtroumpf1664205791786.webp','2022-08-13 17:41:04','2022-09-26 17:23:11'),(2,'Jeannot','Jean','Dupond','essai@gmail.com','$2b$10$3Eb67cuPPZYEWrnJLfXbfuW6DMm0XWsh84LepQgLY0.BkJP9opxou',0,'schtroumpf_curieux1662648600472.png','2022-07-29 16:23:40','2022-09-14 13:55:33'),(3,'Marie M.','Marie','Martin','test@gmail.com','$2b$10$Py4mMxN07PqH5kbsdplSReCS09WfA3cT5VOcTio4feGQ0X7miUF1C',0,'colère1662885673617.jpg','2022-09-11 10:39:26','2022-09-11 10:41:13'),(7,'Lili','Lili','Bates','lili@gmail.com','$2b$10$j97nkvghBcrD.rLGoJ52qePGFIMmaw1TGjrXieN5603snWWvcHTlq',0,'schtroumpf_costaud1664206153153.jpg','2022-09-26 17:28:11','2022-09-26 17:29:13');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
+
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
