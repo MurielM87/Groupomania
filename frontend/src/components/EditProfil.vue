@@ -204,7 +204,7 @@ export default {
         })
         .then((res) => {
           console.log("res", res);
-          this.$emit("deleteUser");
+        //  this.$emit("deleteUser");
           localStorage.removeItem("token");
           localStorage.removeItem("userId");
           this.$router.push({ name: "SignUp" });

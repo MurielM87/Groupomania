@@ -1,27 +1,28 @@
 <template>
-  <h2>Bonjour <span id="user_name">{{ user.pseudo }}</span></h2>
+  <h2>
+    Bonjour <span id="user_name">{{ user.pseudo }}</span>
+  </h2>
   <section id="posts">
-    
     <div class="post_column">
-      <PostForm />
+      <PostForm :post="post" />
       <div class="profil_column">
         <UsersProfil />
-      </div>      
+      </div>
     </div>
-    
+
     <div class="post_card">
       <h2>Nouvelles publications</h2>
       <div class="post_column_center">
-      <PostCard 
-        v-for="post in posts" 
-        :key="post.id"
-        :post="post"
-        :comment="comment"
-        :user="user"
-      />
+        <PostCard
+          v-for="post in posts"
+          :key="post.id"
+          :post="post"
+          :comment="comment"
+          :user="user"
+        />
       </div>
     </div>
-    
+
     <!-- Bouton Scroll to Top-->
     <button class="toTop" @click="toTop" title="Retour en haut de page">
       <span class="fa fa-chevron-up"></span>
@@ -31,6 +32,7 @@
 
 <script>
 import { ref } from "vue";
+import { mapGetters, mapActions } from "vuex";
 import PostForm from "@/components/PostForm.vue";
 import PostCard from "@/components/PostCard.vue";
 import UsersProfil from "@/components/UsersProfil.vue";
@@ -40,78 +42,30 @@ export default {
   components: {
     PostForm,
     PostCard,
-    UsersProfil
-},
+    UsersProfil,
+  },
+
   data() {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
       user: ref({}),
+      post: ref({}),
       posts: ref([]),
       comment: ref({}),
-    }
+    };
   },
 
   beforeCreate() {
-    const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
     if (token == null && userId == null) {
-      this.$router.push({name: 'LogIn'})
+      this.$router.push({ name: "LogIn" });
     }
   },
 
-  computed(){
-    return this.posts
-  },
-
-  watch: {
-    $route:'getAllPosts',    
-  },
-  
-  created(){
-    this.getOneUser(),
-    this.getAllPosts()
-  },
- 
-  methods: {  
-    getOneUser() {
-      fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-      methods: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",    
-        "Authorization": `Bearer ${this.token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if(data.redirect) {
-          this.$router.push({name: 'LogIn'})
-        }
-        console.log("MainPage||user||data", data);
-        this.user = data;
-      })
-      .catch((err) => console.log(err));
-    },
-
-    getAllPosts() {
-      fetch(`http://localhost:3000/api/posts`, {
-      methods: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",    
-        "Authorization": `Bearer ${this.token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("MainPage||this.posts||data", data);
-        this.posts = data;
-      })
-      .catch((err) => console.log(err));
-    },
+  methods: {
+    ...mapActions(["getAllPosts"]),
 
     //button scroll top
     toTop() {
@@ -121,13 +75,20 @@ export default {
       });
     },
   },
-  
+
+  computed: mapGetters(["allPosts"]),
+
+  created() {
+    this.getAllPosts()
+    console.log("main", this.getAllPosts)
+  },
 };
 </script>
 
 <style lang="scss">
 #user_name {
-  font-family: Niconne, 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family: Niconne, "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
   font-size: 30px;
 }
 #posts {
@@ -158,7 +119,7 @@ export default {
   width: 100%;
   margin: auto;
   margin-top: 15px;
-  border: 1px solid #FD2D01;
+  border: 1px solid #fd2d01;
   border-radius: 20px;
   @media screen and (max-width: 768px) {
     display: none;
@@ -174,8 +135,8 @@ img {
   position: fixed;
   left: 30px;
   bottom: 30px;
-  background-color: #FFD7D7;
-  color: #FD2D01;
-  border: 1px solid #FD2D01;
+  background-color: #ffd7d7;
+  color: #fd2d01;
+  border: 1px solid #fd2d01;
 }
 </style>

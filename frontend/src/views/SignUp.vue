@@ -244,12 +244,4 @@ label {
   font-size: 20px;
   margin-bottom: 10px;
 }
-
-input:required{
-  border: 2px solid red;
-}
-input:invalid{
-  border: 2px solid black;
-}
-
 </style>

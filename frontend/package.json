@@ -12,10 +12,14 @@
     "core-js": "^3.8.3",
     "crypto-js": "^4.1.1",
     "es6-promise": "^4.2.8",
+    "normalize.css": "^8.0.1",
     "sass": "^1.52.2",
     "sass-loader": "^13.0.0",
     "vue": "^3.2.13",
-    "vue-router": "^4.0.15"
+    "vue-cli": "^2.9.6",
+    "vue-loader": "^15.10.0",
+    "vue-router": "^4.0.15",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

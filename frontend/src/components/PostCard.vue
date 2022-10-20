@@ -1,5 +1,9 @@
 <template>
-  <PostModify :revele="revele" :toggleModale="toggleModale" :modifyPost="post" />
+  <PostModify
+    :revele="revele"
+    :toggleModale="toggleModale"
+    :modifyPost="post"
+  />
   <article id="card_post">
     <!--informations from the author of the post-->
     <router-link :to="`/profil/${post.User.id}`">
@@ -38,14 +42,16 @@
       <!--add the datetime -->
       <div class="post_date">
         <p>publié le {{ datePost(post.createdAt) }}</p>
-        <p v-if="this.post.updatedAt !== this.post.createdAt">modifié le {{ datePost(post.updatedAt) }}</p>
+        <p v-if="this.post.updatedAt !== this.post.createdAt">
+          modifié le {{ datePost(post.updatedAt) }}
+        </p>
       </div>
     </div>
     <br />
 
     <!--add the buttons 'modify' and 'delete' to the published post-->
     <div v-if="post.User.id == userId || userId == 1">
-      <button 
+      <button
         id="post_modify"
         class="form_btn"
         title="modifier le message"
@@ -69,130 +75,41 @@
 
     <!-- add like to the post-->
     <PostLike :post="post" />
-  
+
     <!--add a comment to the post -->
-    <div class="post_comments">
-      <h3>Commentaires <i class="fas fa-comments"></i></h3>
-
-      <!--write a comment -->
-      <div>
-        <textarea
-          type="text"
-          class="comment_input"
-          v-model="content"
-          placeholder="laissez un commentaire"
-          rows="3"
-          required
-        ></textarea>
-        <button type="submit" @click.prevent="submitComment(post.id)">
-          <span>Publier </span> <i class="far fa-edit"></i>
-        </button>
-      </div>
-
-      <div class="separate_barre"></div>
-
-      <!--get all comments -->
-      <p class="comment_title">{{post.Comments.length}} commentaire{{post.Comments.length > 1 ? 's' : ""}} publié{{post.Comments.length > 1 ? 's' : ""}}</p>
-      <div
-        class="comments_card"
-        v-for="comment in post.Comments"
-        :key="comment.id"
-        :comments="comments"
-        :comment="comment"
-      >
-        <router-link :to="{ name: 'ProfilUser', params: { id: comment.User.id } }"> 
-          <div class="comment_author">
-            <img
-              v-if="comment.User.imageUrl"
-              :src="`http://localhost:3000/images/${comment.User.imageUrl}`"
-              alt="avatar"
-              crossorigin="anonymous"
-            />
-            <img v-else :src="require('../assets/avatar.png')" alt="avatar par default" />
-            <span class="comment_author_pseudo"> 
-              {{ comment.User.pseudo }}
-            </span>
-          </div>
-        </router-link> 
-
-        <div class="comment_content">
-          <p class="comment_text">  
-            {{ comment.content }}
-          </p>
-          <br />
-          <!--add the datetime -->
-          <div class="post_date">
-            <p>publié le {{ dateComment(comment.createdAt) }}</p>
-          </div>
-        </div>
-
-        <div>
-          <button v-if="comment.User.id == userId || userId == 1"
-            id="comment-delete"
-            class="form_btn"
-            title="Supprimer le commentaire"
-            @click.prevent="deleteComment(comment.id)"
-          >
-            <span>Supprimer </span><i class="far fa-trash-alt"></i>
-          </button>
-        </div>
-      </div>
-    </div>
+    <CommentCard :post="post" />
   </article>
 </template>
 
 <script>
 import { ref } from "vue";
+import { mapGetters, mapActions } from "vuex";
 import PostModify from "./PostModify.vue";
 import PostLike from "./PostLike.vue";
+import CommentCard from "./CommentCard.vue";
 
 export default {
   name: "PostCard",
-  props:["post", "comment", "user", "postId"],
+  props: ["post", "comment", "user"],
   components: {
     PostModify,
-    PostLike
+    PostLike,
+    CommentCard,
   },
-  emit: ['input'],
+  emit: ["input"],
   data() {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
-      content: ref(""),
-      comments: ref([]),
       revele: false,
       like: ref(0),
       dislike: ref(0),
+      postId: this.post.id,
     };
   },
 
-  computed(){
-    return this.posts
-  },
-
-  
   methods: {
-    refreshData() {
-      this.posts = []
-      this.getAllPosts()
-    },
-
-    getAllPosts() {
-      fetch(`http://localhost:3000/api/posts`, {
-      methods: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",    
-        "Authorization": `Bearer ${this.token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        this.posts = data;
-      })
-      .catch((err) => console.log(err));
-    },
+    ...mapActions(["getAllPosts"]),
 
     //date of the post
     datePost(date) {
@@ -206,26 +123,15 @@ export default {
       };
       return event.toLocaleDateString("fr-Fr", options);
     },
-    //date of the comment
-    dateComment(date) {
-      const event = new Date(date);
-      const options = {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-      };
-      return event.toLocaleDateString("fr-Fr", options);
-    },
+
     //modify a post
     toggleModale(postId) {
       this.revele = !this.revele;
-      console.log("PostCard||toggleModale||postId", postId)
+      console.log("PostCard||toggleModale||postId", postId);
     },
 
     //delete a post
-    deletePost(postId) {
+/*    deletePost(postId) {
       const userId = localStorage.getItem("userId");
       const token = localStorage.getItem("token");
       console.log("PostCard||deletePost", postId);
@@ -238,93 +144,35 @@ export default {
             Authorization: `Bearer ${this.token}`,
           },
         })
-        .then((res) => res.json())
-        .then((res) => {
-          confirm(("Voulez-vous vraiment supprimer ce message ?"))
-          if(res.redirect) {
-          this.$router.push({name: 'LogIn'})
-          }
-          if(res.status === 200) {
-            this.posts = this.posts.filter((post) => {
-            console.log("deletePost || postId", postId);
-            return post.id != postId;
-            })     
-          this.refreshData()     
-          }   
-        //  this.$router.go()     
-        })
-        .catch((err)=> console.error(err));
-      }
-    },
-    
-    submitComment(postId) {
-      if(this.content === "") {
-        return
-      } else {
-      fetch(`http://localhost:3000/api/posts/${postId}/comment`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",    
-          "Authorization": `Bearer ${this.token}`,
-        },
-        body: JSON.stringify({
-          content: this.content
-        }),
-      })
-      .then((res) => res.json())
-      .then((data) => {     
-        if(data.redirect) {
-          this.$router.push({name: 'LogIn'})
-        }
-        console.log("CardForm||data", data);
-        this.$emit('PostCard')
-        this.refreshData();
-      //  this.$router.go()  
-      })
-      .catch((err) => console.error(err));  
-      this.content = ''
-    }
-  },
-    
-    //delete a comment from a post
-    deleteComment(commentId) {
-      confirm(("Voulez-vous vraiment supprimer ce commentaire ?"))
-      fetch(`http://localhost:3000/api/posts/comment/${commentId}`, {
-        method: "DELETE",
-        credentials: "include", 
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${this.token}`,
-        },
-      })
-      .then((res) => res.json())
-      .then((data) => {
-        if(data.redirect) {
-          this.$router.push({name: 'LogIn'})
-        }
-        console.log("commentId", commentId)
-          this.comments = this.comments.splice((commentId) => {
-            console.log("deleteComment || commentId", commentId);
-            return this.comments;
+          .then((res) => res.json())
+          .then((res) => {
+            confirm("Voulez-vous vraiment supprimer ce message ?");
+            if (res.redirect) {
+              this.$router.push({ name: "LogIn" });
+            }
+            if (res.status === 200) {
+              this.posts = this.posts.filter((post) => {
+                console.log("deletePost || postId", postId);
+                return post.id != postId;
+              });
+              this.getAllPosts();
+            }
           })
-          this.getAllPosts;
-        //  this.$router.go();
-        this.$forceUpdate();
-        })
-      .catch((err) => console.log(err));  
-    },
+          .catch((err) => console.error(err));
+      }
+    },*/
   },
-  mounted(){
-    console.log('updated')
-    this.getAllPosts();
-  }
+  computed: mapGetters(["allPosts"]),
+
+  created() {
+    this.getAllPosts(), 
+    console.log('coucou')
+  },
 };
 </script>
 
 <style lang="scss">
-  #card_post {
+#card_post {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -353,8 +201,8 @@ export default {
   border-radius: 10px;
   margin-bottom: 20px;
   &:hover {
-    background-color: #FFD7D7;
-    color: #FD2D01;
+    background-color: #ffd7d7;
+    color: #fd2d01;
   }
 }
 
@@ -386,56 +234,18 @@ h4 {
   padding: 5px;
 }
 
-.comment_title {
-  display: flex;
-  justify-content: flex-end;
-}
-.comments_card {
-  width: 80%;
-  background-color: #ffd7d7;
-  border: 1px solid #4E5166;
-  margin-bottom: 10px;
-  margin-left: auto;
-  border-radius: 10px;
-  padding: 10px;
-}
-
-.comment_author {
-  width: 50%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  border: 1px solid #4E5166;
-  border-radius: 10px;
-  &:hover {
-    background-color: #f0d1d1;
-    color: #FD2D01;
-  }
-}
-.comment_author_pseudo {
-  display: flex;
-  align-items: center;
-  margin-left: 5px;
-}
-.comment_author img {
-  width: 50px;
-  padding: 5px;
-  border-radius: 50%;
-  margin: 0;
-}
-textarea {
-  width: 100%;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
 .fa-comments,
 .fa-feather-alt {
   font-size: 40px;
   margin: 2px;
-  background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
-              linear-gradient(127deg, rgba(209, 166, 14, 0.8), rgba(0,255,0,0) 70.71%),
-              linear-gradient(336deg, rgba(236, 147, 14, 0.8), rgba(0,0,255,0) 70.71%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+  background: linear-gradient(
+      217deg,
+      rgba(255, 0, 0, 0.8),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(209, 166, 14, 0.8), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(236, 147, 14, 0.8), rgba(0, 0, 255, 0) 70.71%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 </style>

@@ -137,6 +137,7 @@ ul {
   }
 }
 .text_desktop {
+  font-family: "Lato", sans-serif;
   color: black;
   text-decoration: none;
   @media screen and (max-width: 768px) {

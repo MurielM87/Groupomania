@@ -71,13 +71,13 @@ export default {
     })
       .then((data) => {
         console.log("FormCard||user||data", data);
-        this.user = data;
+        this.user = data.user;
       })
       .catch((err) => console.log(err));
   },
 
   computed() {
-    return this.posts
+    return this.$store.state.posts
   },
 
   methods: {
@@ -90,18 +90,26 @@ export default {
       console.log("image-target", this.imageUrl);
     },
 
-    async createPost() {  
-      if(this.title === "") {
-        return
-      } if(this.content === ""){
-        return
-      }
+    async createPost() { 
+      if(this.title === "" || this.content === "") return;
 
       const fd = new FormData()
       fd.append("title", this.title)
+    //  console.log(this.title)
       fd.append("content", this.content)
       fd.append("imageUrl", this.imageUrl)
-      console.log("FormData||fd", fd)
+    //  console.log("FormData||fd", fd)
+    for (const pair of fd.entries()) {
+  console.log(`${pair[0]}, ${pair[1]}`);
+}
+
+ /*     await this.$store.commit("ADD_POST", {
+        post : fd
+      })
+      this.$store.dispatch("ADD_POST", {fd})
+      console.log("PostForm, store", this.$store.commit)
+      console.log("post", this.fd)
+      console.log(fd)*/
 
       await fetch(`http://localhost:3000/api/posts/add`, {
           method: "POST",
@@ -117,9 +125,7 @@ export default {
            this.$router.push({name: 'LogIn'})
           }
           console.log("PostForm||data", data);
-          this.fd = data;
-          this.$emit('PostCard')
-        //  window.location.reload()
+          this.fd = data.post;
         })
         .catch((err) => console.log(err))
       this.fd = ""  

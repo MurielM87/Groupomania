@@ -70,4 +70,8 @@ export default {
   color: black;
   margin: auto;
 }
+
+input, button {
+  font-family: "Lato", sans-serif;
+}
 </style>

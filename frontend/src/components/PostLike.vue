@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+//import { ref } from "vue";
 
 export default {
   name: "PostLike",
@@ -27,17 +27,28 @@ export default {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
-      like: ref(0),
-      dislike: ref(0),
-      postLike: this.post,
+    //  like: ref(0),
+    //  dislike: ref(0),
+    //  postLike: this.post,
       activeLike: false,
     };
   },
   props: ["post"],
 
+  computed: {
+    get() {
+      return this.$store.getters.like
+    },
+    set(value) {
+      return this.$store.commit("LIKE_POST", value)
+    }
+  },
+
   methods: {
     //add a like
     async addLike(postId) {
+      this.$store.commit("LIKE_POST", postId)
+      /*
       const userId = localStorage.getItem("userId");
       console.log("PostCard||addLike||postId", postId);
       console.log("PostCard||addLike||userId", userId);
@@ -54,7 +65,7 @@ export default {
         .then((res) => {
           console.log(res);
           this.like = res;
-          this.$emit('addLike')
+        //  this.$emit('addLike')
           console.log(this.userId);
           const userLike = JSON.parse(JSON.stringify(this.postLike));
           console.log(this.userId == userLike.Likes[0].userId);
@@ -63,7 +74,7 @@ export default {
           }
           this.$router.go(); 
         })
-        .catch((err) => console.error(err));
+        .catch((err) => console.error(err));*/
     },
 //this.like > 0 ? "activeLike" : ""
     //add a dislike
@@ -84,7 +95,7 @@ export default {
         .then((res) => {
           console.log({ res });
           this.dislike = res.data;
-          this.$emit('addDislike')
+        //  this.$emit('addDislike')
           this.$router.go(); 
         })
         .catch((err) => console.error(err));

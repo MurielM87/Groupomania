@@ -129,8 +129,8 @@ export default {
           this.$router.push({name: 'LogIn'})
         }
           console.log("ModifyPost||post", this.post);
-          this.$emit('updatePost');          
-          this.$emit('updatePostList');
+        //  this.$emit('updatePost');          
+        //  this.$emit('updatePostList');
           this.$router.go();
         })
         .catch((error) => {
