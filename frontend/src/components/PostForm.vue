@@ -70,16 +70,13 @@ export default {
       },
     })
       .then((data) => {
-        console.log("FormCard||user||data", data);
+        console.log("PostForm||user||data", data);
         this.user = data.user;
       })
       .catch((err) => console.log(err));
   },
 
-  computed() {
-    return this.$store.state.posts
-  },
-
+  
   methods: {
     selectImage() {
       this.$ref.fileInput.click()
@@ -99,17 +96,11 @@ export default {
       fd.append("content", this.content)
       fd.append("imageUrl", this.imageUrl)
     //  console.log("FormData||fd", fd)
-    for (const pair of fd.entries()) {
-  console.log(`${pair[0]}, ${pair[1]}`);
-}
+//    for (const pair of fd.entries()) {
+//  console.log(`${pair[0]}, ${pair[1]}`);
+//}
 
- /*     await this.$store.commit("ADD_POST", {
-        post : fd
-      })
-      this.$store.dispatch("ADD_POST", {fd})
-      console.log("PostForm, store", this.$store.commit)
-      console.log("post", this.fd)
-      console.log(fd)*/
+ 
 
       await fetch(`http://localhost:3000/api/posts/add`, {
           method: "POST",

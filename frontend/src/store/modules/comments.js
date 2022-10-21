@@ -9,7 +9,9 @@ const getters = {
     allComments: (state) => state.comments
 };
 
-const actions = {};
+const actions = {
+    
+};
 
 const mutations = {
 

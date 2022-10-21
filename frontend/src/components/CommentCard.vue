@@ -118,7 +118,6 @@ export default {
             return this.comments;
           });
           this.getAllPosts;
-          this.$forceUpdate();
         })
         .catch((err) => console.log(err));
     },

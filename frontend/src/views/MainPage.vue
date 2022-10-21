@@ -76,7 +76,7 @@ export default {
     },
   },
 
-  computed: mapGetters(["allPosts"]),
+  computed: mapGetters(["allPosts"], console.log("main, computed")),
 
   created() {
     this.getAllPosts()

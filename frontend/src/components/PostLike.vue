@@ -35,19 +35,12 @@ export default {
   },
   props: ["post"],
 
-  computed: {
-    get() {
-      return this.$store.getters.like
-    },
-    set(value) {
-      return this.$store.commit("LIKE_POST", value)
-    }
-  },
+ 
 
   methods: {
     //add a like
     async addLike(postId) {
-      this.$store.commit("LIKE_POST", postId)
+      console.log(postId)
       /*
       const userId = localStorage.getItem("userId");
       console.log("PostCard||addLike||postId", postId);
@@ -65,7 +58,6 @@ export default {
         .then((res) => {
           console.log(res);
           this.like = res;
-        //  this.$emit('addLike')
           console.log(this.userId);
           const userLike = JSON.parse(JSON.stringify(this.postLike));
           console.log(this.userId == userLike.Likes[0].userId);
@@ -95,7 +87,6 @@ export default {
         .then((res) => {
           console.log({ res });
           this.dislike = res.data;
-        //  this.$emit('addDislike')
           this.$router.go(); 
         })
         .catch((err) => console.error(err));

@@ -83,7 +83,7 @@
 
 <script>
 import { ref } from "vue";
-import { mapGetters, mapActions } from "vuex";
+//import { mapGetters, mapActions } from "vuex";
 import PostModify from "./PostModify.vue";
 import PostLike from "./PostLike.vue";
 import CommentCard from "./CommentCard.vue";
@@ -109,7 +109,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["getAllPosts"]),
+    //...mapActions(["getAllPosts"]),
 
     //date of the post
     datePost(date) {
@@ -162,12 +162,12 @@ export default {
       }
     },*/
   },
-  computed: mapGetters(["allPosts"]),
+//  computed: mapGetters(["allPosts"]),
 
-  created() {
-    this.getAllPosts(), 
-    console.log('coucou')
-  },
+//  created() {
+//    this.getAllPosts(), 
+//    console.log('coucou')
+//  },
 };
 </script>
 

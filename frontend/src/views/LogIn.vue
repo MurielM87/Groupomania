@@ -80,8 +80,6 @@ export default {
             console.log(data);
             localStorage.setItem("token", data.token);
             localStorage.setItem("userId", data.userId); 
-          //  this.$emit("token")
-          //  this.$emit("userId")
             this.$router.push("/"); 
           })
           .catch((error) => {
