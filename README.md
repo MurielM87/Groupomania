@@ -1,11 +1,27 @@
 Openclassroom Projet 7 Groupomania : Créer un réseau social d'entreprise
 
+cloner le projet : `https://github.com/MurielM87/Groupomania.git`
+
 Frontend : Vue CLI 
     - npm install
     - npm run serve
+
 Backend : Nodejs - Database : MySQL Workbench
     - npm install
     - npm start
+
+connexion à la base de données avec vos identifiants : 
+    - DB_HOST=""
+    - DB_USER=""
+    - DB_PASSWORD= ""
+    - DB_NAME=""
+    - DB_dialect=""
+et pour le compte administrateur : 
+    - ADMIN_PSEUDO = ""
+    - ADMIN_EMAIL = ""
+    - ADMIN_PASSWORD = ""
+
+    
 
 Spécifications fonctionelles : 
 - page de connexion : permet à l'utilisateur de se connecter ou de créer un compte s'il n'en possède pas déjà un. La création du compte demandera un minimum d'informations, et la connexion se fera uniquement à partir du mail et du mot de passe.

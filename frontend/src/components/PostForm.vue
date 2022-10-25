@@ -92,13 +92,12 @@ export default {
 
       const fd = new FormData()
       fd.append("title", this.title)
-    //  console.log(this.title)
       fd.append("content", this.content)
       fd.append("imageUrl", this.imageUrl)
-    //  console.log("FormData||fd", fd)
-//    for (const pair of fd.entries()) {
-//  console.log(`${pair[0]}, ${pair[1]}`);
-//}
+   
+      for (const pair of fd.entries()) {
+        console.log(`${pair[0]}, ${pair[1]}`);
+      }
 
  
 

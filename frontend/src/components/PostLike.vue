@@ -18,7 +18,7 @@
 </template>
 
 <script>
-//import { ref } from "vue";
+import { ref } from "vue";
 
 export default {
   name: "PostLike",
@@ -27,9 +27,9 @@ export default {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
-    //  like: ref(0),
-    //  dislike: ref(0),
-    //  postLike: this.post,
+      like: ref(0),
+      dislike: ref(0),
+      postLike: this.post,
       activeLike: false,
     };
   },
@@ -41,7 +41,7 @@ export default {
     //add a like
     async addLike(postId) {
       console.log(postId)
-      /*
+      
       const userId = localStorage.getItem("userId");
       console.log("PostCard||addLike||postId", postId);
       console.log("PostCard||addLike||userId", userId);
@@ -66,7 +66,7 @@ export default {
           }
           this.$router.go(); 
         })
-        .catch((err) => console.error(err));*/
+        .catch((err) => console.error(err));
     },
 //this.like > 0 ? "activeLike" : ""
     //add a dislike

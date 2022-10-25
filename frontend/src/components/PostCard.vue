@@ -50,7 +50,7 @@
     <br />
 
     <!--add the buttons 'modify' and 'delete' to the published post-->
-    <div v-if="post.User.id == userId || userId == 1">
+    <div v-if="post.User.id == userId || userId.isAdmin == true">
       <button
         id="post_modify"
         class="form_btn"
@@ -83,7 +83,6 @@
 
 <script>
 import { ref } from "vue";
-//import { mapGetters, mapActions } from "vuex";
 import PostModify from "./PostModify.vue";
 import PostLike from "./PostLike.vue";
 import CommentCard from "./CommentCard.vue";
@@ -109,8 +108,6 @@ export default {
   },
 
   methods: {
-    //...mapActions(["getAllPosts"]),
-
     //date of the post
     datePost(date) {
       const event = new Date(date);
@@ -162,12 +159,7 @@ export default {
       }
     },*/
   },
-//  computed: mapGetters(["allPosts"]),
 
-//  created() {
-//    this.getAllPosts(), 
-//    console.log('coucou')
-//  },
 };
 </script>
 

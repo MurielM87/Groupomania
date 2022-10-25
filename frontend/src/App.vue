@@ -71,7 +71,7 @@ export default {
   margin: auto;
 }
 
-input, button {
+input, button, textarea {
   font-family: "Lato", sans-serif;
 }
 </style>

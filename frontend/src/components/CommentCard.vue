@@ -51,7 +51,7 @@
 
       <div>
         <button
-          v-if="comment.User.id == userId || userId == 1"
+          v-if="comment.User.id == userId || userId.isAdmin == true"
           id="comment-delete"
           class="form_btn"
           title="Supprimer le commentaire"
