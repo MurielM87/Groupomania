@@ -89,7 +89,7 @@ import CommentCard from "./CommentCard.vue";
 
 export default {
   name: "PostCard",
-  props: ["posts", "post", "comment", "user"],
+  props: ["post", "comment", "user"],
   components: {
     PostModify,
     PostLike,

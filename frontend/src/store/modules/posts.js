@@ -9,7 +9,7 @@ const state = {
 console.log("state", state)
 
 const getters = {
-    allPosts: (state) => state.posts,
+    posts: (state) => state.posts,
 };
 console.log("getters", getters)
 
