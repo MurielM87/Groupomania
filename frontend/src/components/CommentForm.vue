@@ -16,6 +16,7 @@
 
 <script>
 import { ref } from "vue";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "CommentForm",
@@ -30,7 +31,8 @@ export default {
   props: ["post"],
 
   methods: {
-    addComment(postId) {
+    ...mapActions(["addComment"]),
+  /*  addComment(postId) {
       if (this.content === "") {
         return;
       } else {
@@ -52,12 +54,16 @@ export default {
               this.$router.push({ name: "LogIn" });
             }
             console.log("CardForm||data", data);
-            this.refreshData();
           })
           .catch((err) => console.error(err));
         this.content = "";
       }
-    },
+    },*/
   },
+
+  computed: mapGetters(["comments"]),
+
+ 
+
 };
 </script>

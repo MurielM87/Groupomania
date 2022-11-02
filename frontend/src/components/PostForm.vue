@@ -32,7 +32,7 @@
 
       <!-- button to publish -->
       <button
-        @click.prevent="createPost"
+        @click.prevent="addPost"
         class="btn post-btn"
         title="valider la publication">
         <i class="far fa-edit"></i>Publier
@@ -44,6 +44,7 @@
     
 <script>
 import { ref } from "vue";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "PostForm",
@@ -59,7 +60,7 @@ export default {
   },
   
   //get the user by id
-  async created() {
+  async mounted() {
     await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
       methods: "GET",
       credentials: "include",
@@ -78,6 +79,8 @@ export default {
 
   
   methods: {
+    ...mapActions(['addPost']),
+
     selectImage() {
       this.$ref.fileInput.click()
     },
@@ -87,8 +90,9 @@ export default {
       console.log("image-target", this.imageUrl);
     },
 
-    async createPost() { 
-      if(this.title === "" || this.content === "") return;
+
+  //  addPost() { 
+  /*   if(this.title === "" || this.content === "") return;
 
       const fd = new FormData()
       fd.append("title", this.title)
@@ -97,11 +101,10 @@ export default {
    
       for (const pair of fd.entries()) {
         console.log(`${pair[0]}, ${pair[1]}`);
-      }
+      }*/
+      
 
- 
-
-      await fetch(`http://localhost:3000/api/posts/add`, {
+    /*  await fetch(`http://localhost:3000/api/posts/add`, {
           method: "POST",
           credentials: "include",
           headers: {
@@ -117,10 +120,17 @@ export default {
           console.log("PostForm||data", data);
           this.fd = data.post;
         })
-        .catch((err) => console.log(err))
-      this.fd = ""  
+        .catch((err) => console.log(err)) */
+  //    this.fd = "" 
       
-    },  
+  //  },  
+  }, 
+
+  computed: mapGetters(["posts"]),
+
+  created() {
+    this.getAllPosts;
+    console.log("PostForm", this.getAllPosts);
   },
 
 }
@@ -141,9 +151,12 @@ export default {
   @media (min-width: 768px) and (max-width: 992px) {
     width: 90%;
   }
-  @media screen and (max-width: 768px) {
+  @media (min-width: 480px) and (max-width: 768px) {
     width: 90%;
     padding: 10px;
+  }
+  @media screen and (max-width: 480px) {
+    width: 100%;
   }
 }
 
@@ -157,6 +170,12 @@ h2 {
 
 #label_file_input {
   text-align: right;
+}
+
+#addContent {
+  @media screen and (max-width: 480px) {
+    font-size: 13px;
+  }
 }
 
 .post_title {

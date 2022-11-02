@@ -68,7 +68,8 @@
 </template>
 
 <script>
-import { ref } from "vue";
+//import { ref } from "vue";
+import { mapActions, mapGetters } from "vuex";
 import CommentForm from "./CommentForm.vue";
 
 export default {
@@ -77,7 +78,7 @@ export default {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
-      comments: ref([]),
+    //  comments: ref([]),
     };
   },
   components: { CommentForm },
@@ -97,8 +98,9 @@ export default {
     },
 
     //delete a comment from a post
-    deleteComment(commentId) {
-      confirm("Voulez-vous vraiment supprimer ce commentaire ?");
+    ...mapActions(["deleteComment"]),
+    //deleteComment(commentId) {
+    /*  confirm("Voulez-vous vraiment supprimer ce commentaire ?");
       fetch(`http://localhost:3000/api/posts/comment/${commentId}`, {
         method: "DELETE",
         credentials: "include",
@@ -120,8 +122,12 @@ export default {
           this.getAllPosts;
         })
         .catch((err) => console.log(err));
-    },
+    },*/
   },
+
+  computed: mapGetters(["comments"]),
+
+
 };
 </script>
 
@@ -148,8 +154,9 @@ export default {
   border: 1px solid #4e5166;
   border-radius: 10px;
   &:hover {
-    background-color: #f0d1d1;
+    background-color: #FFFFFF;
     color: #fd2d01;
+    border: 1px solid #fd2d01;
   }
 }
 .comment_author_pseudo {

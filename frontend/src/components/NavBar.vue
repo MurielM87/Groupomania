@@ -95,8 +95,11 @@ h1 {
   align-items: center;
   margin-top: 25px;
   margin-left: 175px;
-  @media screen and (max-width: 992px) {
+  @media (min-width: 480px) and (max-width: 992px) {
     margin-left: 0px;
+  }
+  @media screen and (max-width: 480px) {
+    display: none;
   }
 }
 
@@ -105,8 +108,11 @@ h1 {
   display: flex;
   flex-direction: flex-start;
   margin-left: 100px;
-  @media screen and (max-width: 992px) {
+  @media (min-width: 480px) and (max-width: 992px) {
     margin-left: 0px;
+  }
+  @media screen and (max-width: 480px) {
+    margin-left: 15%;
   }
 }
 

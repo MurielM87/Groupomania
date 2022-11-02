@@ -83,6 +83,7 @@
 
 <script>
 import { ref } from "vue";
+import { mapGetters, mapActions } from "vuex";
 import PostModify from "./PostModify.vue";
 import PostLike from "./PostLike.vue";
 import CommentCard from "./CommentCard.vue";
@@ -128,6 +129,8 @@ export default {
     },
 
     //delete a post
+    ...mapActions(["deletePost"]),
+
 /*    deletePost(postId) {
       const userId = localStorage.getItem("userId");
       const token = localStorage.getItem("token");
@@ -159,6 +162,8 @@ export default {
       }
     },*/
   },
+
+  computed: mapGetters(["posts"]),
 
 };
 </script>

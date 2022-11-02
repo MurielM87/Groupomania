@@ -19,6 +19,7 @@
 
 <script>
 import { ref } from "vue";
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: "PostLike",
@@ -39,7 +40,8 @@ export default {
 
   methods: {
     //add a like
-    async addLike(postId) {
+    ...mapActions(["addLike"]),
+  /*  async addLike(postId) {
       console.log(postId)
       
       const userId = localStorage.getItem("userId");
@@ -67,7 +69,7 @@ export default {
           this.$router.go(); 
         })
         .catch((err) => console.error(err));
-    },
+    },*/
 //this.like > 0 ? "activeLike" : ""
     //add a dislike
     addDislike(postId) {
@@ -91,10 +93,12 @@ export default {
         })
         .catch((err) => console.error(err));
     },
-    watch() {      
-      this.activeLike = !this.activeLike;
-    }
+  //  watch() {      
+  //    this.activeLike = !this.activeLike;
+  //  }
   },
+
+  computed: mapGetters(["likes"])
 };
 </script>
 

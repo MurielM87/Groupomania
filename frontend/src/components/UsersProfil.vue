@@ -75,13 +75,14 @@ export default {
 #user {
     display: flex;
     flex-direction: row;
-    border: 2px solid #FD2D01;
+    border: 2px solid #4E5166;
     border-radius: 20px;
     background-color: #FFD7D7;
     align-items: center;
     &:hover {
       color: #FD2D01;
       background-color: #fff;
+      border: 2px solid  #FD2D01;
   }
 }
 

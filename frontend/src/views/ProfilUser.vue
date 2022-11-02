@@ -37,7 +37,7 @@
     <h2>{{posts.length}} Message{{posts.length > 1 ? 's' : ""}} publié{{posts.length > 1 ? 's' : ""}}</h2>
     <div id="card" v-for="post in posts" :key="post.id" :posts="posts">
       <h3>{{ post.title }}</h3>
-      <p>{{ post.content }}</p>
+      <p class="user_post_content">{{ post.content }}</p>
       <img
         v-if="post.imageUrl"
         :src="`http://localhost:3000/images/${post.imageUrl}`"
@@ -234,5 +234,10 @@ export default {
   width: 30%;
   margin: auto;
   margin-bottom: 20px;
+}
+
+.user_post_content {
+  text-align: justify;
+  padding: 10px;
 }
 </style>
