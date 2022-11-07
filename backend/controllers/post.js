@@ -3,11 +3,12 @@ const fs = require("fs")
 
 //create a post
 exports.createPost = async (req, res) => {
+  console.log("createPost")
   //find the user by Id
   const user = await database.User.findOne({
     where: { id: req.user.userId }
   })
-
+console.log("user", user)
   if (user !== null) {
     if (req.file) {
       imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
@@ -17,12 +18,19 @@ exports.createPost = async (req, res) => {
 
     const pushToImg = req.file == undefined ? null : req.file.filename;
     // create a post in database
+    console.log("req.body", req.body)
     const post = await database.Post.create({
       title: req.body.title,
       content: req.body.content,
       imageUrl: pushToImg,
       UserId: req.user.userId,
-    })
+    }) 
+    /*
+charger le post dans la db en utilisant le modele
+ex: let newPost = await database.Post.findOne({where: { id: req.params.id }})
+ou dans le front (voir le store)
+    */
+
     res.status(201).json({ post: post, message: "Votre message est publié" })
   } else {
     res.status(400).send({ error: "Erreur, votre message n'a pas pu être publié" })

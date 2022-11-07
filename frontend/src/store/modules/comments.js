@@ -11,29 +11,34 @@ const getters = {
 
 const actions = {
   //add a comment
-  async addComment({ commit }, postId) {
-    console.log("postId", postId)
-    if (this.content === "") {
-      return;
-    } else {
-      console.log("content", this.content)
-      await fetch(`http://localhost:3000/api/posts/${postId}/comment`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${this.token}`,
-        },
+  async addComment({ commit }, payload) {
+    console.log("payload", payload)
+    console.log("content", payload.content)
+    console.log("postId", payload.postId)
+    let response = await fetch(`http://localhost:3000/api/posts/${payload.postId}/comment`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+      body: JSON.stringify({
+        content: payload.content
+      }),
+    })
+
+    let data = await response.json()
+    console.log(data)
+    commit('newComment', data.comment)
+    /*  .then((res) => res.json())
+      .then((res) => {
+        console.log("store||res", res);
+        commit('newComment', res)
       })
-        .then((res) => res.json())
-        .then((res) => {
-          console.log("store||res", res);
-          commit('newComment', res)
-        })
-        .catch((err) => console.error(err));
-      this.content = "";
-    }
+      .catch((err) => console.error(err));*/
+    this.content = "";
+
   },
 
   //delete a comment

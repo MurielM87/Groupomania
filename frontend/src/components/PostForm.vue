@@ -32,7 +32,7 @@
 
       <!-- button to publish -->
       <button
-        @click.prevent="addPost"
+        @click.prevent="newPost"
         class="btn post-btn"
         title="valider la publication">
         <i class="far fa-edit"></i>Publier
@@ -90,9 +90,21 @@ export default {
       console.log("image-target", this.imageUrl);
     },
 
-
+    newPost () { 
+      if(this.title === "" || this.content === "") return;
+      
+      console.log("title", this.title)
+      console.log("content", this.content)
+      console.log("imageUrl", this.imageUrl)
+      this.$store.dispatch("addPost", {
+        title: this.title, 
+        content: this.content,
+        imageUrl: this.imageUrl
+      })
+    }
+//rajouter method verif
   //  addPost() { 
-  /*   if(this.title === "" || this.content === "") return;
+  /*  
 
       const fd = new FormData()
       fd.append("title", this.title)
@@ -130,7 +142,6 @@ export default {
 
   created() {
     this.getAllPosts;
-    console.log("PostForm", this.getAllPosts);
   },
 
 }

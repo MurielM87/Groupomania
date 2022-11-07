@@ -8,7 +8,7 @@
       rows="3"
       required
     ></textarea>
-    <button type="submit" @click.prevent="addComment(post.id)">
+    <button type="submit" @click.prevent="newComment(post.id)">
       <span>Publier </span><i class="far fa-edit"></i>
     </button>
   </div>
@@ -32,6 +32,15 @@ export default {
 
   methods: {
     ...mapActions(["addComment"]),
+
+    newComment () {
+      console.log("content", this.content)
+      console.log("postId", this.post.id)
+      this.$store.dispatch("addComment", {
+        postId : this.post.id,
+        content: this.content
+      })
+    }
   /*  addComment(postId) {
       if (this.content === "") {
         return;
@@ -63,7 +72,9 @@ export default {
 
   computed: mapGetters(["comments"]),
 
- 
+  mounted() {
+    this.getAllPosts;
+  }, 
 
 };
 </script>

@@ -63,6 +63,27 @@ export default {
     }
   },
 
+  mounted() {
+    fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+      methods: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if(data.redirect) {
+          this.$router.push({name: 'LogIn'})
+        }
+        console.log("MainPage||user||data", data);
+        this.user = data;
+      })
+      .catch((err) => console.log(err));
+  },
+
   methods: {
     ...mapActions(["getAllPosts"]),
 
@@ -79,26 +100,8 @@ export default {
 
   created() {
     this.getAllPosts();
-    console.log("main", this.getAllPosts);
   },
 
-  mounted() {
-    fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-      methods: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${this.token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("MainPage||user||data", data);
-        this.user = data;
-      })
-      .catch((err) => console.log(err));
-  },
 };
 </script>
 

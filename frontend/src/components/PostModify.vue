@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "PostModify",
@@ -66,7 +67,7 @@ export default {
     };
   },
 
-  created() {
+  mounted() {
     fetch(`http://localhost:3000/api/posts/${this.postId}`, {
       method: "GET",
       credentials: "include",
@@ -93,9 +94,24 @@ export default {
       this.image = URL.createObjectURL(this.tempImage);
       console.log("image-target", this.image);
     },
+
+    ...mapActions(['updatePost']),
+
+    updatePost () { 
+      if(this.title === "" || this.content === "") return;
+      
+      console.log("title", this.title)
+      console.log("content", this.content)
+      console.log("imageUrl", this.imageUrl)
+      this.$store.dispatch("addPost", {
+        title: this.title, 
+        content: this.content,
+        imageUrl: this.imageUrl
+      })
+    }
       
     //modify post
-    updatePost(postId) {
+  /*  updatePost(postId) {
       console.log(postId)
       const token = localStorage.getItem("token")
       const userId = localStorage.getItem("userId")
@@ -136,7 +152,13 @@ export default {
           console.warn("ModifyPost||FormData", fd);
         });
       }
-    }
+    }*/
+  },
+
+  computed: mapGetters(["posts"]),
+
+  created() {
+    this.getAllPosts;
   },
   
 };

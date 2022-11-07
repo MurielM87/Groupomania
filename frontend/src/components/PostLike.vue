@@ -40,7 +40,7 @@ export default {
 
   methods: {
     //add a like
-    ...mapActions(["addLike"]),
+    ...mapActions(["addLike", "addDislike"]),
   /*  async addLike(postId) {
       console.log(postId)
       
@@ -72,7 +72,7 @@ export default {
     },*/
 //this.like > 0 ? "activeLike" : ""
     //add a dislike
-    addDislike(postId) {
+  /*  addDislike(postId) {
       const userId = localStorage.getItem("userId");
       console.log("PostCard||addDislike||postId", postId);
       console.log("PostCard||addDislike||userId", userId);
@@ -92,13 +92,13 @@ export default {
           this.$router.go(); 
         })
         .catch((err) => console.error(err));
-    },
+    },*/
   //  watch() {      
   //    this.activeLike = !this.activeLike;
   //  }
   },
 
-  computed: mapGetters(["likes"])
+  computed: mapGetters(["likes", "dislikes"])
 };
 </script>
 
