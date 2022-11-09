@@ -100,6 +100,7 @@ exports.updateUser = async (req, res) => {
     let imageUrl
     let user = await database.User.findOne({ where: { id: id } })
     if (user) {
+      console.log("userUpdata", req.file)
       if (req.file && user.imageUrl) {
       imageUrl = req.file.filename
         const filename = user.imageUrl.split("/images")[1]

@@ -160,6 +160,8 @@ export default {
       fd.append("pseudo", user.pseudo);
       fd.append("firstname", user.firstname);
       fd.append("lastname", user.lastname);
+      for (const pair of fd.entries()) {
+        console.log(`${pair[0]}, ${pair[1]}`);}
       
       fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
         method: "PUT",

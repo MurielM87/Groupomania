@@ -35,20 +35,31 @@ const actions = {
 
   //add a post
   async addPost({ commit }, payload ) {
-    console.log("payload", payload)  
-    
+    console.log("PAYLOAD STORE", payload)  
+  /*  const body = JSON.stringify({
+      title: payload.title,
+      content: payload.content,
+      imageUrl: payload.imageUrl.name
+    })
+    console.log('BODY', body)*/
+
+    const fd = new FormData()
+    fd.append("title", payload.title)
+    fd.append("content", payload.content)
+    fd.append("imageUrl", payload.imageUrl)
+ 
+    for (const pair of fd.entries()) {
+      console.log(`${pair[0]}, ${pair[1]}`);
+    }
+
     let response = await fetch(`http://localhost:3000/api/posts/add`, {
       method: "POST",
       credentials: "include",
       headers: {
-        "Content-Type": "application/json",
+        Accept: "application/json",
         "Authorization": `Bearer ${this.token}`,
       },
-      body: JSON.stringify({
-        title: payload.title,
-        content: payload.content,
-        imageUrl: payload.imageUrl
-      }),
+      body: fd
     })
     let data = await response.json()
     console.log("data", data.post)
@@ -68,7 +79,7 @@ const actions = {
         method: "DELETE",
         credentials: "include",
         headers: {
-          "Content-Type": "application/json",
+          Accept: "application/json",
           Authorization: `Bearer ${this.token}`,
         },
       })
@@ -90,7 +101,7 @@ const actions = {
       method: "PUT",
       credentials: "include",
       headers: {
-        "Content-Type": "application/json",
+        Accept: "application/json",
         "Authorization": `Bearer ${this.token}`,
       },
       body: JSON.stringify({
@@ -117,18 +128,19 @@ const mutations = {
 
   //add a post
   newPost: (state, post) => {
+    console.log("post", post)
     state.posts.unshift(post)
   },
 
   //delete a post
-  removePost: (state, postId) => {
-    state.posts.filter(post => postId == post.id)
-  },
+//  removePost: (state, postId) => {
+//state.posts = state.posts.filter(post => postId == post.id)
+//  },
 
   //update a post
-  updatePost: (state, postId) => {
-    state.posts.push(post => postId == post.id )
-  }
+//  updatePost: (state, postId) => {
+//    state.posts.push(post => postId == post.id )
+//  }
 
 };
 console.log("mutations", mutations)

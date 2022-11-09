@@ -3,13 +3,13 @@
   <div class="post_like">
     <div class="like_thumbs">
         <div class="tooltip">
-        <i class="far fa-thumbs-up"  :class="{ active : activeLike }" @click.prevent="addLike(post.id)">
+        <i class="far fa-thumbs-up"  :class="{ like : activeLike }" @click.prevent="addLike(post.id)">
           <div v-if="post.Likes.length">{{ post.Likes.length }}</div> 
         </i><span class="tooltiptext">J'aime</span>
       </div>
       
       <div class="tooltip">
-        <i class="far fa-thumbs-down" :class="{ active: activeDislike }" @click.prevent="addDislike(post.id)">
+        <i class="far fa-thumbs-down" :class="{ dislike: activeDislike }" @click.prevent="addDislike(post.id)">
           <div v-if="post.Dislikes.length">{{ post.Dislikes.length }}</div> 
         </i><span class="tooltiptext">Je n'aime pas</span>
       </div>      
@@ -49,13 +49,10 @@ export default {
       this.$store.dispatch("addLike", {
         postId: this.post.id,
         userId: this.userId,
-        active: this.activeLike
       })
       console.log("postId", this.post.id);
       console.log("userId", this.userId);
-      if(this.isLike === true) {
-        return this.activeLike
-      }
+      this.activeLike = !this.activeLike
     },
 
     addDislike(){
@@ -64,7 +61,8 @@ export default {
         userId : this.userId
       })
       console.log("postId", this.post.id);
-      console.log("userId", this.userId)
+      console.log("userId", this.userId);
+      this.activeDislike = !this.activeDislike
     }
 
 
@@ -185,15 +183,11 @@ export default {
     color: red;
   }
 }
-.activeLike {
+
+.like {
   color: green;
 }
-
-.active {
-  color: blue;
-}
-
-.activeDislike {
+.dislike {
   color: red;
 }
 

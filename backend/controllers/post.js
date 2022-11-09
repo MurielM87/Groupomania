@@ -10,9 +10,12 @@ exports.createPost = async (req, res) => {
   })
 console.log("user", user)
   if (user !== null) {
+    console.log("req.file", req.file)
     if (req.file) {
+      console.log("filepostAdd", req.file)
       imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
     } else {
+      console.log('no file')
       imageUrl = null
     }
 
