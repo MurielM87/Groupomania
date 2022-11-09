@@ -1,99 +1,75 @@
-const state = {    
-    like: 0,
-    likes: [],
-    activeLike: false,
-    dislike: 0,
-    dislikes: [],
-    activeDislike: false,
+const state = {
+  like: 0,
+  likes: [],
+  dislike: 0,
+  dislikes: [],
 };
 
 const getters = {
-    likes: (state) => state.likes,
-    dislikes: (state) => state.dislikes
+  likes: (state) => state.likes,
+  dislikes: (state) => state.dislikes
 };
 
 const actions = {
-    //add a like
-    async addLike({ commit }, postId) {
-      console.log("postId", postId)
-        
-      //  const userId = localStorage.getItem("userId");
-      //  console.log("PostCard||addLike||postId", postId);
-      //  console.log("PostCard||addLike||userId", userId);
-        await fetch(`http://localhost:3000/api/posts/${postId}/like`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${this.token}`,
-          },
-        })
-          .then((res) => res.json())
-          .then((res) => {
-            console.log(res);
-            commit('newLike', res)
-        //    this.like = res;
-        //    console.log(this.userId);
-        //    const userLike = JSON.parse(JSON.stringify(this.postLike));
-        //    console.log(this.userId == userLike.Likes[0].userId);
-        //    if(this.userId == userLike.Likes[0].userId) {            
-        //    this.activeLike = true;
-        //    }
-          })
-          .catch((err) => console.error(err));
-      },
+  //add a like
+  async addLike({ commit }, payload) {
+    console.log("payload", payload)
 
-    //add a dislike
-    async addDislike({ commit }, postId) {
-      console.log("postId", postId)
-        
-      //  const userId = localStorage.getItem("userId");
-      //  console.log("PostCard||addLike||postId", postId);
-      //  console.log("PostCard||addLike||userId", userId);
-        await fetch(`http://localhost:3000/api/posts/${postId}/dislike`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${this.token}`,
-          },
-        })
-          .then((res) => res.json())
-          .then((res) => {
-            console.log(res);
-            commit('newDislike', res)
-        //    this.like = res;
-        //    console.log(this.userId);
-        //    const userLike = JSON.parse(JSON.stringify(this.postLike));
-        //    console.log(this.userId == userLike.Likes[0].userId);
-        //    if(this.userId == userLike.Likes[0].userId) {            
-        //    this.activeLike = true;
-        //    }
-          })
-          .catch((err) => console.error(err));
-      },
 
-   
+    let response = await fetch(`http://localhost:3000/api/posts/${payload.postId}/like`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    })
+
+    let data = await response.json()
+    console.log("data||like", data)
+    commit('newLike', data)
+  },
+
+  //add a dislike
+  async addDislike({ commit }, payload) {
+    console.log("payload", payload)
+
+
+    const response = await fetch(`http://localhost:3000/api/posts/${payload.postId}/dislike`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    })
+
+    let data = await response.json()
+    console.log("data||dislike", data)
+    commit('newDislike', data)
+  },
+
+
 };
 
 const mutations = {
-    //add a like
-    newLike: (state, like) => {
-        state.likes.unshift(like)
-    },
+  //add a like
+  newLike: (state, like) => {
+    state.likes.unshift(like)
+  },
 
-    //add a dislike
-    newDislike: (state, dislike) => {
-        state.likes.unshift(dislike)
-    }
+  //add a dislike
+  newDislike: (state, dislike) => {
+    state.likes.unshift(dislike)
+  }
 
 };
 
 export default {
-    state,
-    getters,
-    actions,
-    mutations
+  state,
+  getters,
+  actions,
+  mutations
 }

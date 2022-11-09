@@ -5,11 +5,11 @@ exports.likePost = async (req, res) => {
     const userId = await database.User.findOne({
         where: { id: req.user.userId }
     })
-    console.log("likePost||userId", userId.id)
+    console.log("likePost||userId", userId)
     const postId = await database.Post.findOne({
         where: { id: req.params.id }
     })
-    console.log("likePost||post", postId.id)
+    console.log("likePost||post", postId)
     if (!postId) {
         return res.status(404).send({ message: "post inconnu" })
     }

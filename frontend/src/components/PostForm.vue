@@ -1,6 +1,6 @@
 <template>
   <!--to write a new message -->
-  <section id="card" class="card_writing">
+  <section id="card" class="card_writing" enctype="multipart/form-data">
     <h2><i class="fas fa-feather-alt"></i> écrire un nouveau message</h2>
     <div class="post_form">
       <input
@@ -71,6 +71,9 @@ export default {
       },
     })
       .then((data) => {
+        if(data.redirect) {
+          this.$router.push({name: 'LogIn'})
+        }
         console.log("PostForm||user||data", data);
         this.user = data.user;
       })
@@ -102,7 +105,7 @@ export default {
         imageUrl: this.imageUrl
       })
     }
-//rajouter method verif
+
   //  addPost() { 
   /*  
 

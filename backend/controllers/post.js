@@ -30,8 +30,13 @@ charger le post dans la db en utilisant le modele
 ex: let newPost = await database.Post.findOne({where: { id: req.params.id }})
 ou dans le front (voir le store)
     */
+  let newPost = await database.Post.findOne({
+    where: { id: post.id }
+  })
+    console.log("post.id", post.id)
 
-    res.status(201).json({ post: post, message: "Votre message est publié" })
+
+    res.status(201).json({ post: newPost, message: "Votre message est publié" })
   } else {
     res.status(400).send({ error: "Erreur, votre message n'a pas pu être publié" })
   }

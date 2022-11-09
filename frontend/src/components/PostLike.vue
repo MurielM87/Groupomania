@@ -3,13 +3,13 @@
   <div class="post_like">
     <div class="like_thumbs">
         <div class="tooltip">
-        <i class="far fa-thumbs-up"  :class="{active : activeLike}" @click.prevent="addLike(post.id)">
+        <i class="far fa-thumbs-up"  :class="{ active : activeLike }" @click.prevent="addLike(post.id)">
           <div v-if="post.Likes.length">{{ post.Likes.length }}</div> 
         </i><span class="tooltiptext">J'aime</span>
       </div>
       
       <div class="tooltip">
-        <i class="far fa-thumbs-down" @click.prevent="addDislike(post.id)">
+        <i class="far fa-thumbs-down" :class="{ active: activeDislike }" @click.prevent="addDislike(post.id)">
           <div v-if="post.Dislikes.length">{{ post.Dislikes.length }}</div> 
         </i><span class="tooltiptext">Je n'aime pas</span>
       </div>      
@@ -32,6 +32,9 @@ export default {
       dislike: ref(0),
       postLike: this.post,
       activeLike: false,
+      postDislike: this.post,
+      activeDislike: false,
+      isLike: false,
     };
   },
   props: ["post"],
@@ -41,6 +44,30 @@ export default {
   methods: {
     //add a like
     ...mapActions(["addLike", "addDislike"]),
+
+    addLike(){
+      this.$store.dispatch("addLike", {
+        postId: this.post.id,
+        userId: this.userId,
+        active: this.activeLike
+      })
+      console.log("postId", this.post.id);
+      console.log("userId", this.userId);
+      if(this.isLike === true) {
+        return this.activeLike
+      }
+    },
+
+    addDislike(){
+      this.$store.dispatch("addDislike", {
+        postId: this.post.id,
+        userId : this.userId
+      })
+      console.log("postId", this.post.id);
+      console.log("userId", this.userId)
+    }
+
+
   /*  async addLike(postId) {
       console.log(postId)
       
@@ -148,8 +175,26 @@ export default {
   color: black;
   padding-left: 15px;
 }
-.active {
+.fa-thumbs-up {
+  &:hover{
+    color: green;
+  }
+}
+.fa-thumbs-down {
+  &:hover {
+    color: red;
+  }
+}
+.activeLike {
   color: green;
+}
+
+.active {
+  color: blue;
+}
+
+.activeDislike {
+  color: red;
 }
 
 </style>

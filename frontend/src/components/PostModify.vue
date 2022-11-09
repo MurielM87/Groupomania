@@ -93,6 +93,8 @@ export default {
       this.tempImage = e.target.files[0];
       this.image = URL.createObjectURL(this.tempImage);
       console.log("image-target", this.image);
+      console.log("imageUrl", this.imageUrl);
+      console.log("TempImage", this.tempImage)
     },
 
     ...mapActions(['updatePost']),
@@ -102,11 +104,13 @@ export default {
       
       console.log("title", this.title)
       console.log("content", this.content)
-      console.log("imageUrl", this.imageUrl)
-      this.$store.dispatch("addPost", {
+      console.log("imageUrl", this.tempImage)
+      console.log("postId", this.modifyPost.id)
+      this.$store.dispatch("updatePost", {
+        postId: this.modifyPost.id,
         title: this.title, 
         content: this.content,
-        imageUrl: this.imageUrl
+        imageUrl: this.tempImage
       })
     }
       

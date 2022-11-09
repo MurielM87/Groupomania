@@ -30,13 +30,7 @@ const actions = {
 
     let data = await response.json()
     console.log(data)
-    commit('newComment', data.comment)
-    /*  .then((res) => res.json())
-      .then((res) => {
-        console.log("store||res", res);
-        commit('newComment', res)
-      })
-      .catch((err) => console.error(err));*/
+    commit('newComment', data.comment)    
     this.content = "";
 
   },
@@ -45,7 +39,7 @@ const actions = {
   async deleteComment({ commit }, commentId) {
     console.log("deleteComment", commentId)
     confirm("Voulez-vous vraiment supprimer ce commentaire ?");
-    fetch(`http://localhost:3000/api/posts/comment/${commentId}`, {
+    let response = await fetch(`http://localhost:3000/api/posts/comment/${commentId}`, {
       method: "DELETE",
       credentials: "include",
       headers: {
@@ -53,14 +47,11 @@ const actions = {
         Authorization: `Bearer ${this.token}`,
       },
     })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("delete comment")
-        commit('removeComment', res)
-      })
-      .catch((err) => console.log(err));
-  },
 
+    let data = await response.json()
+    console.log(data)
+    commit('removeComment', data.comment)
+  },
 };
 
 const mutations = {

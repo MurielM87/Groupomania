@@ -34,7 +34,7 @@ const actions = {
   },
 
   //add a post
-  async addPost({ commit}, payload ) {
+  async addPost({ commit }, payload ) {
     console.log("payload", payload)  
     
     let response = await fetch(`http://localhost:3000/api/posts/add`, {
@@ -56,12 +56,6 @@ const actions = {
     console.log("data||content", data.post.content)
     console.log("data||imageUrl", data.post.imageUrl)
     commit('newPost', data.post)
-    /*  .then((res) => {       
-        console.log("PostForm||res", res);
-        commit('newPost', res)
-      })
-      .catch((err) => console.log(err))*/
-
   },
 
   //delete a post
@@ -90,8 +84,9 @@ const actions = {
   //update a post
   async updatePost({commit}, payload) {
     console.log("payload", payload)  
-    
-    let response = await fetch(`http://localhost:3000/api/posts/:id`, {
+    console.log("postId", payload.postId)
+
+    let response = await fetch(`http://localhost:3000/api/posts/${payload.postId}`, {
       method: "PUT",
       credentials: "include",
       headers: {
@@ -105,11 +100,11 @@ const actions = {
       }),
     })
     let data = await response.json()
-    console.log("data", data.post)
-    console.log("data||title", data.post.title)
-    console.log("data||content", data.post.content)
-    console.log("data||imageUrl", data.post.imageUrl)
-    commit('modifyPost', data.post)
+    console.log("data", data.newPost)
+    console.log("data||title", data.newPost.title)
+    console.log("data||content", data.newPost.content)
+    console.log("data||imageUrl", data.newPost.imageUrl)
+    commit('updatePost', data.newPost)
   }
 };
 console.log("actions", actions)

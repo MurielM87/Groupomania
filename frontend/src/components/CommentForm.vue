@@ -34,6 +34,10 @@ export default {
     ...mapActions(["addComment"]),
 
     newComment () {
+      if (this.content === "") {
+        return;
+      }
+      
       console.log("content", this.content)
       console.log("postId", this.post.id)
       this.$store.dispatch("addComment", {
