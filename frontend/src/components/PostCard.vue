@@ -5,6 +5,7 @@
     :modifyPost="post"
   />
   <article id="card_post">
+    <div>NOM {{ post.User.pseudo }}</div>
     <!--informations from the author of the post-->
     <router-link :to="`/profil/${post.User.id}`">
       <div id="post_author">
@@ -37,10 +38,11 @@
           v-if="post.imageUrl"
           :src="`http://localhost:3000/images/${post.imageUrl}`"
           crossorigin="anonymous"
+          class="post_img"
         />
       </div>
       <!--add the datetime -->
-      <div class="post_date">
+     <div class="post_date">
         <p>publié le {{ datePost(post.createdAt) }}</p>
         <p v-if="this.post.updatedAt !== this.post.createdAt">
           modifié le {{ datePost(post.updatedAt) }}
@@ -50,7 +52,7 @@
     <br />
 
     <!--add the buttons 'modify' and 'delete' to the published post-->
-    <div v-if="post.User.id == userId || userId.isAdmin == true">
+    <div v-if="user.id == post.User.id || post.User.isAdmin == true">      
       <button
         id="post_modify"
         class="form_btn"
@@ -71,13 +73,13 @@
       </button>
     </div>
 
-    <div class="separate_barre"></div>
+    <div class="separate_barre"></div> 
 
     <!-- add like to the post-->
-    <PostLike :post="post" />
+<!--    <PostLike :post="post" /> -->
 
     <!--add a comment to the post -->
-    <CommentCard :post="post" />
+    <CommentCard :post="post" /> 
   </article>
 </template>
 
@@ -85,7 +87,7 @@
 import { ref } from "vue";
 import { mapGetters, mapActions } from "vuex";
 import PostModify from "./PostModify.vue";
-import PostLike from "./PostLike.vue";
+//import PostLike from "./PostLike.vue";
 import CommentCard from "./CommentCard.vue";
 
 export default {
@@ -93,7 +95,7 @@ export default {
   props: ["post", "comment", "user"],
   components: {
     PostModify,
-    PostLike,
+    //PostLike,
     CommentCard,
   },
   emit: ["input"],
@@ -222,7 +224,9 @@ h4 {
 #card_post p {
   text-align: justify;
 }
-
+.post_img{
+  max-height: 250px;
+}
 .post_date {
   font-size: 13px;
   display: flex;

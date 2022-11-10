@@ -28,11 +28,8 @@ console.log("user", user)
       imageUrl: pushToImg,
       UserId: req.user.userId,
     }) 
-    /*
-charger le post dans la db en utilisant le modele
-ex: let newPost = await database.Post.findOne({where: { id: req.params.id }})
-ou dans le front (voir le store)
-    */
+
+    
   let newPost = await database.Post.findOne({
     where: { id: post.id }
   })

@@ -1,6 +1,6 @@
 <template>
   <!--to write a new message -->
-  <section id="card" class="card_writing" enctype="multipart/form-data">
+  <section id="card" class="card_writing">
     <h2><i class="fas fa-feather-alt"></i> écrire un nouveau message</h2>
     <div class="post_form">
       <input
@@ -59,27 +59,26 @@ export default {
     };
   },
   
-  //get the user by id
-  async mounted() {
-    await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+  mounted() {
+    fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
       methods: "GET",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json",    
-        "Authorization": `Bearer ${this.token}`,
+        Accept: "application/json",
+        Authorization: `Bearer ${this.token}`,
       },
     })
+      .then((res) => res.json())
       .then((data) => {
         if(data.redirect) {
           this.$router.push({name: 'LogIn'})
         }
         console.log("PostForm||user||data", data);
-        this.user = data.user;
+        this.user = data;
       })
       .catch((err) => console.log(err));
   },
-
   
   methods: {
     ...mapActions(['addPost']),
@@ -102,8 +101,12 @@ export default {
       this.$store.dispatch("addPost", {
         title: this.title, 
         content: this.content,
-        imageUrl: this.imageUrl
+        imageUrl: this.imageUrl,
+        userId: this.userId,
+        pseudo: this.user.pseudo
       })
+
+    
     }
 
   //  addPost() { 

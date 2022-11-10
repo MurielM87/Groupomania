@@ -185,7 +185,8 @@ export default {
 .profil_image {
   text-align: center;
   width: 300px;
-  object-fit: contain;
+  height: 300px;
+  object-fit: cover;
   border-radius: 50%;
   margin-top: 10px;
   @media (min-width: 768px) and (max-width: 992px) {

@@ -4,12 +4,12 @@
     <h3>Commentaires <i class="fas fa-comments"></i></h3>
 
     <!--get all comments -->
-    <p class="comment_title">
+<!--    <p class="comment_title">
       {{ post.Comments.length }} commentaire{{
         post.Comments.length > 1 ? "s" : ""
       }}
       publié{{ post.Comments.length > 1 ? "s" : "" }}
-    </p>
+    </p> -->
     <div
       class="comments_card"
       v-for="comment in post.Comments"
@@ -17,7 +17,7 @@
       :comments="comments"
       :comment="comment"
     >
-      <router-link
+<!--      <router-link
         :to="{ name: 'ProfilUser', params: { id: comment.User.id } }"
       >
         <div class="comment_author">
@@ -36,7 +36,7 @@
             {{ comment.User.pseudo }}
           </span>
         </div>
-      </router-link>
+      </router-link> -->
 
       <div class="comment_content">
         <p class="comment_text">
@@ -44,12 +44,12 @@
         </p>
         <br />
         <!--add the datetime -->
-        <div class="post_date">
+<!--        <div class="post_date">
           <p>publié le {{ dateComment(comment.createdAt) }}</p>
-        </div>
+        </div> -->
       </div>
 
-      <div>
+<!--      <div>
         <button
           v-if="comment.User.id == userId || userId.isAdmin == true"
           id="comment-delete"
@@ -59,7 +59,7 @@
         >
           <span>Supprimer </span><i class="far fa-trash-alt"></i>
         </button>
-      </div>
+      </div> -->
     </div>
 
     <!--write a comment -->

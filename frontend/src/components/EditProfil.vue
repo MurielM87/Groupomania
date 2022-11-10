@@ -173,7 +173,6 @@ export default {
           body: fd,
         })
         .then(() => {
-          alert("profil modifié");
           console.log("edit-profil||user", this.user);
           this.$router.push(`/profil/${this.userId}`);
         })

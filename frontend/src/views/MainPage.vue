@@ -11,7 +11,8 @@
     </div>
 
     <div class="post_card">
-      <h2>Nouvelles publications</h2>
+      <div class="separate_barre publishing"></div> 
+      <h2 class="title_publishing">Nouvelles publications</h2>
       <div class="post_column_center">
         <PostCard
           v-for="post in posts"
@@ -143,6 +144,17 @@ export default {
   border-radius: 20px;
   @media screen and (max-width: 768px) {
     display: none;
+  }
+}
+.title_publishing {
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+}
+.publishing {
+  display: none;
+  @media screen and (max-width: 768px) {
+    display: flex;
   }
 }
 img {

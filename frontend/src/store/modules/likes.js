@@ -1,10 +1,6 @@
 const state = {
-  like: 0,
   likes: [],
-  activeLike: true,
-  dislike: 0,
   dislikes: [],
-//  activeDislike: false,
 };
 
 const getters = {

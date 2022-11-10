@@ -1,9 +1,8 @@
+const fetchPostsUrl = `http://localhost:3000/api/posts`
+//const fetchUsersUrl = `http://localhost:3000/api/users`
+
+
 const state = {
-  post: {
-    title: "",
-    content: "",
-    imageUrl: "",
-  },
   posts: [],
 };
 console.log("state", state)
@@ -16,7 +15,7 @@ console.log("getters", getters)
 const actions = {
   //get all posts
   async getAllPosts({ commit }) {
-    await fetch(`http://localhost:3000/api/posts`, {
+    await fetch(fetchPostsUrl, {
       methods: "GET",
       credentials: "include",
       headers: {
@@ -34,25 +33,37 @@ const actions = {
   },
 
   //add a post
-  async addPost({ commit }, payload ) {
-    console.log("PAYLOAD STORE", payload)  
-  /*  const body = JSON.stringify({
-      title: payload.title,
-      content: payload.content,
-      imageUrl: payload.imageUrl.name
-    })
-    console.log('BODY', body)*/
+  async addPost({ commit }, payload) {
+    console.log("PAYLOAD STORE", payload)
 
     const fd = new FormData()
     fd.append("title", payload.title)
     fd.append("content", payload.content)
     fd.append("imageUrl", payload.imageUrl)
- 
+
     for (const pair of fd.entries()) {
       console.log(`${pair[0]}, ${pair[1]}`);
     }
 
-    let response = await fetch(`http://localhost:3000/api/posts/add`, {
+  /*  Promise.all([
+      fetch(fetchPostsUrl + `/add`, {
+        method: "POST", credentials: "include",
+        headers: { Accept: "application/json", "Authorization": `Bearer ${this.token}` },
+        body: fd
+      }),
+      fetch(fetchUsersUrl + `/profil/${payload.userId}`, { 
+        method: "GET", credentials: "include", headers: { Accept: "application/json", "Authorization": `Bearer ${this.token}` } })
+    ]).then((responses) => {
+      return Promise.all(responses.map((response) => {
+        return response.json()
+      }));
+    }).then((data) => {
+      console.log(data)
+      commit('newPost', data)
+    }).catch((err) => console.log(err))*/
+
+
+    let response = await fetch(fetchPostsUrl + `/add`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -61,12 +72,13 @@ const actions = {
       },
       body: fd
     })
-    let data = await response.json()
-    console.log("data", data.post)
-    console.log("data||title", data.post.title)
-    console.log("data||content", data.post.content)
-    console.log("data||imageUrl", data.post.imageUrl)
-    commit('newPost', data.post)
+     let data = await response.json()
+     console.log("data", data.post)
+     console.log("data||title", data.post.title)
+     console.log("data||content", data.post.content)
+     console.log("data||imageUrl", data.post.imageUrl)
+     commit('newPost', data.post)
+      payload.fd = ""
   },
 
   //delete a post
@@ -75,7 +87,7 @@ const actions = {
     const token = localStorage.getItem("token");
     console.log("store||deletePost||postId", postId);
     if (userId === userId && token === token) {
-      await fetch(`http://localhost:3000/api/posts/${postId}`, {
+      await fetch(fetchPostsUrl + `/${postId}`, {
         method: "DELETE",
         credentials: "include",
         headers: {
@@ -93,22 +105,31 @@ const actions = {
   },
 
   //update a post
-  async updatePost({commit}, payload) {
-    console.log("payload", payload)  
+  async updatePost({ commit }, payload) {
+    console.log("payload", payload)
     console.log("postId", payload.postId)
 
-    let response = await fetch(`http://localhost:3000/api/posts/${payload.postId}`, {
+    const post = {
+      postId: payload.postId,
+      title: payload.title,
+      content: payload.content,
+      imageUrl: payload.imageUrl,
+    };
+    console.log("ModifyPost||post", post);
+
+    const fd = new FormData();
+    fd.append("imageUrl", post.imageUrl);
+    fd.append("title", post.title);
+    fd.append("content", post.content);
+
+    let response = await fetch(fetchPostsUrl + `/${payload.postId}`, {
       method: "PUT",
       credentials: "include",
       headers: {
         Accept: "application/json",
         "Authorization": `Bearer ${this.token}`,
       },
-      body: JSON.stringify({
-        title: payload.title,
-        content: payload.content,
-        imageUrl: payload.imageUrl
-      }),
+      body: fd
     })
     let data = await response.json()
     console.log("data", data.newPost)
@@ -128,19 +149,20 @@ const mutations = {
 
   //add a post
   newPost: (state, post) => {
+    console.log("state", state)
     console.log("post", post)
     state.posts.unshift(post)
   },
 
   //delete a post
-//  removePost: (state, postId) => {
-//state.posts = state.posts.filter(post => postId == post.id)
-//  },
+  removePost: (state, postId) => {
+    state.posts = state.posts.splice(post => postId == post.id)
+  },
 
   //update a post
-//  updatePost: (state, postId) => {
-//    state.posts.push(post => postId == post.id )
-//  }
+  updatePost: (state, postId) => {
+    state.posts.push(post => postId == post.id)
+  }
 
 };
 console.log("mutations", mutations)
