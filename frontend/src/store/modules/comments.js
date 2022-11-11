@@ -16,11 +16,11 @@ const actions = {
     console.log("postId", payload.postId)
 
     const fd = new FormData()
-fd.append("content", payload.content)
-for (const pair of fd.entries()) {
+    fd.append("content", payload.content)
+    for (const pair of fd.entries()) {
       console.log(`${pair[0]}, ${pair[1]}`);
     }
-    
+
     let response = await fetch(`http://localhost:3000/api/posts/${payload.postId}/comment`, {
       method: "POST",
       credentials: "include",
@@ -33,8 +33,8 @@ for (const pair of fd.entries()) {
 
     let data = await response.json()
     console.log("data", data)
-    console.log("data||content", data.comment.content)
-    commit('newComment', data.comment)    
+    console.log("data||content", data.content)
+    commit('newComment', data.comment)
     this.content = "";
 
   },

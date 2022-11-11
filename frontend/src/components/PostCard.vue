@@ -76,7 +76,7 @@
     <div class="separate_barre"></div> 
 
     <!-- add like to the post-->
-<!--    <PostLike :post="post" /> -->
+    <PostLike :post="post" /> 
 
     <!--add a comment to the post -->
     <CommentCard :post="post" /> 
@@ -87,7 +87,7 @@
 import { ref } from "vue";
 import { mapGetters, mapActions } from "vuex";
 import PostModify from "./PostModify.vue";
-//import PostLike from "./PostLike.vue";
+import PostLike from "./PostLike.vue";
 import CommentCard from "./CommentCard.vue";
 
 export default {
@@ -95,7 +95,7 @@ export default {
   props: ["post", "comment", "user"],
   components: {
     PostModify,
-    //PostLike,
+    PostLike,
     CommentCard,
   },
   emit: ["input"],
