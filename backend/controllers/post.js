@@ -8,7 +8,7 @@ exports.createPost = async (req, res) => {
   const user = await database.User.findOne({
     where: { id: req.user.userId }
   })
-console.log("user", user)
+  console.log("user", user)
   if (user !== null) {
     console.log("req.file", req.file)
     if (req.file) {
@@ -27,63 +27,63 @@ console.log("user", user)
       content: req.body.content,
       imageUrl: pushToImg,
       UserId: req.user.userId,
-    }) 
+    })
 
-    
-  let newPost = await database.Post.findOne({
-    where: { id: post.id },
-    attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
-    order: [["createdAt", "DESC"]],
-    include: [
-      {
-        model: database.User,
-        attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-      },
-      {
-        model: database.Like,
-        attributes: ["id", "userId", "postId"],
-        include: [
-          {
-            model: database.User,
-            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
-          }
-        ],
-      },
-      {
-        model: database.Dislike,
-        attributes: ["id", "userId", "postId"],
-        include: [
-          {
-            model: database.User,
-            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
-          }
-        ],
-      },
-      {
-        model: database.Comment,
-        order: [["createdAt", "DESC"]],
-        attributes: ["id", "content", "postId", "userId", "createdAt"],
-        include: [
-          {
-            model: database.User,
-            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
-          }
-        ],
-      },
-    ],
-  })
+
+    let newPost = await database.Post.findOne({
+      where: { id: post.id },
+      attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
+      order: [["createdAt", "DESC"]],
+      include: [
+        {
+          model: database.User,
+          attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+        },
+        {
+          model: database.Like,
+          attributes: ["id", "userId", "postId"],
+          include: [
+            {
+              model: database.User,
+              attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+            },
+            {
+              model: database.Post,
+              attributes: ["id", "title", "content", "imageUrl", "userId"]
+            }
+          ],
+        },
+        {
+          model: database.Dislike,
+          attributes: ["id", "userId", "postId"],
+          include: [
+            {
+              model: database.User,
+              attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+            },
+            {
+              model: database.Post,
+              attributes: ["id", "title", "content", "imageUrl", "userId"]
+            }
+          ],
+        },
+        {
+          model: database.Comment,
+          order: [["createdAt", "DESC"]],
+          attributes: ["id", "content", "postId", "userId", "createdAt"],
+          include: [
+            {
+              model: database.User,
+              attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+            },
+            {
+              model: database.Post,
+              attributes: ["id", "title", "content", "imageUrl", "userId"]
+            }
+          ],
+        },
+      ],
+    })
     console.log("post.id", post.id)
 
 
@@ -278,12 +278,63 @@ exports.updatePost = async (req, res) => {
   //find the post by Id
   let newImageUrl
   const userId = await database.User.findOne({
-    where: { id: req.user.userId }
+    where: { id: req.user.userId },
+    attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
   })
   const post = await database.Post.findOne({
-    where: { id: req.params.id }
+    where: { id: req.params.id },
+    attributes: ["id", "title", "content", "imageUrl", "userId"],
+    include: [
+      {
+        model: database.User,
+        attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+      },
+      {
+        model: database.Like,
+        attributes: ["id", "postId", "userId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+      {
+        model: database.Dislike,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+      {
+        model: database.Comment,
+        attributes: ["id", "content", "postId", "userId"],
+        order: [["createdAt", "DESC"]],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+    ]
   })
-  if (userId.id === post.UserId || userId.isAdmin === true) {
+  if (userId.id === post.User.id || userId.isAdmin === true) {
     // if a file is in the request
     if (req.file) {
       newImageUrl = req.file.filename
@@ -322,14 +373,28 @@ exports.deletePost = async (req, res) => {
     where: { id: req.user.userId }
   })
   const post = await database.Post.findOne({
-    where: { id: req.params.id }
+    where: { id: req.params.id },
+    attributes: ["id", "title", "content", "imageUrl", "userId"],
+    include: [
+      {
+        model: database.User,
+        attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+      },
+    ]
   })
-  if (userId.id === post.UserId || userId.isAdmin === true) {
+  if (userId.id === post.User.id || userId.isAdmin === true) {
     if (post.imageUrl) {
       const filename = post.imageUrl.split("/images")[1]
       fs.unlink(`images/${filename}`, () => {
         database.Post.destroy({
-          where: { id: post.id }
+          where: { id: post.id },
+          attributes: ["id", "title", "content", "imageUrl", "userId"],
+          include: [
+            {
+              model: database.User,
+              attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+            },
+          ]
         })
         res.status(200).json({ message: "Post supprimé" })
       })

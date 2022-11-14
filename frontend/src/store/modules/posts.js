@@ -2,11 +2,20 @@ const fetchPostsUrl = `http://localhost:3000/api/posts`
 
 const state = {
   posts: [],
+  comment: {
+    content: ""
+  },
+  comments: [],
+  likes: [],
+  dislikes: [],
 };
 console.log("state", state)
 
 const getters = {
   posts: (state) => state.posts,
+  comments: (state) => state.comments,
+//  likes: (state) => state.likes,
+//  dislikes: (state) => state.dislikes
 };
 console.log("getters", getters)
 
@@ -139,15 +148,68 @@ const actions = {
       body: JSON.stringify({
         comment
       })
-
     })
 
     let data = await response.json()
-
-
     commit('newComment', data.comment)
     this.content = "";
+  },
 
+  //delete a comment
+  async deleteComment({ commit }, commentId) {
+    console.log("deleteComment", commentId)
+    confirm("Voulez-vous vraiment supprimer ce commentaire ?");
+    let response = await fetch(`http://localhost:3000/api/posts/comment/${commentId}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    })
+
+    let data = await response.json()
+    console.log(data)
+    commit('removeComment', data.comment)
+  },
+
+  //add a like
+  async addLike({ commit }, payload) {
+    console.log("payload", payload)
+
+    let response = await fetch(`http://localhost:3000/api/posts/${payload.postId}/like`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    })
+
+    let data = await response.json()
+    console.log("data||like", data)
+    commit('newLike', data)
+  },
+
+  //add a dislike
+  async addDislike({ commit }, payload) {
+    console.log("payload", payload)
+
+
+    const response = await fetch(`http://localhost:3000/api/posts/${payload.postId}/dislike`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    })
+
+    let data = await response.json()
+    console.log("data||dislike", data)
+    commit('newDislike', data)
   },
 };
 console.log("actions", actions)
@@ -180,10 +242,26 @@ const mutations = {
   //add a comment
   newComment: (state, comment) => {
     //ajouter comment dans le bon post du state posts
-    console.log("state||", this.store.posts)
-    console.log("comment||", comment)
-    //  state.comments.unshift(comment)
+    console.log("state||newComment", state)
+    console.log("comment||newComment", comment)
+    state.comments.unshift(comment)
   },
+
+  //delete a comment
+  removeComment: (state, commentId) => {
+    state.comments.splice(comment => commentId == comment.id)
+  },
+
+  //add a like
+  newLike: (state, like) => {
+    state.likes.unshift(like)
+  },
+
+  //add a dislike
+  newDislike: (state, dislike) => {
+    state.likes.unshift(dislike)
+  }
+
 
 };
 console.log("mutations", mutations)
