@@ -5,7 +5,6 @@
     :modifyPost="post"
   />
   <article id="card_post">
-    <div>NOM {{ post.User.pseudo }}</div>
     <!--informations from the author of the post-->
     <router-link :to="`/profil/${post.User.id}`">
       <div id="post_author">
@@ -110,6 +109,7 @@ export default {
     };
   },
 
+  
   methods: {
     //date of the post
     datePost(date) {

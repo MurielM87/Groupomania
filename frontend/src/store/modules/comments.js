@@ -11,33 +11,36 @@ const getters = {
 
 const actions = {
   //add a comment
-  async addComment({ commit }, payload) {
+ /* async addComment({ commit }, payload) {
     console.log("payload", payload)
     console.log("postId", payload.postId)
 
-    const fd = new FormData()
-    fd.append("content", payload.content)
-    for (const pair of fd.entries()) {
-      console.log(`${pair[0]}, ${pair[1]}`);
+    const comment = {
+      postId : payload.postId,
+      content: payload.content,
     }
+    console.log("comment", comment)
 
     let response = await fetch(`http://localhost:3000/api/posts/${payload.postId}/comment`, {
       method: "POST",
       credentials: "include",
       headers: {
-        Accept: "application/json",
+        "Content-Type": "application/json",
         Authorization: `Bearer ${this.token}`,
       },
-      body: fd
+      body: JSON.stringify({
+        comment
+      })
+      
     })
 
     let data = await response.json()
-    console.log("data", data)
-    console.log("data||content", data.content)
-    commit('newComment', data.comment)
+  
+  
+   commit('newComment', data.comment)
     this.content = "";
 
-  },
+  },*/
 
   //delete a comment
   async deleteComment({ commit }, commentId) {
@@ -60,11 +63,12 @@ const actions = {
 
 const mutations = {
   //add a comment
-  newComment: (state, comment) => {
-    console.log("state", state)
-    console.log("comment", comment)
-    state.comments.unshift(comment)
-  },
+/*  newComment: (state, comment) => {
+    //ajouter comment dans le bon post du state posts
+    console.log("state||", this.store.posts)
+    console.log("comment||", comment)
+  //  state.comments.unshift(comment)
+  },*/
 
   //delete a comment
   removeComment: (state, commentId) => {

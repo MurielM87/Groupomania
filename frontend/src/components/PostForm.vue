@@ -59,7 +59,7 @@ export default {
     };
   },
   
-  mounted() {
+  /*mounted() {
     fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
       methods: "GET",
       credentials: "include",
@@ -78,7 +78,7 @@ export default {
         this.user = data;
       })
       .catch((err) => console.log(err));
-  },
+  },*/
   
   methods: {
     ...mapActions(['addPost']),
@@ -103,9 +103,11 @@ export default {
         content: this.content,
         imageUrl: this.imageUrl,
         userId: this.userId,
-        pseudo: this.user.pseudo
       })
 
+      this.title = "",
+      this.content = "",
+      this.imageUrl = ""
     
     }
 

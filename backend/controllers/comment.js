@@ -14,13 +14,16 @@ exports.createComment = async (req, res) => {
         if (req.body.content === "") {
             return res.status(401).json({ error: "Veuillez remplir le champs" });
         } else {
+            console.log('post.id', post.id)
+            console.log('userId.id', userId.id)
+            console.log('req.body', req.body)
             database.Comment.create({
                 PostId: post.id,
                 UserId: userId.id,
-                content: req.body.content,
+                content: req.body.comment.content,
             })
             .then((response) => res.status(201).json({ message: "Commentaire ajouté !", comment: response }))
-            .catch((error) => res.status(400).json({ error: "Erreur, votre commentaire n'a pas pu être publié" }));
+            .catch((error) => res.status(400).json({ error: error }));
         }
     } else {
         res.status(500).send({ error })

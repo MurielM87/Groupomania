@@ -13,7 +13,6 @@ const actions = {
   async addLike({ commit }, payload) {
     console.log("payload", payload)
 
-
     let response = await fetch(`http://localhost:3000/api/posts/${payload.postId}/like`, {
       method: "POST",
       credentials: "include",

@@ -31,7 +31,58 @@ console.log("user", user)
 
     
   let newPost = await database.Post.findOne({
-    where: { id: post.id }
+    where: { id: post.id },
+    attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
+    order: [["createdAt", "DESC"]],
+    include: [
+      {
+        model: database.User,
+        attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+      },
+      {
+        model: database.Like,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+      {
+        model: database.Dislike,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+      {
+        model: database.Comment,
+        order: [["createdAt", "DESC"]],
+        attributes: ["id", "content", "postId", "userId", "createdAt"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Post,
+            attributes: ["id", "title", "content", "imageUrl", "userId"]
+          }
+        ],
+      },
+    ],
   })
     console.log("post.id", post.id)
 
