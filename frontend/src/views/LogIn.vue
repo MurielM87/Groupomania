@@ -1,49 +1,48 @@
 <template>
   <div id="login_container">
     <form id="login">
-    <div class="title_card">
-      <h2 class="card_title">Connexion</h2>
-      <router-link :to="{ name: 'SignUp' }"><h2>Inscription</h2></router-link>
-    </div>
+      <div class="title_card">
+        <h2 class="card_title">Connexion</h2>
+        <router-link :to="{ name: 'SignUp' }"><h2>Inscription</h2></router-link>
+      </div>
 
-    <label for="email">Email</label>
-    <br />
-    <input
-      v-model="email"
-      ref="email"
-      class="form-row_input"
-      type="text"
-      name="email"
-      contenteditable
-      spellcheck="false"
-      required
-    />
-    <br />
-    <p class="error_message">{{ emailErrorMessage }}</p>
-    <br />
-    <label for="password">Mot de passe</label>
-    <br />
-    <input
-      v-model="password"
-      v-on:bind="password"
-      ref="password"
-      class="form-row_input"
-      type="password"
-      name="password"
-      required
-    />
-    <br />
-    <p class="error_message">{{ passwordErrorMessage }}</p>
-    <br />
-    <input
-      type="submit"
-      class="button"
-      @click.prevent="logIn"
-      value="Connexion"
-    />
-  </form>
+      <label for="email">Email</label>
+      <br />
+      <input
+        v-model="email"
+        ref="email"
+        class="form-row_input"
+        type="text"
+        name="email"
+        contenteditable
+        spellcheck="false"
+        required
+      />
+      <br />
+      <p class="error_message">{{ emailErrorMessage }}</p>
+      <br />
+      <label for="password">Mot de passe</label>
+      <br />
+      <input
+        v-model="password"
+        v-on:bind="password"
+        ref="password"
+        class="form-row_input"
+        type="password"
+        name="password"
+        required
+      />
+      <br />
+      <p class="error_message">{{ passwordErrorMessage }}</p>
+      <br />
+      <input
+        type="submit"
+        class="button"
+        @click.prevent="logIn"
+        value="Connexion"
+      />
+    </form>
   </div>
-  
 </template>
 
 <script>
@@ -79,13 +78,13 @@ export default {
           .then((data) => {
             console.log(data);
             localStorage.setItem("token", data.token);
-            localStorage.setItem("userId", data.userId); 
-            this.$router.push("/"); 
+            localStorage.setItem("userId", data.userId);
+            this.$router.push("/");
           })
           .catch((error) => {
             console.log(error);
           });
-      }     
+      }
     },
   },
 };

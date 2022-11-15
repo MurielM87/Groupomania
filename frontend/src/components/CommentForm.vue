@@ -1,16 +1,18 @@
 <template>
-  <div class="btn_publish_comment">
-    <textarea
-      type="text"
-      class="comment_input"
-      v-model="content"
-      placeholder="laissez un commentaire"
-      rows="3"
-      required
-    ></textarea>
-    <button type="submit" @click.prevent="newComment(post.id)">
-      <span>Publier </span><i class="far fa-edit"></i>
-    </button>
+  <div>
+    <div class="btn_publish_comment">
+      <textarea
+        type="text"
+        class="comment_input"
+        v-model="content"
+        placeholder="laissez un commentaire"
+        rows="3"
+        required
+      ></textarea>
+      <button type="submit" @click.prevent="newComment(post.id)">
+        <span>Publier </span><i class="far fa-edit"></i>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -33,19 +35,19 @@ export default {
   methods: {
     ...mapActions(["addComment"]),
 
-    newComment () {
+    newComment() {
       if (this.content === "") {
         return;
       }
-      
-      console.log("content", this.content)
-      console.log("postId", this.post.id)
+
+      console.log("content", this.content);
+      console.log("postId", this.post.id);
       this.$store.dispatch("addComment", {
-        postId : this.post.id,
-        content: this.content
-      })
-    }
-  /*  addComment(postId) {
+        postId: this.post.id,
+        content: this.content,
+      });
+    },
+    /*  addComment(postId) {
       if (this.content === "") {
         return;
       } else {
@@ -78,7 +80,6 @@ export default {
 
   mounted() {
     this.getAllPosts;
-  }, 
-
+  },
 };
 </script>

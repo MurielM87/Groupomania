@@ -34,10 +34,10 @@
       <button
         @click.prevent="newPost"
         class="btn post-btn"
-        title="valider la publication">
+        title="valider la publication"
+      >
         <i class="far fa-edit"></i>Publier
       </button>
-      
     </div>
   </section>
 </template>
@@ -51,40 +51,19 @@ export default {
   emit: ["input"],
   data() {
     return {
-      token: localStorage.getItem('token'),
-      userId: localStorage.getItem('userId'),
+      token: localStorage.getItem("token"),
+      userId: localStorage.getItem("userId"),
       title: ref(""),
       content: ref(""),
       imageUrl: ref(""),
     };
   },
-  
-  /*mounted() {
-    fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-      methods: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${this.token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if(data.redirect) {
-          this.$router.push({name: 'LogIn'})
-        }
-        console.log("PostForm||user||data", data);
-        this.user = data;
-      })
-      .catch((err) => console.log(err));
-  },*/
-  
+
   methods: {
-    ...mapActions(['addPost']),
+    ...mapActions(["addPost"]),
 
     selectImage() {
-      this.$ref.fileInput.click()
+      this.$ref.fileInput.click();
     },
     //upload image
     uploadImg(e) {
@@ -92,27 +71,24 @@ export default {
       console.log("image-target", this.imageUrl);
     },
 
-    newPost () { 
-      if(this.title === "" || this.content === "") return;
-      
-      console.log("title", this.title)
-      console.log("content", this.content)
-      console.log("imageUrl", this.imageUrl)
+    newPost() {
+      if (this.title === "" || this.content === "") return;
+
+      console.log("title", this.title);
+      console.log("content", this.content);
+      console.log("imageUrl", this.imageUrl);
       this.$store.dispatch("addPost", {
-        title: this.title, 
+        title: this.title,
         content: this.content,
         imageUrl: this.imageUrl,
         userId: this.userId,
-      })
+      });
 
-      this.title = "",
-      this.content = "",
-      this.imageUrl = ""
-    
-    }
+      (this.title = ""), (this.content = ""), (this.imageUrl = "");
+    },
 
-  //  addPost() { 
-  /*  
+    //  addPost() {
+    /*  
 
       const fd = new FormData()
       fd.append("title", this.title)
@@ -122,7 +98,6 @@ export default {
       for (const pair of fd.entries()) {
         console.log(`${pair[0]}, ${pair[1]}`);
       }*/
-      
 
     /*  await fetch(`http://localhost:3000/api/posts/add`, {
           method: "POST",
@@ -141,18 +116,17 @@ export default {
           this.fd = data.post;
         })
         .catch((err) => console.log(err)) */
-  //    this.fd = "" 
-      
-  //  },  
-  }, 
+    //    this.fd = ""
+
+    //  },
+  },
 
   computed: mapGetters(["posts"]),
 
   created() {
     this.getAllPosts;
   },
-
-}
+};
 </script>
 
 <style lang="scss">
@@ -221,9 +195,13 @@ h2 {
 .fa-times-circle {
   font-size: 20px;
   margin: 2px;
-  background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
-              linear-gradient(127deg, rgba(209, 166, 14, 0.8), rgba(0,255,0,0) 70.71%),
-              linear-gradient(336deg, rgba(236, 147, 14, 0.8), rgba(0,0,255,0) 70.71%);
+  background: linear-gradient(
+      217deg,
+      rgba(255, 0, 0, 0.8),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(209, 166, 14, 0.8), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(236, 147, 14, 0.8), rgba(0, 0, 255, 0) 70.71%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

@@ -2,24 +2,32 @@
   <!-- add like to the post-->
   <div class="post_like">
     <div class="like_thumbs">
-        <div class="tooltip">
-        <i class="far fa-thumbs-up"  :class="{ like : activeLike }" @click.prevent="addLike(post.id)">
-          <div v-if="post.Likes.length">{{ post.Likes.length }}</div> 
-        </i><span class="tooltiptext">J'aime</span>
-      </div>
-      
       <div class="tooltip">
-        <i class="far fa-thumbs-down" :class="{ dislike: activeDislike }" @click.prevent="addDislike(post.id)">
-          <div v-if="post.Dislikes.length">{{ post.Dislikes.length }}</div> 
-        </i><span class="tooltiptext">Je n'aime pas</span>
-      </div>      
+        <i
+          class="far fa-thumbs-up"
+          :class="{ like: activeLike }"
+          @click.prevent="addLike(post.id)"
+        >
+          <div v-if="post.Likes.length">{{ post.Likes.length }}</div> </i
+        ><span class="tooltiptext">J'aime</span>
+      </div>
+
+      <div class="tooltip">
+        <i
+          class="far fa-thumbs-down"
+          :class="{ dislike: activeDislike }"
+          @click.prevent="addDislike(post.id)"
+        >
+          <div v-if="post.Dislikes.length">{{ post.Dislikes.length }}</div> </i
+        ><span class="tooltiptext">Je n'aime pas</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "PostLike",
@@ -39,34 +47,31 @@ export default {
   },
   props: ["post"],
 
- 
-
   methods: {
     //add a like
     ...mapActions(["addLike", "addDislike"]),
 
-    addLike(){
+    addLike() {
       this.$store.dispatch("addLike", {
         postId: this.post.id,
         userId: this.userId,
-      })
+      });
       console.log("postId", this.post.id);
       console.log("userId", this.userId);
-      this.activeLike = !this.activeLike
+      this.activeLike = !this.activeLike;
     },
 
-    addDislike(){
+    addDislike() {
       this.$store.dispatch("addDislike", {
         postId: this.post.id,
-        userId : this.userId
-      })
+        userId: this.userId,
+      });
       console.log("postId", this.post.id);
       console.log("userId", this.userId);
-      this.activeDislike = !this.activeDislike
-    }
+      this.activeDislike = !this.activeDislike;
+    },
 
-
-  /*  async addLike(postId) {
+    /*  async addLike(postId) {
       console.log(postId)
       
       const userId = localStorage.getItem("userId");
@@ -95,9 +100,9 @@ export default {
         })
         .catch((err) => console.error(err));
     },*/
-//this.like > 0 ? "activeLike" : ""
+    //this.like > 0 ? "activeLike" : ""
     //add a dislike
-  /*  addDislike(postId) {
+    /*  addDislike(postId) {
       const userId = localStorage.getItem("userId");
       console.log("PostCard||addDislike||postId", postId);
       console.log("PostCard||addDislike||userId", userId);
@@ -118,12 +123,12 @@ export default {
         })
         .catch((err) => console.error(err));
     },*/
-  //  watch() {      
-  //    this.activeLike = !this.activeLike;
-  //  }
+    //  watch() {
+    //    this.activeLike = !this.activeLike;
+    //  }
   },
 
-  computed: mapGetters(["likes", "dislikes"])
+  computed: mapGetters(["likes", "dislikes"]),
 };
 </script>
 
@@ -174,7 +179,7 @@ export default {
   padding-left: 15px;
 }
 .fa-thumbs-up {
-  &:hover{
+  &:hover {
     color: green;
   }
 }
@@ -190,5 +195,4 @@ export default {
 .dislike {
   color: red;
 }
-
 </style>

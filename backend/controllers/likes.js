@@ -30,20 +30,131 @@ exports.likePost = async (req, res) => {
         }
     })
     if(!like && dislike) {
-        return res.status(401).json({message: "pas possible"})
+        return res.status(401).json({message: "pas autorisé"})
     } else if (!like && !dislike) {
-        let newLike = await database.Like.create({
+        await database.Like.create({
             UserId: userId.id,
             PostId: postId.id,
             isLike: true,
         });
-        return res.json(newLike);
+
+        let newPost = await database.Post.findOne({
+            where: { id: req.params.id },
+            attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
+            order: [["createdAt", "DESC"]],
+            include: [
+              {
+                model: database.User,
+                attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+              },
+              {
+                model: database.Like,
+                attributes: ["id", "userId", "postId"],
+                include: [
+                  {
+                    model: database.User,
+                    attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+                  },
+                  {
+                    model: database.Post,
+                    attributes: ["id", "title", "content", "imageUrl", "userId"]
+                  }
+                ],
+              },
+              {
+                model: database.Dislike,
+                attributes: ["id", "userId", "postId"],
+                include: [
+                  {
+                    model: database.User,
+                    attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+                  },
+                  {
+                    model: database.Post,
+                    attributes: ["id", "title", "content", "imageUrl", "userId"]
+                  }
+                ],
+              },
+              {
+                model: database.Comment,
+                order: [["createdAt", "DESC"]],
+                attributes: ["id", "content", "postId", "userId", "createdAt"],
+                include: [
+                  {
+                    model: database.User,
+                    attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+                  },
+                  {
+                    model: database.Post,
+                    attributes: ["id", "title", "content", "imageUrl", "userId"]
+                  }
+                ],
+              },
+            ],
+          })
+          console.log("POST.ID", req.params.id)
+        return res.status(201).json({message: "add like", post: newPost});
     } else {
         await database.Like.destroy({
             where: { id: like.id },
+        })
 
-        });
-        return res.json({ message: "delete like" });
+        let newPost = await database.Post.findOne({
+            where: { id: req.params.id },
+            attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
+            order: [["createdAt", "DESC"]],
+            include: [
+              {
+                model: database.User,
+                attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+              },
+              {
+                model: database.Like,
+                attributes: ["id", "userId", "postId"],
+                include: [
+                  {
+                    model: database.User,
+                    attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+                  },
+                  {
+                    model: database.Post,
+                    attributes: ["id", "title", "content", "imageUrl", "userId"]
+                  }
+                ],
+              },
+              {
+                model: database.Dislike,
+                attributes: ["id", "userId", "postId"],
+                include: [
+                  {
+                    model: database.User,
+                    attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+                  },
+                  {
+                    model: database.Post,
+                    attributes: ["id", "title", "content", "imageUrl", "userId"]
+                  }
+                ],
+              },
+              {
+                model: database.Comment,
+                order: [["createdAt", "DESC"]],
+                attributes: ["id", "content", "postId", "userId", "createdAt"],
+                include: [
+                  {
+                    model: database.User,
+                    attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+                  },
+                  {
+                    model: database.Post,
+                    attributes: ["id", "title", "content", "imageUrl", "userId"]
+                  }
+                ],
+              },
+            ],
+          })
+          console.log("POST.ID", req.params.id)
+        return res.status(201).json({message: "delete like", post: newPost});
     }
 },
 
@@ -79,17 +190,126 @@ exports.dislikePost= async (req, res) => {
     if(like && !dislike) {
         return res.status(401).json({message: "pas possible"})
     } else if (!dislike && !like) {
-        let newDislike = await database.Dislike.create({
+        await database.Dislike.create({
             UserId: userId.id,
             PostId: postId.id,
             isDislike: true,
-        });
-        return res.json(newDislike);
+        })
+        let newPost = await database.Post.findOne({
+            where: { id: req.params.id },
+            attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
+            order: [["createdAt", "DESC"]],
+            include: [
+              {
+                model: database.User,
+                attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+              },
+              {
+                model: database.Like,
+                attributes: ["id", "userId", "postId"],
+                include: [
+                  {
+                    model: database.User,
+                    attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+                  },
+                  {
+                    model: database.Post,
+                    attributes: ["id", "title", "content", "imageUrl", "userId"]
+                  }
+                ],
+              },
+              {
+                model: database.Dislike,
+                attributes: ["id", "userId", "postId"],
+                include: [
+                  {
+                    model: database.User,
+                    attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+                  },
+                  {
+                    model: database.Post,
+                    attributes: ["id", "title", "content", "imageUrl", "userId"]
+                  }
+                ],
+              },
+              {
+                model: database.Comment,
+                order: [["createdAt", "DESC"]],
+                attributes: ["id", "content", "postId", "userId", "createdAt"],
+                include: [
+                  {
+                    model: database.User,
+                    attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+                  },
+                  {
+                    model: database.Post,
+                    attributes: ["id", "title", "content", "imageUrl", "userId"]
+                  }
+                ],
+              },
+            ],
+          })
+          console.log("POST.ID", req.params.id)
+        return res.status(201).json({message: "add dislike", post: newPost});
     } else {
         await database.Dislike.destroy({
             where: { id: dislike.id },
-
-        });
-        return res.json({ message: "delete dislike" });
+        })
+        let newPost = await database.Post.findOne({
+            where: { id: req.params.id },
+            attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
+            order: [["createdAt", "DESC"]],
+            include: [
+              {
+                model: database.User,
+                attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+              },
+              {
+                model: database.Like,
+                attributes: ["id", "userId", "postId"],
+                include: [
+                  {
+                    model: database.User,
+                    attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+                  },
+                  {
+                    model: database.Post,
+                    attributes: ["id", "title", "content", "imageUrl", "userId"]
+                  }
+                ],
+              },
+              {
+                model: database.Dislike,
+                attributes: ["id", "userId", "postId"],
+                include: [
+                  {
+                    model: database.User,
+                    attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+                  },
+                  {
+                    model: database.Post,
+                    attributes: ["id", "title", "content", "imageUrl", "userId"]
+                  }
+                ],
+              },
+              {
+                model: database.Comment,
+                order: [["createdAt", "DESC"]],
+                attributes: ["id", "content", "postId", "userId", "createdAt"],
+                include: [
+                  {
+                    model: database.User,
+                    attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+                  },
+                  {
+                    model: database.Post,
+                    attributes: ["id", "title", "content", "imageUrl", "userId"]
+                  }
+                ],
+              },
+            ],
+          })
+          console.log("POST.ID", req.params.id)
+        return res.status(201).json({message: "delete dislike", post: newPost});
     }
 }

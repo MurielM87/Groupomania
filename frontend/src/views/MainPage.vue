@@ -1,34 +1,36 @@
 <template>
-  <h2>
-    Bonjour <span id="user_name">{{ user.pseudo }}</span>
-  </h2>
-  <section id="posts">
-    <div class="post_column">
-      <PostForm :post="post" />
-      <div class="profil_column">
-        <UsersProfil />
+  <div>
+    <h2>
+      Bonjour <span id="user_name">{{ user.pseudo }}</span>
+    </h2>
+    <section id="posts">
+      <div class="post_column">
+        <PostForm :post="post" />
+        <div class="profil_column">
+          <UsersProfil />
+        </div>
       </div>
-    </div>
 
-    <div class="post_card">
-      <div class="separate_barre publishing"></div> 
-      <h2 class="title_publishing">Nouvelles publications</h2>
-      <div class="post_column_center">
-        <PostCard
-          v-for="post in posts"
-          :key="post.id"
-          :post="post"
-          :comment="comment"
-          :user="user"
-        />
+      <div class="post_card">
+        <div class="separate_barre publishing"></div>
+        <h2 class="title_publishing">Nouvelles publications</h2>
+        <div class="post_column_center">
+          <PostCard
+            v-for="post in posts"
+            :key="post.id"
+            :post="post"
+            :comment="comment"
+            :user="user"
+          />
+        </div>
       </div>
-    </div>
 
-    <!-- Bouton Scroll to Top-->
-    <button class="toTop" @click="toTop" title="Retour en haut de page">
-      <span class="fa fa-chevron-up"></span>
-    </button>
-  </section>
+      <!-- Bouton Scroll to Top-->
+      <button class="toTop" @click="toTop" title="Retour en haut de page">
+        <span class="fa fa-chevron-up"></span>
+      </button>
+    </section>
+  </div>
 </template>
 
 <script>
@@ -76,8 +78,8 @@ export default {
     })
       .then((res) => res.json())
       .then((data) => {
-        if(data.redirect) {
-          this.$router.push({name: 'LogIn'})
+        if (data.redirect) {
+          this.$router.push({ name: "LogIn" });
         }
         console.log("MainPage||user||data", data);
         this.user = data;
@@ -102,7 +104,6 @@ export default {
   created() {
     this.getAllPosts();
   },
-
 };
 </script>
 

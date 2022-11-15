@@ -2,20 +2,11 @@ const fetchPostsUrl = `http://localhost:3000/api/posts`
 
 const state = {
   posts: [],
-  comment: {
-    content: ""
-  },
-  comments: [],
-  likes: [],
-  dislikes: [],
 };
 console.log("state", state)
 
 const getters = {
   posts: (state) => state.posts,
-  comments: (state) => state.comments,
-//  likes: (state) => state.likes,
-//  dislikes: (state) => state.dislikes
 };
 console.log("getters", getters)
 
@@ -63,9 +54,6 @@ const actions = {
     })
     let data = await response.json()
     console.log("data", data.post)
-    console.log("data||title", data.post.title)
-    console.log("data||content", data.post.content)
-    console.log("data||imageUrl", data.post.imageUrl)
     commit('newPost', data.post)
   },
 
@@ -95,7 +83,6 @@ const actions = {
   //update a post
   async updatePost({ commit }, payload) {
     console.log("payload", payload)
-    console.log("postId", payload.postId)
 
     const post = {
       postId: payload.postId,
@@ -121,9 +108,6 @@ const actions = {
     })
     let data = await response.json()
     console.log("data", data.newPost)
-    console.log("data||title", data.newPost.title)
-    console.log("data||content", data.newPost.content)
-    console.log("data||imageUrl", data.newPost.imageUrl)
     commit('updatePost', data.newPost)
   },
 
@@ -151,7 +135,7 @@ const actions = {
     })
 
     let data = await response.json()
-    commit('newComment', data.comment)
+    commit('newComment', data.post)
     this.content = "";
   },
 
@@ -170,7 +154,7 @@ const actions = {
 
     let data = await response.json()
     console.log(data)
-    commit('removeComment', data.comment)
+    commit('removeComment', data.post)
   },
 
   //add a like
@@ -244,12 +228,12 @@ const mutations = {
     //ajouter comment dans le bon post du state posts
     console.log("state||newComment", state)
     console.log("comment||newComment", comment)
-    state.comments.unshift(comment)
+    state.posts.unshift(comment)
   },
 
   //delete a comment
   removeComment: (state, commentId) => {
-    state.comments.splice(comment => commentId == comment.id)
+    state.posts.splice(comment => commentId == comment.id)
   },
 
   //add a like

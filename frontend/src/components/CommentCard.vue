@@ -46,7 +46,7 @@
         <!--add the datetime -->
         <div class="post_date">
           <p>publié le {{ dateComment(comment.createdAt) }}</p>
-        </div> 
+        </div>
       </div>
 
       <div>
@@ -59,7 +59,7 @@
         >
           <span>Supprimer </span><i class="far fa-trash-alt"></i>
         </button>
-      </div> 
+      </div>
     </div>
 
     <!--write a comment -->
@@ -78,7 +78,7 @@ export default {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
-    //  comments: ref([]),
+      //  comments: ref([]),
     };
   },
   components: { CommentForm },
@@ -126,8 +126,6 @@ export default {
   },
 
   computed: mapGetters(["comments"]),
-
-
 };
 </script>
 
@@ -154,7 +152,7 @@ export default {
   border: 1px solid #4e5166;
   border-radius: 10px;
   &:hover {
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     color: #fd2d01;
     border: 1px solid #fd2d01;
   }
