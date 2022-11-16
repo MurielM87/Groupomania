@@ -76,10 +76,12 @@
       <div class="separate_barre"></div>
 
       <!-- add like to the post-->
-      <PostLike :post="post" />
+      <PostLike 
+      :post="post" />
 
       <!--add a comment to the post -->
-      <CommentCard :post="post" />
+      <CommentCard       
+      :post="post" />
     </article>
   </div>
 </template>
@@ -134,36 +136,6 @@ export default {
     //delete a post
     ...mapActions(["deletePost"]),
 
-    /*    deletePost(postId) {
-      const userId = localStorage.getItem("userId");
-      const token = localStorage.getItem("token");
-      console.log("PostCard||deletePost", postId);
-      if (userId === userId && token === token) {
-        fetch(`http://localhost:3000/api/posts/${postId}`, {
-          method: "DELETE",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.token}`,
-          },
-        })
-          .then((res) => res.json())
-          .then((res) => {
-            confirm("Voulez-vous vraiment supprimer ce message ?");
-            if (res.redirect) {
-              this.$router.push({ name: "LogIn" });
-            }
-            if (res.status === 200) {
-              this.posts = this.posts.filter((post) => {
-                console.log("deletePost || postId", postId);
-                return post.id != postId;
-              });
-              this.getAllPosts();
-            }
-          })
-          .catch((err) => console.error(err));
-      }
-    },*/
   },
 
   computed: mapGetters(["posts"]),

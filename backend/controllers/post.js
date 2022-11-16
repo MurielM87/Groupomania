@@ -45,10 +45,6 @@ exports.createPost = async (req, res) => {
             {
               model: database.User,
               attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-            },
-            {
-              model: database.Post,
-              attributes: ["id", "title", "content", "imageUrl", "userId"]
             }
           ],
         },
@@ -59,10 +55,6 @@ exports.createPost = async (req, res) => {
             {
               model: database.User,
               attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-            },
-            {
-              model: database.Post,
-              attributes: ["id", "title", "content", "imageUrl", "userId"]
             }
           ],
         },
@@ -74,10 +66,6 @@ exports.createPost = async (req, res) => {
             {
               model: database.User,
               attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-            },
-            {
-              model: database.Post,
-              attributes: ["id", "title", "content", "imageUrl", "userId"]
             }
           ],
         },
@@ -110,10 +98,6 @@ exports.getOnePost = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -124,10 +108,6 @@ exports.getOnePost = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -139,10 +119,6 @@ exports.getOnePost = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -169,10 +145,6 @@ exports.getAllPosts = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -183,10 +155,6 @@ exports.getAllPosts = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -198,10 +166,6 @@ exports.getAllPosts = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId", "createdAt"]
           }
         ],
       },
@@ -298,10 +262,6 @@ exports.updatePost = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -312,10 +272,6 @@ exports.updatePost = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -327,10 +283,6 @@ exports.updatePost = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -380,10 +332,6 @@ exports.updatePost = async (req, res) => {
             {
               model: database.User,
               attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-            },
-            {
-              model: database.Post,
-              attributes: ["id", "title", "content", "imageUrl", "userId"]
             }
           ],
         },
@@ -394,10 +342,6 @@ exports.updatePost = async (req, res) => {
             {
               model: database.User,
               attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-            },
-            {
-              model: database.Post,
-              attributes: ["id", "title", "content", "imageUrl", "userId"]
             }
           ],
         },
@@ -409,10 +353,6 @@ exports.updatePost = async (req, res) => {
             {
               model: database.User,
               attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-            },
-            {
-              model: database.Post,
-              attributes: ["id", "title", "content", "imageUrl", "userId"]
             }
           ],
         },
@@ -446,10 +386,6 @@ exports.deletePost = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -460,10 +396,6 @@ exports.deletePost = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -475,10 +407,6 @@ exports.deletePost = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -508,10 +436,6 @@ exports.deletePost = async (req, res) => {
                 {
                   model: database.User,
                   attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-                },
-                {
-                  model: database.Post,
-                  attributes: ["id", "title", "content", "imageUrl", "userId"]
                 }
               ],
             },
@@ -522,10 +446,6 @@ exports.deletePost = async (req, res) => {
                 {
                   model: database.User,
                   attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-                },
-                {
-                  model: database.Post,
-                  attributes: ["id", "title", "content", "imageUrl", "userId"]
                 }
               ],
             },
@@ -537,10 +457,6 @@ exports.deletePost = async (req, res) => {
                 {
                   model: database.User,
                   attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-                },
-                {
-                  model: database.Post,
-                  attributes: ["id", "title", "content", "imageUrl", "userId"]
                 }
               ],
             },
@@ -570,10 +486,6 @@ exports.deletePost = async (req, res) => {
               {
                 model: database.User,
                 attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-              },
-              {
-                model: database.Post,
-                attributes: ["id", "title", "content", "imageUrl", "userId"]
               }
             ],
           },
@@ -584,10 +496,6 @@ exports.deletePost = async (req, res) => {
               {
                 model: database.User,
                 attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-              },
-              {
-                model: database.Post,
-                attributes: ["id", "title", "content", "imageUrl", "userId"]
               }
             ],
           },
@@ -599,10 +507,6 @@ exports.deletePost = async (req, res) => {
               {
                 model: database.User,
                 attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-              },
-              {
-                model: database.Post,
-                attributes: ["id", "title", "content", "imageUrl", "userId"]
               }
             ],
           },

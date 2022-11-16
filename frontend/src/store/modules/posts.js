@@ -3,12 +3,12 @@ const fetchPostsUrl = `http://localhost:3000/api/posts`
 const state = {
   posts: [],
 };
-console.log("state", state)
+
 
 const getters = {
   posts: (state) => state.posts,
 };
-console.log("getters", getters)
+
 
 const actions = {
   //get all posts
@@ -107,8 +107,8 @@ const actions = {
       body: fd
     })
     let data = await response.json()
-    console.log("data", data.newPost)
-    commit('updatePost', data.newPost)
+    console.log("data", data.post)
+    commit('updatePost', data.post)
   },
 
   //add a comment
@@ -153,7 +153,8 @@ const actions = {
     })
 
     let data = await response.json()
-    console.log(data)
+    console.log("data", data)
+    console.log("data.post", data.post)
     commit('removeComment', data.post)
   },
 
@@ -196,11 +197,15 @@ const actions = {
     commit('newDislike', data)
   },
 };
-console.log("actions", actions)
-
 
 
 const mutations = {
+  /*
+increment (state, payload){
+      return state.count = state.count + payload.amount;
+    },
+  */
+
   //get all posts
   setAllPosts: (state, posts) => {
     state.posts = posts
@@ -233,22 +238,24 @@ const mutations = {
 
   //delete a comment
   removeComment: (state, commentId) => {
+    console.log("mutation||state", state)
+    console.log("mutation||commentId", commentId)
     state.posts.splice(comment => commentId == comment.id)
   },
 
   //add a like
   newLike: (state, like) => {
-    state.likes.unshift(like)
+    state.posts.unshift(like)
   },
 
   //add a dislike
   newDislike: (state, dislike) => {
-    state.likes.unshift(dislike)
+    state.posts.unshift(dislike)
   }
 
 
 };
-console.log("mutations", mutations)
+
 export default {
   state,
   getters,

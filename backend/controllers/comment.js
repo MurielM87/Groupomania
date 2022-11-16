@@ -39,10 +39,6 @@ exports.createComment = async (req, res) => {
                       {
                         model: database.User,
                         attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-                      },
-                      {
-                        model: database.Post,
-                        attributes: ["id", "title", "content", "imageUrl", "userId"]
                       }
                     ],
                   },
@@ -53,10 +49,6 @@ exports.createComment = async (req, res) => {
                       {
                         model: database.User,
                         attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-                      },
-                      {
-                        model: database.Post,
-                        attributes: ["id", "title", "content", "imageUrl", "userId"]
                       }
                     ],
                   },
@@ -68,10 +60,6 @@ exports.createComment = async (req, res) => {
                       {
                         model: database.User,
                         attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-                      },
-                      {
-                        model: database.Post,
-                        attributes: ["id", "title", "content", "imageUrl", "userId"]
                       }
                     ],
                   },
@@ -96,15 +84,16 @@ exports.deleteComment = async (req, res) => {
         const comment = await database.Comment.findOne({
             where: { id: req.params.id },
         })
-        
+                
         if (userId.id === comment.UserId || userId.isAdmin === true) {
             database.Comment.destroy(
                 { where: { id: req.params.id } },
                 { truncate: true }
             )
-
+console.log("DELETECOMMENT||req.params.id", req.params)
+console.log("DELETECOMMENT||req.body", req.body)
             //renvoyer getOnePost
-            let newPost = getOnePost({
+            let newPost = database.Post.findOne({
                 where: { id: req.body.comment.postId },
                 attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
                 order: [["createdAt", "DESC"]],
@@ -120,10 +109,6 @@ exports.deleteComment = async (req, res) => {
                       {
                         model: database.User,
                         attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-                      },
-                      {
-                        model: database.Post,
-                        attributes: ["id", "title", "content", "imageUrl", "userId"]
                       }
                     ],
                   },
@@ -134,10 +119,6 @@ exports.deleteComment = async (req, res) => {
                       {
                         model: database.User,
                         attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-                      },
-                      {
-                        model: database.Post,
-                        attributes: ["id", "title", "content", "imageUrl", "userId"]
                       }
                     ],
                   },
@@ -149,10 +130,6 @@ exports.deleteComment = async (req, res) => {
                       {
                         model: database.User,
                         attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-                      },
-                      {
-                        model: database.Post,
-                        attributes: ["id", "title", "content", "imageUrl", "userId"]
                       }
                     ],
                   },

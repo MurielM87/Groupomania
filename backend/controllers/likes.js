@@ -54,10 +54,6 @@ exports.likePost = async (req, res) => {
                   {
                     model: database.User,
                     attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-                  },
-                  {
-                    model: database.Post,
-                    attributes: ["id", "title", "content", "imageUrl", "userId"]
                   }
                 ],
               },
@@ -68,10 +64,6 @@ exports.likePost = async (req, res) => {
                   {
                     model: database.User,
                     attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-                  },
-                  {
-                    model: database.Post,
-                    attributes: ["id", "title", "content", "imageUrl", "userId"]
                   }
                 ],
               },
@@ -83,10 +75,6 @@ exports.likePost = async (req, res) => {
                   {
                     model: database.User,
                     attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-                  },
-                  {
-                    model: database.Post,
-                    attributes: ["id", "title", "content", "imageUrl", "userId"]
                   }
                 ],
               },

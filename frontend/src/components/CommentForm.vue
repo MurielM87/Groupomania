@@ -47,36 +47,9 @@ export default {
         content: this.content,
       });
     },
-    /*  addComment(postId) {
-      if (this.content === "") {
-        return;
-      } else {
-        fetch(`http://localhost:3000/api/posts/${postId}/comment`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${this.token}`,
-          },
-          body: JSON.stringify({
-            content: this.content,
-          }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.redirect) {
-              this.$router.push({ name: "LogIn" });
-            }
-            console.log("CardForm||data", data);
-          })
-          .catch((err) => console.error(err));
-        this.content = "";
-      }
-    },*/
   },
 
-  computed: mapGetters(["comments"]),
+  computed: mapGetters(["posts"]),
 
   mounted() {
     this.getAllPosts;

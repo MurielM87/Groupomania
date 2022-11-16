@@ -1,5 +1,5 @@
 <template>
-  <div class="modal_background" v-if="revele">
+  <div class="modal_background" v-if="revele" >
     <div class="post_form">
       <h2>Modifier votre message</h2>
       <input
@@ -114,49 +114,6 @@ export default {
       });
     },
 
-    //modify post
-    /*  updatePost(postId) {
-      console.log(postId)
-      const token = localStorage.getItem("token")
-      const userId = localStorage.getItem("userId")
-
-      const post = {
-        postId: this.modifyPost.id,
-        title: this.title,
-        content: this.content,
-        imageUrl: this.tempImage,
-      };
-      console.log("ModifyPost||post", post);
-           
-      const fd = new FormData();
-      fd.append("imageUrl", post.imageUrl);
-      fd.append("title", post.title);
-      fd.append("content", post.content);
-
-      if(userId == userId && token == token) {
-        fetch(`http://localhost:3000/api/posts/${post.postId}`, {
-          method: "PUT",
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-            "Authorization": `Bearer ${this.token}`,
-          },
-          body: fd,
-        })
-        .then((res) => res.json())
-        .then((data) => {
-          if(data.redirect) {
-          this.$router.push({name: 'LogIn'})
-        }
-          console.log("ModifyPost||post", this.post);
-          this.$router.go();
-        })
-        .catch((error) => {
-          console.error(error)
-          console.warn("ModifyPost||FormData", fd);
-        });
-      }
-    }*/
   },
 
   computed: mapGetters(["posts"]),

@@ -1,21 +1,17 @@
 <template>
-  <!--add a comment to the post -->
   <div class="post_comments">
+    <!--add a comment to the post -->
     <h3>Commentaires <i class="fas fa-comments"></i></h3>
 
     <!--get all comments -->
     <p class="comment_title">
-      {{ post.Comments.length }} commentaire{{
-        post.Comments.length > 1 ? "s" : ""
-      }}
-      publié{{ post.Comments.length > 1 ? "s" : "" }}
+      {{ post.Comments.length }} commentaire{{post.Comments.length > 1 ? "s" : ""
+      }} publié{{ post.Comments.length > 1 ? "s" : "" }}
     </p>
     <div
       class="comments_card"
       v-for="comment in post.Comments"
       :key="comment.id"
-      :comments="comments"
-      :comment="comment"
     >
       <router-link
         :to="{ name: 'ProfilUser', params: { id: comment.User.id } }"
@@ -68,7 +64,7 @@
 </template>
 
 <script>
-//import { ref } from "vue";
+import { ref } from "vue";
 import { mapActions, mapGetters } from "vuex";
 import CommentForm from "./CommentForm.vue";
 
@@ -78,7 +74,7 @@ export default {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
-      //  comments: ref([]),
+        comments: ref([]),
     };
   },
   components: { CommentForm },
@@ -99,33 +95,10 @@ export default {
 
     //delete a comment from a post
     ...mapActions(["deleteComment"]),
-    //deleteComment(commentId) {
-    /*  confirm("Voulez-vous vraiment supprimer ce commentaire ?");
-      fetch(`http://localhost:3000/api/posts/comment/${commentId}`, {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.redirect) {
-            this.$router.push({ name: "LogIn" });
-          }
-          console.log("commentId", commentId);
-          this.comments = this.comments.splice((commentId) => {
-            console.log("deleteComment || commentId", commentId);
-            return this.comments;
-          });
-          this.getAllPosts;
-        })
-        .catch((err) => console.log(err));
-    },*/
+    
   },
 
-  computed: mapGetters(["comments"]),
+  computed: mapGetters(["posts"]),
 };
 </script>
 
@@ -173,7 +146,5 @@ textarea {
   margin-top: 5px;
   margin-bottom: 5px;
 }
-.btn_publish_comment {
-  margin-bottom: 10px;
-}
+
 </style>
