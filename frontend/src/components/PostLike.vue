@@ -122,16 +122,6 @@ export default {
   color: black;
   padding-left: 15px;
 }
-.fa-thumbs-up {
-  &:hover {
-    color: green;
-  }
-}
-.fa-thumbs-down {
-  &:hover {
-    color: red;
-  }
-}
 
 .like {
   color: green;

@@ -80,7 +80,7 @@
       :post="post" />
 
       <!--add a comment to the post -->
-      <CommentCard       
+      <CommentCard     
       :post="post" />
     </article>
   </div>

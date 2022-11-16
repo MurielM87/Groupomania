@@ -1,5 +1,5 @@
 <template>
-  <div class="post_comments">
+  <div class="post_comments" >
     <!--add a comment to the post -->
     <h3>Commentaires <i class="fas fa-comments"></i></h3>
 
@@ -51,7 +51,7 @@
           id="comment-delete"
           class="form_btn"
           title="Supprimer le commentaire"
-          @click.prevent="deleteComment(comment.id)"
+          @click.prevent="deleteComment(comment.id, post.id)"
         >
           <span>Supprimer </span><i class="far fa-trash-alt"></i>
         </button>
@@ -74,7 +74,7 @@ export default {
     return {
       token: localStorage.getItem("token"),
       userId: localStorage.getItem("userId"),
-        comments: ref([]),
+      comments: ref([]),
     };
   },
   components: { CommentForm },

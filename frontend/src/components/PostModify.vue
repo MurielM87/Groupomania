@@ -112,6 +112,7 @@ export default {
         content: this.content,
         imageUrl: this.tempImage,
       });
+      this.toggleModale()
     },
 
   },

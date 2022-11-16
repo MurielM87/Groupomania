@@ -46,6 +46,7 @@ export default {
         postId: this.post.id,
         content: this.content,
       });
+      (this.content = "")
     },
   },
 
@@ -56,3 +57,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.btn_publish_comment {
+  margin-bottom: 5px;
+}
+</style>
