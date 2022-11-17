@@ -1,14 +1,40 @@
 <template>
   <div>
     <div class="cube">
-      <img src="../assets/icon.png" class="side" id="front" />
-      <img src="../assets/icon.png" class="side" id="bottom" />
-      <img src="../assets/icon.png" class="side" id="top" />
-      <img src="../assets/icon.png" class="side" id="left" />
-      <img src="../assets/icon.png" class="side" id="right" />
-      <img src="../assets/icon.png" class="side" id="back" />
+      <img
+        id="front"
+        src="../assets/icon.png"
+        class="side"
+      >
+      <img
+        id="bottom"
+        src="../assets/icon.png"
+        class="side"
+      >
+      <img
+        id="top"
+        src="../assets/icon.png"
+        class="side"
+      >
+      <img
+        id="left"
+        src="../assets/icon.png"
+        class="side"
+      >
+      <img
+        id="right"
+        src="../assets/icon.png"
+        class="side"
+      >
+      <img
+        id="back"
+        src="../assets/icon.png"
+        class="side"
+      >
     </div>
-    <div id="not_found">Page Not Found error 404</div>
+    <div id="not_found">
+      Page Not Found error 404
+    </div>
   </div>
 </template>
 

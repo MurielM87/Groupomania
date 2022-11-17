@@ -2,58 +2,70 @@
   <div id="navbar">
     <header>
       <div v-if="isLoggedIn">
-        <router-link :to="{ name: 'MainPage' }"
-          ><img alt="logo Groupomania" src="../assets/icon.png" class="logo"
-        /></router-link>
+        <router-link :to="{ name: 'MainPage' }">
+          <img
+            alt="logo Groupomania"
+            src="../assets/icon.png"
+            class="logo"
+          >
+        </router-link>
       </div>
       <div v-else>
-        <img alt="logo Groupomania" src="../assets/icon.png" class="logo" />
+        <img
+          alt="logo Groupomania"
+          src="../assets/icon.png"
+          class="logo"
+        >
       </div>
 
       <div v-if="isLoggedIn">
-        <router-link :to="{ name: 'MainPage' }"
-          ><h1>Groupomania</h1></router-link
-        >
+        <router-link :to="{ name: 'MainPage' }">
+          <h1>Groupomania</h1>
+        </router-link>
       </div>
-      <h1 v-else>Groupomania</h1>
+      <h1 v-else>
+        Groupomania
+      </h1>
 
       <div id="barre">
-        <li v-if="isLoggedIn" class="menu">
+        <li
+          v-if="isLoggedIn"
+          class="menu"
+        >
           <ul>
             <router-link
-              :to="{ name: 'ProfilUser', params: { id: this.userId } }"
-              ><i class="fas fa-user-circle"
-                ><span class="text_desktop"> Mon profil</span></i
-              ></router-link
+              :to="{ name: 'ProfilUser', params: { id: userId } }"
             >
+              <i class="fas fa-user-circle"><span class="text_desktop"> Mon profil</span></i>
+            </router-link>
           </ul>
           <ul>
-            <router-link :to="{ name: 'LogIn' }" @click="this.logOut"
-              ><i class="fas fa-sign-out-alt"
-                ><span class="text_desktop"> Déconnexion</span></i
-              ></router-link
+            <router-link
+              :to="{ name: 'LogIn' }"
+              @click="logOut"
             >
+              <i class="fas fa-sign-out-alt"><span class="text_desktop"> Déconnexion</span></i>
+            </router-link>
           </ul>
         </li>
-        <li v-else class="menu">
+        <li
+          v-else
+          class="menu"
+        >
           <ul>
-            <router-link :to="{ name: 'LogIn' }"
-              ><i class="fas fa-sign-in-alt"
-                ><span class="text_desktop"> Connexion</span></i
-              ></router-link
-            >
+            <router-link :to="{ name: 'LogIn' }">
+              <i class="fas fa-sign-in-alt"><span class="text_desktop"> Connexion</span></i>
+            </router-link>
           </ul>
           <ul>
-            <router-link :to="{ name: 'SignUp' }"
-              ><i class="fas fa-user-plus"
-                ><span class="text_desktop"> Inscription</span></i
-              ></router-link
-            >
+            <router-link :to="{ name: 'SignUp' }">
+              <i class="fas fa-user-plus"><span class="text_desktop"> Inscription</span></i>
+            </router-link>
           </ul>
         </li>
       </div>
     </header>
-    <div class="barre_color"></div>
+    <div class="barre_color" />
   </div>
 </template>
 

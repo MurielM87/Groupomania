@@ -1,89 +1,99 @@
 <template>
-  <form id="profil_form" enctype="multipart/form-data">
+  <form
+    id="profil_form"
+    enctype="multipart/form-data"
+  >
     <h2>Modifier votre profil</h2>
 
     <div class="img">
       <div class="photo_icone">
-        <div v-if="!this.image">
-          <img src="../assets/avatar.png" alt="avatar" class="profil_image" />
+        <div v-if="!image">
+          <img
+            src="../assets/avatar.png"
+            alt="avatar"
+            class="profil_image"
+          >
         </div>
         <div v-else>
-          <img :src="image" class="profil_image" />
+          <img
+            :src="image"
+            class="profil_image"
+          >
         </div>
         <input
-          @change="uploadImg"
+          id="profil_image"
           type="file"
           name="imageUrl"
-          id="profil_image"
           accept=".jpeg, .jpg, .png, .webp"
-        />
+          @change="uploadImg"
+        >
       </div>
     </div>
 
-    <div class="separate_barre"></div>
+    <div class="separate_barre" />
 
     <div class="profil_informations">
       <div class="form-profil">
         <div class="form_group">
           <label for="pseudo">Pseudo : </label>
           <input
-            type="text"
+            id="pseudo"
             v-model="user.pseudo"
+            type="text"
             placeholder="votre pseudo"
             name="pseudo"
-            id="pseudo"
             class="form_input"
             required
-          />
+          >
         </div>
         <div class="form_group">
           <label for="firstname">Prénom : </label>
           <input
-            type="text"
+            id="firstname"
             v-model="user.firstname"
+            type="text"
             placeholder="votre prénom"
             name="firstname"
-            id="firstname"
             class="form_input"
             required
-          />
+          >
         </div>
         <div class="form_group">
           <label for="lastname">Nom : </label>
           <input
-            type="text"
+            id="lastname"
             v-model="user.lastname"
+            type="text"
             placeholder="votre nom"
             name="lastname"
-            id="lastname"
             class="form_input"
             required
-          />
+          >
         </div>
-        <br />
+        <br>
         <button
-          @click.prevent="updateProfil"
           class="form_btn"
           title="enregistrer les modifications"
           type="submit"
+          @click.prevent="updateProfil"
         >
-          <i class="fas fa-save"></i> Enregistrer
+          <i class="fas fa-save" /> Enregistrer
         </button>
         <button
-          @click.prevent="onCancel"
           class="form_btn"
           title="annuler les modifications"
           type="button"
+          @click.prevent="onCancel"
         >
-          <i class="fas fa-times-circle"></i> Annuler</button
-        ><br />
+          <i class="fas fa-times-circle" /> Annuler
+        </button><br>
 
         <button
           class="delete_btn"
-          @click.prevent="deleteUser"
           title="supprimer le compte"
+          @click.prevent="deleteUser"
         >
-          <i class="fas fa-trash-alt"></i>
+          <i class="fas fa-trash-alt" />
           Supprimer le compte
         </button>
       </div>

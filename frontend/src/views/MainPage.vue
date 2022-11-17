@@ -12,8 +12,10 @@
       </div>
 
       <div class="post_card">
-        <div class="separate_barre publishing"></div>
-        <h2 class="title_publishing">Nouvelles publications</h2>
+        <div class="separate_barre publishing" />
+        <h2 class="title_publishing">
+          Nouvelles publications
+        </h2>
         <div class="post_column_center">
           <PostCard
             v-for="post in posts"
@@ -26,8 +28,12 @@
       </div>
 
       <!-- Bouton Scroll to Top-->
-      <button class="toTop" @click="toTop" title="Retour en haut de page">
-        <span class="fa fa-chevron-up"></span>
+      <button
+        class="toTop"
+        title="Retour en haut de page"
+        @click="toTop"
+      >
+        <span class="fa fa-chevron-up" />
       </button>
     </section>
   </div>
@@ -87,6 +93,12 @@ export default {
       .catch((err) => console.log(err));
   },
 
+  computed: mapGetters(["posts"]),
+
+  created() {
+    this.getAllPosts();
+  },
+  
   methods: {
     ...mapActions(["getAllPosts"]),
 
@@ -99,11 +111,6 @@ export default {
     },
   },
 
-  computed: mapGetters(["posts"]),
-
-  created() {
-    this.getAllPosts();
-  },
 };
 </script>
 

@@ -5,22 +5,22 @@
     <!--user profile image -->
     <div id="photo_icone">
       <img
-        v-if="!this.user.imageUrl"
+        v-if="!user.imageUrl"
         :src="require('../assets/avatar.png')"
         alt="avatar"
         class="profil_image"
-      />
+      >
       <img
         v-else
         class="profil_image"
-        alt="avatar de {{this.user.pseudo}}"
+        alt="avatar"
         title="mon avatar"
-        :src="`http://localhost:3000/images/${this.user.imageUrl}`"
+        :src="`http://localhost:3000/images/${user.imageUrl}`"
         crossorigin="anonymous"
-      />
-      <div v-if="userValue == this.userId">
-        <router-link :to="`/profil/${this.userId}/edit`">
-          <i class="fas fa-pencil-alt"></i>
+      >
+      <div v-if="userValue == userId">
+        <router-link :to="`/profil/${userId}/edit`">
+          <i class="fas fa-pencil-alt" />
         </router-link>
       </div>
     </div>
@@ -31,25 +31,32 @@
       <div>{{ user.email }}</div>
     </div>
 
-    <div id="separation_barre"></div>
+    <div id="separation_barre" />
 
     <h2>
       {{ posts.length }} Message{{ posts.length > 1 ? "s" : "" }} publié{{
         posts.length > 1 ? "s" : ""
       }}
     </h2>
-    <div id="card" v-for="post in posts" :key="post.id" :posts="posts">
+    <div
+      v-for="post in posts"
+      id="card"
+      :key="post.id"
+      :posts="posts"
+    >
       <h3>{{ post.title }}</h3>
-      <p class="user_post_content">{{ post.content }}</p>
+      <p class="user_post_content">
+        {{ post.content }}
+      </p>
       <img
         v-if="post.imageUrl"
         :src="`http://localhost:3000/images/${post.imageUrl}`"
         crossorigin="anonymous"
-      />
+      >
       <!--add the datetime -->
       <div class="post_date">
         <p>publié le {{ datePost(post.createdAt) }}</p>
-        <br />
+        <br>
         <p v-if="post.updatedAt !== post.createdAt">
           - modifié le {{ datePost(post.updatedAt) }}
         </p>
@@ -57,8 +64,12 @@
     </div>
   </form>
   <!-- Bouton Scroll to Top-->
-  <button class="toTop" @click="toTop" title="Retour en haut de page">
-    <span class="fa fa-chevron-up"></span>
+  <button
+    class="toTop"
+    title="Retour en haut de page"
+    @click="toTop"
+  >
+    <span class="fa fa-chevron-up" />
   </button>
 </template>
 

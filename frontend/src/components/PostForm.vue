@@ -1,42 +1,45 @@
 <template>
   <!--to write a new message -->
-  <section id="card" class="card_writing">
-    <h2><i class="fas fa-feather-alt"></i> écrire un nouveau message</h2>
+  <section
+    id="card"
+    class="card_writing"
+  >
+    <h2><i class="fas fa-feather-alt" /> écrire un nouveau message</h2>
     <div class="post_form">
       <input
-        type="text"
         v-model="title"
+        type="text"
         class="post_title"
         placeholder="titre du message"
         required
-      />
+      >
       <textarea
-        type="text"
         v-model="content"
+        type="text"
         placeholder="message"
         rows="3"
         required
-      ></textarea>
+      />
       <!--add an image -->
       <div class="post_img">
         <input
-          @change="uploadImg"
-          type="file"
-          ref="fileInput"
           id="addContent"
+          ref="fileInput"
+          type="file"
           name="imageUrl"
           accept=".jpeg, .jpg, .png, .webp, .gif"
-        />
+          @change="uploadImg"
+        >
       </div>
-      <br />
+      <br>
 
       <!-- button to publish -->
       <button
-        @click.prevent="newPost"
         class="btn post-btn"
         title="valider la publication"
+        @click.prevent="newPost"
       >
-        <i class="far fa-edit"></i>Publier
+        <i class="far fa-edit" />Publier
       </button>
     </div>
   </section>
@@ -57,6 +60,12 @@ export default {
       content: ref(""),
       imageUrl: ref(""),
     };
+  },
+
+  computed: mapGetters(["posts"]),
+
+  created() {
+    this.getAllPosts;
   },
 
   methods: {
@@ -85,46 +94,7 @@ export default {
       });
 
       (this.title = ""), (this.content = ""), (this.imageUrl = "");
-    },
-
-    //  addPost() {
-    /*  
-
-      const fd = new FormData()
-      fd.append("title", this.title)
-      fd.append("content", this.content)
-      fd.append("imageUrl", this.imageUrl)
-   
-      for (const pair of fd.entries()) {
-        console.log(`${pair[0]}, ${pair[1]}`);
-      }*/
-
-    /*  await fetch(`http://localhost:3000/api/posts/add`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-            "Authorization": `Bearer ${this.token}`,
-          },
-          body: fd
-        })
-        .then((data) => {
-          if(data.redirect) {
-           this.$router.push({name: 'LogIn'})
-          }
-          console.log("PostForm||data", data);
-          this.fd = data.post;
-        })
-        .catch((err) => console.log(err)) */
-    //    this.fd = ""
-
-    //  },
-  },
-
-  computed: mapGetters(["posts"]),
-
-  created() {
-    this.getAllPosts;
+    }
   },
 };
 </script>

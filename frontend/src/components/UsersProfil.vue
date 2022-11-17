@@ -1,7 +1,11 @@
 <template>
   <div>
     <h2>{{ users.length }} Membre{{ users.length > 1 ? "s" : "" }}</h2>
-    <div id="profil_users" v-for="user in users" :key="user">
+    <div
+      v-for="user in users"
+      id="profil_users"
+      :key="user"
+    >
       <router-link :to="`/profil/${user.id}`">
         <div id="user">
           <div id="author_img">
@@ -10,14 +14,14 @@
               :src="require('../assets/avatar.png')"
               alt="avatar"
               class="author_avatar"
-            />
+            >
             <img
               v-else
               class="author_avatar"
               alt="avatar"
               :src="`http://localhost:3000/images/${user.imageUrl}`"
               crossorigin="anonymous"
-            />
+            >
           </div>
           <div class="user_name">
             <p>{{ user.pseudo }}</p>

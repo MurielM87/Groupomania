@@ -1,104 +1,122 @@
 <template>
   <div id="signup_container">
-    <form method="post" id="signup" class="card">
+    <form
+      id="signup"
+      method="post"
+      class="card"
+    >
       <div class="title_card">
-        <router-link :to="{ name: 'LogIn' }"><h2>Connexion</h2></router-link>
-        <h2 class="card_title">Inscription</h2>
+        <router-link :to="{ name: 'LogIn' }">
+          <h2>Connexion</h2>
+        </router-link>
+        <h2 class="card_title">
+          Inscription
+        </h2>
       </div>
       <div class="form-row">
         <label for="pseudo">Votre pseudo</label>
-        <br />
+        <br>
         <input
-          v-model="pseudo"
-          v-on:input="checkPseudo"
           ref="pseudo"
+          v-model="pseudo"
           class="form-row_input"
           type="text"
           name="pseudo"
           contenteditable
           spellcheck="false"
           required
-        />
-        <br />
-        <p class="error__message">{{ pseudoErrorMessage }}</p>
-        <br />
+          @input="checkPseudo"
+        >
+        <br>
+        <p class="error__message">
+          {{ pseudoErrorMessage }}
+        </p>
+        <br>
       </div>
       <div class="form-row">
         <label for="firstname">Prénom</label>
-        <br />
+        <br>
         <input
-          v-model="firstname"
-          v-on:input="checkfirstname"
           ref="firstname"
+          v-model="firstname"
           class="form-row_input"
           type="text"
           name="firstname"
           contenteditable
           spellcheck="false"
           required
-        />
-        <br />
-        <p class="error__message">{{ firstnameErrorMessage }}</p>
-        <br />
+          @input="checkfirstname"
+        >
+        <br>
+        <p class="error__message">
+          {{ firstnameErrorMessage }}
+        </p>
+        <br>
         <label for="lastname">Nom</label>
-        <br />
+        <br>
         <input
-          v-model="lastname"
-          v-on:input="checklastname"
           ref="lastname"
+          v-model="lastname"
           class="form-row_input"
           type="text"
           name="lastname"
           contenteditable
           spellcheck="false"
           required
-        />
-        <br />
-        <p class="error__message">{{ lastnameErrorMessage }}</p>
+          @input="checklastname"
+        >
+        <br>
+        <p class="error__message">
+          {{ lastnameErrorMessage }}
+        </p>
       </div>
       <div class="form-row">
         <label for="email">Email</label>
-        <br />
+        <br>
         <input
-          v-model="email"
-          v-on:input="checkEmail"
           ref="email"
+          v-model="email"
           class="form-row_input"
           type="text"
           name="email"
           contenteditable
           spellcheck="false"
           required
-        />
-        <br />
-        <p class="error__message">{{ emailErrorMessage }}</p>
-        <br />
+          @input="checkEmail"
+        >
+        <br>
+        <p class="error__message">
+          {{ emailErrorMessage }}
+        </p>
+        <br>
       </div>
       <div class="form-row">
         <label for="password">Mot de passe</label>
-        <br />
+        <br>
         <input
-          v-model="password"
-          v-on:input="checkPassword"
           ref="password"
+          v-model="password"
           class="form-row_input"
           name="password"
           type="password"
           contenteditable
           spellcheck="false"
           required
-        />
-        <br />
-        <p class="error__message">{{ passwordErrorMessage }}</p>
-        <br />
+          @input="checkPassword"
+        >
+        <br>
+        <p class="error__message">
+          {{ passwordErrorMessage }}
+        </p>
+        <br>
       </div>
       <div class="form-row">
         <input
-          @click.prevent="signUp"
           type="submit"
           class="button"
           value="Inscription"
-        />
+          @click.prevent="signUp"
+        >
       </div>
     </form>
   </div>

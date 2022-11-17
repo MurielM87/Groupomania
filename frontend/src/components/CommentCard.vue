@@ -1,17 +1,17 @@
 <template>
-  <div class="post_comments" >
+  <div class="post_comments">
     <!--add a comment to the post -->
-    <h3>Commentaires <i class="fas fa-comments"></i></h3>
+    <h3>Commentaires <i class="fas fa-comments" /></h3>
 
     <!--get all comments -->
     <p class="comment_title">
-      {{ post.Comments.length }} commentaire{{post.Comments.length > 1 ? "s" : ""
+      {{ post.Comments.length }} commentaire{{ post.Comments.length > 1 ? "s" : ""
       }} publié{{ post.Comments.length > 1 ? "s" : "" }}
     </p>
     <div
-      class="comments_card"
       v-for="comment in post.Comments"
       :key="comment.id"
+      class="comments_card"
     >
       <router-link
         :to="{ name: 'ProfilUser', params: { id: comment.User.id } }"
@@ -22,12 +22,12 @@
             :src="`http://localhost:3000/images/${comment.User.imageUrl}`"
             alt="avatar"
             crossorigin="anonymous"
-          />
+          >
           <img
             v-else
             :src="require('../assets/avatar.png')"
             alt="avatar par default"
-          />
+          >
           <span class="comment_author_pseudo">
             {{ comment.User.pseudo }}
           </span>
@@ -38,7 +38,7 @@
         <p class="comment_text">
           {{ comment.content }}
         </p>
-        <br />
+        <br>
         <!--add the datetime -->
         <div class="post_date">
           <p>publié le {{ dateComment(comment.createdAt) }}</p>
@@ -47,13 +47,13 @@
 
       <div>
         <button
-          v-if="comment.User.id == userId || userId.isAdmin == true"
+          v-if="comment.User.id == userId"
           id="comment-delete"
           class="form_btn"
           title="Supprimer le commentaire"
           @click.prevent="deleteComment(comment.id, post.id)"
         >
-          <span>Supprimer </span><i class="far fa-trash-alt"></i>
+          <span>Supprimer </span><i class="far fa-trash-alt" />
         </button>
       </div>
     </div>
@@ -64,21 +64,21 @@
 </template>
 
 <script>
-import { ref } from "vue";
 import { mapActions, mapGetters } from "vuex";
 import CommentForm from "./CommentForm.vue";
 
 export default {
   name: "CommentCard",
+  components: { CommentForm },
+  props: ["post"],
   data() {
     return {
       token: localStorage.getItem("token"),
-      userId: localStorage.getItem("userId"),
-      comments: ref([]),
+      userId: localStorage.getItem("userId")
     };
   },
-  components: { CommentForm },
-  props: ["post"],
+  computed: mapGetters(["posts"]),
+  
   methods: {
     //date of the comment
     dateComment(date) {
@@ -98,7 +98,6 @@ export default {
     
   },
 
-  computed: mapGetters(["posts"]),
 };
 </script>
 
@@ -108,11 +107,10 @@ export default {
   justify-content: flex-end;
 }
 .comments_card {
-  width: 80%;
+  width: 100%;
   background-color: #ffd7d7;
   border: 1px solid #4e5166;
   margin-bottom: 10px;
-  margin-left: auto;
   border-radius: 10px;
   padding: 10px;
 }

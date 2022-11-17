@@ -110,7 +110,7 @@ const actions = {
     }
     console.log("comment", comment)
 
-    await fetch(`http://localhost:3000/api/posts/${payload.postId}/comment`, {
+    await fetch(fetchPostsUrl + `/${payload.postId}/comment`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -128,7 +128,7 @@ const actions = {
   async deleteComment({ dispatch }, commentId) {
     console.log("deleteComment", commentId)
     confirm("Voulez-vous vraiment supprimer ce commentaire ?");
-    await fetch(`http://localhost:3000/api/posts/comment/${commentId}`, {
+    await fetch(fetchPostsUrl + `/comment/${commentId}`, {
       method: "DELETE",
       credentials: "include",
       headers: {
@@ -144,7 +144,7 @@ const actions = {
   async addLike({ dispatch }, payload) {
     console.log("payload", payload)
 
-    await fetch(`http://localhost:3000/api/posts/${payload.postId}/like`, {
+    await fetch(fetchPostsUrl + `/${payload.postId}/like`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -161,7 +161,7 @@ const actions = {
     console.log("payload", payload)
 
 
-    await fetch(`http://localhost:3000/api/posts/${payload.postId}/dislike`, {
+    await fetch(fetchPostsUrl + `/${payload.postId}/dislike`, {
       method: "POST",
       credentials: "include",
       headers: {

@@ -5,21 +5,17 @@
       <div class="tooltip">
         <i
           class="far fa-thumbs-up"
-          :class="{ like: activeLike }"
           @click.prevent="addLike(post.id)"
         >
-          <div v-if="post.Likes.length">{{ post.Likes.length }}</div> </i
-        ><span class="tooltiptext">J'aime</span>
+          <div v-if="post.Likes.length">{{ post.Likes.length }}</div></i><span class="tooltiptext">J'aime</span>
       </div>
 
       <div class="tooltip">
         <i
           class="far fa-thumbs-down"
-          :class="{ dislike: activeDislike }"
           @click.prevent="addDislike(post.id)"
         >
-          <div v-if="post.Dislikes.length">{{ post.Dislikes.length }}</div> </i
-        ><span class="tooltiptext">Je n'aime pas</span>
+          <div v-if="post.Dislikes.length">{{ post.Dislikes.length }}</div> </i><span class="tooltiptext">Je n'aime pas</span>
       </div>
     </div>
   </div>
@@ -32,6 +28,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "PostLike",
   emit: ["input"],
+  props: ["post"],
   data() {
     return {
       token: localStorage.getItem("token"),
@@ -45,7 +42,8 @@ export default {
       isLike: false,
     };
   },
-  props: ["post"],
+
+  computed: mapGetters(["posts"]),
 
   methods: {
     //add a like
@@ -56,9 +54,6 @@ export default {
         postId: this.post.id,
         userId: this.userId,
       });
-      console.log("postId", this.post.id);
-      console.log("userId", this.userId);
-      this.activeLike = !this.activeLike;
     },
 
     addDislike() {
@@ -66,13 +61,9 @@ export default {
         postId: this.post.id,
         userId: this.userId,
       });
-      console.log("postId", this.post.id);
-      console.log("userId", this.userId);
-      this.activeDislike = !this.activeDislike;
     },
   },
 
-  computed: mapGetters(["posts"]),
 };
 </script>
 
@@ -123,10 +114,4 @@ export default {
   padding-left: 15px;
 }
 
-.like {
-  color: green;
-}
-.dislike {
-  color: red;
-}
 </style>

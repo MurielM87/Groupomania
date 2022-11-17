@@ -15,14 +15,14 @@
               :src="require('../assets/avatar.png')"
               alt="avatar"
               class="author_avatar"
-            />
+            >
             <img
               v-else
               class="author_avatar"
               alt="avatar"
               :src="`http://localhost:3000/images/${post.User.imageUrl}`"
               crossorigin="anonymous"
-            />
+            >
           </div>
           <div class="author_name">
             <h4>{{ post.User.pseudo }}</h4>
@@ -39,27 +39,27 @@
             :src="`http://localhost:3000/images/${post.imageUrl}`"
             crossorigin="anonymous"
             class="post_img"
-          />
+          >
         </div>
         <!--add the datetime -->
         <div class="post_date">
           <p>publié le {{ datePost(post.createdAt) }}</p>
-          <p v-if="this.post.updatedAt !== this.post.createdAt">
+          <p v-if="post.updatedAt !== post.createdAt">
             modifié le {{ datePost(post.updatedAt) }}
           </p>
         </div>
       </div>
-      <br />
+      <br>
 
       <!--add the buttons 'modify' and 'delete' to the published post-->
-      <div v-if="user.id == post.User.id || post.User.isAdmin == true">
+      <div v-if="user.id == post.User.id || user.isAdmin == true">
         <button
           id="post_modify"
           class="form_btn"
           title="modifier le message"
           @click.prevent="toggleModale(post.id)"
         >
-          <i class="far fa-edit"></i>
+          <i class="far fa-edit" />
           <span class="btn_modify">Modifier</span>
         </button>
         <button
@@ -68,20 +68,22 @@
           title="supprimer le message"
           @click.prevent="deletePost(post.id)"
         >
-          <i class="far fa-trash-alt"></i>
+          <i class="far fa-trash-alt" />
           <span>Supprimer</span>
         </button>
       </div>
 
-      <div class="separate_barre"></div>
+      <div class="separate_barre" />
 
       <!-- add like to the post-->
       <PostLike 
-      :post="post" />
+        :post="post"
+      />
 
       <!--add a comment to the post -->
       <CommentCard     
-      :post="post" />
+        :post="post"
+      />
     </article>
   </div>
 </template>
@@ -95,12 +97,12 @@ import CommentCard from "./CommentCard.vue";
 
 export default {
   name: "PostCard",
-  props: ["post", "comment", "user"],
   components: {
     PostModify,
     PostLike,
     CommentCard,
   },
+  props: ["post", "comment", "user"],
   emit: ["input"],
   data() {
     return {
@@ -112,6 +114,7 @@ export default {
       postId: this.post.id,
     };
   },
+  computed: mapGetters(["posts"]),
 
   methods: {
     //date of the post
@@ -137,8 +140,6 @@ export default {
     ...mapActions(["deletePost"]),
 
   },
-
-  computed: mapGetters(["posts"]),
 };
 </script>
 
