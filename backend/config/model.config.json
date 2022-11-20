@@ -1,0 +1,25 @@
+{
+  "development": {
+    "username": "",
+    "password": "",
+    "database": "",
+    "host": "",
+    "dialect": "",
+    "timezone": ""
+
+  },
+  "test": {
+    "username": "",
+    "password": "",
+    "database": "",
+    "host": "",
+    "dialect": ""
+  },
+  "production": {
+    "username": "",
+    "password": "",
+    "database": "",
+    "host": "",
+    "dialect": ""
+  }
+}
