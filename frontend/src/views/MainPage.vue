@@ -1,17 +1,17 @@
 <template>
-  <h2>
-    Bonjour <span id="user_name">{{ user.pseudo }}</span>
-  </h2>
-  <section id="posts">
-    <div class="post_column">
-      <PostForm :post="post" />
-      <div class="profil_column">
-        <UsersProfil />
+  <div>
+    <h2>
+      Bonjour <span id="user_name">{{ user.pseudo }}</span>
+    </h2>
+    <section id="posts">
+      <div class="post_column">
+        <PostForm :post="post" />
+        <div class="profil_column">
+          <UsersProfil />
+        </div>
       </div>
-    </div>
 
-    <div class="post_card">
-      <div>
+      <div class="post_card">
         <PostCard
           v-for="post in posts"
           :key="post.id"
@@ -20,13 +20,13 @@
           :user="user"
         />
       </div>
-    </div>
 
-    <!-- Bouton Scroll to Top-->
-    <button class="toTop" @click="toTop" title="Retour en haut de page">
-      <span class="fa fa-chevron-up"></span>
-    </button>
-  </section>
+      <!-- Bouton Scroll to Top-->
+      <button class="toTop" title="Retour en haut de page" @click="toTop">
+        <span class="fa fa-chevron-up" />
+      </button>
+    </section>
+  </div>
 </template>
 
 <script>
@@ -43,7 +43,6 @@ export default {
     PostCard,
     UsersProfil,
   },
-
   data() {
     return {
       token: localStorage.getItem("token"),
@@ -139,6 +138,17 @@ export default {
   background-color: #fff;
   @media screen and (max-width: 768px) {
     display: none;
+  }
+}
+.title_publishing {
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+}
+.publishing {
+  display: none;
+  @media screen and (max-width: 768px) {
+    display: flex;
   }
 }
 img {

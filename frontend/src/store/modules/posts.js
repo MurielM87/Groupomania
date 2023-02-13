@@ -1,22 +1,19 @@
+const fetchPostsUrl = `http://localhost:3000/api/posts`
+
 const state = {
-  post: {
-    title: "",
-    content: "",
-    imageUrl: "",
-  },
   posts: [],
 };
-console.log("state", state)
+
 
 const getters = {
   posts: (state) => state.posts,
 };
-console.log("getters", getters)
+
 
 const actions = {
   //get all posts
   async getAllPosts({ commit }) {
-    await fetch(`http://localhost:3000/api/posts`, {
+    await fetch(fetchPostsUrl, {
       methods: "GET",
       credentials: "include",
       headers: {
@@ -56,35 +53,21 @@ const actions = {
     console.log("data||content", data.post.content)
     console.log("data||imageUrl", data.post.imageUrl)
     commit('newPost', data.post)
-    /*  .then((res) => {       
-        console.log("PostForm||res", res);
-        commit('newPost', res)
-      })
-      .catch((err) => console.log(err))*/
-
   },
 
   //delete a post
-  async deletePost({ commit }, postId) {
-    const userId = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
+  async deletePost({ dispatch }, postId) {
     console.log("store||deletePost||postId", postId);
-    if (userId === userId && token === token) {
-      await fetch(`http://localhost:3000/api/posts/${postId}`, {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          console.log("deletePost || res", res);
-          commit("removePost", res)
-        })
-        .catch((err) => console.error(err));
-    }
+
+    await fetch(fetchPostsUrl + `/${postId}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    })
+    await dispatch('getAllPosts')
   },
 
   //update a post
@@ -112,7 +95,7 @@ const actions = {
     commit('modifyPost', data.post)
   }
 };
-console.log("actions", actions)
+
 
 const mutations = {
   //get all posts
@@ -136,7 +119,7 @@ const mutations = {
   }
 
 };
-console.log("mutations", mutations)
+
 export default {
   state,
   getters,

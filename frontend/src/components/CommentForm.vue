@@ -1,15 +1,18 @@
 <template>
   <div class="btn_publish_comment">
     <textarea
+      v-model="content"
       type="text"
       class="comment_input"
-      v-model="content"
       placeholder="laissez un commentaire"
       rows="2"
       required
-    ></textarea>
-    <button type="submit" @click.prevent="newComment(post.id)">
-      <span>Publier </span><i class="far fa-edit"></i>
+    />
+    <button
+      type="submit"
+      @click.prevent="newComment(post.id)"
+    >
+      <span>Publier </span><i class="far fa-edit" />
     </button>
   </div>
 </template>
@@ -21,6 +24,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   name: "CommentForm",
   emit: ["input"],
+  props: ["post"],
   data() {
     return {
       token: localStorage.getItem("token"),
@@ -28,8 +32,13 @@ export default {
       content: ref(""),
     };
   },
-  props: ["post"],
 
+  computed: mapGetters(["posts"]),
+
+  mounted() {
+    this.getAllPosts;
+  },
+  
   methods: {
     ...mapActions(["addComment"]),
 
@@ -43,11 +52,11 @@ export default {
     }
   },
 
-  computed: mapGetters(["comments"]),
-
-  mounted() {
-    this.getAllPosts;
-  }, 
-
 };
 </script>
+
+<style lang="scss">
+.btn_publish_comment {
+  margin-bottom: 5px;
+}
+</style>

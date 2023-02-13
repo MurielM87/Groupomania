@@ -1,86 +1,73 @@
 <template>
-  <PostModify
-    :revele="revele"
-    :toggleModale="toggleModale"
-    :modifyPost="post"
-  />
-  <article id="card_post">
-    <!--informations from the author of the post-->
-    <router-link :to="`/profil/${post.User.id}`">
-      <div id="post_author">
-        <div id="author_img">
+  <div id="card_post">
+    <PostModify
+      :revele="revele"
+      :toggle-modale="toggleModale"
+      :modify-post="post"
+    />
+    <article>
+      <!--informations from the author of the post-->
+      <router-link :to="`/profil/${post.User.id}`">
+        <div id="post_author">
+          <div id="author_img">
+            <img
+              v-if="!post.User.imageUrl"
+              :src="require('../assets/avatar.png')"
+              alt="avatar"
+              class="author_avatar"
+            >
+            <img
+              v-else
+              class="author_avatar"
+              alt="avatar"
+              :src="`http://localhost:3000/images/${post.User.imageUrl}`"
+              crossorigin="anonymous"
+            >
+          </div>
+          <div class="author_name">
+            <h4>{{ post.User.pseudo }}</h4>
+          </div>
+        </div>
+      </router-link>
+      <!--content from the writing post -->
+      <div class="post_content">
+        <div class="post_description">
+          <div class="post_text">
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.content }}</p>
+          </div>
           <img
-            v-if="!post.User.imageUrl"
-            :src="require('../assets/avatar.png')"
-            alt="avatar"
-            class="author_avatar"
-          />
-          <img
-            v-else
-            class="author_avatar"
-            alt="avatar"
-            :src="`http://localhost:3000/images/${post.User.imageUrl}`"
+            v-if="post.imageUrl"
+            :src="`http://localhost:3000/images/${post.imageUrl}`"
             crossorigin="anonymous"
-          />
-        </div>
-        <div class="author_name">
-          <h4>{{ post.User.pseudo }}</h4>
+            class="post_img"
+          >
+        </div>            
+        
+        <!--add the datetime -->
+        <div class="post_date">
+          <p>publié le {{ datePost(post.createdAt) }}</p>
+          <p v-if="post.updatedAt !== post.createdAt">
+            modifié le {{ datePost(post.updatedAt) }}
+          </p>
         </div>
       </div>
-    </router-link>
     <!--content from the writing post -->
-    <div class="post_content">
-      <div class="post_description">
-        <div class="post_text">
-          <h3>{{ post.title }}</h3>
-          <p>{{ post.content }}</p>
-        </div>        
-        <img
-          v-if="post.imageUrl"
-          :src="`http://localhost:3000/images/${post.imageUrl}`"
-          crossorigin="anonymous"
-        />
-      </div>
-      <!--add the datetime -->
-      <div class="post_date">
-        <p>publié le {{ datePost(post.createdAt) }}</p>
-        <p v-if="this.post.updatedAt !== this.post.createdAt">
-          modifié le {{ datePost(post.updatedAt) }}
-        </p>
-      </div>
-    </div>
-    <br />
-
-    <!--add the buttons 'modify' and 'delete' to the published post-->
-    <div v-if="post.User.id == userId || userId.isAdmin == true">
-      <button
-        id="post_modify"
-        class="form_btn"
-        title="modifier le message"
-        @click.prevent="toggleModale(post.id)"
-      >
-        <i class="far fa-edit"></i>
-        <span class="btn_modify">Modifier</span>
-      </button>
-      <button
-        id="post_delete"
-        class="form_btn"
-        title="supprimer le message"
-        @click.prevent="deletePost(post.id)"
-      >
-        <i class="far fa-trash-alt"></i>
-        <span>Supprimer</span>
-      </button>
-    </div>
-
-    <div class="separate_barre"></div>
+         
+    <div class="separate_barre" />
 
     <!-- add like to the post-->
-    <PostLike :post="post" />
+    <PostLike 
+      :post="post"
+    />
 
     <!--add a comment to the post -->
-    <CommentCard :post="post" />
-  </article>
+    <CommentCard     
+      :post="post"
+    />  
+  
+    </article>
+  </div>
 </template>
 
 <script>
@@ -92,12 +79,12 @@ import CommentCard from "./CommentCard.vue";
 
 export default {
   name: "PostCard",
-  props: ["post", "comment", "user"],
   components: {
     PostModify,
     PostLike,
     CommentCard,
   },
+  props: ["post", "comment", "user"],
   emit: ["input"],
   data() {
     return {
@@ -109,6 +96,7 @@ export default {
       postId: this.post.id,
     };
   },
+  computed: mapGetters(["posts"]),
 
   methods: {
     //date of the post
@@ -133,9 +121,6 @@ export default {
     //delete a post
     ...mapActions(["deletePost"]),
   },
-
-  computed: mapGetters(["posts"]),
-
 };
 </script>
 
@@ -194,11 +179,15 @@ h4 {
   text-align: justify;
   margin-right: 5px;
 }
+.post_content {
+  display: flex;
+  flex-direction: column;
+}
 .post_description {
   display: flex;
   flex-direction: row;
 }
-.post_text {
+.post_text {  
   width: 80%;
 }
 .post_date {

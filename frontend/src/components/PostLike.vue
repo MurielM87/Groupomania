@@ -2,28 +2,33 @@
   <!-- add like to the post-->
   <div class="post_like">
     <div class="like_thumbs">
-        <div class="tooltip">
-        <i class="far fa-thumbs-up"  :class="{active : activeLike}" @click.prevent="addLike(post.id)">
-          <div v-if="post.Likes.length">{{ post.Likes.length }}</div> 
-        </i><span class="tooltiptext">J'aime</span>
-      </div>
-      
       <div class="tooltip">
-        <i class="far fa-thumbs-down" @click.prevent="addDislike(post.id)">
-          <div v-if="post.Dislikes.length">{{ post.Dislikes.length }}</div> 
-        </i><span class="tooltiptext">Je n'aime pas</span>
-      </div>      
+        <i
+          class="far fa-thumbs-up"
+          @click.prevent="addLike(post.id)"
+        >
+          <div v-if="post.Likes.length">{{ post.Likes.length }}</div></i><span class="tooltiptext">J'aime</span>
+      </div>
+
+      <div class="tooltip">
+        <i
+          class="far fa-thumbs-down"
+          @click.prevent="addDislike(post.id)"
+        >
+          <div v-if="post.Dislikes.length">{{ post.Dislikes.length }}</div> </i><span class="tooltiptext">Je n'aime pas</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "PostLike",
   emit: ["input"],
+  props: ["post"],
   data() {
     return {
       token: localStorage.getItem("token"),
@@ -32,18 +37,19 @@ export default {
       dislike: ref(0),
       postLike: this.post,
       activeLike: false,
+      postDislike: this.post,
+      activeDislike: false,
+      isLike: false,
     };
   },
-  props: ["post"],
 
- 
+  computed: mapGetters(["posts", "likes", "dislikes"]),
 
   methods: {
     //add a like
     ...mapActions(["addLike", "addDislike"]),
   },
 
-  computed: mapGetters(["likes", "dislikes"])
 };
 </script>
 
@@ -90,9 +96,6 @@ export default {
   font-size: 25px;
   color: black;
   padding-left: 15px;
-}
-.active {
-  color: green;
 }
 
 </style>

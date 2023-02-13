@@ -10,9 +10,12 @@ exports.createPost = async (req, res) => {
   })
 console.log("user", user)
   if (user !== null) {
+    console.log("req.file", req.file)
     if (req.file) {
+      console.log("filepostAdd", req.file)
       imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
     } else {
+      console.log('no file')
       imageUrl = null
     }
 
@@ -25,11 +28,7 @@ console.log("user", user)
       imageUrl: pushToImg,
       UserId: req.user.userId,
     }) 
-    /*
-charger le post dans la db en utilisant le modele
-ex: let newPost = ert.findOne(post.id)
-ou dansle front (voir le store)
-    */
+  
     res.status(201).json({ post: post, message: "Votre message est publié" })
   } else {
     res.status(400).send({ error: "Erreur, votre message n'a pas pu être publié" })
@@ -45,16 +44,16 @@ exports.getOnePost = async (req, res) => {
     order: [["createdAt", "DESC"]],
     include: [
       {
+        model: database.User,
+        attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+      },
+      {
         model: database.Like,
         attributes: ["id", "userId", "postId"],
         include: [
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -65,10 +64,6 @@ exports.getOnePost = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -80,10 +75,6 @@ exports.getOnePost = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -110,10 +101,6 @@ exports.getAllPosts = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -124,10 +111,6 @@ exports.getAllPosts = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -139,10 +122,6 @@ exports.getAllPosts = async (req, res) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId", "createdAt"]
           }
         ],
       },
@@ -174,10 +153,6 @@ exports.getAllPostsOfOneUser = async (req, res, next) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -188,10 +163,6 @@ exports.getAllPostsOfOneUser = async (req, res, next) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -203,10 +174,6 @@ exports.getAllPostsOfOneUser = async (req, res, next) => {
           {
             model: database.User,
             attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
-          },
-          {
-            model: database.Post,
-            attributes: ["id", "title", "content", "imageUrl", "userId"]
           }
         ],
       },
@@ -221,12 +188,51 @@ exports.updatePost = async (req, res) => {
   //find the post by Id
   let newImageUrl
   const userId = await database.User.findOne({
-    where: { id: req.user.userId }
+    where: { id: req.user.userId },
+    attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
   })
   const post = await database.Post.findOne({
-    where: { id: req.params.id }
+    where: { id: req.params.id },
+    attributes: ["id", "title", "content", "imageUrl", "userId"],
+    include: [
+      {
+        model: database.User,
+        attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+      },
+      {
+        model: database.Like,
+        attributes: ["id", "postId", "userId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          }
+        ],
+      },
+      {
+        model: database.Dislike,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          }
+        ],
+      },
+      {
+        model: database.Comment,
+        attributes: ["id", "content", "postId", "userId"],
+        order: [["createdAt", "DESC"]],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          }
+        ],
+      },
+    ]
   })
-  if (userId.id === post.UserId || userId.isAdmin === true) {
+  if (userId.id === post.User.id || userId.isAdmin === true) {
     // if a file is in the request
     if (req.file) {
       newImageUrl = req.file.filename
@@ -250,10 +256,55 @@ exports.updatePost = async (req, res) => {
     }
     post.imageUrl = newImageUrl
     //save in database
-    const newPost = await post.save({
+    await post.save({
       fields: ["title", "content", "imageUrl"],
     })
-    res.status(200).json({ newPost: newPost, message: "message modifié" })
+
+    let newPost = await database.Post.findOne({
+      where: { id: post.id },
+      attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
+      order: [["createdAt", "DESC"]],
+      include: [
+        {
+          model: database.User,
+          attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+        },
+        {
+          model: database.Like,
+          attributes: ["id", "userId", "postId"],
+          include: [
+            {
+              model: database.User,
+              attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+            }
+          ],
+        },
+        {
+          model: database.Dislike,
+          attributes: ["id", "userId", "postId"],
+          include: [
+            {
+              model: database.User,
+              attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+            }
+          ],
+        },
+        {
+          model: database.Comment,
+          order: [["createdAt", "DESC"]],
+          attributes: ["id", "content", "postId", "userId", "createdAt"],
+          include: [
+            {
+              model: database.User,
+              attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+            }
+          ],
+        },
+      ],
+    })
+    console.log("post.id", post.id)
+
+    res.status(200).json({ post: newPost, message: "message modifié" })
   } else {
     res.status(401).json({ message: "Vous n'avez pas l'autorisation" })
   }
@@ -265,22 +316,149 @@ exports.deletePost = async (req, res) => {
     where: { id: req.user.userId }
   })
   const post = await database.Post.findOne({
-    where: { id: req.params.id }
+    where: { id: req.params.id },
+    attributes: ["id", "title", "content", "imageUrl", "userId"],
+    include: [
+      {
+        model: database.User,
+        attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+      },
+      {
+        model: database.Like,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          }
+        ],
+      },
+      {
+        model: database.Dislike,
+        attributes: ["id", "userId", "postId"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          }
+        ],
+      },
+      {
+        model: database.Comment,
+        order: [["createdAt", "DESC"]],
+        attributes: ["id", "content", "postId", "userId", "createdAt"],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          }
+        ],
+      },
+    ]
   })
-  if (userId.id === post.UserId || userId.isAdmin === true) {
+  if (userId.id === post.User.id || userId.isAdmin === true) {
     if (post.imageUrl) {
       const filename = post.imageUrl.split("/images")[1]
       fs.unlink(`images/${filename}`, () => {
         database.Post.destroy({
-          where: { id: post.id }
+          where: { id: post.id },
         })
-        res.status(200).json({ message: "Post supprimé" })
+          
+        let newPost = database.Post.findOne({
+          where: { id: req.params.id },
+          attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
+          order: [["createdAt", "DESC"]],
+          include: [
+            {
+              model: database.User,
+              attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+            },
+            {
+              model: database.Like,
+              attributes: ["id", "userId", "postId"],
+              include: [
+                {
+                  model: database.User,
+                  attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+                }
+              ],
+            },
+            {
+              model: database.Dislike,
+              attributes: ["id", "userId", "postId"],
+              include: [
+                {
+                  model: database.User,
+                  attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+                }
+              ],
+            },
+            {
+              model: database.Comment,
+              order: [["createdAt", "DESC"]],
+              attributes: ["id", "content", "postId", "userId", "createdAt"],
+              include: [
+                {
+                  model: database.User,
+                  attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+                }
+              ],
+            },
+          ],
+        })
+        console.log("POST.ID", req.params.id)
+        return res.status(200).json({ post: newPost, message: "Post supprimé" })
       })
     } else {
       database.Post.destroy({
         where: { id: req.params.id }
-      }, { truncate: true })
-      res.status(200).json({ message: "Post supprimé" })
+      }, 
+      { truncate: true })
+      let newPost = await database.Post.findOne({
+        where: { id: req.params.id },
+        attributes: ["id", "title", "content", "imageUrl", "createdAt", "updatedAt"],
+        order: [["createdAt", "DESC"]],
+        include: [
+          {
+            model: database.User,
+            attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+          },
+          {
+            model: database.Like,
+            attributes: ["id", "userId", "postId"],
+            include: [
+              {
+                model: database.User,
+                attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+              }
+            ],
+          },
+          {
+            model: database.Dislike,
+            attributes: ["id", "userId", "postId"],
+            include: [
+              {
+                model: database.User,
+                attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+              }
+            ],
+          },
+          {
+            model: database.Comment,
+            order: [["createdAt", "DESC"]],
+            attributes: ["id", "content", "postId", "userId", "createdAt"],
+            include: [
+              {
+                model: database.User,
+                attributes: ["id", "pseudo", "imageUrl", "isAdmin"],
+              }
+            ],
+          },
+        ],
+      })
+      console.log("POST.ID", req.params.id)
+
+      return res.status(200).json({ post: newPost, message: "Post supprimé" })
     }
   } else {
     res.status(401).json({ message: "Vous n'avez pas l'autorisation" })

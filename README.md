@@ -11,6 +11,7 @@ Backend : Nodejs - Database : MySQL Workbench
     - npm start
 
 connexion à la base de données avec vos identifiants : 
+créer un fichier config.json à partir du modèle model.config.json et mettre vos propres identifiants
     - DB_HOST=""
     - DB_USER=""
     - DB_PASSWORD= ""

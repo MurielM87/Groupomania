@@ -14,13 +14,14 @@ exports.createComment = async (req, res) => {
         if (req.body.content === "") {
             return res.status(401).json({ error: "Veuillez remplir le champs" });
         } else {
+            
             database.Comment.create({
                 PostId: post.id,
                 UserId: userId.id,
-                content: req.body.content,
+                content: req.body.comment.content,
             })
-            .then((response) => res.status(201).json({ message: "Commentaire ajouté !", comment: response }))
-            .catch((error) => res.status(400).json({ error: "Erreur, votre commentaire n'a pas pu être publié" }));
+
+            res.status(201).json({ message: "Commentaire ajouté !"})
         }
     } else {
         res.status(500).send({ error })
@@ -36,12 +37,13 @@ exports.deleteComment = async (req, res) => {
         const comment = await database.Comment.findOne({
             where: { id: req.params.id },
         })
-
+                
         if (userId.id === comment.UserId || userId.isAdmin === true) {
             database.Comment.destroy(
                 { where: { id: req.params.id } },
                 { truncate: true }
             )
+         
             res.status(200).json({ message: "commentaire supprimé" })
         } else {
             res.status(401).json({ message: "Vous n'avez pas l'autorisation" })

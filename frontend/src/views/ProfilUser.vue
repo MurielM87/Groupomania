@@ -5,25 +5,24 @@
     <!--user profile image -->
     <div id="photo_icone">
       <img
-        v-if="!this.user.imageUrl"
+        v-if="!user.imageUrl"
         :src="require('../assets/avatar.png')"
         alt="avatar"
         class="profil_image"
-      />
+      >
       <img
         v-else
         class="profil_image"
         alt="avatar"
         title="mon avatar"
-        :src="`http://localhost:3000/images/${this.user.imageUrl}`"
+        :src="`http://localhost:3000/images/${user.imageUrl}`"
         crossorigin="anonymous"
-      />
-      <div v-if="userValue == this.userId">
-        <router-link :to="`/profil/${this.userId}/edit`">
-        <i class="fas fa-pencil-alt"></i>
+      >
+      <div v-if="userValue == userId">
+        <router-link :to="`/profil/${userId}/edit`">
+          <i class="fas fa-pencil-alt" />
         </router-link>
       </div>
-      
     </div>
 
     <!--user information -->
@@ -32,28 +31,46 @@
       <div>{{ user.email }}</div>
     </div>
 
-    <div id="separation_barre"></div>
+    <div id="separation_barre" />
 
-    <h2>{{posts.length}} Message{{posts.length > 1 ? 's' : ""}} publié{{posts.length > 1 ? 's' : ""}}</h2>
-    <div id="card" v-for="post in posts" :key="post.id" :posts="posts">
+    <h2>
+      {{ posts.length }} Message{{ posts.length > 1 ? "s" : "" }} publié{{
+        posts.length > 1 ? "s" : ""
+      }}
+    </h2>
+    <div
+      v-for="post in posts"
+      id="card"
+      :key="post.id"
+      :posts="posts"
+    >
       <h3>{{ post.title }}</h3>
-      <p class="user_post_content">{{ post.content }}</p>
+      <p class="user_post_content">
+        {{ post.content }}
+      </p>
       <img
         v-if="post.imageUrl"
         :src="`http://localhost:3000/images/${post.imageUrl}`"
         crossorigin="anonymous"
-      />
+      >
       <!--add the datetime -->
       <div class="post_date">
-        <p>publié le {{ datePost(post.createdAt) }}</p><br/>
-        <p v-if="post.updatedAt !== post.createdAt">- modifié le {{ datePost(post.updatedAt) }}</p>
+        <p>publié le {{ datePost(post.createdAt) }}</p>
+        <br>
+        <p v-if="post.updatedAt !== post.createdAt">
+          - modifié le {{ datePost(post.updatedAt) }}
+        </p>
       </div>
     </div>
   </form>
   <!-- Bouton Scroll to Top-->
-  <button class="toTop" @click="toTop" title="Retour en haut de page">
-      <span class="fa fa-chevron-up"></span>
-    </button>
+  <button
+    class="toTop"
+    title="Retour en haut de page"
+    @click="toTop"
+  >
+    <span class="fa fa-chevron-up" />
+  </button>
 </template>
 
 <script>
@@ -76,16 +93,16 @@ export default {
       posts: ref({
         title: "",
         content: "",
-        imageUrl:"",
+        imageUrl: "",
       }),
     };
   },
 
   beforeCreate() {
-    const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
     if (token == null && userId == null) {
-      this.$router.push({name: 'LogIn'})
+      this.$router.push({ name: "LogIn" });
     }
   },
 
@@ -96,13 +113,13 @@ export default {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${this.token}`,
+        Authorization: `Bearer ${this.token}`,
       },
     })
       .then((res) => res.json())
       .then((data) => {
-        if(data.redirect) {
-          this.$router.push({name: 'LogIn'})
+        if (data.redirect) {
+          this.$router.push({ name: "LogIn" });
         }
         console.log("ProfilUser||data", data);
         this.user = data;
@@ -110,15 +127,15 @@ export default {
       .catch((err) => console.log(err));
   },
 
-    //get all posts from the user
-    async mounted() {
-      await fetch(`http://localhost:3000/api/posts/user/${this.userId}`, {
+  //get all posts from the user
+  async mounted() {
+    await fetch(`http://localhost:3000/api/posts/user/${this.userId}`, {
       methods: "GET",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json",    
-        "Authorization": `Bearer ${this.token}`,
+        Accept: "application/json",
+        Authorization: `Bearer ${this.token}`,
       },
     })
       .then((res) => res.json())
@@ -127,9 +144,9 @@ export default {
         this.posts = data;
       })
       .catch((err) => console.log(err));
-    }, 
+  },
 
-    methods: {
+  methods: {
     //date of the post
     datePost(date) {
       const event = new Date(date);
@@ -162,7 +179,7 @@ export default {
         behavior: "smooth",
       });
     },
-  }
+  },
 };
 </script>
 
@@ -172,7 +189,8 @@ export default {
   color: black;
   border: 1px solid #fd2d01;
   border-radius: 30px;
-  margin-bottom: 20px;
+  margin: auto;
+  margin-bottom: 25px;
   position: relative;
   @media (min-width: 768px) and (max-width: 992px) {
     width: 80%;
@@ -185,15 +203,10 @@ export default {
 .profil_image {
   text-align: center;
   width: 300px;
-  object-fit: contain;
+  height: 300px;
+  object-fit: cover;
   border-radius: 50%;
   margin-top: 10px;
-  @media (min-width: 768px) and (max-width: 992px) {
-    width: 250px;
-  }
-  @media screen and (max-width: 768px) {
-    width: 200px;
-  }
 }
 #file-input {
   display: none;

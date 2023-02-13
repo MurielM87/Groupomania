@@ -1,31 +1,31 @@
 <template>
   <!--to write a new message -->
-  <section id="card" class="card_writing">
-    <h2><i class="fas fa-feather-alt"></i> écrire un nouveau message</h2>
+  <section id="card">
+    <h2><i class="fas fa-feather-alt" />écrire un nouveau message</h2>
     <div class="post_form">
       <input
-        type="text"
         v-model="title"
+        type="text"
         class="post_title"
         placeholder="titre du message"
         required
       />
       <textarea
-        type="text"
         v-model="content"
+        type="text"
         placeholder="message"
         rows="3"
         required
-      ></textarea>
+      />
       <!--add an image -->
       <div class="post_img">
         <input
-          @change="uploadImg"
-          type="file"
-          ref="fileInput"
           id="addContent"
+          ref="fileInput"
+          type="file"
           name="imageUrl"
           accept=".jpeg, .jpg, .png, .webp, .gif"
+          @change="uploadImg"
         />
       </div>
       <br />
@@ -34,10 +34,10 @@
       <button
         @click.prevent="newPost"
         class="btn post-btn"
-        title="valider la publication">
-        <i class="far fa-edit"></i>Publier
+        title="valider la publication"
+      >
+        <i class="far fa-edit" />Publier
       </button>
-      
     </div>
   </section>
 </template>
@@ -51,58 +51,13 @@ export default {
   emit: ["input"],
   data() {
     return {
-      token: localStorage.getItem('token'),
-      userId: localStorage.getItem('userId'),
+      token: localStorage.getItem("token"),
+      userId: localStorage.getItem("userId"),
       title: ref(""),
       content: ref(""),
       imageUrl: ref(""),
     };
   },
-  
-  //get the user by id
-  async mounted() {
-    await fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-      methods: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",    
-        "Authorization": `Bearer ${this.token}`,
-      },
-    })
-      .then((data) => {
-        console.log("PostForm||user||data", data);
-        this.user = data.user;
-      })
-      .catch((err) => console.log(err));
-  },
-
-  
-  methods: {
-    ...mapActions(['addPost']),
-
-    selectImage() {
-      this.$ref.fileInput.click()
-    },
-    //upload image
-    uploadImg(e) {
-      this.imageUrl = e.target.files[0];
-      console.log("image-target", this.imageUrl);
-    },
-
-    newPost () { 
-      if(this.title === "" || this.content === "") return;
-      
-      console.log("title", this.title)
-      console.log("content", this.content)
-      console.log("imageUrl", this.imageUrl.name)
-      this.$store.dispatch("addPost", {
-        title: this.title, 
-        content: this.content,
-        imageUrl: this.imageUrl.name
-      })
-    }
-  }, 
 
   computed: mapGetters(["posts"]),
 
@@ -110,7 +65,36 @@ export default {
     this.getAllPosts;
   },
 
-}
+  methods: {
+    ...mapActions(["addPost"]),
+
+    created() {
+      this.getAllPosts;
+    },
+
+    selectImage() {
+      this.$ref.fileInput.click();
+    },
+    //upload image
+    uploadImg(e) {
+      this.imageUrl = e.target.files[0];
+      console.log("image-target", this.imageUrl);
+    },
+
+    newPost() {
+      if (this.title === "" || this.content === "") return;
+
+      console.log("title", this.title);
+      console.log("content", this.content);
+      console.log("imageUrl", this.imageUrl.name);
+      this.$store.dispatch("addPost", {
+        title: this.title,
+        content: this.content,
+        imageUrl: this.imageUrl.name,
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss">
@@ -121,6 +105,7 @@ export default {
   background-color: white;
   border-radius: 20px;
   border: 1px solid #fd2d01;
+  box-shadow: 5px 5px 7px #ffd7d7;
   padding: 10px 10px 0px 10px;
   margin: auto;
   margin-top: 20px;
@@ -141,9 +126,6 @@ h2 {
   margin-bottom: 10px;
 }
 
-.card_writing {
-  box-shadow: 5px 5px 7px #ffd7d7;
-}
 
 #label_file_input {
   text-align: right;
@@ -179,9 +161,13 @@ h2 {
 .fa-times-circle {
   font-size: 20px;
   margin: 2px;
-  background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
-              linear-gradient(127deg, rgba(209, 166, 14, 0.8), rgba(0,255,0,0) 70.71%),
-              linear-gradient(336deg, rgba(236, 147, 14, 0.8), rgba(0,0,255,0) 70.71%);
+  background: linear-gradient(
+      217deg,
+      rgba(255, 0, 0, 0.8),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(209, 166, 14, 0.8), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(236, 147, 14, 0.8), rgba(0, 0, 255, 0) 70.71%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
