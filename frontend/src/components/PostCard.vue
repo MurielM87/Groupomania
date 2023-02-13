@@ -31,8 +31,10 @@
     <!--content from the writing post -->
     <div class="post_content">
       <div class="post_description">
-        <h3>{{ post.title }}</h3>
-        <p>{{ post.content }}</p>
+        <div class="post_text">
+          <h3>{{ post.title }}</h3>
+          <p>{{ post.content }}</p>
+        </div>        
         <img
           v-if="post.imageUrl"
           :src="`http://localhost:3000/images/${post.imageUrl}`"
@@ -130,37 +132,6 @@ export default {
 
     //delete a post
     ...mapActions(["deletePost"]),
-
-/*    deletePost(postId) {
-      const userId = localStorage.getItem("userId");
-      const token = localStorage.getItem("token");
-      console.log("PostCard||deletePost", postId);
-      if (userId === userId && token === token) {
-        fetch(`http://localhost:3000/api/posts/${postId}`, {
-          method: "DELETE",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.token}`,
-          },
-        })
-          .then((res) => res.json())
-          .then((res) => {
-            confirm("Voulez-vous vraiment supprimer ce message ?");
-            if (res.redirect) {
-              this.$router.push({ name: "LogIn" });
-            }
-            if (res.status === 200) {
-              this.posts = this.posts.filter((post) => {
-                console.log("deletePost || postId", postId);
-                return post.id != postId;
-              });
-              this.getAllPosts();
-            }
-          })
-          .catch((err) => console.error(err));
-      }
-    },*/
   },
 
   computed: mapGetters(["posts"]),
@@ -173,11 +144,11 @@ export default {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  width: 47%;
-  height: 100%;
+  width: 95%;
   background-color: white;
   border-radius: 20px;
   border: 2px solid #fd2d01;
+  box-shadow: 5px 5px 10px #4e5166;
   padding: 10px 10px 0px 10px;
   margin: auto;
   margin-top: 20px;
@@ -221,8 +192,15 @@ h4 {
 
 #card_post p {
   text-align: justify;
+  margin-right: 5px;
 }
-
+.post_description {
+  display: flex;
+  flex-direction: row;
+}
+.post_text {
+  width: 80%;
+}
 .post_date {
   font-size: 13px;
   display: flex;

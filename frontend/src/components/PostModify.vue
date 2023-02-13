@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "PostModify",
@@ -66,7 +67,7 @@ export default {
     };
   },
 
-  created() {
+  mounted() {
     fetch(`http://localhost:3000/api/posts/${this.postId}`, {
       method: "GET",
       credentials: "include",
@@ -93,50 +94,27 @@ export default {
       this.image = URL.createObjectURL(this.tempImage);
       console.log("image-target", this.image);
     },
+
+    ...mapActions(['updatePost']),
+
+    updatePost () { 
+      if(this.title === "" || this.content === "") return;
       
-    //modify post
-    updatePost(postId) {
-      console.log(postId)
-      const token = localStorage.getItem("token")
-      const userId = localStorage.getItem("userId")
-
-      const post = {
-        postId: this.modifyPost.id,
-        title: this.title,
+      console.log("title", this.title)
+      console.log("content", this.content)
+      console.log("imageUrl", this.imageUrl)
+      this.$store.dispatch("addPost", {
+        title: this.title, 
         content: this.content,
-        imageUrl: this.tempImage,
-      };
-      console.log("ModifyPost||post", post);
-           
-      const fd = new FormData();
-      fd.append("imageUrl", post.imageUrl);
-      fd.append("title", post.title);
-      fd.append("content", post.content);
-
-      if(userId == userId && token == token) {
-        fetch(`http://localhost:3000/api/posts/${post.postId}`, {
-          method: "PUT",
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-            "Authorization": `Bearer ${this.token}`,
-          },
-          body: fd,
-        })
-        .then((res) => res.json())
-        .then((data) => {
-          if(data.redirect) {
-          this.$router.push({name: 'LogIn'})
-        }
-          console.log("ModifyPost||post", this.post);
-          this.$router.go();
-        })
-        .catch((error) => {
-          console.error(error)
-          console.warn("ModifyPost||FormData", fd);
-        });
-      }
+        imageUrl: this.imageUrl
+      })
     }
+  },
+
+  computed: mapGetters(["posts"]),
+
+  created() {
+    this.getAllPosts;
   },
   
 };

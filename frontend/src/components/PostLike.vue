@@ -40,65 +40,10 @@ export default {
 
   methods: {
     //add a like
-    ...mapActions(["addLike"]),
-  /*  async addLike(postId) {
-      console.log(postId)
-      
-      const userId = localStorage.getItem("userId");
-      console.log("PostCard||addLike||postId", postId);
-      console.log("PostCard||addLike||userId", userId);
-      await fetch(`http://localhost:3000/api/posts/${postId}/like`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${this.token}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          console.log(res);
-          this.like = res;
-          console.log(this.userId);
-          const userLike = JSON.parse(JSON.stringify(this.postLike));
-          console.log(this.userId == userLike.Likes[0].userId);
-          if(this.userId == userLike.Likes[0].userId) {            
-          this.activeLike = true;
-          }
-          this.$router.go(); 
-        })
-        .catch((err) => console.error(err));
-    },*/
-//this.like > 0 ? "activeLike" : ""
-    //add a dislike
-    addDislike(postId) {
-      const userId = localStorage.getItem("userId");
-      console.log("PostCard||addDislike||postId", postId);
-      console.log("PostCard||addDislike||userId", userId);
-      fetch(`http://localhost:3000/api/posts/${postId}/dislike`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${this.token}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          console.log({ res });
-          this.dislike = res.data;
-          this.$router.go(); 
-        })
-        .catch((err) => console.error(err));
-    },
-  //  watch() {      
-  //    this.activeLike = !this.activeLike;
-  //  }
+    ...mapActions(["addLike", "addDislike"]),
   },
 
-  computed: mapGetters(["likes"])
+  computed: mapGetters(["likes", "dislikes"])
 };
 </script>
 
@@ -138,8 +83,6 @@ export default {
 
 .like_thumbs {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 20px;
 }
 .fa-thumbs-up,
 .fa-thumbs-down {

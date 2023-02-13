@@ -211,12 +211,12 @@ export default {
     color: red;
   }
   @media (min-width: 768px) and (max-width: 992px) {
-    top: 9%;
+    top: 39%;
     right: 34%;
   }
   @media screen and (max-width: 768px) {
-    top: 7%;
-    right: 32%;
+    top: 37%;
+    right: 33%;
 
   }
 }

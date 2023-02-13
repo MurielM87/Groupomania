@@ -57,8 +57,11 @@ export default {
 .container {
   width: 1394px;
   margin: 0px auto;
+  background: linear-gradient(217deg, rgba(255,214,214,.8), rgba(255,0,0,0) 20.71%),
+              linear-gradient(127deg, rgba(253, 45, 1, 0.8), rgba(0,255,0,0) 70.71%),
+              linear-gradient(336deg, rgba(78, 81, 102, 0.8), rgba(0,0,255,0) 70.71%);
   @media screen and (max-width: 992px) {
-    width: 95%;
+    width: 100%;
   }
 }
 #app {

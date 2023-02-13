@@ -11,8 +11,7 @@
     </div>
 
     <div class="post_card">
-      <h2>Nouvelles publications</h2>
-      <div class="post_column_center">
+      <div>
         <PostCard
           v-for="post in posts"
           :key="post.id"
@@ -63,6 +62,27 @@ export default {
     }
   },
 
+  mounted() {
+    fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
+      methods: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${this.token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if(data.redirect) {
+          this.$router.push({name: 'LogIn'})
+        }
+        console.log("MainPage||user||data", data);
+        this.user = data;
+      })
+      .catch((err) => console.log(err));
+  },
+
   methods: {
     ...mapActions(["getAllPosts"]),
 
@@ -79,26 +99,8 @@ export default {
 
   created() {
     this.getAllPosts();
-    console.log("main", this.getAllPosts);
   },
 
-  mounted() {
-    fetch(`http://localhost:3000/api/users/profil/${this.userId}`, {
-      methods: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${this.token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("MainPage||user||data", data);
-        this.user = data;
-      })
-      .catch((err) => console.log(err));
-  },
 };
 </script>
 
@@ -122,28 +124,25 @@ export default {
   display: flex;
   flex-direction: column;
   margin-left: 10px;
-  width: 80%;
   @media screen and (max-width: 768px) {
-    margin: auto;
+    margin: 0px;
   }
 }
-.post_column_center {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
+
 .profil_column {
   width: 100%;
   margin: auto;
   margin-top: 15px;
   border: 1px solid #fd2d01;
+  box-shadow: 5px 5px 7px #ffd7d7;
   border-radius: 20px;
+  background-color: #fff;
   @media screen and (max-width: 768px) {
     display: none;
   }
 }
 img {
-  width: 250px;
+  width: 150px;
   margin: auto;
 }
 .toTop {

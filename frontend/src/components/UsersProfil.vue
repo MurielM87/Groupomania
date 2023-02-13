@@ -1,5 +1,5 @@
 <template>
-  <h2>{{users.length}} Membre{{users.length > 1 ? 's' : ""}}</h2>
+  <h2>{{users.length}} Membre{{users.length > 1 ? 's' : ""}} inscrit{{users.length > 1 ? 's' : ""}}</h2>
   <div id="profil_users" v-for="user in users" :key="user">
     <router-link :to="`/profil/${user.id}`"> 
       <div id="user">        
@@ -75,14 +75,15 @@ export default {
 #user {
     display: flex;
     flex-direction: row;
-    border: 2px solid #4E5166;
+    border: 1px solid #4E5166;
     border-radius: 20px;
     background-color: #FFD7D7;
     align-items: center;
+    color: #FD2D01;
     &:hover {
-      color: #FD2D01;
-      background-color: #fff;
-      border: 2px solid  #FD2D01;
+      color: #4E5166;
+      background-color: #FD2D01;
+      border: 1px solid  #FFD7D7;
   }
 }
 

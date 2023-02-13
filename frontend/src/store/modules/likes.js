@@ -15,7 +15,7 @@ const getters = {
 const actions = {
     //add a like
     async addLike({ commit }, postId) {
-        console.log(postId)
+      console.log("postId", postId)
         
       //  const userId = localStorage.getItem("userId");
       //  console.log("PostCard||addLike||postId", postId);
@@ -45,6 +45,35 @@ const actions = {
       },
 
     //add a dislike
+    async addDislike({ commit }, postId) {
+      console.log("postId", postId)
+        
+      //  const userId = localStorage.getItem("userId");
+      //  console.log("PostCard||addLike||postId", postId);
+      //  console.log("PostCard||addLike||userId", userId);
+        await fetch(`http://localhost:3000/api/posts/${postId}/dislike`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${this.token}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            console.log(res);
+            commit('newDislike', res)
+        //    this.like = res;
+        //    console.log(this.userId);
+        //    const userLike = JSON.parse(JSON.stringify(this.postLike));
+        //    console.log(this.userId == userLike.Likes[0].userId);
+        //    if(this.userId == userLike.Likes[0].userId) {            
+        //    this.activeLike = true;
+        //    }
+          })
+          .catch((err) => console.error(err));
+      },
 
    
 };

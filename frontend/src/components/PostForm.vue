@@ -32,7 +32,7 @@
 
       <!-- button to publish -->
       <button
-        @click.prevent="addPost"
+        @click.prevent="newPost"
         class="btn post-btn"
         title="valider la publication">
         <i class="far fa-edit"></i>Publier
@@ -90,47 +90,24 @@ export default {
       console.log("image-target", this.imageUrl);
     },
 
-
-  //  addPost() { 
-  /*   if(this.title === "" || this.content === "") return;
-
-      const fd = new FormData()
-      fd.append("title", this.title)
-      fd.append("content", this.content)
-      fd.append("imageUrl", this.imageUrl)
-   
-      for (const pair of fd.entries()) {
-        console.log(`${pair[0]}, ${pair[1]}`);
-      }*/
+    newPost () { 
+      if(this.title === "" || this.content === "") return;
       
-
-    /*  await fetch(`http://localhost:3000/api/posts/add`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            Accept: "application/json",
-            "Authorization": `Bearer ${this.token}`,
-          },
-          body: fd
-        })
-        .then((data) => {
-          if(data.redirect) {
-           this.$router.push({name: 'LogIn'})
-          }
-          console.log("PostForm||data", data);
-          this.fd = data.post;
-        })
-        .catch((err) => console.log(err)) */
-  //    this.fd = "" 
-      
-  //  },  
+      console.log("title", this.title)
+      console.log("content", this.content)
+      console.log("imageUrl", this.imageUrl.name)
+      this.$store.dispatch("addPost", {
+        title: this.title, 
+        content: this.content,
+        imageUrl: this.imageUrl.name
+      })
+    }
   }, 
 
   computed: mapGetters(["posts"]),
 
   created() {
     this.getAllPosts;
-    console.log("PostForm", this.getAllPosts);
   },
 
 }

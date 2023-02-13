@@ -99,30 +99,6 @@ export default {
 
     //delete a comment from a post
     ...mapActions(["deleteComment"]),
-    //deleteComment(commentId) {
-    /*  confirm("Voulez-vous vraiment supprimer ce commentaire ?");
-      fetch(`http://localhost:3000/api/posts/comment/${commentId}`, {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.redirect) {
-            this.$router.push({ name: "LogIn" });
-          }
-          console.log("commentId", commentId);
-          this.comments = this.comments.splice((commentId) => {
-            console.log("deleteComment || commentId", commentId);
-            return this.comments;
-          });
-          this.getAllPosts;
-        })
-        .catch((err) => console.log(err));
-    },*/
   },
 
   computed: mapGetters(["comments"]),

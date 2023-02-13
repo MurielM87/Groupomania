@@ -34,39 +34,34 @@ const actions = {
   },
 
   //add a post
-  async addPost({ commit }, {post}) {
-    console.log(post)
-    if(this.title === "" || this.content === "") {
-      return;
-    } else {
-      const fd = new FormData()
-      fd.append("title", this.title)
-      fd.append("content", this.content)
-      fd.append("imageUrl", this.imageUrl)
-   
-      for (const pair of fd.entries()) {
-        console.log(`${pair[0]}, ${pair[1]}`);
-      }
-    console.log("coucou")
-    await fetch(`http://localhost:3000/api/posts/add`, {
+  async addPost({ commit}, payload ) {
+    console.log("payload", payload)  
+    
+    let response = await fetch(`http://localhost:3000/api/posts/add`, {
       method: "POST",
       credentials: "include",
       headers: {
-        Accept: "application/json",
+        "Content-Type": "application/json",
         "Authorization": `Bearer ${this.token}`,
       },
       body: JSON.stringify({
-        title: this.title,
-        content: this.content,
-        imageUrl: this.imageUrl
+        title: payload.title,
+        content: payload.content,
+        imageUrl: payload.imageUrl
       }),
     })
-      .then((res) => {       
+    let data = await response.json()
+    console.log("data", data.post)
+    console.log("data||title", data.post.title)
+    console.log("data||content", data.post.content)
+    console.log("data||imageUrl", data.post.imageUrl)
+    commit('newPost', data.post)
+    /*  .then((res) => {       
         console.log("PostForm||res", res);
         commit('newPost', res)
       })
-      .catch((err) => console.log(err))
-    }
+      .catch((err) => console.log(err))*/
+
   },
 
   //delete a post
@@ -93,7 +88,29 @@ const actions = {
   },
 
   //update a post
-  //async updatePost({commit}, postId) {}
+  async updatePost({commit}, payload) {
+    console.log("payload", payload)  
+    
+    let response = await fetch(`http://localhost:3000/api/posts/:id`, {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${this.token}`,
+      },
+      body: JSON.stringify({
+        title: payload.title,
+        content: payload.content,
+        imageUrl: payload.imageUrl
+      }),
+    })
+    let data = await response.json()
+    console.log("data", data.post)
+    console.log("data||title", data.post.title)
+    console.log("data||content", data.post.content)
+    console.log("data||imageUrl", data.post.imageUrl)
+    commit('modifyPost', data.post)
+  }
 };
 console.log("actions", actions)
 
@@ -114,7 +131,7 @@ const mutations = {
   },
 
   //update a post
-  modifyPost: (state, postId) => {
+  updatePost: (state, postId) => {
     state.posts.push(post => postId == post.id )
   }
 

@@ -224,7 +224,7 @@ export default {
   align-items: center;
 }
 .separate_barre {
-  border: 1px solid #455166;
+  border: 1px solid #fd2d01;
   width: 50%;
   margin: auto;
   margin-bottom: 20px;
